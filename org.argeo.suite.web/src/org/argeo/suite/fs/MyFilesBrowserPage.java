@@ -6,8 +6,8 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.argeo.cms.auth.CurrentUser;
-import org.argeo.cms.fs.CmsFsBrowser;
 import org.argeo.cms.ui.CmsUiProvider;
+import org.argeo.cms.ui.fs.CmsFsBrowser;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;

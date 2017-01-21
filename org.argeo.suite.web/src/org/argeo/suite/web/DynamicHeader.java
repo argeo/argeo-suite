@@ -19,10 +19,10 @@ public class DynamicHeader implements CmsUiProvider {
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
-		if (CurrentUser.isRegistered())
-			return privateHeaderProvider.createUi(parent, context);
-		else
+		if (CurrentUser.isAnonymous())
 			return publicHeaderProvider.createUi(parent, context);
+		else
+			return privateHeaderProvider.createUi(parent, context);
 	}
 
 	public void setPrivateHeaderProvider(CmsUiProvider privateHeaderProvider) {
