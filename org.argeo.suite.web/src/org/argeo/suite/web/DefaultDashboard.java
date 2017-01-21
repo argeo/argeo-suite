@@ -9,7 +9,6 @@ import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.people.PeopleException;
 import org.argeo.connect.people.PeopleService;
-import org.argeo.connect.people.web.pages.OrgPage;
 import org.argeo.connect.people.web.parts.PeopleSearchCmp;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -31,13 +30,13 @@ public class DefaultDashboard implements CmsUiProvider {
 	private Map<String, String> peopleIconPaths;
 
 	// Local UI Providers
-	private CmsUiProvider orgPage;
+	// private CmsUiProvider orgPage;
 
 	public DefaultDashboard(PeopleService peopleService, Map<String, String> peopleIconPaths) {
 		this.peopleService = peopleService;
 		this.peopleIconPaths = peopleIconPaths;
 
-		orgPage = new OrgPage(peopleService);
+		// orgPage = new OrgPage(peopleService);
 	}
 
 	@Override
