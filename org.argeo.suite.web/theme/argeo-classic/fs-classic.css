@@ -1,0 +1,87 @@
+/**
+Argeo Blue: #00294b
+*/ 
+
+/**** BREAD CRUMB ***/
+Button.breadCrumb_btn {
+  border: 1px solid  #f4f6f7;
+  border-radius: 3px;
+  padding: 5px 2px 5px 2px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  animation: hoverOut 500ms ease-out;
+  cursor: pointer;
+  font-color: #00294b;
+  text-decoration: none;
+}
+
+Button.breadCrumb_btn:hover {
+  text-decoration: underline;
+}
+
+
+/****** Context menu  *********/
+.contextMenu_box {
+	border: 1px solid #fde2d5;
+  	padding: 0px;
+  	box-shadow: 2px 2px 5px #fde2d5; 
+}
+
+Button[PUSH][FLAT].createFolder_btn {
+	  background-image: url( theme/argeo-classic/icons/fs/createFolder.png);
+}
+
+Button[PUSH][FLAT].shareFolder_btn {
+	  background-image: url( theme/argeo-classic/icons/fs/createFolder.png);
+}
+
+Button[PUSH][FLAT].downloadFolder_btn {
+	  background-image: url( theme/argeo-classic/icons/fs/createFolder.png);
+}
+
+Button[PUSH][FLAT].delete_btn {
+	  background-image: url( theme/argeo-classic/icons/fs/createFolder.png);
+}
+
+Button[PUSH][FLAT].uploadFiles_btn {
+	  background-image: url( theme/argeo-classic/icons/fs/createFolder.png);
+}
+
+Button[PUSH][FLAT].open_btn {
+	  background-image: url( theme/argeo-classic/icons/fs/createFolder.png);
+}
+
+Button[PUSH][FLAT].shareFolder_btn,
+Button[PUSH][FLAT].downloadFolder_btn,
+Button[PUSH][FLAT].delete_btn,
+Button[PUSH][FLAT].uploadFiles_btn,
+Button[PUSH][FLAT].open_btn,
+Button[PUSH][FLAT].createFolder_btn {
+  border: 0px solid white;
+  border-left: 10px solid transparent;
+  border-radius: 0px;
+  padding: 8px 5px 8px 24px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: left; 
+  animation: hoverOut 500ms ease-out;
+  cursor: pointer;
+}
+
+Button[PUSH][FLAT].shareFolder_btn:hover,
+Button[PUSH][FLAT].downloadFolder_btn:hover,
+Button[PUSH][FLAT].delete_btn:hover,
+Button[PUSH][FLAT].uploadFiles_btn:hover,
+Button[PUSH][FLAT].open_btn:hover,
+Button[PUSH][FLAT].createFolder_btn:hover {
+  background-color: #fef0ea;
+}
+
+Button[PUSH][FLAT].shareFolder_btn:pressed,
+Button[PUSH][FLAT].downloadFolder_btn:pressed,
+Button[PUSH][FLAT].delete_btn:pressed,
+Button[PUSH][FLAT].uploadFiles_btn:pressed,
+Button[PUSH][FLAT].open_btn:pressed,
+Button[PUSH][FLAT].createFolder_btn:pressed {
+  background-color: #fde2d5;
+}

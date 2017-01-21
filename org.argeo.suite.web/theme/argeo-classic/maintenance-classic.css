@@ -1,0 +1,48 @@
+/****************************
+***     The browser      ***/
+
+/* Management of border for edition */
+.user_form_text[BORDER]:read-only,
+.user_form_text[BORDER]:read-only:focused,
+.user_form_text[BORDER][MULTI]:read-only:focused,
+.user_form_text[BORDER][MULTI]:read-only {
+	box-shadow: none;
+  	border: 0px solid #ffffff;
+}
+
+/* Signal focus gained ********/
+.user_form_text[BORDER]:focused,
+.user_form_text[MULTI][BORDER]:focused {
+  box-shadow: 1px 1px 2px #00294b;; 
+  border: 1px solid #00294b;;
+}
+
+.user_form_title{
+	font: bold italic 20px serif;
+ 	background-color: #00294b;
+	color: #eeeeee;
+}
+
+
+/* Tests and work in progress */
+.maintenance_browser_column {
+	background-color: white;
+	color: black;
+}
+
+/* PB: Css class given to a table is not herited by Table-RowOverlay */
+Table-RowOverlay:unfocused {
+	color: #00294b;
+}
+
+Table-RowOverlay:selected, 
+Table-RowOverlay:linesvisible:even:selected {
+	background-color: #fcd4c0;
+	color: #00294b;
+}
+
+Table-RowOverlay:selected:unfocused, 
+Table-RowOverlay:linesvisible:even:selected:unfocused {
+  color: #00294b;
+  background-color: #6e869b;
+}

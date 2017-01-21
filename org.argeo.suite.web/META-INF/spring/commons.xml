@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<!-- COMMON UI PARTS -->
+	<util:list id="headerEnd">
+		<bean class="org.argeo.cms.util.UserMenuLink" p:vAlign="bottom" />
+	</util:list>
+
+	<!-- TEMPLATES -->
+	<bean id="menuLink" abstract="true" class="org.argeo.cms.util.MenuLink"
+		init-method="init">
+		<property name="bundleContext" ref="bundleContext" />
+	</bean>
+
+	<bean name="app" class="org.argeo.cms.util.SimpleApp" abstract="true">
+		<property name="headerHeight" value="40" />
+		<property name="repository" ref="repository" />
+		<property name="bundleContext" ref="bundleContext" />
+		<property name="jcrBasePath" value="/public" /> 
+	</bean>
+
+	<bean id="header" class="org.argeo.cms.util.SimpleCmsHeader"
+		abstract="true">
+		<property name="end" ref="headerEnd" />
+	</bean>
+
+	<!-- Switch header depending on client type and logged in status -->
+	<bean id="headerManager" class="org.argeo.suite.web.DynamicHeader">
+		<property name="privateHeaderProvider" ref="privateHeader" />
+		<property name="publicHeaderProvider" ref="publicHeader" />
+		<!-- <property name="smallHeaderProvider" ref="smallHeader" /> -->
+	</bean>
+
+	<bean id="privateHeader" class="org.argeo.cms.util.SimpleCmsHeader">
+		<property name="center">
+			<list>
+				<bean p:label="Dashboard" p:target="/#" parent="menuLink" />
+				<bean p:label="Contacts" p:target="/#/people" parent="menuLink" />
+				<bean p:label="Files" p:target="/#/sharedFiles" parent="menuLink" />
+				<!-- <bean p:label="Wiki" p:target="/wiki" parent="menuLink" /> -->
+			</list>
+		</property>
+		<property name="end" ref="headerEnd" />
+	</bean>
+
+	<bean id="publicHeader" class="org.argeo.cms.util.SimpleCmsHeader">
+		<!-- TODO: add static pages for anonymous view -->
+		<!-- <property name="lead"> -->
+		<!-- <list> -->
+		<!-- </list> -->
+		<!-- </property> -->
+		<property name="end" ref="headerEnd" />
+	</bean>
+</beans>

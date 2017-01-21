@@ -1,0 +1,149 @@
+/* For reference, Argeo colors
+Orange: #f6712e;
+Blue: #00294b; */
+
+/* TEXT STYLES */
+.text_title {
+	font: bold 26px sans-serif;
+}
+
+.text_title_box {
+	padding: 20px;
+}
+
+.text_h1 {
+	font: bold 24px sans-serif;
+}
+
+.text_h1_box {
+	padding: 10px 10px 5px;
+}
+
+.text_h2 {
+	font: bold italic 20px serif;
+}
+
+.text_h2_box {
+	padding: 0px 15px 10px;
+}
+
+.text_h3 {
+	font: bold 18px sans-serif;
+}
+
+.text_h3_box {
+	padding: 0px 20px 10px;
+}
+
+.text_default {
+	font: 18px sans-serif;
+}
+
+.text_default_box {
+	padding: 0px 10px 10px;
+}
+
+.text_pre {
+	font: 16px monospace;
+	background-color: inherit;
+}
+
+.text_pre_box {
+	padding: 10px;
+	border: 1px dashed gray;
+	background-color: #ababab
+}
+
+.text_pre_container {
+	padding: 0px 10px 10px;
+}
+
+.text_quote {
+	font: italic 22px serif;
+	text-shadow: 2px 3px 3px #ababab;
+	background-color: inherit;
+}
+
+.text_quote_box {
+	padding: 10px;
+	background-color: #d6d6d6
+}
+
+.text_quote_container {
+	padding: 20px 50px 20px 80px;
+}
+
+/* TEXT */
+.text_styled_tools_dialog {
+	border: 1px solid #00294b;
+	padding: 10px 5px;
+}
+
+.text_styled_composite {
+	/*border: 1px solid red;*/
+	
+}
+
+.text_section {
+/* 	border: 1px solid green; */
+}
+
+.text_paragraph {
+/* 	border: 1px solid blue; */
+}
+
+.text_editor {
+	border: 2px outset #00294b;
+}
+
+/* CMS ICONS */
+.cms_icon_delete {
+	background-image: url(theme/argeo-classic/icons/delete.gif);
+	border: none;
+}
+
+/* CMS */
+.cms_header {
+	background-color: #00294b;
+	height: 30px;
+}
+
+.cms_link {
+	text-decoration: underline;
+}
+
+.cms_link:hover {
+	text-decoration: none;
+	color: black;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+.cms_header-logo {
+	padding: 5px;
+}
+
+.cms_user_menu-link,
+.cms_menu_link {
+	color: white;
+	font: 15px Helvetica, Verdana, sans-serif;
+	padding: 10px;
+	text-decoration: none;
+}
+
+.cms_user_menu-link:hover,
+.cms_menu_link:hover {
+	color: #ededed;
+	text-decoration: underline;
+}
+
+.cms_user_menu {
+	border: 1px solid #00294b;
+	padding: 10px 5px;
+}
