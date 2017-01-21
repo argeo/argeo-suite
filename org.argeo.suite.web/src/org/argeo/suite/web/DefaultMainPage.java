@@ -89,8 +89,7 @@ public class DefaultMainPage implements LifeCycleUiProvider {
 
 		Label anonymousLbl = new Label(body, SWT.WRAP);
 		anonymousLbl.setText("You should login or register to access your private dashboard");
-		CmsUtils.style(anonymousLbl, TextStyles.TEXT_QUOTE);
-
+		
 		return body;
 
 	}
