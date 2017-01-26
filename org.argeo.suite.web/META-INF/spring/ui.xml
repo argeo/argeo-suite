@@ -48,7 +48,8 @@
 				</entry>
 				<entry key="">
 					<map>
-						<entry value="Argeo Suite" key="org.eclipse.rap.rwt.webclient.pageTitle" />
+						<entry value="Smart Data Productivity Suite" key="org.eclipse.rap.rwt.webclient.pageTitle" />
+						<entry value="theme/argeo-classic/icons/favicon.png" key="org.eclipse.rap.rwt.webclient.favicon" />
 					</map>
 				</entry>
 				<entry key="people">

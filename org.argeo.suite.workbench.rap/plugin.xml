@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.6"?>
+<plugin>
+	<!-- RAP workbench main entry point for the Argeo Suite core application --> 
+	<extension
+		point="org.eclipse.rap.ui.entrypoint">
+		<entrypoint
+			id="org.argeo.suite.workbench.rap.entrypoint"
+			class="org.argeo.suite.workbench.rap.AsSecureEntryPoint"
+			path="/suite"
+			brandingId="org.argeo.suite.workbench.rap.defaultBranding">
+		</entrypoint>
+	</extension>
+	
+	<!-- PERSPECTIVES -->
+   	<extension
+         point="org.eclipse.ui.perspectives">
+		<perspective
+            class="org.argeo.suite.workbench.DashboardPerspective"
+            id="org.argeo.suite.workbench.dashboardPerspective"
+            icon="theme/argeo-classic/icons/favicon.png"
+            name="Dashboard">
+		</perspective> 
+	</extension>
+	
+	
+	<!-- EDITORS --> 
+	<extension
+		point="org.eclipse.ui.editors">
+	</extension>
+	
+	<!-- COMMANDS --> 	
+	<extension
+         point="org.eclipse.ui.commands">
+	</extension>
+
+	<!-- MENU CONTRIBUTION --> 
+	<extension
+		id="menu:org.eclipse.ui.main.menu"
+		point="org.eclipse.ui.menus">
+	</extension>
+	
+	<!-- BRANDING AND THEMES -->
+	<extension
+		point="org.eclipse.rap.ui.branding">
+		<branding
+			id="org.argeo.suite.workbench.rap.defaultBranding"
+			themeId="org.eclipse.rap.rwt.theme.Default"
+			title="Smart Data Productivity Suite"
+			favicon="theme/argeo-classic/icons/favicon.png">
+			<additionalHeaders>
+    			 <link 
+    			 	href="suite/theme/classic-headerExt.css"  
+    			 	rel="stylesheet" />
+			</additionalHeaders>
+		</branding>
+	</extension> 
+	
+	<extension  
+            point="org.eclipse.equinox.http.registry.resources">  
+		 <!-- Enable overwriting of link styles in the meta tags -->
+         <resource  
+               alias="/ui/suite/theme/classic-headerExt.css"  
+               base-name="theme/argeo-classic/workbench-headerExt.css">  
+         </resource>  
+         <!-- images -->
+         <resource  
+               alias="/ui/suite/img/logo.jpg"  
+               base-name="theme/argeo-classic/img/logo.jpg">  
+         </resource>  
+         <!-- javascript libraries -->
+         <!--          <resource  
+               alias="/ui/suite/js/Chart.min.js"  
+               base-name="js/Chart.min.js">  
+         </resource>  
+         <resource  
+               alias="/ui/suite/js/leaflet.js"  
+               base-name="js/leaflet.js">  
+         </resource>  
+         <resource  
+               alias="/ui/suite/js/leaflet.css"  
+               base-name="js/leaflet.css">  
+         </resource>   -->
+    </extension>  
+	
+	<extension
+		point="org.eclipse.rap.ui.themes">
+		<themeContribution
+			themeId="org.eclipse.rap.rwt.theme.Default"
+			file="theme/argeo-classic/workbench-ext.css" />
+	</extension>
+</plugin>

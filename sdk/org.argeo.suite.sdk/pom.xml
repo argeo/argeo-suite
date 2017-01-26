@@ -13,6 +13,15 @@
 	<packaging>jar</packaging>
 	<dependencies>
 		<!-- Default Assembly for supported minimal set of Argeo Suite Features -->
+		
+		<!--  Rap Workbench -->
+		<dependency>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.suite.workbench.rap</artifactId>
+			<version>0.1.1-SNAPSHOT</version>
+		</dependency>
+		
+		<!-- Web UI -->
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.suite.web</artifactId>

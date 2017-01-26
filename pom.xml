@@ -14,9 +14,11 @@
 	<version>0.1.1-SNAPSHOT</version>
 	<modules>
 		<module>org.argeo.suite.web</module>
+		<module>org.argeo.suite.workbench.rap</module>
 		<module>sdk</module>
 	</modules>
 	<properties>
+		<version.argeo-suite>0.1.1-SNAPSHOT</version.argeo-suite>
 		<developmentCycle.argeo-suite>0.1</developmentCycle.argeo-suite>
 		<version.argeo-connect>2.1.63</version.argeo-connect>
 		<version.argeo-tp-extras>2.1.9</version.argeo-tp-extras>
