@@ -11,7 +11,7 @@ javax.jcr.nodetype,\
 javax.jcr.security,\
 org.argeo.cms,\
 org.argeo.cms.ui.workbench,\
-org.argeo.connect.people.rap.views,\
+org.argeo.connect.people.workbench.rap.views,\
 org.argeo.eclipse.spring,\
 org.argeo.node,\
 org.argeo.util,\

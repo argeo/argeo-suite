@@ -1,7 +1,7 @@
 package org.argeo.suite.workbench;
 
-import org.argeo.connect.people.rap.views.MyTasksView;
-import org.argeo.connect.people.rap.views.PeopleDefaultView;
+import org.argeo.connect.people.workbench.rap.views.MyTasksView;
+import org.argeo.connect.people.workbench.rap.views.PeopleDefaultView;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;

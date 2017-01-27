@@ -22,7 +22,7 @@
 
 	<!-- The UI Service - Enables among other definition of specific commands 
 		and editors. -->
-	<bean id="peopleWbService" class="org.argeo.connect.people.rap.PeopleWbServiceImpl"
+	<bean id="peopleWbService" class="org.argeo.connect.people.workbench.rap.PeopleWbServiceImpl"
 		scope="prototype">
 	</bean>
 

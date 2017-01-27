@@ -12,19 +12,9 @@
 	<packaging>jar</packaging>
 	<dependencies>
 		<dependency>
-			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.suite.web</artifactId>
-			<version>0.1.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.argeo.connect</groupId>
-			<artifactId>org.argeo.connect.people.rap</artifactId>
+			<artifactId>org.argeo.connect.people.workbench.rap</artifactId>
 			<version>${version.argeo-connect}</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.argeo.commons</groupId> -->
-<!-- 			<artifactId>org.argeo.cms.ui.workbench.rap</artifactId> -->
-<!-- 			<version>${version.argeo-commons}</version> -->
-<!-- 		</dependency> -->
 	</dependencies>
 </project>

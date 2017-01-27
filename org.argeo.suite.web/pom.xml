@@ -20,11 +20,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.argeo.connect</groupId>
-			<artifactId>org.argeo.connect.people.rap</artifactId>
-			<version>${version.argeo-connect}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.connect</groupId>
 			<artifactId>org.argeo.connect.ui</artifactId>
 			<version>${version.argeo-connect}</version>
 		</dependency>
