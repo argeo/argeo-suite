@@ -1,0 +1,8 @@
+Import-Package:\
+javax.jcr.nodetype,\
+org.argeo.node,\
+javax.jcr.security,\
+*
+
+
+    

@@ -9,12 +9,9 @@
 	<!-- REFERENCES -->
 	<!--  Insure a home is present for each user that logs in -->
 	<reference id="repository" interface="javax.jcr.Repository" filter="(cn=home)" />
-	<reference id="userAdmin" interface="org.osgi.service.useradmin.UserAdmin" />
-	<reference id="userTransaction" interface="javax.transaction.UserTransaction" />
+	<reference id="peopleService" interface="org.argeo.connect.people.PeopleService" />
 	<reference id="nodeFileSystemProvider" interface="java.nio.file.spi.FileSystemProvider"
 		filter="(service.pid=org.argeo.node.fsProvider)" />
 	
 	<!-- SERVICES -->
-	<!-- Exposes Argeo Suite specific implementation of the People Service -->
-	<service ref="peopleService" interface="org.argeo.connect.people.PeopleService" />
 </beans:beans>

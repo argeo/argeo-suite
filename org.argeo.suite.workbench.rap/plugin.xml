@@ -33,6 +33,13 @@
 			name="Test View"
 			restorable="true">
 		</view>
+		<view
+			id="org.argeo.suite.workbench.rap.myFilesView"
+			class="org.argeo.eclipse.spring.SpringExtensionFactory"
+			icon="theme/argeo-classic/icons/fs/fsBrowser.png"
+			name="Files"
+			restorable="true">
+		</view>
 	</extension>
 		
 	<!-- EDITORS --> 

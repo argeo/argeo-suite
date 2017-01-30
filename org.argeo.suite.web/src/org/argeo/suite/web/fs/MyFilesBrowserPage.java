@@ -1,4 +1,4 @@
-package org.argeo.suite.fs;
+package org.argeo.suite.web.fs;
 
 import java.nio.file.spi.FileSystemProvider;
 

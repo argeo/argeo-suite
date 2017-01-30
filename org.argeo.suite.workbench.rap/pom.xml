@@ -14,7 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.suite.web</artifactId>
+			<artifactId>org.argeo.suite.core</artifactId>
 			<version>0.1.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

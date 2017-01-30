@@ -6,10 +6,18 @@
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-	<!-- The UI Service - Enables among other definition of specific commands 
-		and editors. -->
-	<bean id="peopleWbService" class="org.argeo.connect.people.workbench.rap.PeopleWbServiceImpl"
-		scope="prototype">
+	<bean id="peopleService" class="org.argeo.suite.people.PeopleSuiteServiceImpl"
+		init-method="init" destroy-method="destroy">
+		<property name="repository" ref="repository" />
+		<property name="workspaceName" value="main" />
+		<property name="userAdminService" ref="userAdminService" />
+	</bean>
+
+	<bean id="userAdminService" class="org.argeo.connect.people.core.UserAdminServiceImpl"
+		scope="singleton" lazy-init="false">
+		<property name="userTransaction" ref="userTransaction" />
+		<property name="userAdmin" ref="userAdmin" />
+		<property name="userAdminServiceReference" ref="userAdmin" />
 	</bean>
 
 	<!-- Execute initialization with a system authentication -->

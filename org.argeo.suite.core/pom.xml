@@ -8,24 +8,15 @@
 		<version>0.1.1-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>org.argeo.suite.web</artifactId>
-	<name>Argeo Suite Web UI</name>
+	<artifactId>org.argeo.suite.core</artifactId>
+	<name>Argeo Suite Core</name>
 	<packaging>jar</packaging>
+
 	<dependencies>
 		<dependency>
-			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.suite.core</artifactId>
-			<version>0.1.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.argeo.connect</groupId>
-			<artifactId>org.argeo.connect.people.web</artifactId>
+			<artifactId>org.argeo.connect.people.core</artifactId>
 			<version>${version.argeo-connect}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.commons</groupId>
-			<artifactId>org.argeo.cms.ui</artifactId>
-			<version>${version.argeo-commons}</version>
 		</dependency>
 	</dependencies>
 </project>

@@ -12,6 +12,14 @@
 	</bean>
 
 	<!-- VIEWS -->
+	<bean id="myFilesView" class="org.argeo.suite.workbench.parts.MyFilesView"
+		scope="prototype">
+		<property name="repository" ref="repository" />
+		<property name="nodeFileSystemProvider" ref="nodeFileSystemProvider" />
+		<property name="fsAppService" ref="fsAppService" />
+	</bean>
+	
+
 	<bean id="testView" class="org.argeo.suite.workbench.parts.TestView"
 		scope="prototype">
 		<property name="repository" ref="repository" />

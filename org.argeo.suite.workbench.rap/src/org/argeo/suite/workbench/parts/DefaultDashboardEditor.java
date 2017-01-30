@@ -1,9 +1,13 @@
 package org.argeo.suite.workbench.parts;
 
+import javax.jcr.Node;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.argeo.connect.people.PeopleConstants;
 import org.argeo.connect.people.PeopleTypes;
 import org.argeo.connect.people.workbench.rap.PeopleRapUtils;
+import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.suite.workbench.AsUiPlugin;
 import org.eclipse.swt.SWT;
@@ -73,10 +77,26 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard {
 		parent.setLayout(EclipseUiUtils.noSpaceGridLayout());
 		createGadgetTitleCmp(parent, "Contacts");
 		Composite bodyCmp = createGadgetBodyCmp(parent);
+		
 		PeopleRapUtils.createOpenSearchEditorLink(getPeopleWorkbenchService(), bodyCmp, "Persons",
 				PeopleTypes.PEOPLE_PERSON, getPeopleService().getBasePath(PeopleTypes.PEOPLE_PERSON));
 
 		PeopleRapUtils.createOpenSearchEditorLink(getPeopleWorkbenchService(), bodyCmp, "Organisations",
 				PeopleTypes.PEOPLE_ORG, getPeopleService().getBasePath(PeopleTypes.PEOPLE_ORG));
+
+		Node tagParent = getPeopleService().getResourceService().getTagLikeResourceParent(getSession(),
+				PeopleTypes.PEOPLE_MAILING_LIST);
+		PeopleRapUtils.createOpenSearchEditorLink(getPeopleWorkbenchService(), bodyCmp, "Mailing lists",
+				PeopleTypes.PEOPLE_MAILING_LIST, ConnectJcrUtils.getPath(tagParent));
+		
+		PeopleRapUtils.createOpenSearchEditorLink(getPeopleWorkbenchService(), bodyCmp, "Tasks",
+				PeopleTypes.PEOPLE_TASK, getPeopleService().getBasePath(null));
+		
+		tagParent = getPeopleService().getResourceService().getTagLikeResourceParent(getSession(),
+				PeopleConstants.RESOURCE_TAG);
+		
+		PeopleRapUtils.createOpenSearchEditorLink(getPeopleWorkbenchService(), bodyCmp, "Tags",
+				PeopleTypes.PEOPLE_TAG_INSTANCE, ConnectJcrUtils.getPath(tagParent));
+
 	}
 }

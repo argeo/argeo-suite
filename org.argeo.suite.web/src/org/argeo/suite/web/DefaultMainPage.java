@@ -21,7 +21,7 @@ import org.argeo.connect.people.PeopleService;
 import org.argeo.connect.people.PeopleTypes;
 import org.argeo.connect.people.web.pages.PeopleDefaultPage;
 import org.argeo.eclipse.ui.EclipseUiUtils;
-import org.argeo.suite.fs.MyFilesBrowserPage;
+import org.argeo.suite.web.fs.MyFilesBrowserPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
