@@ -11,7 +11,7 @@ import org.osgi.framework.BundleContext;
 /** The activator class controls the plug-in life cycle */
 public class AsUiPlugin extends AbstractUIPlugin {
 
-	public static final String PLUGIN_ID = "org.argeo.suite.workbench";
+	public static final String PLUGIN_ID = "org.argeo.suite.workbench.rap";
 
 	// The shared instance
 	private static AsUiPlugin plugin;

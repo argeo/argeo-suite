@@ -1,12 +1,13 @@
 package org.argeo.suite.workbench;
 
+import org.argeo.cms.ui.workbench.jcr.NodeFsBrowserView;
 import org.argeo.connect.people.workbench.rap.views.MyTasksView;
-import org.argeo.connect.people.workbench.rap.views.PeopleDefaultView;
+import org.argeo.connect.people.workbench.rap.views.QuickSearchView;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 
-/** Default office perspective */
+/** Default Argeo Suite Dashboard perspective */
 public class DashboardPerspective implements IPerspectiveFactory {
 
 	public void createInitialLayout(IPageLayout layout) {
@@ -14,10 +15,11 @@ public class DashboardPerspective implements IPerspectiveFactory {
 		layout.setEditorAreaVisible(true);
 		layout.setFixed(false);
 
-		IFolderLayout left = layout.createFolder("left", IPageLayout.LEFT, 0.25f, editorArea);
+		IFolderLayout left = layout.createFolder("left", IPageLayout.LEFT, 0.33f, editorArea);
+		// Only show contacts if current user is a coworker
+		// if (CurrentUser.isInRole(Role.coworker.dn()))
 		left.addView(MyTasksView.ID);
-		// Only show contacts to coworkers
-		// if (CurrentUser.isInRole(AoRole.coworker.dn()))
-		left.addView(PeopleDefaultView.ID);
+		left.addView(QuickSearchView.ID);
+		left.addView(NodeFsBrowserView.ID);
 	}
 }

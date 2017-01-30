@@ -17,21 +17,43 @@
          point="org.eclipse.ui.perspectives">
 		<perspective
             class="org.argeo.suite.workbench.DashboardPerspective"
-            id="org.argeo.suite.workbench.dashboardPerspective"
-            icon="theme/argeo-classic/icons/favicon.png"
+            id="org.argeo.suite.workbench.rap.dashboardPerspective"
+            icon="theme/argeo-classic/icons/favicon-16px.png"
             name="Dashboard">
 		</perspective> 
 	</extension>
 	
-	
+	<!-- VIEWS -->
+	 <extension
+		point="org.eclipse.ui.views">
+		<view
+			id="org.argeo.connect.people.workbench.rap.quickSearchView"
+			class="org.argeo.eclipse.spring.SpringExtensionFactory"
+			icon="theme/argeo-classic/icons/favicon-16px.png"
+			name="Test View"
+			restorable="true">
+		</view>
+	</extension>
+		
 	<!-- EDITORS --> 
 	<extension
 		point="org.eclipse.ui.editors">
+		<editor
+			id="org.argeo.suite.workbench.rap.defaultDashboardEditor"
+			class="org.argeo.eclipse.spring.SpringExtensionFactory"
+			icon="theme/argeo-classic/icons/favicon-16px.png"
+			name="My Dashboard">
+		</editor>
 	</extension>
 	
 	<!-- COMMANDS --> 	
 	<extension
          point="org.eclipse.ui.commands">
+         <command
+      		id="org.argeo.suite.workbench.rap.openDashboardEditor"
+			defaultHandler="org.argeo.eclipse.spring.SpringCommandHandler"
+			name="createEntity">
+    	</command>         
 	</extension>
 
 	<!-- MENU CONTRIBUTION --> 

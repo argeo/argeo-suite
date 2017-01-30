@@ -1,19 +1,11 @@
 package org.argeo.suite.workbench.rap;
 
-import static org.eclipse.swt.SWT.CENTER;
-import static org.eclipse.swt.SWT.LEFT;
-import static org.eclipse.swt.SWT.NO_FOCUS;
-import static org.eclipse.swt.SWT.TOP;
-
 import org.argeo.cms.ui.workbench.rap.RapWorkbenchAdvisor;
 import org.argeo.cms.ui.workbench.rap.RapWorkbenchLogin;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.cms.widgets.auth.CmsLogin;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FormAttachment;
-import org.eclipse.swt.layout.FormData;
-import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -46,8 +38,7 @@ public class AsSecureEntryPoint extends RapWorkbenchLogin {
 		CmsUtils.markup(headerLbl);
 		String headerStr = "<a href=\"http://argeo.org\" "
 				+ "title=\"Smart Data Productivity Suite, by Argeo\" target=\"_blank\"> "
-				+ "<img src=\"/ui/suite/img/logo.jpg\" width=\"200\" height=\"140\"></img> "
-				+ "</a>";
+				+ "<img src=\"/ui/suite/img/logo.jpg\" width=\"200\" height=\"140\"></img> " + "</a>";
 		headerLbl.setText(headerStr);
 		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, true, false);
 		headerLbl.setLayoutData(gd);
@@ -58,7 +49,7 @@ public class AsSecureEntryPoint extends RapWorkbenchLogin {
 		String titleStr = "<big> Please sign in to your personal dashboard</big>";
 		titleLbl.setText(titleStr);
 		gd = new GridData(SWT.CENTER, SWT.BOTTOM, false, false);
-		gd.verticalIndent = 40;
+		gd.verticalIndent = 80;
 		titleLbl.setLayoutData(gd);
 
 		// Login composite
