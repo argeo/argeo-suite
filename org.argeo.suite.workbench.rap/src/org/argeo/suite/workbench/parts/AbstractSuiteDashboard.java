@@ -6,8 +6,8 @@ import javax.jcr.Session;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.people.PeopleService;
 import org.argeo.connect.people.workbench.rap.PeopleStyles;
-import org.argeo.connect.people.workbench.rap.PeopleWorkbenchService;
 import org.argeo.connect.people.workbench.rap.editors.util.EntityEditorInput;
+import org.argeo.connect.ui.workbench.AppWorkbenchService;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
@@ -30,7 +30,7 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 	// DEPENDENCY INJECTION
 	private Repository repository;
 	private PeopleService peopleService;
-	private PeopleWorkbenchService peopleWorkbenchService;
+	private AppWorkbenchService appWorkbenchService;
 
 	private Session session;
 
@@ -153,8 +153,8 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 		return peopleService;
 	}
 
-	protected PeopleWorkbenchService getPeopleWorkbenchService() {
-		return peopleWorkbenchService;
+	protected AppWorkbenchService getAppWorkbenchService() {
+		return appWorkbenchService;
 	}
 
 	protected Session getSession() {
@@ -174,8 +174,8 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 		this.repository = repository;
 	}
 
-	public void setPeopleWorkbenchService(PeopleWorkbenchService peopleWorkbenchService) {
-		this.peopleWorkbenchService = peopleWorkbenchService;
+	public void setAppWorkbenchService(AppWorkbenchService appWorkbenchService) {
+		this.appWorkbenchService = appWorkbenchService;
 	}
 
 	public void setPeopleService(PeopleService peopleService) {

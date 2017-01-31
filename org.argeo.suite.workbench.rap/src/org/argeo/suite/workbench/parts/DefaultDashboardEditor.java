@@ -78,24 +78,24 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard {
 		createGadgetTitleCmp(parent, "Contacts");
 		Composite bodyCmp = createGadgetBodyCmp(parent);
 		
-		PeopleRapUtils.createOpenSearchEditorLink(getPeopleWorkbenchService(), bodyCmp, "Persons",
+		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Persons",
 				PeopleTypes.PEOPLE_PERSON, getPeopleService().getBasePath(PeopleTypes.PEOPLE_PERSON));
 
-		PeopleRapUtils.createOpenSearchEditorLink(getPeopleWorkbenchService(), bodyCmp, "Organisations",
+		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Organisations",
 				PeopleTypes.PEOPLE_ORG, getPeopleService().getBasePath(PeopleTypes.PEOPLE_ORG));
 
 		Node tagParent = getPeopleService().getResourceService().getTagLikeResourceParent(getSession(),
 				PeopleTypes.PEOPLE_MAILING_LIST);
-		PeopleRapUtils.createOpenSearchEditorLink(getPeopleWorkbenchService(), bodyCmp, "Mailing lists",
+		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Mailing lists",
 				PeopleTypes.PEOPLE_MAILING_LIST, ConnectJcrUtils.getPath(tagParent));
 		
-		PeopleRapUtils.createOpenSearchEditorLink(getPeopleWorkbenchService(), bodyCmp, "Tasks",
+		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tasks",
 				PeopleTypes.PEOPLE_TASK, getPeopleService().getBasePath(null));
 		
 		tagParent = getPeopleService().getResourceService().getTagLikeResourceParent(getSession(),
 				PeopleConstants.RESOURCE_TAG);
 		
-		PeopleRapUtils.createOpenSearchEditorLink(getPeopleWorkbenchService(), bodyCmp, "Tags",
+		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tags",
 				PeopleTypes.PEOPLE_TAG_INSTANCE, ConnectJcrUtils.getPath(tagParent));
 
 	}

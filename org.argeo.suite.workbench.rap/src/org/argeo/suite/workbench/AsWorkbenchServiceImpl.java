@@ -1,40 +1,100 @@
 package org.argeo.suite.workbench;
 
-import org.argeo.connect.people.workbench.rap.PeopleWorkbenchService;
-import org.argeo.connect.people.workbench.rap.PeopleWorkbenchServiceImpl;
+import java.util.List;
+
+import javax.jcr.Node;
+
+import org.argeo.connect.ui.workbench.AppWorkbenchService;
+import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.suite.workbench.parts.DefaultDashboardEditor;
+import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.graphics.Image;
 
 /** Centralize workbench services from the various base apps */
-public class AsWorkbenchServiceImpl extends PeopleWorkbenchServiceImpl implements PeopleWorkbenchService {
+public class AsWorkbenchServiceImpl implements AppWorkbenchService {
+
+	// Injected known AppWorkbenchServices: order is important, first found
+	// result will be returned by the various methods.
+	private List<AppWorkbenchService> knownAppWbServices;
 
 	@Override
 	public String getDefaultEditorId() {
 		return DefaultDashboardEditor.ID;
 	}
-}
 
-// extends PeopleWorkbenchServiceImpl {
-//
-// public String getDefaultEditorId() {
-// return DefaultDashboardEditor.ID;
-// }
-//
-// //
-// // @Override
-// // public Image getIconForType(Node entity) {
-// // try {
-// // if (entity.isNodeType(AoTypes.OFFICE_ACCOUNT))
-// // return AoImages.ICON_ACCOUNT;
-// // else if (entity.isNodeType(TrackerTypes.TRACKER_ISSUE))
-// // return AoImages.ICON_ISSUE;
-// // else if (entity.isNodeType(TrackerTypes.TRACKER_PROJECT))
-// // return AoImages.ICON_PROJECT;
-// // else if (entity.isNodeType(AoTypes.OFFICE_PROSPECT))
-// // return AoImages.ICON_PROSPECT;
-// // else
-// // return super.getIconForType(entity);
-// // } catch (RepositoryException re) {
-// // throw new PeopleException("Unable to get image for node", re);
-// // }
-// // }
-// }
+	@Override
+	public String getOpenEntityEditorCmdId() {
+		String result = null;
+		for (AppWorkbenchService appWbService : knownAppWbServices) {
+			result = appWbService.getOpenEntityEditorCmdId();
+			if (EclipseUiUtils.notEmpty(result))
+				return result;
+		}
+		return null;
+	}
+
+	@Override
+	public String getOpenSearchEntityEditorCmdId() {
+		String result = null;
+		for (AppWorkbenchService appWbService : knownAppWbServices) {
+			result = appWbService.getOpenSearchEntityEditorCmdId();
+			if (EclipseUiUtils.notEmpty(result))
+				return result;
+		}
+		return null;
+	}
+
+	@Override
+	public String getEntityEditorId(Node entity) {
+		String result = null;
+		for (AppWorkbenchService appWbService : knownAppWbServices) {
+			result = appWbService.getEntityEditorId(entity);
+			if (EclipseUiUtils.notEmpty(result))
+				return result;
+		}
+		return null;
+	}
+
+	@Override
+	public String getSearchEntityEditorId(String nodeType) {
+		String result = null;
+		for (AppWorkbenchService appWbService : knownAppWbServices) {
+			result = appWbService.getSearchEntityEditorId(nodeType);
+			if (EclipseUiUtils.notEmpty(result))
+				return result;
+		}
+		return null;
+	}
+
+	@Override
+	public Image getIconForType(Node entity) {
+		Image result = null;
+		for (AppWorkbenchService appWbService : knownAppWbServices) {
+			result = appWbService.getIconForType(entity);
+			if (result != null)
+				return result;
+		}
+		return null;
+	}
+
+	@Override
+	public Wizard getCreationWizard(Node node) {
+		Wizard result = null;
+		for (AppWorkbenchService appWbService : knownAppWbServices) {
+			result = appWbService.getCreationWizard(node);
+			if (result != null)
+				return result;
+		}
+		return null;
+	}
+
+	@Override
+	public String getOpenFileCmdId() {
+		return null;
+	}
+
+	/* DEPENDENCY INJECTION */
+	public void setKnownAppWbServices(List<AppWorkbenchService> knownAppWbServices) {
+		this.knownAppWbServices = knownAppWbServices;
+	}
+}

@@ -9,15 +9,12 @@
 	<!-- REFERENCES -->
 	<reference id="repository" interface="javax.jcr.Repository"
 		filter="(cn=home)" />
-	<reference id="peopleService" interface="org.argeo.connect.people.PeopleService" />
-	<reference id="peopleWorkbenchService"
-		interface="org.argeo.connect.people.workbench.rap.PeopleWorkbenchService" />
 	<reference id="nodeFileSystemProvider" interface="java.nio.file.spi.FileSystemProvider"
 		filter="(service.pid=org.argeo.node.fsProvider)" />
+	<reference id="appWorkbenchService"
+		interface="org.argeo.connect.ui.workbench.AppWorkbenchService" />
 
-
-	<!-- Local beans to be cleaned -->
-	<beans:bean id="fsAppService" class="org.argeo.suite.workbench.fs.FsAppService">
-	</beans:bean>
+	<reference id="peopleService" interface="org.argeo.connect.people.PeopleService" />
+	<reference id="documentsService" interface="org.argeo.connect.documents.DocumentsService" />
 
 </beans:beans>

@@ -23,24 +23,24 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.nodetype.NodeType;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 import javax.jcr.query.QueryResult;
 
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.ConnectConstants;
+import org.argeo.connect.documents.DocumentsService;
 import org.argeo.connect.people.PeopleException;
 import org.argeo.connect.people.workbench.rap.providers.BasicNodeListContentProvider;
 import org.argeo.connect.ui.ConnectUiConstants;
 import org.argeo.connect.ui.widgets.DelayedText;
+import org.argeo.connect.ui.workbench.AppWorkbenchService;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.connect.util.XPathUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.eclipse.ui.fs.FsTableViewer;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.suite.workbench.AsUiPlugin;
-import org.argeo.suite.workbench.fs.FsAppService;
 import org.argeo.suite.workbench.fs.FsSingleColumnLabelProvider;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -68,10 +68,11 @@ import org.eclipse.ui.part.ViewPart;
 public class MyFilesView extends ViewPart implements IDoubleClickListener {
 	public final static String ID = AsUiPlugin.PLUGIN_ID + ".myFilesView";
 
-	private FileSystemProvider nodeFileSystemProvider;
-	private FsAppService fsAppService;
 	private Repository repository;
 	private Session session;
+	private AppWorkbenchService appWorkbenchService;
+	private FileSystemProvider nodeFileSystemProvider;
+	private DocumentsService documentsService;
 
 	private DelayedText filterTxt;
 	private TableViewer searchResultsViewer;
@@ -150,21 +151,19 @@ public class MyFilesView extends ViewPart implements IDoubleClickListener {
 		parent.setLayout(new GridLayout());
 
 		Composite tableComposite = new Composite(parent, SWT.NONE);
-		GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_VERTICAL
-				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
-		tableComposite.setLayoutData(gd);
+		tableComposite.setLayoutData(EclipseUiUtils.fillAll());
 
 		TableViewer v = new TableViewer(tableComposite);
 		v.setLabelProvider(labelProvider);
 
 		TableColumn singleColumn = new TableColumn(v.getTable(), SWT.V_SCROLL);
 		TableColumnLayout tableColumnLayout = new TableColumnLayout();
-		tableColumnLayout.setColumnData(singleColumn, new ColumnWeightData(85));
+		tableColumnLayout.setColumnData(singleColumn, new ColumnWeightData(100));
 		tableComposite.setLayout(tableColumnLayout);
 
 		// Corresponding table & style
 		Table table = v.getTable();
-		table.setLinesVisible(true);
+		table.setLinesVisible(false);
 		table.setHeaderVisible(false);
 		CmsUtils.markup(table);
 		CmsUtils.setItemHeight(table, 26);
@@ -183,13 +182,10 @@ public class MyFilesView extends ViewPart implements IDoubleClickListener {
 	protected int refreshFilteredList() {
 		try {
 			String filter = filterTxt.getText();
-			// Prevents the query on the full repository
 			if (EclipseUiUtils.isEmpty(filter)) {
 				searchResultsViewer.setInput(null);
 				return 0;
 			}
-
-			QueryManager queryManager = session.getWorkspace().getQueryManager();
 
 			// XPATH Query
 			// TODO manage cleanly jcr: prefix
@@ -199,11 +195,10 @@ public class MyFilesView extends ViewPart implements IDoubleClickListener {
 			if (notEmpty(xpathFilter))
 				xpathQueryStr += "[" + xpathFilter + "]";
 
+			QueryManager queryManager = session.getWorkspace().getQueryManager();
 			Query xpathQuery = queryManager.createQuery(xpathQueryStr, ConnectConstants.QUERY_XPATH);
-
 			// xpathQuery.setLimit(TrackerUiConstants.SEARCH_DEFAULT_LIMIT);
 			QueryResult result = xpathQuery.execute();
-
 			NodeIterator nit = result.getNodes();
 			searchResultsViewer.setInput(JcrUtils.nodeIteratorToList(nit));
 
@@ -216,7 +211,6 @@ public class MyFilesView extends ViewPart implements IDoubleClickListener {
 	private void populateBookmarks(Composite parent) {
 		CmsUtils.clear(parent);
 		parent.setLayout(new GridLayout());
-
 		int bookmarkColWith = 200;
 
 		FsTableViewer homeViewer = new FsTableViewer(parent, SWT.SINGLE | SWT.NO_SCROLL);
@@ -225,7 +219,7 @@ public class MyFilesView extends ViewPart implements IDoubleClickListener {
 		gd.horizontalIndent = 10;
 		table.setLayoutData(gd);
 		homeViewer.addDoubleClickListener(this);
-		homeViewer.setPathsInput(fsAppService.getMyFilesPath(nodeFileSystemProvider, session));
+		homeViewer.setPathsInput(documentsService.getMyDocumentsPath(nodeFileSystemProvider, session));
 
 		appendTitle(parent, "Shared files");
 		FsTableViewer groupsViewer = new FsTableViewer(parent, SWT.SINGLE | SWT.NO_SCROLL);
@@ -234,7 +228,7 @@ public class MyFilesView extends ViewPart implements IDoubleClickListener {
 		gd.horizontalIndent = 10;
 		table.setLayoutData(gd);
 		groupsViewer.addDoubleClickListener(this);
-		groupsViewer.setPathsInput(fsAppService.getMyGroupsFilesPath(nodeFileSystemProvider, session));
+		groupsViewer.setPathsInput(documentsService.getMyGroupsFilesPath(nodeFileSystemProvider, session));
 
 		appendTitle(parent, "My bookmarks");
 		FsTableViewer bookmarksViewer = new FsTableViewer(parent, SWT.SINGLE | SWT.NO_SCROLL);
@@ -243,7 +237,7 @@ public class MyFilesView extends ViewPart implements IDoubleClickListener {
 		gd.horizontalIndent = 10;
 		table.setLayoutData(gd);
 		bookmarksViewer.addDoubleClickListener(this);
-		bookmarksViewer.setPathsInput(fsAppService.getMyBookmarks(nodeFileSystemProvider, session));
+		bookmarksViewer.setPathsInput(documentsService.getMyBookmarks(nodeFileSystemProvider, session));
 	}
 
 	private Label appendTitle(Composite parent, String value) {
@@ -263,6 +257,14 @@ public class MyFilesView extends ViewPart implements IDoubleClickListener {
 		if (selection.isEmpty())
 			return;
 		else {
+
+			// currNode = ConnectJcrUtils.getNodeFromElement(obj, selectorName);
+			// if (currNode != null)
+			// CommandUtils
+			// .callCommand(peopleWorkbenchService
+			// .getOpenEntityEditorCmdId(),
+			// OpenEntityEditor.PARAM_JCR_ID, currNode
+			// .getIdentifier());
 			System.out.println("Double clicked");
 			// TODO open corresponding editor
 			// Path newSelected = (Path) selection.getFirstElement();
@@ -283,11 +285,15 @@ public class MyFilesView extends ViewPart implements IDoubleClickListener {
 		this.repository = repository;
 	}
 
+	public void setAppWorkbenchService(AppWorkbenchService appWorkbenchService) {
+		this.appWorkbenchService = appWorkbenchService;
+	}
+
 	public void setNodeFileSystemProvider(FileSystemProvider nodeFileSystemProvider) {
 		this.nodeFileSystemProvider = nodeFileSystemProvider;
 	}
 
-	public void setFsAppService(FsAppService fsAppService) {
-		this.fsAppService = fsAppService;
+	public void setDocumentsService(DocumentsService documentsService) {
+		this.documentsService = documentsService;
 	}
 }

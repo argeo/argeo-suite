@@ -1,3 +1,5 @@
+Require-Capability: cms.datamodel; filter:="(name=people)",\
+cms.datamodel; filter:="(name=documents)"
 Import-Package:\
 javax.jcr.nodetype,\
 org.argeo.node,\
