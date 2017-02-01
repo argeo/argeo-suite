@@ -6,6 +6,7 @@ import javax.jcr.Node;
 
 import org.argeo.connect.ui.workbench.AppWorkbenchService;
 import org.argeo.eclipse.ui.EclipseUiUtils;
+import org.argeo.suite.workbench.commands.OpenEntityEditor;
 import org.argeo.suite.workbench.parts.DefaultDashboardEditor;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.graphics.Image;
@@ -24,13 +25,13 @@ public class AsWorkbenchServiceImpl implements AppWorkbenchService {
 
 	@Override
 	public String getOpenEntityEditorCmdId() {
-		String result = null;
-		for (AppWorkbenchService appWbService : knownAppWbServices) {
-			result = appWbService.getOpenEntityEditorCmdId();
-			if (EclipseUiUtils.notEmpty(result))
-				return result;
-		}
-		return null;
+//		String result = null;
+//		for (AppWorkbenchService appWbService : knownAppWbServices) {
+//			result = appWbService.getOpenEntityEditorCmdId();
+//			if (EclipseUiUtils.notEmpty(result))
+//				return result;
+//		}
+		return OpenEntityEditor.ID;
 	}
 
 	@Override

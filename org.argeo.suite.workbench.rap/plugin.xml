@@ -33,13 +33,6 @@
 			name="Test View"
 			restorable="true">
 		</view>
-		<view
-			id="org.argeo.suite.workbench.rap.myFilesView"
-			class="org.argeo.eclipse.spring.SpringExtensionFactory"
-			icon="theme/argeo-classic/icons/fs/fsBrowser.png"
-			name="Files"
-			restorable="true">
-		</view>
 	</extension>
 		
 	<!-- EDITORS --> 
@@ -61,6 +54,18 @@
 			defaultHandler="org.argeo.eclipse.spring.SpringCommandHandler"
 			name="createEntity">
     	</command>         
+    	
+    	<!-- Open correct editor given the node type --> 
+    	<command
+			id="org.argeo.suite.workbench.rap.openEntityEditor"
+			defaultHandler="org.argeo.eclipse.spring.SpringCommandHandler"
+			name="Open Editor">
+			<commandParameter
+         		id="param.jcrId"
+         		name="The jcr identifier">
+         	</commandParameter>
+		</command>    
+		
 	</extension>
 
 	<!-- MENU CONTRIBUTION --> 

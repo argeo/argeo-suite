@@ -10,17 +10,14 @@
 		scope="prototype">
 		<property name="repository" ref="repository" />
 	</bean>
-
-	<!-- VIEWS -->
-	<bean id="myFilesView" class="org.argeo.suite.workbench.parts.MyFilesView"
+	
+	<bean id="openEntityEditor" class="org.argeo.suite.workbench.commands.OpenEntityEditor"
 		scope="prototype">
 		<property name="repository" ref="repository" />
-		<property name="nodeFileSystemProvider" ref="nodeFileSystemProvider" />
-		<property name="documentsService" ref="documentsService" />
 		<property name="appWorkbenchService" ref="appWorkbenchService" />
 	</bean>
-	
 
+	<!-- VIEWS -->
 	<bean id="testView" class="org.argeo.suite.workbench.parts.TestView"
 		scope="prototype">
 		<property name="repository" ref="repository" />

@@ -80,15 +80,14 @@ Widget-ToolTip {
 
 }
 
-/** HEADER
- **/
+/** HEADER **/
 .people_entity_header {
   font: 14px Helvetica, Verdana, "Lucida Sans", Arial, sans-serif;
   text-decoration: none;
 }
 
 
-/****** Flat image Buttons *********/
+/** Flat image Buttons **/
 Button[PUSH][FLAT].people_flat_btn,
 Button.people_flat_btn,
 Button.people_flat_btn:default, 
@@ -105,15 +104,27 @@ Button.people_flat_btn:selected {
   cursor: pointer;
 }
 
-/*
 
-Button.createFolder_btn:selected,
-Button.createFolder_btn:disabled, 
-Button.createFolder_btn:pressed, 
+/****** DOCUMENTS  *********/
 
-*/
+/* Breadcrumb ***/
+Button.breadCrumb_btn {
+  border: 1px solid  #f4f6f7;
+  border-radius: 3px;
+  padding: 2px 2px 2px 2px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  animation: hoverOut 500ms ease-out;
+  cursor: pointer;
+  font-color: #00294b;
+  text-decoration: none;
+}
 
-/****** Context menu  *********/
+Button.breadCrumb_btn:hover {
+  text-decoration: underline;
+}
+
+/* Documents lists context menu */
 .contextMenu_box {
 	border: 0px solid #fde2d5;
   	padding: 0px;
@@ -121,11 +132,15 @@ Button.createFolder_btn:pressed,
 }
 
 Button[PUSH][FLAT].createFolder_btn {
-	background-image: url( theme/argeo-classic/icons/fs/createFolder.png);
+	background-image: url( theme/argeo-classic/icons/fs/addFolder.gif);
 }
 
 Button[PUSH][FLAT].shareFolder_btn {
 	background-image: url( theme/argeo-classic/icons/fs/shareFolder.png);
+}
+
+Button[PUSH][FLAT].bookmarkFolder_btn {
+	background-image: url( theme/argeo-classic/icons/fs/bookmarkFolder.png);
 }
 
 Button[PUSH][FLAT].downloadFolder_btn {
@@ -144,16 +159,17 @@ Button[PUSH][FLAT].open_btn {
 	background-image: url( theme/argeo-classic/icons/fs/open.png);
 }
 
+Button[PUSH][FLAT].createFolder_btn,
 Button[PUSH][FLAT].shareFolder_btn,
+Button[PUSH][FLAT].bookmarkFolder_btn,
 Button[PUSH][FLAT].downloadFolder_btn,
 Button[PUSH][FLAT].delete_btn,
 Button[PUSH][FLAT].uploadFiles_btn,
-Button[PUSH][FLAT].open_btn,
-Button[PUSH][FLAT].createFolder_btn {
+Button[PUSH][FLAT].open_btn {
   border: 0px solid white;
   border-left: 10px solid transparent;
   border-radius: 0px;
-  padding: 8px 5px 8px 24px;
+  padding: 4px 5px 4px 24px;
   background-color: transparent;
   background-repeat: no-repeat;
   background-position: left; 
@@ -161,27 +177,28 @@ Button[PUSH][FLAT].createFolder_btn {
   cursor: pointer;
 }
 
+Button[PUSH][FLAT].createFolder_btn:hover,
 Button[PUSH][FLAT].shareFolder_btn:hover,
+Button[PUSH][FLAT].bookmarkFolder_btn:hover,
 Button[PUSH][FLAT].downloadFolder_btn:hover,
 Button[PUSH][FLAT].delete_btn:hover,
 Button[PUSH][FLAT].uploadFiles_btn:hover,
-Button[PUSH][FLAT].open_btn:hover,
-Button[PUSH][FLAT].createFolder_btn:hover {
+Button[PUSH][FLAT].open_btn:hover {
   background-color: #fef0ea;
 }
 
+Button[PUSH][FLAT].createFolder_btn:pressed,
+Button[PUSH][FLAT].shareFolder_btn:pressed,
+Button[PUSH][FLAT].bookmarkFolder_btn:pressed,
 Button[PUSH][FLAT].shareFolder_btn:pressed,
 Button[PUSH][FLAT].downloadFolder_btn:pressed,
 Button[PUSH][FLAT].delete_btn:pressed,
 Button[PUSH][FLAT].uploadFiles_btn:pressed,
-Button[PUSH][FLAT].open_btn:pressed,
-Button[PUSH][FLAT].createFolder_btn:pressed {
+Button[PUSH][FLAT].open_btn:pressed {
   background-color: #fde2d5;
 }
 
-/*******************************/
-/*   People Generic Styling  **/
-/*******************************/
+/*  PEOPLE  **/
 
 /**  TEXTS **/
 
