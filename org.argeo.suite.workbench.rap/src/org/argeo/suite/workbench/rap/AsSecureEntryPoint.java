@@ -36,6 +36,7 @@ public class AsSecureEntryPoint extends RapWorkbenchLogin {
 		// Logo
 		Label headerLbl = new Label(bodyCmp, SWT.WRAP);
 		CmsUtils.markup(headerLbl);
+		// Images are declared via the resources extension point in plugin.xml
 		String headerStr = "<a href=\"http://argeo.org\" "
 				+ "title=\"Smart Data Productivity Suite, by Argeo\" target=\"_blank\"> "
 				+ "<img src=\"/ui/suite/img/logo.jpg\" width=\"200\" height=\"140\"></img> " + "</a>";
