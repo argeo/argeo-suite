@@ -147,9 +147,16 @@ Button[PUSH][FLAT].downloadFolder_btn {
 	background-image: url( theme/argeo-classic/icons/fs/downloadFolder.png);
 }
 
-Button[PUSH][FLAT].delete_btn {
+Button[PUSH][FLAT].delete_btn,
+Button[PUSH][FLAT].deleteBookmark_btn {
 	background-image: url( theme/argeo-classic/icons/fs/delete.png);
 }
+
+Button[PUSH][FLAT].rename_btn,
+Button[PUSH][FLAT].renameBookmark_btn {
+	background-image: url( theme/argeo-classic/icons/fs/rename.png);
+}
+
 
 Button[PUSH][FLAT].uploadFiles_btn {
 	background-image: url( theme/argeo-classic/icons/fs/upload.png);
@@ -159,13 +166,17 @@ Button[PUSH][FLAT].open_btn {
 	background-image: url( theme/argeo-classic/icons/fs/open.png);
 }
 
+
 Button[PUSH][FLAT].createFolder_btn,
 Button[PUSH][FLAT].shareFolder_btn,
 Button[PUSH][FLAT].bookmarkFolder_btn,
 Button[PUSH][FLAT].downloadFolder_btn,
 Button[PUSH][FLAT].delete_btn,
+Button[PUSH][FLAT].rename_btn,
 Button[PUSH][FLAT].uploadFiles_btn,
-Button[PUSH][FLAT].open_btn {
+Button[PUSH][FLAT].open_btn,
+Button[PUSH][FLAT].deleteBookmark_btn, 
+Button[PUSH][FLAT].renameBookmark_btn {
   border: 0px solid white;
   border-left: 10px solid transparent;
   border-radius: 0px;
@@ -182,8 +193,11 @@ Button[PUSH][FLAT].shareFolder_btn:hover,
 Button[PUSH][FLAT].bookmarkFolder_btn:hover,
 Button[PUSH][FLAT].downloadFolder_btn:hover,
 Button[PUSH][FLAT].delete_btn:hover,
+Button[PUSH][FLAT].rename_btn:hover,
 Button[PUSH][FLAT].uploadFiles_btn:hover,
-Button[PUSH][FLAT].open_btn:hover {
+Button[PUSH][FLAT].open_btn:hover,
+Button[PUSH][FLAT].deleteBookmark_btn:hover, 
+Button[PUSH][FLAT].renameBookmark_btn:hover  {
   background-color: #fef0ea;
 }
 
@@ -193,8 +207,11 @@ Button[PUSH][FLAT].bookmarkFolder_btn:pressed,
 Button[PUSH][FLAT].shareFolder_btn:pressed,
 Button[PUSH][FLAT].downloadFolder_btn:pressed,
 Button[PUSH][FLAT].delete_btn:pressed,
+Button[PUSH][FLAT].rename_btn:pressed,
 Button[PUSH][FLAT].uploadFiles_btn:pressed,
-Button[PUSH][FLAT].open_btn:pressed {
+Button[PUSH][FLAT].open_btn:pressed,
+Button[PUSH][FLAT].deleteBookmark_btn:pressed, 
+Button[PUSH][FLAT].renameBookmark_btn:pressed{
   background-color: #fde2d5;
 }
 

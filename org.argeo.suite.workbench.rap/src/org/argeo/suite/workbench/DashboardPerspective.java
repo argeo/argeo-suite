@@ -14,12 +14,9 @@ public class DashboardPerspective implements IPerspectiveFactory {
 		String editorArea = layout.getEditorArea();
 		layout.setEditorAreaVisible(true);
 		layout.setFixed(false);
-
 		IFolderLayout left = layout.createFolder("left", IPageLayout.LEFT, 0.25f, editorArea);
-		// Only show contacts if current user is a coworker
-		// if (CurrentUser.isInRole(Role.coworker.dn()))
-		left.addView(MyTasksView.ID);
-		left.addView(QuickSearchView.ID);
 		left.addView(MyFilesView.ID);
+		left.addView(QuickSearchView.ID);
+		left.addView(MyTasksView.ID);
 	}
 }
