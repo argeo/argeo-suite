@@ -62,6 +62,8 @@ Widget-ToolTip {
 }
 
 
+
+
 /** GADGETS  **/
 .people_gadget {
   border: 1px solid #f3f3f4;
@@ -103,6 +105,23 @@ Button.people_flat_btn:selected {
   animation: hoverOut 500ms ease-out;
   cursor: pointer;
 }
+
+
+/*** FORMS ****/ 
+
+Text.workbench_form_text {
+	box-shadow: inset 0 0 0px #bdbdbd;	
+	padding: 2px 8px 2px 8px;
+	border: 0px solid  #f4f6f7;
+}
+
+Text.workbench_form_text:focused {
+	padding: 2px 8px 2px 8px;
+	border: 2px solid red;
+	box-shadow: inset 0 0 1px #bdbdbd;	
+}
+
+
 
 
 /****** DOCUMENTS  *********/

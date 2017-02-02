@@ -26,7 +26,11 @@ import org.argeo.suite.ArgeoSuiteRole;
 import org.argeo.suite.SuiteException;
 import org.springframework.core.io.Resource;
 
-/** Default implementation of an Argeo Suite specific People Backend */
+/**
+ * Default implementation of an Argeo Suite specific People Backend
+ * 
+ * TODO refactor and clean init process and service dependencies
+ */
 public class PeopleSuiteServiceImpl extends PeopleServiceImpl implements PeopleService, PeopleConstants {
 	private final static Log log = LogFactory.getLog(PeopleSuiteServiceImpl.class);
 
@@ -57,7 +61,6 @@ public class PeopleSuiteServiceImpl extends PeopleServiceImpl implements PeopleS
 	// FIXME Users must have read access on the jcr:system/jcr:versionStorage
 	// node under JackRabbit to be able to manage versions
 	private final static String jackRabbitVersionSystemPath = "/jcr:system";
-	// private final static String sharedFilePath = "/sharedFiles";
 
 	@Override
 	protected void initialiseModel(Session adminSession) throws RepositoryException {
@@ -65,7 +68,6 @@ public class PeopleSuiteServiceImpl extends PeopleServiceImpl implements PeopleS
 
 		JcrUtils.mkdirs(adminSession, publicPath, NodeType.NT_UNSTRUCTURED);
 		JcrUtils.mkdirs(adminSession, groupHomePath, NodeType.NT_UNSTRUCTURED);
-		// JcrUtils.mkdirs(adminSession, sharedFilePath, NodeType.NT_FOLDER);
 		if (adminSession.hasPendingChanges()) {
 			adminSession.save();
 			configureACL(adminSession);
@@ -88,8 +90,7 @@ public class PeopleSuiteServiceImpl extends PeopleServiceImpl implements PeopleS
 		JcrUtils.addPrivilege(session, publicPath, NodeConstants.ROLE_USER, Privilege.JCR_READ);
 		JcrUtils.addPrivilege(session, publicPath, "anonymous", Privilege.JCR_READ);
 		JcrUtils.addPrivilege(session, publicPath, NodeConstants.ROLE_ANONYMOUS, Privilege.JCR_READ);
-		// JcrUtils.addPrivilege(session, sharedFilePath,
-		// NodeConstants.ROLE_USER, Privilege.JCR_ALL);
+
 		session.save();
 		log.info("Access control configured");
 	}
