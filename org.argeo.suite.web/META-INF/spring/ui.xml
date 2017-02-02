@@ -76,7 +76,7 @@
 					<list>
 						<value>theme/argeo-classic/argeo-classic.css</value>
 						<value>theme/argeo-classic/people-classic.css</value>
-						<value>theme/argeo-classic/fs-classic.css</value>
+						<value>theme/argeo-classic/documents-classic.css</value>
 						<value>theme/argeo-classic/maintenance-classic.css</value>
 					</list>
 				</entry>
