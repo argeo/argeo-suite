@@ -1,9 +1,15 @@
 package org.argeo.suite.workbench.parts;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.jcr.Node;
 import javax.jcr.Repository;
 import javax.jcr.Session;
 
+import org.argeo.cms.ui.workbench.util.CommandUtils;
 import org.argeo.cms.util.CmsUtils;
+import org.argeo.connect.documents.DocumentsService;
 import org.argeo.connect.people.PeopleService;
 import org.argeo.connect.people.workbench.rap.PeopleStyles;
 import org.argeo.connect.people.workbench.rap.editors.util.EntityEditorInput;
@@ -13,11 +19,14 @@ import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.PartInitException;
@@ -30,6 +39,7 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 	// DEPENDENCY INJECTION
 	private Repository repository;
 	private PeopleService peopleService;
+	private DocumentsService documentsService;
 	private AppWorkbenchService appWorkbenchService;
 
 	private Session session;
@@ -116,6 +126,25 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 		return bodyCmp;
 	}
 
+	protected Link createOpenEntityEditorLink(final AppWorkbenchService peopleUiService, Composite parent,
+			final String label, final Node entity) {
+		Link link = new Link(parent, SWT.NONE);
+		link.setText("<a>" + label + "</a>");
+		link.setLayoutData(EclipseUiUtils.fillWidth());
+		link.addSelectionListener(new SelectionAdapter() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public void widgetSelected(final SelectionEvent event) {
+				Map<String, String> params = new HashMap<String, String>();
+				// FIXME
+				params.put("param.jcrId", ConnectJcrUtils.getIdentifier(entity));
+				CommandUtils.callCommand(peopleUiService.getOpenEntityEditorCmdId(), params);
+			}
+		});
+		return link;
+	}
+
 	// LIFE CYCLE
 	@Override
 	public void dispose() {
@@ -165,6 +194,10 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 		return logoImg;
 	}
 
+	protected DocumentsService getDocumentsService() {
+		return documentsService;
+	}
+
 	protected FormToolkit getFormToolkit() {
 		return toolkit;
 	}
@@ -176,6 +209,10 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 
 	public void setAppWorkbenchService(AppWorkbenchService appWorkbenchService) {
 		this.appWorkbenchService = appWorkbenchService;
+	}
+
+	public void setDocumentsService(DocumentsService documentsService) {
+		this.documentsService = documentsService;
 	}
 
 	public void setPeopleService(PeopleService peopleService) {

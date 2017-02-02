@@ -38,8 +38,8 @@ public class AsSecureEntryPoint extends RapWorkbenchLogin {
 		CmsUtils.markup(headerLbl);
 		// Images are declared via the resources extension point in plugin.xml
 		String headerStr = "<a href=\"http://argeo.org\" "
-				+ "title=\"Smart Data Productivity Suite, by Argeo\" target=\"_blank\"> "
-				+ "<img src=\"/ui/suite/img/logo.jpg\" width=\"200\" height=\"140\"></img> " + "</a>";
+				+ "title=\"Smart Data Productivity Suite by Argeo\" target=\"_blank\"> "
+				+ "<img src=\"/ui/suite/img/logo-argeo.png\" width=\"250\" height=\"250\"></img> " + "</a>";
 		headerLbl.setText(headerStr);
 		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, true, false);
 		headerLbl.setLayoutData(gd);
@@ -50,7 +50,7 @@ public class AsSecureEntryPoint extends RapWorkbenchLogin {
 		String titleStr = "<big> Please sign in to your personal dashboard</big>";
 		titleLbl.setText(titleStr);
 		gd = new GridData(SWT.CENTER, SWT.BOTTOM, false, false);
-		gd.verticalIndent = 80;
+		// gd.verticalIndent = 40;
 		titleLbl.setLayoutData(gd);
 
 		// Login composite
@@ -60,12 +60,13 @@ public class AsSecureEntryPoint extends RapWorkbenchLogin {
 		gd.verticalIndent = 15;
 		loginCmp.setLayoutData(gd);
 
-		// Footer
-		Label footerLbl = new Label(bodyCmp, SWT.WRAP | SWT.CENTER);
-		CmsUtils.markup(footerLbl);
-		String footerStr = "<small>SDPS is a private service. <br/>"
-				+ " Please <a href=\"mailto:contact@argeo.org\">contact us</a> if you have any question.</small>";
-		footerLbl.setText(footerStr);
-		footerLbl.setLayoutData(EclipseUiUtils.fillWidth());
+		// // Footer
+		// Label footerLbl = new Label(bodyCmp, SWT.WRAP | SWT.CENTER);
+		// CmsUtils.markup(footerLbl);
+		// String footerStr = "<small>SDPS is a private service. <br/>"
+		// + " Please <a href=\"mailto:contact@argeo.org\">contact us</a> if you
+		// have any question.</small>";
+		// footerLbl.setText(footerStr);
+		// footerLbl.setLayoutData(EclipseUiUtils.fillWidth());
 	}
 }

@@ -10,7 +10,7 @@
 		scope="prototype">
 		<property name="repository" ref="repository" />
 	</bean>
-	
+
 	<bean id="openEntityEditor" class="org.argeo.suite.workbench.commands.OpenEntityEditor"
 		scope="prototype">
 		<property name="repository" ref="repository" />
@@ -27,7 +27,8 @@
 	<bean id="defaultDashboardEditor" class="org.argeo.suite.workbench.parts.DefaultDashboardEditor"
 		scope="prototype">
 		<property name="repository" ref="repository" />
-		<property name="peopleService" ref="peopleService" />
 		<property name="appWorkbenchService" ref="appWorkbenchService" />
+		<property name="peopleService" ref="peopleService" />
+		<property name="documentsService" ref="documentsService" />
 	</bean>
 </beans>

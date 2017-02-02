@@ -137,6 +137,9 @@ public class PeopleSuiteServiceImpl extends PeopleServiceImpl implements PeopleS
 				resourceService.createTagLikeResourceParent(adminSession, null, PeopleTypes.PEOPLE_MAILING_LIST, null,
 						getBasePath(null), PeopleTypes.PEOPLE_ENTITY, PeopleNames.PEOPLE_MAILING_LISTS);
 
+			// Initialise catalogues
+			importCatalogue(adminSession, initResources.get("SimpleTasks"), PeopleTypes.PEOPLE_TASK);
+
 			if (adminSession.hasPendingChanges()) {
 				adminSession.save();
 				log.info("Resources have been added to Argeo Suite model");

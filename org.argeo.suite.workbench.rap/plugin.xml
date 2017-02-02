@@ -18,7 +18,7 @@
 		<perspective
             class="org.argeo.suite.workbench.DashboardPerspective"
             id="org.argeo.suite.workbench.rap.dashboardPerspective"
-            icon="theme/argeo-classic/icons/favicon-16px.png"
+            icon="theme/argeo-classic/icons/favicon.ico"
             name="Dashboard">
 		</perspective> 
 	</extension>
@@ -26,13 +26,13 @@
 	<!-- VIEWS -->
 	 <extension
 		point="org.eclipse.ui.views">
-		<view
+       <!-- <view
 			id="org.argeo.connect.people.workbench.rap.quickSearchView"
 			class="org.argeo.eclipse.spring.SpringExtensionFactory"
 			icon="theme/argeo-classic/icons/favicon-16px.png"
 			name="Test View"
 			restorable="true">
-		</view>
+		</view> -->
 	</extension>
 		
 	<!-- EDITORS --> 
@@ -41,7 +41,7 @@
 		<editor
 			id="org.argeo.suite.workbench.rap.defaultDashboardEditor"
 			class="org.argeo.eclipse.spring.SpringExtensionFactory"
-			icon="theme/argeo-classic/icons/favicon-16px.png"
+			icon="theme/argeo-classic/icons/dashboard.gif"
 			name="My Dashboard">
 		</editor>
 	</extension>
@@ -80,8 +80,8 @@
 		<branding
 			id="org.argeo.suite.workbench.rap.defaultBranding"
 			themeId="org.eclipse.rap.rwt.theme.Default"
-			title="Smart Data Productivity Suite"
-			favicon="theme/argeo-classic/icons/favicon.png">
+			title="Argeo Suite"
+			favicon="theme/argeo-classic/icons/favicon.ico">
 			<additionalHeaders>
     			 <link 
     			 	href="suite/theme/classic-headerExt.css"  
@@ -99,8 +99,8 @@
          </resource>  
          <!-- images -->
          <resource  
-               alias="/ui/suite/img/logo.jpg"  
-               base-name="theme/argeo-classic/img/logo.jpg">  
+               alias="/ui/suite/img/logo-argeo.png"  
+               base-name="theme/argeo-classic/img/logo-argeo.png">  
          </resource>  
          <!-- javascript libraries -->
          <!--          <resource  
