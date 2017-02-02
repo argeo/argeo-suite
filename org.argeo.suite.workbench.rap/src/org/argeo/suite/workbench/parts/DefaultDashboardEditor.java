@@ -1,12 +1,14 @@
 package org.argeo.suite.workbench.parts;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.connect.people.PeopleConstants;
 import org.argeo.connect.people.PeopleTypes;
 import org.argeo.connect.people.workbench.rap.PeopleRapUtils;
+import org.argeo.connect.ui.workbench.Refreshable;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.suite.workbench.AsUiPlugin;
@@ -16,13 +18,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 /** Argeo Suite Default Dashboard */
-public class DefaultDashboardEditor extends AbstractSuiteDashboard {
+public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Refreshable {
 	final static Log log = LogFactory.getLog(DefaultDashboardEditor.class);
 	public final static String ID = AsUiPlugin.PLUGIN_ID + ".defaultDashboardEditor";
 
 	// Default gadget dimensions
 	private int wh = 300;
 	private int hh = 350;
+
+	private Composite projectsGadget;
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -38,38 +42,38 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard {
 		bodyLayout.verticalSpacing = 20;
 		body.setLayout(bodyLayout);
 
-		// Project List
-		Composite projectsGadget = createGadgetCmp(body, wh, hh);
-		populateProjectsGadget(projectsGadget);
+		// Last updated doc List
+		projectsGadget = createGadgetCmp(body, wh, hh);
+		// refreshDocListGadget(projectsGadget);
 
 		// Contacts
 		Composite contactGadget = createGadgetCmp(body, wh, hh);
 		populateContactsGadget(contactGadget);
-
 	}
 
-	/** Links to the various projects */
-	private void populateProjectsGadget(Composite parent) {
-		parent.setLayout(EclipseUiUtils.noSpaceGridLayout());
-		createGadgetTitleCmp(parent, "Projects");
-		Composite bodyCmp = createGadgetBodyCmp(parent);
+	@Override
+	public void forceRefresh(Object object) {
+		refreshDocListGadget();
+	}
 
-		// // TODO enhance this
-		// NodeIterator nit = AoUtils.listNodesOfType(getSession(),
-		// AoTypes.OFFICE_ACCOUNT,
-		// getAoService().getBasePath(AoTypes.OFFICE_ACCOUNT));
-		// while (nit.hasNext()) {
-		// Node account = nit.nextNode();
-		// PeopleRapUtils.createOpenEntityEditorLink(getAoWbService(), bodyCmp,
-		// ConnectJcrUtils.get(account, Property.JCR_TITLE), account);
-		// }
-		//
-		// PeopleWorkbenchService aoWbSrv = getAoWbService();
-		// // Opens a lits of all projects
-		//
-		// PeopleRapUtils.createOpenSearchEditorLink(aoWbSrv, bodyCmp, "All
-		// projects", TrackerTypes.TRACKER_PROJECT,
-		// AoConstants.ACCOUNTS_BASE_PATH);
+	@Override
+	public void setFocus() {
+		refreshDocListGadget();
+	}
+
+	/** Links to the various last updated docs */
+	private void refreshDocListGadget() {
+		EclipseUiUtils.clear(projectsGadget);
+		projectsGadget.setLayout(EclipseUiUtils.noSpaceGridLayout());
+		createGadgetTitleCmp(projectsGadget, "Last updated documents");
+		Composite bodyCmp = createGadgetBodyCmp(projectsGadget);
+
+		NodeIterator nit = getDocumentsService().getLastUpdatedDocuments(getSession());
+		while (nit.hasNext()) {
+			Node file = nit.nextNode();
+			createOpenEntityEditorLink(getAppWorkbenchService(), bodyCmp, ConnectJcrUtils.getName(file), file);
+		}
+		projectsGadget.layout(true, true);
 	}
 
 	/** Links to the various contact search pages */
@@ -77,7 +81,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard {
 		parent.setLayout(EclipseUiUtils.noSpaceGridLayout());
 		createGadgetTitleCmp(parent, "Contacts");
 		Composite bodyCmp = createGadgetBodyCmp(parent);
-		
+
 		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Persons",
 				PeopleTypes.PEOPLE_PERSON, getPeopleService().getBasePath(PeopleTypes.PEOPLE_PERSON));
 
@@ -88,13 +92,13 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard {
 				PeopleTypes.PEOPLE_MAILING_LIST);
 		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Mailing lists",
 				PeopleTypes.PEOPLE_MAILING_LIST, ConnectJcrUtils.getPath(tagParent));
-		
-		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tasks",
-				PeopleTypes.PEOPLE_TASK, getPeopleService().getBasePath(null));
-		
+
+		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tasks", PeopleTypes.PEOPLE_TASK,
+				getPeopleService().getBasePath(null));
+
 		tagParent = getPeopleService().getResourceService().getTagLikeResourceParent(getSession(),
 				PeopleConstants.RESOURCE_TAG);
-		
+
 		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tags",
 				PeopleTypes.PEOPLE_TAG_INSTANCE, ConnectJcrUtils.getPath(tagParent));
 
