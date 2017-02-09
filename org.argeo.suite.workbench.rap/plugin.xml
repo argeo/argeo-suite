@@ -81,7 +81,7 @@
 					style="pulldown"
 					label="Create"
 					tooltip="Create a new object"
-					icon="theme/argeo-classic/icons/add.png"
+					icon="theme/argeo-classic/icons/add.gif"
 					commandId="org.argeo.cms.ui.workbench.doNothing">
 				</command>
 				<command

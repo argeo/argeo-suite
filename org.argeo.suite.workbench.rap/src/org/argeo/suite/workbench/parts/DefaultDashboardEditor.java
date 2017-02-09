@@ -91,8 +91,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		Node tagParent = getPeopleService().getResourceService().getTagLikeResourceParent(getSession(),
 				PeopleTypes.PEOPLE_MAILING_LIST);
 		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Mailing lists",
-				PeopleTypes.PEOPLE_MAILING_LIST, ConnectJcrUtils.getPath(tagParent));
-
+					PeopleTypes.PEOPLE_MAILING_LIST, ConnectJcrUtils.getPath(tagParent));
 		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tasks", PeopleTypes.PEOPLE_TASK,
 				getPeopleService().getBasePath(null));
 

@@ -56,8 +56,6 @@ public class PeopleSuiteServiceImpl extends PeopleServiceImpl implements PeopleS
 	// TODO Hard-coded model initialisation
 	// To be cleaned once first init and config mechanisms have been implemented
 	private final static String publicPath = "/public";
-	// FIXME to be added in NodeConstants
-	private final static String groupHomePath = "/groups";
 	// FIXME Users must have read access on the jcr:system/jcr:versionStorage
 	// node under JackRabbit to be able to manage versions
 	private final static String jackRabbitVersionSystemPath = "/jcr:system";
@@ -67,13 +65,11 @@ public class PeopleSuiteServiceImpl extends PeopleServiceImpl implements PeopleS
 		super.initialiseModel(adminSession);
 
 		JcrUtils.mkdirs(adminSession, publicPath, NodeType.NT_UNSTRUCTURED);
-		JcrUtils.mkdirs(adminSession, groupHomePath, NodeType.NT_UNSTRUCTURED);
 		if (adminSession.hasPendingChanges()) {
 			adminSession.save();
 			configureACL(adminSession);
 			log.info("Repository has been initialised with Argeo Suite model");
 		}
-		initModelResources(adminSession);
 	}
 
 	// First draft of configuration of the people specific rights
@@ -85,8 +81,6 @@ public class PeopleSuiteServiceImpl extends PeopleServiceImpl implements PeopleS
 
 		// Default configuration of the workspace
 		JcrUtils.addPrivilege(session, "/", NodeConstants.ROLE_ADMIN, Privilege.JCR_ALL);
-		JcrUtils.addPrivilege(session, groupHomePath, NodeConstants.ROLE_USER_ADMIN, Privilege.JCR_ALL);
-
 		JcrUtils.addPrivilege(session, publicPath, NodeConstants.ROLE_USER, Privilege.JCR_READ);
 		JcrUtils.addPrivilege(session, publicPath, "anonymous", Privilege.JCR_READ);
 		JcrUtils.addPrivilege(session, publicPath, NodeConstants.ROLE_ANONYMOUS, Privilege.JCR_READ);
