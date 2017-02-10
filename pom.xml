@@ -10,7 +10,7 @@
 	<packaging>pom</packaging>
 	<name>Argeo Suite</name>
 	<description />
-	<version>0.1.3</version>
+	<version>0.1.4-SNAPSHOT</version>
 	<modules>
 		<module>org.argeo.suite.core</module>
 		<module>org.argeo.suite.web</module>
@@ -28,7 +28,7 @@
 		<connection>scm:git:http://git.argeo.org/gpl/argeo-suite.git</connection>
 		<url>http://git.argeo.org/?p=gpl/argeo-suite.git;a=summary</url>
 		<developerConnection>scm:git:https://code.argeo.org/git/gpl/argeo-suite.git</developerConnection>
-	  <tag>argeo-suite-0.1.3</tag>
+	  <tag>HEAD</tag>
   </scm>
 	<inceptionYear>2014</inceptionYear>
 	<licenses>
