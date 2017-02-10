@@ -235,6 +235,37 @@ Button[PUSH][FLAT].createFolder_btn:pressed, Button[PUSH][FLAT].shareFolder_btn:
 
 /**  PEOPLE  **/
 
+Button[PUSH][FLAT].markAsDone_btn {
+	background-image: url( theme/argeo-classic/icons/fs/open.png);
+}
+
+Button[PUSH][FLAT].cancel_btn {
+	background-image: url( theme/argeo-classic/icons/fs/open.png);
+}
+
+Button[PUSH][FLAT].cancel_btn,
+Button[PUSH][FLAT].markAsDone_btn {
+	border: 0px solid white;
+	border-left: 10px solid transparent;
+	border-radius: 0px;
+	padding: 4px 5px 4px 24px;
+	background-color: transparent;
+	background-repeat: no-repeat;
+	background-position: left;
+	animation: hoverOut 500ms ease-out;
+	cursor: pointer;
+}
+
+Button[PUSH][FLAT].cancel_btn:hover,
+Button[PUSH][FLAT].markAsDone_btn:hover {
+	background-color: #fef0ea;
+}
+
+Button[PUSH][FLAT].cancel_btn:pressed,
+Button[PUSH][FLAT].markAsDone_btn:pressed {
+	background-color: #fde2d5;
+}
+
 /** Gadgets  **/
 .people_gadget {
 	border: 1px solid #f3f3f4;

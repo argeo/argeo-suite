@@ -26,7 +26,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 	private int wh = 300;
 	private int hh = 350;
 
-	private Composite projectsGadget;
+	private Composite lastUpdatedDocsGadget;
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -42,13 +42,12 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		bodyLayout.verticalSpacing = 20;
 		body.setLayout(bodyLayout);
 
-		// Last updated doc List
-		projectsGadget = createGadgetCmp(body, wh, hh);
-		// refreshDocListGadget(projectsGadget);
-
 		// Contacts
 		Composite contactGadget = createGadgetCmp(body, wh, hh);
 		populateContactsGadget(contactGadget);
+
+		// Last updated doc List
+		lastUpdatedDocsGadget = createGadgetCmp(body, wh, hh);
 	}
 
 	@Override
@@ -63,17 +62,17 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 
 	/** Links to the various last updated docs */
 	private void refreshDocListGadget() {
-		EclipseUiUtils.clear(projectsGadget);
-		projectsGadget.setLayout(EclipseUiUtils.noSpaceGridLayout());
-		createGadgetTitleCmp(projectsGadget, "Last updated documents");
-		Composite bodyCmp = createGadgetBodyCmp(projectsGadget);
+		EclipseUiUtils.clear(lastUpdatedDocsGadget);
+		lastUpdatedDocsGadget.setLayout(EclipseUiUtils.noSpaceGridLayout());
+		createGadgetTitleCmp(lastUpdatedDocsGadget, "Last updated documents");
+		Composite bodyCmp = createGadgetBodyCmp(lastUpdatedDocsGadget);
 
 		NodeIterator nit = getDocumentsService().getLastUpdatedDocuments(getSession());
 		while (nit.hasNext()) {
 			Node file = nit.nextNode();
 			createOpenEntityEditorLink(getAppWorkbenchService(), bodyCmp, ConnectJcrUtils.getName(file), file);
 		}
-		projectsGadget.layout(true, true);
+		lastUpdatedDocsGadget.layout(true, true);
 	}
 
 	/** Links to the various contact search pages */
@@ -91,7 +90,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		Node tagParent = getPeopleService().getResourceService().getTagLikeResourceParent(getSession(),
 				PeopleTypes.PEOPLE_MAILING_LIST);
 		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Mailing lists",
-					PeopleTypes.PEOPLE_MAILING_LIST, ConnectJcrUtils.getPath(tagParent));
+				PeopleTypes.PEOPLE_MAILING_LIST, ConnectJcrUtils.getPath(tagParent));
 		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tasks", PeopleTypes.PEOPLE_TASK,
 				getPeopleService().getBasePath(null));
 

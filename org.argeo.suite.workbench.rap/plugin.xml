@@ -26,13 +26,6 @@
 	<!-- VIEWS -->
 	 <extension
 		point="org.eclipse.ui.views">
-       <!-- <view
-			id="org.argeo.connect.people.workbench.rap.quickSearchView"
-			class="org.argeo.eclipse.spring.SpringExtensionFactory"
-			icon="theme/argeo-classic/icons/favicon-16px.png"
-			name="Test View"
-			restorable="true">
-		</view> -->
 	</extension>
 		
 	<!-- EDITORS --> 
