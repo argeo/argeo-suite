@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.argeo.commons</groupId>
@@ -9,8 +10,8 @@
 	<artifactId>argeo-suite</artifactId>
 	<packaging>pom</packaging>
 	<name>Argeo Suite</name>
-	<description />
-	<version>0.1.2-SNAPSHOT</version>
+	<description></description>
+	<version>0.1.1-SNAPSHOT</version>
 	<modules>
 		<module>org.argeo.suite.core</module>
 		<module>org.argeo.suite.web</module>
@@ -28,8 +29,7 @@
 		<connection>scm:git:http://git.argeo.org/gpl/argeo-suite.git</connection>
 		<url>http://git.argeo.org/?p=gpl/argeo-suite.git;a=summary</url>
 		<developerConnection>scm:git:https://code.argeo.org/git/gpl/argeo-suite.git</developerConnection>
-	  <tag>HEAD</tag>
-  </scm>
+	</scm>
 	<inceptionYear>2014</inceptionYear>
 	<licenses>
 		<license>
