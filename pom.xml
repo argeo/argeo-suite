@@ -18,7 +18,7 @@
 		<module>sdk</module>
 	</modules>
 	<properties>
-		<version.argeo-suite>0.1.2</version.argeo-suite>
+		<version.argeo-suite>0.1.3</version.argeo-suite>
 		<developmentCycle.argeo-suite>0.1</developmentCycle.argeo-suite>
 		<version.argeo-connect>2.1.66</version.argeo-connect>
 		<version.argeo-tp-extras>2.1.9</version.argeo-tp-extras>
@@ -113,7 +113,7 @@ which are used as well as that of the covered work.]]>
 	<distributionManagement>
 		<repository>
 			<id>staging</id>
-			<url>dav:https://forge.argeo.org/data/java/argeo-suite_0.1</url>
+			<url>dav:https://forge.argeo.org/data/java/argeo-suite-0.1</url>
 			<uniqueVersion>false</uniqueVersion>
 		</repository>
 	</distributionManagement>
