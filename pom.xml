@@ -113,7 +113,8 @@ which are used as well as that of the covered work.]]>
 	<distributionManagement>
 		<repository>
 			<id>staging</id>
-			<url>dav:https://repo.argeo.org/data/java/argeo-suite_0.1</url>
+			<url>dav:https://forge.argeo.org/data/java/argeo-suite_0.1</url>
+			<uniqueVersion>false</uniqueVersion>
 		</repository>
 	</distributionManagement>
 </project>
