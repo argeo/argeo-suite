@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.argeo.suite</groupId>
 		<artifactId>argeo-suite</artifactId>
-		<version>0.1.4</version>
+		<version>0.1.5-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>org.argeo.suite.web</artifactId>
@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.suite.core</artifactId>
-			<version>0.1.4</version>
+			<version>0.1.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.argeo.connect</groupId>
