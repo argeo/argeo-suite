@@ -11,7 +11,6 @@ import javax.jcr.nodetype.NodeType;
 
 import org.argeo.cms.CmsMsg;
 import org.argeo.cms.auth.CurrentUser;
-import org.argeo.cms.text.TextStyles;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.LifeCycleUiProvider;
@@ -32,8 +31,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 
 /**
- * Default entry point for the Argeo Suite CMS. Forwards the request to the relevant
- * CmsUiProvider
+ * Default entry point for the Argeo Suite CMS. Forwards the request to the
+ * relevant CmsUiProvider
  */
 public class DefaultMainPage implements LifeCycleUiProvider {
 
@@ -89,7 +88,7 @@ public class DefaultMainPage implements LifeCycleUiProvider {
 
 		Label anonymousLbl = new Label(body, SWT.WRAP);
 		anonymousLbl.setText("You should login or register to access your private dashboard");
-		
+
 		return body;
 
 	}
