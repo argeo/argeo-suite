@@ -14,7 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.argeo.connect.people.PeopleConstants;
 import org.argeo.connect.people.PeopleService;
 import org.argeo.connect.people.core.PeopleServiceImpl;
-import org.argeo.connect.resources.ResourceService;
+import org.argeo.connect.resources.ResourcesService;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.node.NodeConstants;
 import org.argeo.suite.ArgeoSuiteRole;
@@ -31,7 +31,7 @@ public class PeopleSuiteServiceImpl extends PeopleServiceImpl implements PeopleS
 	/* DEPENDENCY INJECTION */
 	private Repository repository;
 	private String workspaceName;
-	private ResourceService resourceService;
+	private ResourcesService resourceService;
 	private Map<String, URI> initResources = null;
 	private Map<String, URI> legacyResources = null;
 

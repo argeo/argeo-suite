@@ -9,14 +9,13 @@ import javax.jcr.Session;
 
 import org.argeo.cms.ui.workbench.util.CommandUtils;
 import org.argeo.cms.util.CmsUtils;
+import org.argeo.connect.activities.ActivitiesService;
 import org.argeo.connect.documents.DocumentsService;
-import org.argeo.connect.resources.ResourceService;
-import org.argeo.connect.activities.ActivityService;
-import org.argeo.connect.activities.ActivitiesTypes;
 import org.argeo.connect.people.PeopleService;
-import org.argeo.connect.people.workbench.rap.PeopleStyles;
-import org.argeo.connect.people.workbench.rap.editors.util.EntityEditorInput;
+import org.argeo.connect.resources.ResourcesService;
+import org.argeo.connect.ui.ConnectUiStyles;
 import org.argeo.connect.ui.workbench.AppWorkbenchService;
+import org.argeo.connect.ui.workbench.parts.EntityEditorInput;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
@@ -41,8 +40,8 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 
 	// DEPENDENCY INJECTION
 	private Repository repository;
-	private ResourceService resourceService;
-	private ActivityService activityService;
+	private ResourcesService resourceService;
+	private ActivitiesService activityService;
 	private PeopleService peopleService;
 	private DocumentsService documentsService;
 	private AppWorkbenchService appWorkbenchService;
@@ -106,20 +105,20 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 		gd.widthHint = widthHint;
 		gd.heightHint = heightHint;
 		gadgetCmp.setLayoutData(gd);
-		CmsUtils.style(gadgetCmp, PeopleStyles.PEOPLE_CLASS_GADGET);
+		CmsUtils.style(gadgetCmp, ConnectUiStyles.GADGET_BOX);
 		return gadgetCmp;
 	}
 
 	protected Composite createGadgetTitleCmp(Composite parent, String title) {
 		Composite titleCmp = toolkit.createComposite(parent, SWT.BACKGROUND | SWT.INHERIT_NONE);
-		CmsUtils.style(titleCmp, PeopleStyles.GADGET_HEADER);
+		CmsUtils.style(titleCmp, ConnectUiStyles.GADGET_HEADER);
 		titleCmp.setBackground(null);
 		GridData gd = new GridData(SWT.FILL, SWT.TOP, true, false);
 		titleCmp.setLayoutData(gd);
 		titleCmp.setLayout(new GridLayout());
 
 		Label titleLbl = toolkit.createLabel(titleCmp, title + " ", SWT.BOLD);
-		CmsUtils.style(titleLbl, PeopleStyles.GADGET_HEADER);
+		CmsUtils.style(titleLbl, ConnectUiStyles.GADGET_HEADER);
 		titleLbl.setBackground(null);
 		return titleCmp;
 	}
@@ -187,11 +186,11 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 		return session;
 	}
 
-	public ResourceService getResourceService() {
+	public ResourcesService getResourceService() {
 		return resourceService;
 	}
-	
-	protected ActivityService getActivityService() {
+
+	protected ActivitiesService getActivityService() {
 		return activityService;
 	}
 
@@ -202,7 +201,6 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 	protected DocumentsService getDocumentsService() {
 		return documentsService;
 	}
-
 
 	protected AppWorkbenchService getAppWorkbenchService() {
 		return appWorkbenchService;
@@ -221,11 +219,11 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 		this.repository = repository;
 	}
 
-	public void setResourceService(ResourceService resourceService) {
+	public void setResourceService(ResourcesService resourceService) {
 		this.resourceService = resourceService;
 	}
-	
-	public void setActivityService(ActivityService activityService) {
+
+	public void setActivityService(ActivitiesService activityService) {
 		this.activityService = activityService;
 	}
 
@@ -236,7 +234,6 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 	public void setPeopleService(PeopleService peopleService) {
 		this.peopleService = peopleService;
 	}
-
 
 	public void setAppWorkbenchService(AppWorkbenchService appWorkbenchService) {
 		this.appWorkbenchService = appWorkbenchService;

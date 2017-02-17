@@ -7,14 +7,9 @@
        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
 	<!-- REFERENCES -->
-	<!--  Insure a home is present for each user that logs in -->
-	<reference id="repository" interface="javax.jcr.Repository" filter="(cn=home)" />
-	<reference id="userAdmin" interface="org.osgi.service.useradmin.UserAdmin" />
-	<reference id="userTransaction" interface="javax.transaction.UserTransaction" />
-	<reference id="nodeFileSystemProvider" interface="java.nio.file.spi.FileSystemProvider"
-		filter="(service.pid=org.argeo.node.fsProvider)" />
+	<reference id="repository" interface="javax.jcr.Repository" filter="(cn=node)" />
 	
 	<!-- SERVICES -->
-	<!-- Exposes Argeo Suite specific implementation of the People Service -->
-	<service ref="peopleService" interface="org.argeo.connect.people.PeopleService" />
+	<!-- Exposes the Argeo Suite specific maintenance service -->
+	<service ref="suiteMaintenanceService" interface="org.argeo.connect.AppMaintenanceService" />
 </beans:beans>

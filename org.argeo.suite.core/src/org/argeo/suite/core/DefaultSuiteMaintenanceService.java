@@ -1,8 +1,6 @@
-package org.argeo.suite;
+package org.argeo.suite.core;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Map;
 
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
@@ -13,21 +11,19 @@ import javax.jcr.security.Privilege;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.connect.AppMaintenanceService;
-import org.argeo.connect.resources.ResourceService;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.node.NodeConstants;
+import org.argeo.suite.ArgeoSuiteRole;
+import org.argeo.suite.SuiteException;
 
 /** Make the DJay-ing to provide a full running Suite platform */
-public class SuiteMaintenanceService implements AppMaintenanceService {
-	private final static Log log = LogFactory.getLog(SuiteMaintenanceService.class);
+public class DefaultSuiteMaintenanceService implements AppMaintenanceService {
+	private final static Log log = LogFactory.getLog(DefaultSuiteMaintenanceService.class);
 
 	/* DEPENDENCY INJECTION */
 	private Repository repository;
 	private String workspaceName;
-	private ResourceService resourceService;
 	private List<AppMaintenanceService> maintenanceServices;
-	private Map<String, URI> initResources = null;
-	private Map<String, URI> legacyResources = null;
 
 	public void init() {
 		Session adminSession = null;
@@ -35,7 +31,6 @@ public class SuiteMaintenanceService implements AppMaintenanceService {
 			adminSession = repository.login(workspaceName);
 			if (prepareJcrTree(adminSession)) {
 				configurePrivileges(adminSession);
-				importResources(adminSession, null);
 			}
 		} catch (Exception e) {
 			throw new SuiteException("Cannot initialise model", e);
@@ -65,14 +60,17 @@ public class SuiteMaintenanceService implements AppMaintenanceService {
 		}
 		for (AppMaintenanceService service : maintenanceServices)
 			hasCHanged |= service.prepareJcrTree(session);
-		log.info("Repository has been initialised with Argeo Suite model");
+		if (hasCHanged)
+			log.info("Repository has been initialised with Argeo Suite model");
 		return hasCHanged;
 	}
 
 	@Override
 	public void configurePrivileges(Session session) {
-		// TODO check if first init.
 		try {
+			// Remove unused default JCR rights
+			JcrUtils.clearAccessControList(session, "/", "everyone");
+
 			JcrUtils.addPrivilege(session, jackRabbitVersionSystemPath, ArgeoSuiteRole.coworker.dn(),
 					Privilege.JCR_READ);
 			// Default configuration of the workspace
@@ -80,6 +78,7 @@ public class SuiteMaintenanceService implements AppMaintenanceService {
 			JcrUtils.addPrivilege(session, publicPath, NodeConstants.ROLE_USER, Privilege.JCR_READ);
 			JcrUtils.addPrivilege(session, publicPath, "anonymous", Privilege.JCR_READ);
 			JcrUtils.addPrivilege(session, publicPath, NodeConstants.ROLE_ANONYMOUS, Privilege.JCR_READ);
+
 			session.save();
 		} catch (RepositoryException e) {
 			throw new SuiteException("Cannot build model", e);
@@ -89,26 +88,18 @@ public class SuiteMaintenanceService implements AppMaintenanceService {
 		log.info("Access control configured");
 	}
 
-	@Override
-	public void importResources(Session session, Map<String, URI> initialResources) {
-		for (AppMaintenanceService service : maintenanceServices)
-			service.prepareJcrTree(session);
-	}
-
-	@Override
-	public void importData(Session session, URI uri, Map<String, URI> resources) {
-		for (AppMaintenanceService service : maintenanceServices)
-			service.prepareJcrTree(session);
-
-	}
-
-	@Override
-	public void doBackup(Session session, URI uri, Object resource) {
-		for (AppMaintenanceService service : maintenanceServices)
-			service.prepareJcrTree(session);
+	public void destroy() {
 	}
 
 	/* DEPENDENCY INJECTION */
+	public void setRepository(Repository repository) {
+		this.repository = repository;
+	}
+
+	public void setWorkspaceName(String workspaceName) {
+		this.workspaceName = workspaceName;
+	}
+
 	public void setMaintenanceServices(List<AppMaintenanceService> maintenanceServices) {
 		this.maintenanceServices = maintenanceServices;
 	}

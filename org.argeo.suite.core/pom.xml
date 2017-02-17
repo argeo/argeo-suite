@@ -14,7 +14,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.argeo.connect</groupId>
-			<artifactId>org.argeo.connect.people.core</artifactId>
+			<artifactId>org.argeo.connect.tracker</artifactId>
+			<version>${version.argeo-connect}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.connect</groupId>
+			<artifactId>org.argeo.connect.people</artifactId>
 			<version>${version.argeo-connect}</version>
 		</dependency>
 		<dependency>

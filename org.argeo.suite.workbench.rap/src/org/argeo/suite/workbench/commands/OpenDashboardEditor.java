@@ -5,7 +5,7 @@ import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.argeo.connect.people.workbench.rap.editors.util.EntityEditorInput;
+import org.argeo.connect.ui.workbench.parts.EntityEditorInput;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.node.NodeUtils;
 import org.argeo.suite.SuiteException;

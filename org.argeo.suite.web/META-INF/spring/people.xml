@@ -9,7 +9,7 @@
 	<bean id="people.mainPage" class="org.argeo.connect.people.web.pages.PeopleDynamicPages">
 		<property name="dynamicPages" ref="people.dynamicPages" />
 		<property name="peopleService" ref="peopleService" />
-		<property name="resourceService" ref="resourceService" />
+		<property name="resourcesService" ref="resourcesService" />
 		<property name="iconPathes" ref="peopleEntityIcons" />
 	</bean>
 
@@ -60,11 +60,11 @@
 		<entry>
 			<key>
 				<util:constant
-					static-field="org.argeo.connect.people.PeopleTypes.PEOPLE_TAG_INSTANCE" />
+					static-field="org.argeo.connect.resources.ResourcesTypes.RESOURCES_TAG_INSTANCE" />
 			</key>
 			<bean class="org.argeo.connect.people.web.pages.TagLikeInstancePage">
 				<property name="peopleService" ref="peopleService" />
-				<property name="resourceService" ref="resourceService" />
+				<property name="resourcesService" ref="resourcesService" />
 
 				<property name="iconPathes" ref="peopleEntityIcons" />
 				<property name="propertyName" value="people:tags" />
@@ -76,8 +76,8 @@
 					static-field="org.argeo.connect.people.PeopleTypes.PEOPLE_MAILING_LIST" />
 			</key>
 			<bean class="org.argeo.connect.people.web.pages.TagLikeInstancePage">
+				<property name="resourcesService" ref="resourcesService" />
 				<property name="peopleService" ref="peopleService" />
-				<property name="resourceService" ref="resourceService" />
 				<property name="iconPathes" ref="peopleEntityIcons" />
 				<property name="propertyName" value="people:mailingLists" />
 			</bean>
@@ -86,15 +86,15 @@
 
 	<!-- Various headers -->
 	<bean id="personHeaderPart" class="org.argeo.connect.people.web.parts.PersonHeaderPart">
+		<property name="resourcesService" ref="resourcesService" />
 		<property name="peopleService" ref="peopleService" />
-		<property name="resourceService" ref="resourceService" />
 		<property name="tagsPart" ref="tagsPart" />
 		<property name="mailingListsPart" ref="mailingListsPart" />
 	</bean>
 
 	<bean id="orgHeaderPart" class="org.argeo.connect.people.web.parts.OrgHeaderPart">
+		<property name="resourcesService" ref="resourcesService" />
 		<property name="peopleService" ref="peopleService" />
-		<property name="resourceService" ref="resourceService" />
 		<property name="tagsPart" ref="tagsPart" />
 		<property name="mailingListsPart" ref="mailingListsPart" />
 	</bean>
@@ -104,7 +104,7 @@
 		<property name="singleContactPart" ref="singleContactPart" />
 	</bean>
 	<bean id="singleContactPart" class="org.argeo.connect.people.web.parts.SingleContactPart">
-		<property name="peopleService" ref="peopleService" />
+		<property name="resourcesService" ref="resourcesService" />
 		<property name="contactButtonsPart" ref="contactButtonsPart" />
 	</bean>
 	<bean id="contactButtonsPart" class="org.argeo.connect.people.web.parts.ContactButtonsPart">

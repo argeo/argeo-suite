@@ -141,6 +141,27 @@ Text.workbench_form_text:focused {
 	box-shadow: inset 0 0 1px #bdbdbd;
 }
 
+
+/****** DASHBOARD  *********/
+
+/** Gadgets  **/
+.gadget_box {
+	border: 1px solid #f3f3f4;
+	border-radius: 0px;
+	padding: 0px 0px;
+	margin: 0px 0px;
+	background-image: none;
+	background-color: transparent;
+}
+
+.gadget_header {
+	background-color: #f3f3f4;
+	font-color: white;
+	color: white; /*dont work */
+	font: bold 14px Helvetica, Verdana, "Lucida Sans", Arial, sans-serif;
+}
+
+
 /****** DOCUMENTS  *********/
 
 /* Breadcrumb ***/
@@ -266,22 +287,16 @@ Button[PUSH][FLAT].markAsDone_btn:pressed {
 	background-color: #fde2d5;
 }
 
-/** Gadgets  **/
-.people_gadget {
-	border: 1px solid #f3f3f4;
+Button[PUSH][FLAT].small_delete_btn{
+	background-image: url( theme/argeo-classic/icons/actions/delete_small.gif);
+	border: 0px solid white;
 	border-radius: 0px;
 	padding: 0px 0px;
-	margin: 0px 0px;
-	background-image: none;
 	background-color: transparent;
+	animation: hoverOut 500ms ease-out;
+	cursor: pointer;
 }
 
-.people_gadget_header {
-	background-color: #f3f3f4;
-	font-color: white;
-	color: white; /*dont work */
-	font: bold 14px Helvetica, Verdana, "Lucida Sans", Arial, sans-serif;
-}
 
 /** Header **/
 .people_entity_header {

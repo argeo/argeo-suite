@@ -19,7 +19,7 @@ import org.argeo.cms.widgets.auth.CmsLogin;
 import org.argeo.connect.people.PeopleService;
 import org.argeo.connect.people.PeopleTypes;
 import org.argeo.connect.people.web.pages.PeopleDefaultPage;
-import org.argeo.connect.resources.ResourceService;
+import org.argeo.connect.resources.ResourcesService;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.suite.web.fs.MyFilesBrowserPage;
 import org.eclipse.swt.SWT;
@@ -42,7 +42,7 @@ public class DefaultMainPage implements LifeCycleUiProvider {
 	private CmsUiProvider fsBrowserPage;
 
 	/* DEPENDENCY INJECTION */
-	private ResourceService resourceService;
+	private ResourcesService resourceService;
 	private PeopleService peopleService;
 	private FileSystemProvider nodeFileSystemProvider;
 	private Map<String, String> peopleIconPaths;
@@ -123,7 +123,7 @@ public class DefaultMainPage implements LifeCycleUiProvider {
 	}
 
 	/* DEPENDENCY INJECTION */
-	public void setResourceService(ResourceService resourceService) {
+	public void setResourceService(ResourcesService resourceService) {
 		this.resourceService = resourceService;
 	}
 

@@ -8,8 +8,8 @@ import org.apache.commons.logging.LogFactory;
 import org.argeo.connect.ConnectConstants;
 import org.argeo.connect.activities.ActivitiesTypes;
 import org.argeo.connect.people.PeopleTypes;
-import org.argeo.connect.people.workbench.rap.PeopleRapUtils;
 import org.argeo.connect.resources.ResourcesTypes;
+import org.argeo.connect.ui.workbench.ConnectWorkbenchUtils;
 import org.argeo.connect.ui.workbench.Refreshable;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
@@ -83,22 +83,22 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		createGadgetTitleCmp(parent, "Contacts");
 		Composite bodyCmp = createGadgetBodyCmp(parent);
 
-		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Persons",
+		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Persons",
 				PeopleTypes.PEOPLE_PERSON, getPeopleService().getBasePath(PeopleTypes.PEOPLE_PERSON));
 
-		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Organisations",
+		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Organisations",
 				PeopleTypes.PEOPLE_ORG, getPeopleService().getBasePath(PeopleTypes.PEOPLE_ORG));
 
 		Node tagParent = getResourceService().getTagLikeResourceParent(getSession(), PeopleTypes.PEOPLE_MAILING_LIST);
-		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Mailing lists",
+		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Mailing lists",
 				PeopleTypes.PEOPLE_MAILING_LIST, ConnectJcrUtils.getPath(tagParent));
-		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tasks",
+		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tasks",
 				ActivitiesTypes.ACTIVITIES_TASK, getPeopleService().getBasePath(null));
 
 		tagParent = getResourceService().getTagLikeResourceParent(getSession(), ConnectConstants.RESOURCE_TAG);
 
-		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tags",
-				ResourcesTypes.PEOPLE_TAG_INSTANCE, ConnectJcrUtils.getPath(tagParent));
+		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tags",
+				ResourcesTypes.RESOURCES_TAG_INSTANCE, ConnectJcrUtils.getPath(tagParent));
 
 	}
 }

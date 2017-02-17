@@ -7,11 +7,13 @@
        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
 
 	<!-- REFERENCES -->
-	<!--  Insure a home is present for each user that logs in -->
-	<reference id="repository" interface="javax.jcr.Repository" filter="(cn=home)" />
+	<reference id="repository" interface="javax.jcr.Repository"
+		filter="(cn=home)" />
+	<reference id="resourcesService" interface="org.argeo.connect.resources.ResourcesService" />
+	<reference id="activitiesService"
+		interface="org.argeo.connect.activities.ActivitiesService" />
 	<reference id="peopleService" interface="org.argeo.connect.people.PeopleService" />
 	<reference id="nodeFileSystemProvider" interface="java.nio.file.spi.FileSystemProvider"
 		filter="(service.pid=org.argeo.node.fsProvider)" />
-	
-	<!-- SERVICES -->
+
 </beans:beans>

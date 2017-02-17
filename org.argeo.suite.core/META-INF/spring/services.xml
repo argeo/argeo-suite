@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<!-- Instantiate the default MaintenanceService of the various Known Apps -->
+	<bean id="resourcesMaintenanceService"
+		class="org.argeo.connect.resources.core.ResourcesMaintenanceService" />
+
+	<bean id="activitiesMaintenanceService"
+		class="org.argeo.connect.activities.core.ActivitiesMaintenanceService" />
+
+	<bean id="peopleMaintenanceService"
+		class="org.argeo.connect.people.core.PeopleMaintenanceService" />
+
+	<bean id="trackerMaintenanceService"
+		class="org.argeo.connect.tracker.core.TrackerMaintenanceService" />
+
+	<!--  Ther is no miantenance Service for the Documents app yet  -->
+
+	<!--order is important -->
+	<util:list id="knownMaintenanceServices">
+		<ref bean="resourcesMaintenanceService" />
+		<ref bean="activitiesMaintenanceService" />
+		<ref bean="peopleMaintenanceService" />
+		<ref bean="trackerMaintenanceService" />
+	</util:list>
+
+	<bean id="suiteMaintenanceService" class="org.argeo.suite.core.DefaultSuiteMaintenanceService"
+		init-method="init" destroy-method="destroy">
+		<property name="repository" ref="repository" />
+		<property name="workspaceName" value="main" />
+		<property name="maintenanceServices" ref="knownMaintenanceServices" />
+	</bean>
+
+	<!-- Execute initialization with a system authentication -->
+	<bean
+		class="org.argeo.cms.spring.AuthenticatedApplicationContextInitialization" />
+</beans>
