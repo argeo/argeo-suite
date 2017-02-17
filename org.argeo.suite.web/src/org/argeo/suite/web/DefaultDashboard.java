@@ -10,6 +10,7 @@ import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.people.PeopleException;
 import org.argeo.connect.people.PeopleService;
 import org.argeo.connect.people.web.parts.PeopleSearchCmp;
+import org.argeo.connect.resources.ResourceService;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -26,13 +27,15 @@ import org.eclipse.swt.widgets.Label;
 /** Default dashboard layout for Argeo Suite */
 public class DefaultDashboard implements CmsUiProvider {
 
+	private ResourceService resourceService;
 	private PeopleService peopleService;
 	private Map<String, String> peopleIconPaths;
 
 	// Local UI Providers
 	// private CmsUiProvider orgPage;
 
-	public DefaultDashboard(PeopleService peopleService, Map<String, String> peopleIconPaths) {
+	public DefaultDashboard(ResourceService resourceService, PeopleService peopleService, Map<String, String> peopleIconPaths) {
+		this.resourceService = resourceService;
 		this.peopleService = peopleService;
 		this.peopleIconPaths = peopleIconPaths;
 
@@ -66,7 +69,7 @@ public class DefaultDashboard implements CmsUiProvider {
 		titleLbl.setText("My Tasks");
 		titleLbl.setFont(EclipseUiUtils.getBoldFont(titleCmp));
 
-		PeopleSearchCmp searchComp = new PeopleSearchCmp(parent, SWT.NO_FOCUS, peopleService, peopleIconPaths);
+		PeopleSearchCmp searchComp = new PeopleSearchCmp(parent, SWT.NO_FOCUS, resourceService, peopleService, peopleIconPaths);
 		searchComp.populate(context, true);
 		searchComp.setLayoutData(EclipseUiUtils.fillAll());
 

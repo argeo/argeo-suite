@@ -19,6 +19,7 @@ import org.argeo.cms.widgets.auth.CmsLogin;
 import org.argeo.connect.people.PeopleService;
 import org.argeo.connect.people.PeopleTypes;
 import org.argeo.connect.people.web.pages.PeopleDefaultPage;
+import org.argeo.connect.resources.ResourceService;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.suite.web.fs.MyFilesBrowserPage;
 import org.eclipse.swt.SWT;
@@ -41,6 +42,7 @@ public class DefaultMainPage implements LifeCycleUiProvider {
 	private CmsUiProvider fsBrowserPage;
 
 	/* DEPENDENCY INJECTION */
+	private ResourceService resourceService;
 	private PeopleService peopleService;
 	private FileSystemProvider nodeFileSystemProvider;
 	private Map<String, String> peopleIconPaths;
@@ -50,8 +52,8 @@ public class DefaultMainPage implements LifeCycleUiProvider {
 
 	@Override
 	public void init(Session adminSession) throws RepositoryException {
-		dashboardPage = new DefaultDashboard(peopleService, peopleIconPaths);
-		peoplePage = new PeopleDefaultPage(peopleService, peopleIconPaths);
+		dashboardPage = new DefaultDashboard(resourceService, peopleService, peopleIconPaths);
+		peoplePage = new PeopleDefaultPage(resourceService, peopleService, peopleIconPaths);
 		fsBrowserPage = new MyFilesBrowserPage(nodeFileSystemProvider);
 	}
 
@@ -121,6 +123,10 @@ public class DefaultMainPage implements LifeCycleUiProvider {
 	}
 
 	/* DEPENDENCY INJECTION */
+	public void setResourceService(ResourceService resourceService) {
+		this.resourceService = resourceService;
+	}
+
 	public void setPeopleService(PeopleService peopleService) {
 		this.peopleService = peopleService;
 	}

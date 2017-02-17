@@ -13,7 +13,7 @@
 		<property name="userAdminService" ref="userAdminService" />
 	</bean>
 
-	<bean id="userAdminService" class="org.argeo.connect.people.core.UserAdminServiceImpl"
+	<bean id="userAdminService" class="org.argeo.connect.UserAdminServiceImpl"
 		scope="singleton" lazy-init="false">
 		<property name="userTransaction" ref="userTransaction" />
 		<property name="userAdmin" ref="userAdmin" />

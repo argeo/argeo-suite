@@ -9,6 +9,7 @@
 	<bean id="people.mainPage" class="org.argeo.connect.people.web.pages.PeopleDynamicPages">
 		<property name="dynamicPages" ref="people.dynamicPages" />
 		<property name="peopleService" ref="peopleService" />
+		<property name="resourceService" ref="resourceService" />
 		<property name="iconPathes" ref="peopleEntityIcons" />
 	</bean>
 
@@ -18,8 +19,10 @@
 				<bean p:image="theme/argeo-classic/img/byArgeo.png" p:target="/people#"
 					p:custom="cms_header-logo" parent="menuLink" />
 				<bean p:label="All" p:target="people!/search/all" parent="menuLink" />
-				<bean p:label="Persons" p:target="people!/search/persons" parent="menuLink" />
-				<bean p:label="Organisations" p:target="people!/search/orgs" parent="menuLink" />
+				<bean p:label="Persons" p:target="people!/search/persons"
+					parent="menuLink" />
+				<bean p:label="Organisations" p:target="people!/search/orgs"
+					parent="menuLink" />
 				<bean p:label="Browse" p:target="browse#" parent="menuLink" />
 			</list>
 		</property>
@@ -61,16 +64,20 @@
 			</key>
 			<bean class="org.argeo.connect.people.web.pages.TagLikeInstancePage">
 				<property name="peopleService" ref="peopleService" />
+				<property name="resourceService" ref="resourceService" />
+
 				<property name="iconPathes" ref="peopleEntityIcons" />
 				<property name="propertyName" value="people:tags" />
 			</bean>
 		</entry>
 		<entry>
 			<key>
-				<util:constant static-field="org.argeo.connect.people.PeopleTypes.PEOPLE_MAILING_LIST" />
+				<util:constant
+					static-field="org.argeo.connect.people.PeopleTypes.PEOPLE_MAILING_LIST" />
 			</key>
 			<bean class="org.argeo.connect.people.web.pages.TagLikeInstancePage">
 				<property name="peopleService" ref="peopleService" />
+				<property name="resourceService" ref="resourceService" />
 				<property name="iconPathes" ref="peopleEntityIcons" />
 				<property name="propertyName" value="people:mailingLists" />
 			</bean>
@@ -80,12 +87,14 @@
 	<!-- Various headers -->
 	<bean id="personHeaderPart" class="org.argeo.connect.people.web.parts.PersonHeaderPart">
 		<property name="peopleService" ref="peopleService" />
+		<property name="resourceService" ref="resourceService" />
 		<property name="tagsPart" ref="tagsPart" />
 		<property name="mailingListsPart" ref="mailingListsPart" />
 	</bean>
 
 	<bean id="orgHeaderPart" class="org.argeo.connect.people.web.parts.OrgHeaderPart">
 		<property name="peopleService" ref="peopleService" />
+		<property name="resourceService" ref="resourceService" />
 		<property name="tagsPart" ref="tagsPart" />
 		<property name="mailingListsPart" ref="mailingListsPart" />
 	</bean>

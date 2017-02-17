@@ -10,6 +10,9 @@ import javax.jcr.Session;
 import org.argeo.cms.ui.workbench.util.CommandUtils;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.documents.DocumentsService;
+import org.argeo.connect.resources.ResourceService;
+import org.argeo.connect.activities.ActivityService;
+import org.argeo.connect.activities.ActivitiesTypes;
 import org.argeo.connect.people.PeopleService;
 import org.argeo.connect.people.workbench.rap.PeopleStyles;
 import org.argeo.connect.people.workbench.rap.editors.util.EntityEditorInput;
@@ -38,6 +41,8 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 
 	// DEPENDENCY INJECTION
 	private Repository repository;
+	private ResourceService resourceService;
+	private ActivityService activityService;
 	private PeopleService peopleService;
 	private DocumentsService documentsService;
 	private AppWorkbenchService appWorkbenchService;
@@ -178,24 +183,33 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 	}
 
 	// Expose to implementing classes
+	protected Session getSession() {
+		return session;
+	}
+
+	public ResourceService getResourceService() {
+		return resourceService;
+	}
+	
+	protected ActivityService getActivityService() {
+		return activityService;
+	}
+
 	protected PeopleService getPeopleService() {
 		return peopleService;
 	}
+
+	protected DocumentsService getDocumentsService() {
+		return documentsService;
+	}
+
 
 	protected AppWorkbenchService getAppWorkbenchService() {
 		return appWorkbenchService;
 	}
 
-	protected Session getSession() {
-		return session;
-	}
-
 	protected Image getLogoImg() {
 		return logoImg;
-	}
-
-	protected DocumentsService getDocumentsService() {
-		return documentsService;
 	}
 
 	protected FormToolkit getFormToolkit() {
@@ -207,8 +221,12 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 		this.repository = repository;
 	}
 
-	public void setAppWorkbenchService(AppWorkbenchService appWorkbenchService) {
-		this.appWorkbenchService = appWorkbenchService;
+	public void setResourceService(ResourceService resourceService) {
+		this.resourceService = resourceService;
+	}
+	
+	public void setActivityService(ActivityService activityService) {
+		this.activityService = activityService;
 	}
 
 	public void setDocumentsService(DocumentsService documentsService) {
@@ -218,4 +236,10 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 	public void setPeopleService(PeopleService peopleService) {
 		this.peopleService = peopleService;
 	}
+
+
+	public void setAppWorkbenchService(AppWorkbenchService appWorkbenchService) {
+		this.appWorkbenchService = appWorkbenchService;
+	}
+
 }

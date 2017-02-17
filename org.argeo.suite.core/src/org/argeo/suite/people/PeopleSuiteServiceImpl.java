@@ -1,7 +1,6 @@
 package org.argeo.suite.people;
 
-import java.io.IOException;
-import java.util.ArrayList;
+import java.net.URI;
 import java.util.Map;
 
 import javax.jcr.Repository;
@@ -13,18 +12,13 @@ import javax.jcr.security.Privilege;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.connect.people.PeopleConstants;
-import org.argeo.connect.people.PeopleNames;
 import org.argeo.connect.people.PeopleService;
-import org.argeo.connect.people.PeopleTypes;
-import org.argeo.connect.people.ResourceService;
 import org.argeo.connect.people.core.PeopleServiceImpl;
-import org.argeo.connect.people.core.imports.EncodedTagCsvFileParser;
-import org.argeo.connect.util.ConnectJcrUtils;
+import org.argeo.connect.resources.ResourceService;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.node.NodeConstants;
 import org.argeo.suite.ArgeoSuiteRole;
 import org.argeo.suite.SuiteException;
-import org.springframework.core.io.Resource;
 
 /**
  * Default implementation of an Argeo Suite specific People Backend
@@ -37,7 +31,9 @@ public class PeopleSuiteServiceImpl extends PeopleServiceImpl implements PeopleS
 	/* DEPENDENCY INJECTION */
 	private Repository repository;
 	private String workspaceName;
-	private Map<String, Resource> initResources = null;
+	private ResourceService resourceService;
+	private Map<String, URI> initResources = null;
+	private Map<String, URI> legacyResources = null;
 
 	public void init() {
 		super.init();
@@ -93,54 +89,70 @@ public class PeopleSuiteServiceImpl extends PeopleServiceImpl implements PeopleS
 	 * Initialises People resource model and optionally imports legacy resources
 	 */
 	protected void initModelResources(Session adminSession) {
-		try {
-			// initialisation
-			ResourceService resourceService = getResourceService();
-			resourceService.initialiseResources(adminSession);
-
-			Resource resource = initResources.get("Countries");
-			if (resourceService.getTagLikeResourceParent(adminSession, PeopleConstants.RESOURCE_COUNTRY) == null
-					&& resource != null) {
-				resourceService.createTagLikeResourceParent(adminSession, PeopleConstants.RESOURCE_COUNTRY,
-						PeopleTypes.PEOPLE_TAG_ENCODED_INSTANCE, PeopleNames.PEOPLE_CODE, getBasePath(null),
-						ConnectJcrUtils.getLocalJcrItemName(NodeType.NT_UNSTRUCTURED), new ArrayList<String>());
-				String EN_SHORT_NAME = "English short name (upper-lower case)";
-				String ISO_CODE = "Alpha-2 code";
-				new EncodedTagCsvFileParser(resourceService, adminSession, PeopleConstants.RESOURCE_COUNTRY, ISO_CODE,
-						EN_SHORT_NAME).parse(resource.getInputStream(), "UTF-8");
-			}
-
-			resource = initResources.get("Languages");
-			if (resourceService.getTagLikeResourceParent(adminSession, PeopleConstants.RESOURCE_LANG) == null
-					&& resource != null) {
-				resourceService.createTagLikeResourceParent(adminSession, PeopleConstants.RESOURCE_LANG,
-						PeopleTypes.PEOPLE_TAG_ENCODED_INSTANCE, PeopleNames.PEOPLE_CODE, getBasePath(null),
-						ConnectJcrUtils.getLocalJcrItemName(NodeType.NT_UNSTRUCTURED), new ArrayList<String>());
-				String EN_SHORT_NAME = "Language name";
-				String ISO_CODE = "639-1";
-				new EncodedTagCsvFileParser(resourceService, adminSession, PeopleConstants.RESOURCE_LANG, ISO_CODE,
-						EN_SHORT_NAME).parse(resource.getInputStream(), "UTF-8");
-			}
-
-			// Create tag & mailing list parents
-			if (resourceService.getTagLikeResourceParent(adminSession, PeopleConstants.RESOURCE_TAG) == null)
-				resourceService.createTagLikeResourceParent(adminSession, PeopleConstants.RESOURCE_TAG,
-						PeopleTypes.PEOPLE_TAG_INSTANCE, null, getBasePath(null), PeopleTypes.PEOPLE_ENTITY,
-						PeopleNames.PEOPLE_TAGS);
-			if (resourceService.getTagLikeResourceParent(adminSession, PeopleTypes.PEOPLE_MAILING_LIST) == null)
-				resourceService.createTagLikeResourceParent(adminSession, null, PeopleTypes.PEOPLE_MAILING_LIST, null,
-						getBasePath(null), PeopleTypes.PEOPLE_ENTITY, PeopleNames.PEOPLE_MAILING_LISTS);
-
-			// Initialise catalogues
-			importCatalogue(adminSession, initResources.get("SimpleTasks"), PeopleTypes.PEOPLE_TASK);
-
-			if (adminSession.hasPendingChanges()) {
-				adminSession.save();
-				log.info("Resources have been added to Argeo Suite model");
-			}
-		} catch (IOException | RepositoryException e) {
-			throw new SuiteException("Cannot initialise resources ", e);
-		}
+		// try {
+		// // initialisation
+		// resourceService.initialiseResources(adminSession);
+		//
+		// Resource resource = initResources.get("Countries");
+		// if (resourceService.getTagLikeResourceParent(adminSession,
+		// PeopleConstants.RESOURCE_COUNTRY) == null
+		// && resource != null) {
+		// resourceService.createTagLikeResourceParent(adminSession,
+		// PeopleConstants.RESOURCE_COUNTRY,
+		// PeopleTypes.PEOPLE_TAG_ENCODED_INSTANCE, PeopleNames.PEOPLE_CODE,
+		// getBasePath(null),
+		// ConnectJcrUtils.getLocalJcrItemName(NodeType.NT_UNSTRUCTURED), new
+		// ArrayList<String>());
+		// String EN_SHORT_NAME = "English short name (upper-lower case)";
+		// String ISO_CODE = "Alpha-2 code";
+		// new EncodedTagCsvFileParser(resourceService, adminSession,
+		// PeopleConstants.RESOURCE_COUNTRY, ISO_CODE,
+		// EN_SHORT_NAME).parse(resource.getInputStream(), "UTF-8");
+		// }
+		//
+		// resource = initResources.get("Languages");
+		// if (resourceService.getTagLikeResourceParent(adminSession,
+		// PeopleConstants.RESOURCE_LANG) == null
+		// && resource != null) {
+		// resourceService.createTagLikeResourceParent(adminSession,
+		// PeopleConstants.RESOURCE_LANG,
+		// PeopleTypes.PEOPLE_TAG_ENCODED_INSTANCE, PeopleNames.PEOPLE_CODE,
+		// getBasePath(null),
+		// ConnectJcrUtils.getLocalJcrItemName(NodeType.NT_UNSTRUCTURED), new
+		// ArrayList<String>());
+		// String EN_SHORT_NAME = "Language name";
+		// String ISO_CODE = "639-1";
+		// new EncodedTagCsvFileParser(resourceService, adminSession,
+		// PeopleConstants.RESOURCE_LANG, ISO_CODE,
+		// EN_SHORT_NAME).parse(resource.getInputStream(), "UTF-8");
+		// }
+		//
+		// // Create tag & mailing list parents
+		// if (resourceService.getTagLikeResourceParent(adminSession,
+		// PeopleConstants.RESOURCE_TAG) == null)
+		// resourceService.createTagLikeResourceParent(adminSession,
+		// PeopleConstants.RESOURCE_TAG,
+		// PeopleTypes.PEOPLE_TAG_INSTANCE, null, getBasePath(null),
+		// PeopleTypes.PEOPLE_ENTITY,
+		// PeopleNames.PEOPLE_TAGS);
+		// if (resourceService.getTagLikeResourceParent(adminSession,
+		// PeopleTypes.PEOPLE_MAILING_LIST) == null)
+		// resourceService.createTagLikeResourceParent(adminSession, null,
+		// PeopleTypes.PEOPLE_MAILING_LIST, null,
+		// getBasePath(null), PeopleTypes.PEOPLE_ENTITY,
+		// PeopleNames.PEOPLE_MAILING_LISTS);
+		//
+		// // Initialise catalogues
+		// importCatalogue(adminSession, initResources.get("SimpleTasks"),
+		// PeopleTypes.PEOPLE_TASK);
+		//
+		// if (adminSession.hasPendingChanges()) {
+		// adminSession.save();
+		// log.info("Resources have been added to Argeo Suite model");
+		// }
+		// } catch (IOException | RepositoryException e) {
+		// throw new SuiteException("Cannot initialise resources ", e);
+		// }
 	}
 
 	/** Give access to the repository to extending classes */
@@ -161,7 +173,7 @@ public class PeopleSuiteServiceImpl extends PeopleServiceImpl implements PeopleS
 		this.workspaceName = workspaceName;
 	}
 
-	public void setInitResources(Map<String, Resource> initResources) {
+	public void setInitResources(Map<String, URI> initResources) {
 		this.initResources = initResources;
 	}
 }

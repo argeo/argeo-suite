@@ -5,9 +5,11 @@ import javax.jcr.NodeIterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.connect.people.PeopleConstants;
+import org.argeo.connect.ConnectConstants;
+import org.argeo.connect.activities.ActivitiesTypes;
 import org.argeo.connect.people.PeopleTypes;
 import org.argeo.connect.people.workbench.rap.PeopleRapUtils;
+import org.argeo.connect.resources.ResourcesTypes;
 import org.argeo.connect.ui.workbench.Refreshable;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
@@ -87,18 +89,16 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Organisations",
 				PeopleTypes.PEOPLE_ORG, getPeopleService().getBasePath(PeopleTypes.PEOPLE_ORG));
 
-		Node tagParent = getPeopleService().getResourceService().getTagLikeResourceParent(getSession(),
-				PeopleTypes.PEOPLE_MAILING_LIST);
+		Node tagParent = getResourceService().getTagLikeResourceParent(getSession(), PeopleTypes.PEOPLE_MAILING_LIST);
 		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Mailing lists",
 				PeopleTypes.PEOPLE_MAILING_LIST, ConnectJcrUtils.getPath(tagParent));
-		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tasks", PeopleTypes.PEOPLE_TASK,
-				getPeopleService().getBasePath(null));
+		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tasks",
+				ActivitiesTypes.ACTIVITIES_TASK, getPeopleService().getBasePath(null));
 
-		tagParent = getPeopleService().getResourceService().getTagLikeResourceParent(getSession(),
-				PeopleConstants.RESOURCE_TAG);
+		tagParent = getResourceService().getTagLikeResourceParent(getSession(), ConnectConstants.RESOURCE_TAG);
 
 		PeopleRapUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tags",
-				PeopleTypes.PEOPLE_TAG_INSTANCE, ConnectJcrUtils.getPath(tagParent));
+				ResourcesTypes.PEOPLE_TAG_INSTANCE, ConnectJcrUtils.getPath(tagParent));
 
 	}
 }

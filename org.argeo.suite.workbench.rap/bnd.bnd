@@ -12,6 +12,8 @@ javax.jcr.security,\
 org.argeo.cms,\
 org.argeo.cms.ui.workbench,\
 org.argeo.connect,\
+org.argeo.connect.resources,\
+org.argeo.connect.activities,\
 org.argeo.connect.ui,\
 org.argeo.connect.people.workbench.rap.views,\
 org.argeo.connect.documents.workbench.parts,\
