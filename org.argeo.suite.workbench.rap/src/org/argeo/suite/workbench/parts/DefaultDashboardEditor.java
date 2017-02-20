@@ -5,7 +5,6 @@ import javax.jcr.NodeIterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.connect.ConnectConstants;
 import org.argeo.connect.activities.ActivitiesTypes;
 import org.argeo.connect.people.PeopleTypes;
 import org.argeo.connect.resources.ResourcesTypes;
@@ -82,23 +81,15 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		parent.setLayout(EclipseUiUtils.noSpaceGridLayout());
 		createGadgetTitleCmp(parent, "Contacts");
 		Composite bodyCmp = createGadgetBodyCmp(parent);
-
 		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Persons",
-				PeopleTypes.PEOPLE_PERSON, getPeopleService().getBasePath(PeopleTypes.PEOPLE_PERSON));
-
+				PeopleTypes.PEOPLE_PERSON);
 		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Organisations",
-				PeopleTypes.PEOPLE_ORG, getPeopleService().getBasePath(PeopleTypes.PEOPLE_ORG));
-
-		Node tagParent = getResourceService().getTagLikeResourceParent(getSession(), PeopleTypes.PEOPLE_MAILING_LIST);
+				PeopleTypes.PEOPLE_ORG);
 		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Mailing lists",
-				PeopleTypes.PEOPLE_MAILING_LIST, ConnectJcrUtils.getPath(tagParent));
+				PeopleTypes.PEOPLE_MAILING_LIST);
 		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tasks",
-				ActivitiesTypes.ACTIVITIES_TASK, getPeopleService().getBasePath(null));
-
-		tagParent = getResourceService().getTagLikeResourceParent(getSession(), ConnectConstants.RESOURCE_TAG);
-
+				ActivitiesTypes.ACTIVITIES_TASK);
 		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tags",
-				ResourcesTypes.RESOURCES_TAG_INSTANCE, ConnectJcrUtils.getPath(tagParent));
-
+				ResourcesTypes.RESOURCES_TAG_INSTANCE);
 	}
 }

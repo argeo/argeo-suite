@@ -87,6 +87,19 @@ Button.flat_btn, Button[PUSH][FLAT].flat_btn, Button.flat_btn:default,
 	cursor: pointer;
 }
 
+
+Button[FLAT].open_calendar_btn {
+	background-image: url( theme/argeo-classic/icons/actions/openCalendar.gif);
+	background-color: transparent;
+	background-repeat: no-repeat;
+	border: 0px solid white;
+	border-radius: 0px;
+	padding: 0px 0px;
+	animation: hoverOut 500ms ease-out;
+	cursor: pointer;
+}
+
+
 /* Links */
 Link, Link-Hyperlink, Link-Hyperlink:link, Link-Hyperlink:visited,
 	Link-Hyperlink:active {
@@ -140,6 +153,7 @@ Text.workbench_form_text:focused {
 	border: 2px solid red;
 	box-shadow: inset 0 0 1px #bdbdbd;
 }
+
 
 
 /****** DASHBOARD  *********/
@@ -288,7 +302,7 @@ Button[PUSH][FLAT].markAsDone_btn:pressed {
 }
 
 Button[PUSH][FLAT].small_delete_btn{
-	background-image: url( theme/argeo-classic/icons/actions/delete_small.gif);
+	background-image: url( theme/argeo-classic/icons/actions/deleteSmall.gif);
 	border: 0px solid white;
 	border-radius: 0px;
 	padding: 0px 0px;

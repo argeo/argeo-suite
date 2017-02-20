@@ -9,12 +9,13 @@
 	<!-- REFERENCES -->
 	<reference id="repository" interface="javax.jcr.Repository"
 		filter="(cn=home)" />
-	<reference id="nodeFileSystemProvider" interface="java.nio.file.spi.FileSystemProvider"
-		filter="(service.pid=org.argeo.node.fsProvider)" />
-	<reference id="appWorkbenchService"
-		interface="org.argeo.connect.ui.workbench.AppWorkbenchService" />
-
+	<reference id="resourcesService" interface="org.argeo.connect.resources.ResourcesService" />
+	<reference id="activitiesService"
+		interface="org.argeo.connect.activities.ActivitiesService" />
 	<reference id="peopleService" interface="org.argeo.connect.people.PeopleService" />
 	<reference id="documentsService" interface="org.argeo.connect.documents.DocumentsService" />
-
+	<reference id="appWorkbenchService"
+		interface="org.argeo.connect.ui.workbench.AppWorkbenchService" />
+	<reference id="nodeFileSystemProvider" interface="java.nio.file.spi.FileSystemProvider"
+		filter="(service.pid=org.argeo.node.fsProvider)" />
 </beans:beans>

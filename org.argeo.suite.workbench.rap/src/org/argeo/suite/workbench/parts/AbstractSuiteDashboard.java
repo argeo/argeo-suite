@@ -40,8 +40,8 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 
 	// DEPENDENCY INJECTION
 	private Repository repository;
-	private ResourcesService resourceService;
-	private ActivitiesService activityService;
+	private ResourcesService resourcesService;
+	private ActivitiesService activitiesService;
 	private PeopleService peopleService;
 	private DocumentsService documentsService;
 	private AppWorkbenchService appWorkbenchService;
@@ -187,11 +187,11 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 	}
 
 	public ResourcesService getResourceService() {
-		return resourceService;
+		return resourcesService;
 	}
 
 	protected ActivitiesService getActivityService() {
-		return activityService;
+		return activitiesService;
 	}
 
 	protected PeopleService getPeopleService() {
@@ -219,12 +219,12 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 		this.repository = repository;
 	}
 
-	public void setResourceService(ResourcesService resourceService) {
-		this.resourceService = resourceService;
+	public void setResourcesService(ResourcesService resourcesService) {
+		this.resourcesService = resourcesService;
 	}
 
-	public void setActivityService(ActivitiesService activityService) {
-		this.activityService = activityService;
+	public void setActivitiesService(ActivitiesService activitiesService) {
+		this.activitiesService = activitiesService;
 	}
 
 	public void setDocumentsService(DocumentsService documentsService) {
@@ -238,5 +238,4 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 	public void setAppWorkbenchService(AppWorkbenchService appWorkbenchService) {
 		this.appWorkbenchService = appWorkbenchService;
 	}
-
 }
