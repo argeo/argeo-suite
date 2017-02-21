@@ -303,9 +303,10 @@ Button[PUSH][FLAT].markAsDone_btn:pressed {
 
 Button[PUSH][FLAT].small_delete_btn{
 	background-image: url( theme/argeo-classic/icons/actions/deleteSmall.gif);
+	background-repeat: no-repeat;
 	border: 0px solid white;
 	border-radius: 0px;
-	padding: 0px 0px;
+	padding: 0px 20px 0px 0px;
 	background-color: transparent;
 	animation: hoverOut 500ms ease-out;
 	cursor: pointer;

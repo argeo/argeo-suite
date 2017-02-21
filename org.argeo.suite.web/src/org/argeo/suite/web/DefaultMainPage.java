@@ -16,8 +16,8 @@ import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.LifeCycleUiProvider;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.cms.widgets.auth.CmsLogin;
+import org.argeo.connect.ConnectTypes;
 import org.argeo.connect.people.PeopleService;
-import org.argeo.connect.people.PeopleTypes;
 import org.argeo.connect.people.web.pages.PeopleDefaultPage;
 import org.argeo.connect.resources.ResourcesService;
 import org.argeo.eclipse.ui.EclipseUiUtils;
@@ -62,7 +62,7 @@ public class DefaultMainPage implements LifeCycleUiProvider {
 		if (CurrentUser.isAnonymous())
 			return createAnonymousUi(parent, context);
 
-		if (context.isNodeType(PeopleTypes.PEOPLE_ENTITY))
+		if (context.isNodeType(ConnectTypes.CONNECT_ENTITY))
 			return peoplePage.createUi(parent, context);
 		else if (peopleService.getDefaultBasePath().equals(context.getPath()))
 			return peoplePage.createUi(parent, context);

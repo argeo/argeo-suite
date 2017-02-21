@@ -67,7 +67,7 @@
 				<property name="resourcesService" ref="resourcesService" />
 
 				<property name="iconPathes" ref="peopleEntityIcons" />
-				<property name="propertyName" value="people:tags" />
+				<property name="propertyName" value="connect:tags" />
 			</bean>
 		</entry>
 		<entry>
@@ -117,7 +117,7 @@
 	<!-- Tag like properties -->
 	<bean id="tagsPart" class="org.argeo.connect.people.web.parts.TagLikeValuesPart">
 		<property name="propertyName">
-			<util:constant static-field="org.argeo.connect.people.PeopleNames.PEOPLE_TAGS" />
+			<util:constant static-field="org.argeo.connect.ConnectNames.CONNECT_TAGS" />
 		</property>
 	</bean>
 	<bean id="mailingListsPart" class="org.argeo.connect.people.web.parts.TagLikeValuesPart">
