@@ -65,35 +65,6 @@
 	<extension
 		id="menu:org.eclipse.ui.main.menu"
 		point="org.eclipse.ui.menus">
-
-		<!-- Add entity and Search menus --> 
-		<menuContribution locationURI="toolbar:org.eclipse.ui.main.toolbar?after=org.argeo.cms.ui.workbench.rap.userToolbar">
-			<toolbar id="org.argeo.connect.ui.workbench.dropDownsToolbar">
-				<command
-					id="org.argeo.connect.ui.workbench.addEntityToolbar"
-					style="pulldown"
-					label="Create"
-					tooltip="Create a new object"
-					icon="theme/argeo-classic/icons/add.gif"
-					commandId="org.argeo.cms.ui.workbench.doNothing">
-				</command>
-				<command
-					id="org.argeo.connect.ui.workbench.openSearchToolbar"
-					style="pulldown"
-					label="Search"
-					tooltip="Open a detailed search page"
-					icon="theme/argeo-classic/icons/search.png"
-					commandId="org.argeo.cms.ui.workbench.doNothing">
-					<visibleWhen checkEnabled="false">
-						<with variable="roles">
-		    				<iterate ifEmpty="false" operator="or">
-		      					<equals value="cn=org.argeo.suite.coworker,ou=roles,ou=node" />
-			      			</iterate>
-		    			</with>
-					</visibleWhen>
-				</command>
-			</toolbar>
-		</menuContribution>
 	</extension>
 	
 	<!-- BRANDING AND THEMES -->

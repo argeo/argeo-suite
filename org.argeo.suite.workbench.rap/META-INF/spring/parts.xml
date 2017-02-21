@@ -11,11 +11,11 @@
 		<property name="repository" ref="repository" />
 	</bean>
 
-	<bean id="openEntityEditor" class="org.argeo.suite.workbench.commands.OpenEntityEditor"
-		scope="prototype">
-		<property name="repository" ref="repository" />
-		<property name="appWorkbenchService" ref="appWorkbenchService" />
-	</bean>
+<!-- 	<bean id="openEntityEditor" class="org.argeo.suite.workbench.commands.OpenEntityEditor" -->
+<!-- 		scope="prototype"> -->
+<!-- 		<property name="repository" ref="repository" /> -->
+<!-- 		<property name="appWorkbenchService" ref="appWorkbenchService" /> -->
+<!-- 	</bean> -->
 
 	<!-- VIEWS -->
 	
@@ -27,6 +27,6 @@
 		<property name="activitiesService" ref="activitiesService" />
 		<property name="peopleService" ref="peopleService" />
 		<property name="documentsService" ref="documentsService" />
-		<property name="appWorkbenchService" ref="appWorkbenchService" />
+		<property name="appWorkbenchService" ref="suiteWorkbenchService" />
 	</bean>
 </beans>

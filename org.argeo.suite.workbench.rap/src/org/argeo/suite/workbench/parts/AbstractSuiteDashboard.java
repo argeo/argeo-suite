@@ -15,7 +15,7 @@ import org.argeo.connect.people.PeopleService;
 import org.argeo.connect.resources.ResourcesService;
 import org.argeo.connect.ui.ConnectUiStyles;
 import org.argeo.connect.ui.workbench.AppWorkbenchService;
-import org.argeo.connect.ui.workbench.parts.EntityEditorInput;
+import org.argeo.connect.ui.workbench.util.EntityEditorInput;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;

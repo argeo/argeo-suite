@@ -14,8 +14,15 @@
 		interface="org.argeo.connect.activities.ActivitiesService" />
 	<reference id="peopleService" interface="org.argeo.connect.people.PeopleService" />
 	<reference id="documentsService" interface="org.argeo.connect.documents.DocumentsService" />
-	<reference id="appWorkbenchService"
+	<reference id="trackerService" interface="org.argeo.connect.tracker.TrackerService" />
+	
+	
+	<!-- Assembly of the various apps workbench services -->
+	<service ref="suiteWorkbenchService"
 		interface="org.argeo.connect.ui.workbench.AppWorkbenchService" />
-	<reference id="nodeFileSystemProvider" interface="java.nio.file.spi.FileSystemProvider"
-		filter="(service.pid=org.argeo.node.fsProvider)" />
+
+	<!-- Exposes People specific implementation of the AppWorkbenchService -->
+	<service ref="peopleWorkbenchService"
+		interface="org.argeo.connect.people.workbench.PeopleWorkbenchService" />
+		
 </beans:beans>

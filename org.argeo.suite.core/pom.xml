@@ -27,5 +27,10 @@
 			<artifactId>org.argeo.connect.documents</artifactId>
 			<version>${version.argeo-connect}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.argeo.connect</groupId>
+			<artifactId>org.argeo.connect.activities</artifactId>
+			<version>${version.argeo-connect}</version>
+		</dependency>
 	</dependencies>
 </project>

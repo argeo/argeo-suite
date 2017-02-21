@@ -313,7 +313,7 @@ Button[PUSH][FLAT].small_delete_btn{
 
 
 /** Header **/
-.people_entity_header {
+.entity_header {
 	font: 14px Helvetica, Verdana, "Lucida Sans", Arial, sans-serif;
 	text-decoration: none;
 }

@@ -64,7 +64,7 @@ public class DefaultMainPage implements LifeCycleUiProvider {
 
 		if (context.isNodeType(PeopleTypes.PEOPLE_ENTITY))
 			return peoplePage.createUi(parent, context);
-		else if (peopleService.getBasePath(null).equals(context.getPath()))
+		else if (peopleService.getDefaultBasePath().equals(context.getPath()))
 			return peoplePage.createUi(parent, context);
 		else if (context.isNodeType(NodeType.NT_FOLDER) || context.isNodeType(NodeType.NT_FILE))
 			return fsBrowserPage.createUi(parent, context);
