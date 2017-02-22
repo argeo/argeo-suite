@@ -11,7 +11,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.graphics.Image;
 
 /** Centralize workbench services from the various base apps */
-public class AsWorkbenchServiceImpl implements AppWorkbenchService {
+public class SuiteWorkbenchService implements AppWorkbenchService {
 
 	// Injected known AppWorkbenchServices: order is important, first found
 	// result will be returned by the various methods.
@@ -21,28 +21,6 @@ public class AsWorkbenchServiceImpl implements AppWorkbenchService {
 	public String getDefaultEditorId() {
 		return DefaultDashboardEditor.ID;
 	}
-
-	// @Override
-	// public String getOpenEntityEditorCmdId() {
-	//// String result = null;
-	//// for (AppWorkbenchService appWbService : knownAppWbServices) {
-	//// result = appWbService.getOpenEntityEditorCmdId();
-	//// if (EclipseUiUtils.notEmpty(result))
-	//// return result;
-	//// }
-	// return OpenEntityEditor.ID;
-	// }
-
-	// @Override
-	// public String getOpenSearchEntityEditorCmdId() {
-	// String result = null;
-	// for (AppWorkbenchService appWbService : knownAppWbServices) {
-	// result = appWbService.getOpenSearchEntityEditorCmdId();
-	// if (EclipseUiUtils.notEmpty(result))
-	// return result;
-	// }
-	// return null;
-	// }
 
 	@Override
 	public String getEntityEditorId(Node entity) {
@@ -85,11 +63,6 @@ public class AsWorkbenchServiceImpl implements AppWorkbenchService {
 			if (result != null)
 				return result;
 		}
-		return null;
-	}
-
-	@Override
-	public String getOpenFileCmdId() {
 		return null;
 	}
 

@@ -5,6 +5,9 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
 	<!-- Assembly of the various AppWorkbenchServices -->
+	<bean id="resourcesWorkbenchService"
+		class="org.argeo.connect.resources.workbench.ResourcesWorkbenchService" />
+
 	<bean id="activitiesWorkbenchService"
 		class="org.argeo.connect.activities.workbench.ActivitiesWorkbenchService" />
 
@@ -16,13 +19,13 @@
 
 	<!--order is important -->
 	<util:list id="knownWbServices">
-		<ref bean="activitiesWorkbenchService" />
 		<ref bean="peopleWorkbenchService" />
 		<ref bean="documentsWorkbenchService" />
+		<ref bean="activitiesWorkbenchService" />
+		<ref bean="resourcesWorkbenchService" />
 	</util:list>
 
-	<bean id="suiteWorkbenchService" class="org.argeo.suite.workbench.AsWorkbenchServiceImpl">
+	<bean id="suiteWorkbenchService" class="org.argeo.suite.workbench.SuiteWorkbenchService">
 		<property name="knownAppWbServices" ref="knownWbServices" />
 	</bean>
-
 </beans>

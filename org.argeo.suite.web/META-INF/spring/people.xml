@@ -60,7 +60,7 @@
 		<entry>
 			<key>
 				<util:constant
-					static-field="org.argeo.connect.resources.ResourcesTypes.RESOURCES_TAG_INSTANCE" />
+					static-field="org.argeo.connect.resources.ResourcesTypes.RESOURCES_TAG" />
 			</key>
 			<bean class="org.argeo.connect.people.web.pages.TagLikeInstancePage">
 				<property name="peopleService" ref="peopleService" />

@@ -32,7 +32,7 @@
 		<ref bean="trackerMaintenanceService" />
 	</util:list>
 
-	<!-- Make the DJ-aying between the various known Apps Maintenance  -->
+	<!-- Make the DJ-aying between the various known Apps Maintenance -->
 	<bean id="suiteMaintenanceService" class="org.argeo.suite.core.DefaultSuiteMaintenanceService"
 		init-method="init" destroy-method="destroy">
 		<property name="repository" ref="repository" />
@@ -40,7 +40,7 @@
 		<property name="maintenanceServices" ref="knownMaintenanceServices" />
 	</bean>
 
-	<!--  APP SERVICES (backends) -->
+	<!-- APP SERVICES (backends) -->
 	<bean id="resourcesService" class="org.argeo.connect.resources.core.ResourcesServiceImpl" />
 
 	<bean id="activitiesService" class="org.argeo.connect.activities.core.ActivitiesServiceImpl">
@@ -53,7 +53,9 @@
 		<property name="resourcesService" ref="resourcesService" />
 	</bean>
 
-	<bean id="trackerService" class="org.argeo.connect.tracker.core.TrackerServiceImpl" />
+	<bean id="trackerService" class="org.argeo.connect.tracker.core.TrackerServiceImpl">
+		<property name="activitiesService" ref="activitiesService" />
+	</bean>
 
 	<bean id="documentsService" class="org.argeo.connect.documents.DocumentsService" />
 
@@ -65,7 +67,7 @@
 		<property name="documentsService" ref="documentsService" />
 	</bean>
 
-	<!--  VARIOUS -->
+	<!-- VARIOUS -->
 
 	<!-- Execute initialization with a system authentication -->
 	<bean

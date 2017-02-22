@@ -90,6 +90,6 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tasks",
 				ActivitiesTypes.ACTIVITIES_TASK);
 		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tags",
-				ResourcesTypes.RESOURCES_TAG_INSTANCE);
+				ResourcesTypes.RESOURCES_TAG);
 	}
 }

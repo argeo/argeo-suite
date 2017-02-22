@@ -15,6 +15,7 @@ import org.argeo.connect.resources.ResourcesTypes;
 import org.argeo.connect.tracker.TrackerService;
 import org.argeo.connect.tracker.TrackerTypes;
 import org.argeo.connect.util.ConnectJcrUtils;
+import org.argeo.suite.SuiteConstants;
 
 public class DefaultSuiteAppService implements AppService {
 
@@ -26,12 +27,29 @@ public class DefaultSuiteAppService implements AppService {
 
 	@Override
 	public String getAppBaseName() {
-		return null;
+		return SuiteConstants.SUITE_APP_BASE_NAME;
 	}
 
 	@Override
 	public String getDefaultRelPath(Node entity) throws RepositoryException {
-		return null;
+		if (ConnectJcrUtils.isNodeType(entity, ResourcesTypes.RESOURCES_TAG_PARENT)
+				|| ConnectJcrUtils.isNodeType(entity, ResourcesTypes.RESOURCES_NODE_TEMPLATE)
+				|| ConnectJcrUtils.isNodeType(entity, ResourcesTypes.RESOURCES_ENCODED_TAG)
+				|| ConnectJcrUtils.isNodeType(entity, ResourcesTypes.RESOURCES_TAG))
+			return resourcesService.getDefaultRelPath(entity);
+		else if (ConnectJcrUtils.isNodeType(entity, TrackerTypes.TRACKER_PROJECT))
+			return trackerService.getDefaultRelPath(entity);
+		else if (ConnectJcrUtils.isNodeType(entity, ActivitiesTypes.ACTIVITIES_TASK)
+				|| ConnectJcrUtils.isNodeType(entity, ActivitiesTypes.ACTIVITIES_ACTIVITY))
+			return activitiesService.getDefaultRelPath(entity);
+		else if (ConnectJcrUtils.isNodeType(entity, PeopleTypes.PEOPLE_PERSON)
+				|| ConnectJcrUtils.isNodeType(entity, PeopleTypes.PEOPLE_ORG))
+			return peopleService.getDefaultRelPath(entity);
+		else if (ConnectJcrUtils.isNodeType(entity, NodeType.NT_FILE)
+				|| ConnectJcrUtils.isNodeType(entity, NodeType.NT_FOLDER))
+			return documentsService.getDefaultRelPath(entity);
+		else
+			return null;
 	}
 
 	@Override
@@ -44,8 +62,8 @@ public class DefaultSuiteAppService implements AppService {
 	public Node saveEntity(Node entity, boolean publish) {
 		if (ConnectJcrUtils.isNodeType(entity, ResourcesTypes.RESOURCES_TAG_PARENT)
 				|| ConnectJcrUtils.isNodeType(entity, ResourcesTypes.RESOURCES_NODE_TEMPLATE)
-				|| ConnectJcrUtils.isNodeType(entity, ResourcesTypes.RESOURCES_TAG_ENCODED_INSTANCE)
-				|| ConnectJcrUtils.isNodeType(entity, ResourcesTypes.RESOURCES_TAG_INSTANCE))
+				|| ConnectJcrUtils.isNodeType(entity, ResourcesTypes.RESOURCES_ENCODED_TAG)
+				|| ConnectJcrUtils.isNodeType(entity, ResourcesTypes.RESOURCES_TAG))
 			return resourcesService.saveEntity(entity, publish);
 		else if (ConnectJcrUtils.isNodeType(entity, TrackerTypes.TRACKER_PROJECT))
 			return trackerService.saveEntity(entity, publish);
