@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.6"?>
+<target name="org.argeo.suite.platform - Local Maven repository (v0.1.5-SNAPSHOT)">
+<locations>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/suite/org.argeo.suite.workbench.rap/0.1.5-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/suite/org.argeo.suite.core/0.1.5-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/connect/org.argeo.connect.tracker/2.1.68-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/connect/org.argeo.connect.people/2.1.68-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/connect/org.argeo.connect.documents/2.1.68-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/connect/org.argeo.connect.activities/2.1.68-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/connect/org.argeo.connect.people.workbench.rap/2.1.68-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/connect/org.argeo.connect.people.ui/2.1.68-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/commons/org.argeo.eclipse.ui.rap/2.1.62-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/connect/org.argeo.connect.ui/2.1.68-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/connect/org.argeo.connect.core/2.1.68-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/commons/org.argeo.jcr/2.1.62-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/commons/org.argeo.eclipse.ui/2.1.62-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/suite/org.argeo.suite.web/0.1.5-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/connect/org.argeo.connect.people.web/2.1.68-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/commons/org.argeo.cms/2.1.62-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/commons/org.argeo.cms.ui/2.1.62-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/commons/org.argeo.dep.cms.platform/2.1.62-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/commons/org.argeo.dep.cms.node/2.1.62-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/commons/org.argeo.dep.cms.client/2.1.62-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/commons/org.argeo.node.api/2.1.62-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/commons/org.argeo.enterprise/2.1.62-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/commons/org.argeo.ext.jackrabbit/2.1.62-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/commons/org.argeo.cms.ui.workbench/2.1.62-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/commons/org.argeo.util/2.1.62-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/commons/org.argeo.ext.rap.ui.workbench/2.1.62-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/commons/org.argeo.cms.ui.workbench.rap/2.1.62-SNAPSHOT" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/org.apache.tika.parser/1.13.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/org.apache.tika.parser.source/1.13.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/bouncycastle/bcmail/1.55" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/bouncycastle/bcmail.source/1.55" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/bouncycastle/bcpg/1.55" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/bouncycastle/bcpg.source/1.55" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/ant/org.apache.ant/1.9.2" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/ant/org.apache.ant.source/1.9.2" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/ant/org.apache.ant.launch/1.9.2" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/ant/org.apache.ant.launch.source/1.9.2" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.quartz-scheduler.quartz/2.2.1" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.quartz-scheduler.quartz.source/2.2.1" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.quartz-scheduler.quartz.jobs/2.2.1" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.quartz-scheduler.quartz.jobs.source/2.2.1" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/javax/javax.mail/1.5.2" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/javax/javax.mail.source/1.5.2" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.ui/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.ui.source/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.ui.forms/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.ui.forms.source/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.ui.views/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.ui.views.source/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.ui.workbench/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.ui.workbench.source/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.databinding/1.6.0.v20160412-0910" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.databinding.source/1.6.0.v20160412-0910" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.databinding.beans/1.3.100.v20160509-1025" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.databinding.beans.source/1.3.100.v20160509-1025" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.runtime/3.12.0.v20160606-1342" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.runtime.source/3.12.0.v20160606-1342" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.databinding.property/1.6.0.v20160427-0852" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.databinding.property.source/1.6.0.v20160427-0852" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/com.ibm.icu.base/56.1.0.v201601250100" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/com.ibm.icu.base.source/56.1.0.v201601250100" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.contenttype/3.5.100.v20160418-1621" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.contenttype.source/3.5.100.v20160418-1621" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.rwt.osgi/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.rwt.osgi.source/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.jface.databinding/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.jface.databinding.source/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.jobs/3.8.0.v20160509-0411" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.jobs.source/3.8.0.v20160509-0411" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.expressions/3.5.100.v20160418-1621" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.expressions.source/3.5.100.v20160418-1621" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.databinding.observable/1.6.0.v20160511-1747" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.databinding.observable.source/1.6.0.v20160511-1747" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.help/3.7.0.v20160602-1307" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.help.source/3.7.0.v20160602-1307" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.aspects/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.aspects.source/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.context.support/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.context.support.source/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.jdbc/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.jdbc.source/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.tx/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.tx.source/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.web/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.web.source/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.web.servlet/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.web.servlet.source/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/argeo-tp/2.1.17" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/javax/javax.inject/1.0.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/javax/javax.inject.source/1.0.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/javax/javax.jcr/2.0.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/javax/javax.jcr.source/2.0.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/javax/javax.transaction/1.1.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/javax/javax.transaction.source/1.1.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/sdk/biz.aQute.bnd/1.50.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/sdk/biz.aQute.bnd.source/1.50.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/org.apache.log4j/1.2.17" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/org.apache.log4j.source/1.2.17" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.slf4j.log4j12/1.7.5" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.slf4j.log4j12.source/1.7.5" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.slf4j.api/1.7.5" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.slf4j.api.source/1.7.5" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.slf4j.commons.logging/1.7.5" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.slf4j.commons.logging.source/1.7.5" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.aopalliance/1.0.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.aopalliance.source/1.0.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/sdk/org.junit/4.11.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/sdk/org.junit.source/4.11.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.h2/1.4.188" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.h2.source/1.4.188" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.joda.time/2.6.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.joda.time.source/2.6.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/com.jcraft.jsch/0.1.51" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/com.jcraft.jsch.source/0.1.51" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/EDU.oswego.cs.dl.util.concurrent/1.3.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/EDU.oswego.cs.dl.util.concurrent.source/1.3.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.objectweb.asm/3.1.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.objectweb.asm.source/3.1.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.aspectj.weaver/1.7.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.aspectj.weaver.source/1.7.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/bouncycastle/bcprov/1.55" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/bouncycastle/bcprov.source/1.55" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/bouncycastle/bcpkix/1.55" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/bouncycastle/bcpkix.source/1.55" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/bitronix.tm/2.1.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/bitronix.tm.source/2.1.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.w3c.css.sac/1.3" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/com.steadystate.css/0.9.18" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/com.steadystate.css.source/0.9.18" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.io/2.4.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.io.source/2.4.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.fileupload/1.3.1" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.fileupload.source/1.3.1" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.collections/3.2.1" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.collections.source/3.2.1" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.dbcp/1.4.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.dbcp.source/1.4.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.pool/1.5.7" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.pool.source/1.5.7" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.codec/1.9.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.codec.source/1.9.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.httpclient/3.1.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.httpclient.source/3.1.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.vfs/2.0.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.vfs.source/2.0.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.net/3.3.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.net.source/3.3.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.exec/1.3.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.exec.source/1.3.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.jci-core/1.1" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.jci-eclipse/1.1" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.compress/1.9.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.compress.source/1.9.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.lang3/3.4.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/commons/org.apache.commons.lang3.source/3.4.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/com.google.guava/18.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/com.google.gson/2.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/com.google.gson.source/2.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/jetty/org.eclipse.jetty.client/9.3.12.v20160915" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/jetty/org.eclipse.jetty.continuation/9.3.12.v20160915" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/jetty/org.eclipse.jetty.http/9.3.12.v20160915" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/jetty/org.eclipse.jetty.io/9.3.12.v20160915" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/jetty/org.eclipse.jetty.jmx/9.3.12.v20160915" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/jetty/org.eclipse.jetty.security/9.3.12.v20160915" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/jetty/org.eclipse.jetty.server/9.3.12.v20160915" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/jetty/org.eclipse.jetty.servlet/9.3.12.v20160915" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/jetty/org.eclipse.jetty.servlets/9.3.12.v20160915" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/jetty/org.eclipse.jetty.util/9.3.12.v20160915" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.util/1.0.500.v20130404-1337" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.util.source/1.0.500.v20130404-1337" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.event/1.3.200.v20160324-1850" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.event.source/1.3.200.v20160324-1850" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.servletbridge/1.3.200.v20160128-1435" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.servletbridge.source/1.3.200.v20160128-1435" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/felix/org.apache.felix.gogo.command/0.10.0.v201209301215" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/felix/org.apache.felix.gogo.command.source/0.10.0.v201209301215" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.http.registry/1.1.400.v20150715-1528" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.http.registry.source/1.1.400.v20150715-1528" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.preferences/3.6.1.v20160815-1406" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.preferences.source/3.6.1.v20160815-1406" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.app/1.3.400.v20150715-1528" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.app.source/1.3.400.v20150715-1528" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.osgi.util/3.3.100.v20150423-1351" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.osgi.util.source/3.3.100.v20150423-1351" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.osgi/3.11.1.v20160708-1632" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.osgi.source/3.11.1.v20160708-1632" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.http.servlet/1.3.1.v20160808-1329" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.http.servlet.source/1.3.1.v20160808-1329" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.http.servletbridge/1.0.300.v20130327-1442" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.http.servletbridge.source/1.0.300.v20130327-1442" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.console/1.1.200.v20150929-1405" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.console.source/1.1.200.v20150929-1405" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.http.jetty/3.3.0.v20160324-1850" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.http.jetty.source/3.3.0.v20160324-1850" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/javax/javax.el/2.2.0.v201303151357" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/javax/javax.el.source/2.2.0.v201303151357" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.registry/3.6.100.v20160223-2218" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.registry.source/3.6.100.v20160223-2218" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/felix/org.apache.felix.gogo.runtime/0.10.0.v201209301036" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/felix/org.apache.felix.gogo.runtime.source/0.10.0.v201209301036" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.cm/1.1.200.v20160324-1850" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.cm.source/1.1.200.v20160324-1850" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/javax/javax.servlet/3.1.0.v201410161800" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/javax/javax.servlet.source/3.1.0.v201410161800" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.ds/1.4.400.v20160226-2036" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.ds.source/1.4.400.v20160226-2036" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/felix/org.apache.felix.gogo.shell/0.10.0.v201212101605" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/felix/org.apache.felix.gogo.shell.source/0.10.0.v201212101605" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.common/3.8.0.v20160509-1230" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.common.source/3.8.0.v20160509-1230" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.metatype/1.4.200.v20160324-1850" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.equinox.metatype.source/1.4.200.v20160324-1850" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.osgi.services/3.5.100.v20160504-1419" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/equinox/org.eclipse.osgi.services.source/3.5.100.v20160504-1419" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/gemini/org.eclipse.gemini.blueprint.core/1.0.2.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/gemini/org.eclipse.gemini.blueprint.core.source/1.0.2.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/gemini/org.eclipse.gemini.blueprint.extender/1.0.2.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/gemini/org.eclipse.gemini.blueprint.extender.source/1.0.2.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/gemini/org.eclipse.gemini.blueprint.io/1.0.2.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/gemini/org.eclipse.gemini.blueprint.io.source/1.0.2.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.rwt/3.1.1.20160831-0710" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.rwt.source/3.1.1.20160831-0710" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.commands/3.8.0.v20160316-1921" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.core.commands.source/3.8.0.v20160316-1921" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.jface/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.jface.source/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.fileupload/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/rap/platform/org.eclipse.rap.filedialog/3.1.1.20160831-0700" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/org.apache.tika.core/1.13.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/org.apache.tika.core.source/1.13.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/org.apache.lucene/3.6.2" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/org.apache.lucene.source/3.6.2" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.api/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.api.source/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.jcr.commons/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.jcr.commons.source/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.spi/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.spi.source/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.spi.commons/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.spi.commons.source/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.data/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.data.source/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.core/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.core.source/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.jcr.client/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.jcr.client.source/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.server/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.server.source/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.servlet/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.servlet.source/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.webdav/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.webdav.source/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.spi2dav/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.spi2dav.source/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.spi2jcr/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.spi2jcr.source/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.jcr2dav/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.jcr2dav.source/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.jcr2spi/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/jackrabbit/org.apache.jackrabbit.jcr2spi.source/2.12.4" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.aop/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.aop.source/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.beans/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.beans.source/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.context/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.context.source/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.core/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.core.source/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.expression/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.expression.source/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.instrument/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/spring/org.springframework.instrument.source/3.2.13.RELEASE" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/net.sf.jxl/2.6.12" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/net.sf.jxl.source/2.6.12" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/org.apache.pdfbox/2.0.3" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/org.apache.pdfbox.source/2.0.3" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/org.apache.pdfbox.fontbox/2.0.3" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/apache/org.apache.pdfbox.fontbox.source/2.0.3" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/sdk/org.dbunit/2.5.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/sdk/org.dbunit.source/2.5.0" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/aether/org.eclipse.aether.api/1.0.1.v20141111" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/aether/org.eclipse.aether.api.source/1.0.1.v20141111" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/aether/org.eclipse.aether.spi/1.0.1.v20141111" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/aether/org.eclipse.aether.spi.source/1.0.1.v20141111" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/aether/org.eclipse.aether.util/1.0.1.v20141111" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/aether/org.eclipse.aether.util.source/1.0.1.v20141111" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/aether/org.eclipse.aether.impl/1.0.1.v20141111" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/aether/org.eclipse.aether.impl.source/1.0.1.v20141111" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/aether/org.eclipse.aether.connector.basic/1.0.1.v20141111" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/aether/org.eclipse.aether.connector.basic.source/1.0.1.v20141111" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/aether/org.eclipse.aether.transport.classpath/1.0.1.v20141111" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/aether/org.eclipse.aether.transport.classpath.source/1.0.1.v20141111" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/aether/org.eclipse.aether.transport.file/1.0.1.v20141111" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/aether/org.eclipse.aether.transport.file.source/1.0.1.v20141111" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/sdk/org.redline-rpm/1.2.1" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/sdk/org.redline-rpm.source/1.2.1" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/sdk/org.tmatesoft.svnkit/1.8.12" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/sdk/org.tmatesoft.svnkit.source/1.8.12" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.postgresql.postgresql/9.3.1102.jdbc41" type="Directory"/>
+<location path="${system_property:user.home}/.m2/repository/org/argeo/tp/misc/org.postgresql.postgresql.source/9.3.1102.jdbc41" type="Directory"/>
+</locations>
+<includeBundles>
+<plugin id="org.argeo.suite.workbench.rap"/>
+<plugin id="org.argeo.suite.core"/>
+<plugin id="org.argeo.connect.tracker"/>
+<plugin id="org.argeo.connect.people"/>
+<plugin id="org.argeo.connect.documents"/>
+<plugin id="org.argeo.connect.activities"/>
+<plugin id="org.argeo.connect.people.workbench.rap"/>
+<plugin id="org.argeo.connect.people.ui"/>
+<plugin id="org.argeo.eclipse.ui.rap"/>
+<plugin id="org.argeo.connect.ui"/>
+<plugin id="org.argeo.connect.core"/>
+<plugin id="org.argeo.jcr"/>
+<plugin id="org.argeo.eclipse.ui"/>
+<plugin id="org.argeo.suite.web"/>
+<plugin id="org.argeo.connect.people.web"/>
+<plugin id="org.argeo.cms"/>
+<plugin id="org.argeo.cms.ui"/>
+<plugin id="org.argeo.dep.cms.platform"/>
+<plugin id="org.argeo.dep.cms.node"/>
+<plugin id="org.argeo.dep.cms.client"/>
+<plugin id="org.argeo.node.api"/>
+<plugin id="org.argeo.enterprise"/>
+<plugin id="org.argeo.ext.jackrabbit"/>
+<plugin id="org.argeo.cms.ui.workbench"/>
+<plugin id="org.argeo.util"/>
+<plugin id="org.argeo.ext.rap.ui.workbench"/>
+<plugin id="org.argeo.cms.ui.workbench.rap"/>
+<plugin id="org.apache.tika.parsers"/>
+<plugin id="org.apache.tika.parser.source"/>
+<plugin id="bcmail"/>
+<plugin id="bcmail.source"/>
+<plugin id="bcpg"/>
+<plugin id="bcpg.source"/>
+<plugin id="org.apache.ant"/>
+<plugin id="org.apache.ant.source"/>
+<plugin id="org.apache.ant.launch"/>
+<plugin id="org.apache.ant.launch.source"/>
+<plugin id="org.quartz-scheduler.quartz"/>
+<plugin id="org.quartz-scheduler.quartz.source"/>
+<plugin id="org.quartz-scheduler.quartz.jobs"/>
+<plugin id="org.quartz-scheduler.quartz.jobs.source"/>
+<plugin id="javax.mail"/>
+<plugin id="javax.mail.source"/>
+<plugin id="org.eclipse.rap.ui"/>
+<plugin id="org.eclipse.rap.ui.source"/>
+<plugin id="org.eclipse.rap.ui.forms"/>
+<plugin id="org.eclipse.rap.ui.forms.source"/>
+<plugin id="org.eclipse.rap.ui.views"/>
+<plugin id="org.eclipse.rap.ui.views.source"/>
+<plugin id="org.eclipse.rap.ui.workbench"/>
+<plugin id="org.eclipse.rap.ui.workbench.source"/>
+<plugin id="org.eclipse.core.databinding"/>
+<plugin id="org.eclipse.core.databinding.source"/>
+<plugin id="org.eclipse.core.databinding.beans"/>
+<plugin id="org.eclipse.core.databinding.beans.source"/>
+<plugin id="org.eclipse.core.runtime"/>
+<plugin id="org.eclipse.core.runtime.source"/>
+<plugin id="org.eclipse.core.databinding.property"/>
+<plugin id="org.eclipse.core.databinding.property.source"/>
+<plugin id="com.ibm.icu.base"/>
+<plugin id="com.ibm.icu.base.source"/>
+<plugin id="org.eclipse.core.contenttype"/>
+<plugin id="org.eclipse.core.contenttype.source"/>
+<plugin id="org.eclipse.rap.rwt.osgi"/>
+<plugin id="org.eclipse.rap.rwt.osgi.source"/>
+<plugin id="org.eclipse.rap.jface.databinding"/>
+<plugin id="org.eclipse.rap.jface.databinding.source"/>
+<plugin id="org.eclipse.core.jobs"/>
+<plugin id="org.eclipse.core.jobs.source"/>
+<plugin id="org.eclipse.core.expressions"/>
+<plugin id="org.eclipse.core.expressions.source"/>
+<plugin id="org.eclipse.core.databinding.observable"/>
+<plugin id="org.eclipse.core.databinding.observable.source"/>
+<plugin id="org.eclipse.help"/>
+<plugin id="org.eclipse.help.source"/>
+<plugin id="org.springframework.aspects"/>
+<plugin id="org.springframework.aspects.source"/>
+<plugin id="org.springframework.context.support"/>
+<plugin id="org.springframework.context.support.source"/>
+<plugin id="org.springframework.jdbc"/>
+<plugin id="org.springframework.jdbc.source"/>
+<plugin id="org.springframework.tx"/>
+<plugin id="org.springframework.tx.source"/>
+<plugin id="org.springframework.web"/>
+<plugin id="org.springframework.web.source"/>
+<plugin id="org.springframework.web.servlet"/>
+<plugin id="org.springframework.web.servlet.source"/>
+<plugin id="argeo-tp"/>
+<plugin id="javax.inject"/>
+<plugin id="javax.inject.source"/>
+<plugin id="javax.jcr"/>
+<plugin id="javax.jcr.source"/>
+<plugin id="javax.transaction"/>
+<plugin id="javax.transaction.source"/>
+<plugin id="biz.aQute.bnd"/>
+<plugin id="biz.aQute.bnd.source"/>
+<plugin id="org.apache.log4j"/>
+<plugin id="org.apache.log4j.source"/>
+<plugin id="org.slf4j.log4j12"/>
+<plugin id="org.slf4j.log4j12.source"/>
+<plugin id="org.slf4j.api"/>
+<plugin id="org.slf4j.api.source"/>
+<plugin id="org.slf4j.commons.logging"/>
+<plugin id="org.slf4j.commons.logging.source"/>
+<plugin id="org.aopalliance"/>
+<plugin id="org.aopalliance.source"/>
+<plugin id="org.junit"/>
+<plugin id="org.junit.source"/>
+<plugin id="org.h2"/>
+<plugin id="org.h2.source"/>
+<plugin id="org.joda.time"/>
+<plugin id="org.joda.time.source"/>
+<plugin id="com.jcraft.jsch"/>
+<plugin id="com.jcraft.jsch.source"/>
+<plugin id="EDU.oswego.cs.dl.util.concurrent"/>
+<plugin id="EDU.oswego.cs.dl.util.concurrent.source"/>
+<plugin id="org.objectweb.asm"/>
+<plugin id="org.objectweb.asm.source"/>
+<plugin id="org.aspectj.weaver"/>
+<plugin id="org.aspectj.weaver.source"/>
+<plugin id="bcprov"/>
+<plugin id="bcprov.source"/>
+<plugin id="bcpkix"/>
+<plugin id="bcpkix.source"/>
+<plugin id="bitronix.tm"/>
+<plugin id="bitronix.tm.source"/>
+<plugin id="org.w3c.css.sac"/>
+<plugin id="com.steadystate.css"/>
+<plugin id="com.steadystate.css.source"/>
+<plugin id="org.apache.commons.io"/>
+<plugin id="org.apache.commons.io.source"/>
+<plugin id="org.apache.commons.fileupload"/>
+<plugin id="org.apache.commons.fileupload.source"/>
+<plugin id="org.apache.commons.collections"/>
+<plugin id="org.apache.commons.collections.source"/>
+<plugin id="org.apache.commons.dbcp"/>
+<plugin id="org.apache.commons.dbcp.source"/>
+<plugin id="org.apache.commons.pool"/>
+<plugin id="org.apache.commons.pool.source"/>
+<plugin id="org.apache.commons.codec"/>
+<plugin id="org.apache.commons.codec.source"/>
+<plugin id="org.apache.commons.httpclient"/>
+<plugin id="org.apache.commons.httpclient.source"/>
+<plugin id="org.apache.commons.vfs"/>
+<plugin id="org.apache.commons.vfs.source"/>
+<plugin id="org.apache.commons.net"/>
+<plugin id="org.apache.commons.net.source"/>
+<plugin id="org.apache.commons.exec"/>
+<plugin id="org.apache.commons.exec.source"/>
+<plugin id="org.apache.commons.jci-core"/>
+<plugin id="org.apache.commons.jci-eclipse"/>
+<plugin id="org.apache.commons.compress"/>
+<plugin id="org.apache.commons.compress.source"/>
+<plugin id="org.apache.commons.lang3"/>
+<plugin id="org.apache.commons.lang3.source"/>
+<plugin id="com.google.guava"/>
+<plugin id="com.google.gson"/>
+<plugin id="com.google.gson.source"/>
+<plugin id="org.eclipse.jetty.client"/>
+<plugin id="org.eclipse.jetty.continuation"/>
+<plugin id="org.eclipse.jetty.http"/>
+<plugin id="org.eclipse.jetty.io"/>
+<plugin id="org.eclipse.jetty.jmx"/>
+<plugin id="org.eclipse.jetty.security"/>
+<plugin id="org.eclipse.jetty.server"/>
+<plugin id="org.eclipse.jetty.servlet"/>
+<plugin id="org.eclipse.jetty.servlets"/>
+<plugin id="org.eclipse.jetty.util"/>
+<plugin id="org.eclipse.equinox.util"/>
+<plugin id="org.eclipse.equinox.util.source"/>
+<plugin id="org.eclipse.equinox.event"/>
+<plugin id="org.eclipse.equinox.event.source"/>
+<plugin id="org.eclipse.equinox.servletbridge"/>
+<plugin id="org.eclipse.equinox.servletbridge.source"/>
+<plugin id="org.apache.felix.gogo.command"/>
+<plugin id="org.apache.felix.gogo.command.source"/>
+<plugin id="org.eclipse.equinox.http.registry"/>
+<plugin id="org.eclipse.equinox.http.registry.source"/>
+<plugin id="org.eclipse.equinox.preferences"/>
+<plugin id="org.eclipse.equinox.preferences.source"/>
+<plugin id="org.eclipse.equinox.app"/>
+<plugin id="org.eclipse.equinox.app.source"/>
+<plugin id="org.eclipse.osgi.util"/>
+<plugin id="org.eclipse.osgi.util.source"/>
+<plugin id="org.eclipse.osgi"/>
+<plugin id="org.eclipse.osgi.source"/>
+<plugin id="org.eclipse.equinox.http.servlet"/>
+<plugin id="org.eclipse.equinox.http.servlet.source"/>
+<plugin id="org.eclipse.equinox.http.servletbridge"/>
+<plugin id="org.eclipse.equinox.http.servletbridge.source"/>
+<plugin id="org.eclipse.equinox.console"/>
+<plugin id="org.eclipse.equinox.console.source"/>
+<plugin id="org.eclipse.equinox.http.jetty"/>
+<plugin id="org.eclipse.equinox.http.jetty.source"/>
+<plugin id="javax.el"/>
+<plugin id="javax.el.source"/>
+<plugin id="org.eclipse.equinox.registry"/>
+<plugin id="org.eclipse.equinox.registry.source"/>
+<plugin id="org.apache.felix.gogo.runtime"/>
+<plugin id="org.apache.felix.gogo.runtime.source"/>
+<plugin id="org.eclipse.equinox.cm"/>
+<plugin id="org.eclipse.equinox.cm.source"/>
+<plugin id="javax.servlet"/>
+<plugin id="javax.servlet.source"/>
+<plugin id="org.eclipse.equinox.ds"/>
+<plugin id="org.eclipse.equinox.ds.source"/>
+<plugin id="org.apache.felix.gogo.shell"/>
+<plugin id="org.apache.felix.gogo.shell.source"/>
+<plugin id="org.eclipse.equinox.common"/>
+<plugin id="org.eclipse.equinox.common.source"/>
+<plugin id="org.eclipse.equinox.metatype"/>
+<plugin id="org.eclipse.equinox.metatype.source"/>
+<plugin id="org.eclipse.osgi.services"/>
+<plugin id="org.eclipse.osgi.services.source"/>
+<plugin id="org.eclipse.gemini.blueprint.core"/>
+<plugin id="org.eclipse.gemini.blueprint.core.source"/>
+<plugin id="org.eclipse.gemini.blueprint.extender"/>
+<plugin id="org.eclipse.gemini.blueprint.extender.source"/>
+<plugin id="org.eclipse.gemini.blueprint.io"/>
+<plugin id="org.eclipse.gemini.blueprint.io.source"/>
+<plugin id="org.eclipse.rap.rwt"/>
+<plugin id="org.eclipse.rap.rwt.source"/>
+<plugin id="org.eclipse.core.commands"/>
+<plugin id="org.eclipse.core.commands.source"/>
+<plugin id="org.eclipse.rap.jface"/>
+<plugin id="org.eclipse.rap.jface.source"/>
+<plugin id="org.eclipse.rap.fileupload"/>
+<plugin id="org.eclipse.rap.filedialog"/>
+<plugin id="org.apache.tika.core"/>
+<plugin id="org.apache.tika.core.source"/>
+<plugin id="org.apache.lucene"/>
+<plugin id="org.apache.lucene.source"/>
+<plugin id="org.apache.jackrabbit.api"/>
+<plugin id="org.apache.jackrabbit.api.source"/>
+<plugin id="org.apache.jackrabbit.jcr.commons"/>
+<plugin id="org.apache.jackrabbit.jcr.commons.source"/>
+<plugin id="org.apache.jackrabbit.spi"/>
+<plugin id="org.apache.jackrabbit.spi.source"/>
+<plugin id="org.apache.jackrabbit.spi.commons"/>
+<plugin id="org.apache.jackrabbit.spi.commons.source"/>
+<plugin id="org.apache.jackrabbit.data"/>
+<plugin id="org.apache.jackrabbit.data.source"/>
+<plugin id="org.apache.jackrabbit.core"/>
+<plugin id="org.apache.jackrabbit.core.source"/>
+<plugin id="org.apache.jackrabbit.jcr.client"/>
+<plugin id="org.apache.jackrabbit.jcr.client.source"/>
+<plugin id="org.apache.jackrabbit.server"/>
+<plugin id="org.apache.jackrabbit.server.source"/>
+<plugin id="org.apache.jackrabbit.servlet"/>
+<plugin id="org.apache.jackrabbit.servlet.source"/>
+<plugin id="org.apache.jackrabbit.webdav"/>
+<plugin id="org.apache.jackrabbit.webdav.source"/>
+<plugin id="org.apache.jackrabbit.spi2dav"/>
+<plugin id="org.apache.jackrabbit.spi2dav.source"/>
+<plugin id="org.apache.jackrabbit.spi2jcr"/>
+<plugin id="org.apache.jackrabbit.spi2jcr.source"/>
+<plugin id="org.apache.jackrabbit.jcr2dav"/>
+<plugin id="org.apache.jackrabbit.jcr2dav.source"/>
+<plugin id="org.apache.jackrabbit.jcr2spi"/>
+<plugin id="org.apache.jackrabbit.jcr2spi.source"/>
+<plugin id="org.springframework.aop"/>
+<plugin id="org.springframework.aop.source"/>
+<plugin id="org.springframework.beans"/>
+<plugin id="org.springframework.beans.source"/>
+<plugin id="org.springframework.context"/>
+<plugin id="org.springframework.context.source"/>
+<plugin id="org.springframework.core"/>
+<plugin id="org.springframework.core.source"/>
+<plugin id="org.springframework.expression"/>
+<plugin id="org.springframework.expression.source"/>
+<plugin id="org.springframework.instrument"/>
+<plugin id="org.springframework.instrument.source"/>
+<plugin id="net.sf.jxl"/>
+<plugin id="net.sf.jxl.source"/>
+<plugin id="org.apache.pdfbox"/>
+<plugin id="org.apache.pdfbox.source"/>
+<plugin id="org.apache.pdfbox.fontbox"/>
+<plugin id="org.apache.pdfbox.fontbox.source"/>
+<plugin id="org.dbunit"/>
+<plugin id="org.dbunit.source"/>
+<plugin id="org.eclipse.aether.api"/>
+<plugin id="org.eclipse.aether.api.source"/>
+<plugin id="org.eclipse.aether.spi"/>
+<plugin id="org.eclipse.aether.spi.source"/>
+<plugin id="org.eclipse.aether.util"/>
+<plugin id="org.eclipse.aether.util.source"/>
+<plugin id="org.eclipse.aether.impl"/>
+<plugin id="org.eclipse.aether.impl.source"/>
+<plugin id="org.eclipse.aether.connector.basic"/>
+<plugin id="org.eclipse.aether.connector.basic.source"/>
+<plugin id="org.eclipse.aether.transport.classpath"/>
+<plugin id="org.eclipse.aether.transport.classpath.source"/>
+<plugin id="org.eclipse.aether.transport.file"/>
+<plugin id="org.eclipse.aether.transport.file.source"/>
+<plugin id="org.redline-rpm"/>
+<plugin id="org.redline-rpm.source"/>
+<plugin id="org.tmatesoft.svnkit"/>
+<plugin id="org.tmatesoft.svnkit.source"/>
+<plugin id="org.postgresql.postgresql"/>
+<plugin id="org.postgresql.postgresql.source"/>
+</includeBundles>
+</target>

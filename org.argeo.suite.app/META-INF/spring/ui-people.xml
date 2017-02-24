@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<!-- People UI -->
+	<bean id="people.mainPage" class="org.argeo.connect.people.web.pages.PeopleDynamicPages">
+		<property name="dynamicPages" ref="people.dynamicPages" />
+		<property name="peopleService" ref="peopleService" />
+		<property name="resourcesService" ref="resourcesService" />
+		<property name="iconPathes" ref="peopleEntityIcons" />
+	</bean>
+
+	<bean id="people.header" class="org.argeo.cms.util.SimpleCmsHeader">
+		<property name="lead">
+			<list>
+				<bean p:image="theme/argeo-classic/img/byArgeo.png" p:target="/people#"
+					p:custom="cms_header-logo" parent="menuLink" />
+				<bean p:label="All" p:target="people!/search/all" parent="menuLink" />
+				<bean p:label="Persons" p:target="people!/search/persons"
+					parent="menuLink" />
+				<bean p:label="Organisations" p:target="people!/search/orgs"
+					parent="menuLink" />
+				<bean p:label="Browse" p:target="browse#" parent="menuLink" />
+			</list>
+		</property>
+		<property name="end" ref="headerEnd" />
+	</bean>
+
+	<util:map id="peopleEntityIcons">
+		<entry key="people:person" value="theme/argeo-classic/icons/people/types/person.gif" />
+		<entry key="people:org" value="theme/argeo-classic/icons/people/types/company.png" />
+	</util:map>
+
+	<!-- UI Providers -->
+	<!-- A map for the specific page given the node type of the passed context -->
+	<util:map id="people.dynamicPages">
+		<entry>
+			<key>
+				<util:constant static-field="org.argeo.connect.people.PeopleTypes.PEOPLE_PERSON" />
+			</key>
+			<bean class="org.argeo.connect.people.web.pages.PersonPage">
+				<property name="personHeaderPart" ref="personHeaderPart" />
+				<property name="contactsWithNotePart" ref="contactsWithNotePart" />
+				<property name="activitiesPart" ref="activitiesPart" />
+			</bean>
+		</entry>
+		<entry>
+			<key>
+				<util:constant static-field="org.argeo.connect.people.PeopleTypes.PEOPLE_ORG" />
+			</key>
+			<bean class="org.argeo.connect.people.web.pages.OrgPage">
+				<property name="orgHeaderPart" ref="orgHeaderPart" />
+				<property name="contactsWithNotePart" ref="contactsWithNotePart" />
+				<property name="activitiesPart" ref="activitiesPart" />
+			</bean>
+		</entry>
+		<entry>
+			<key>
+				<util:constant
+					static-field="org.argeo.connect.resources.ResourcesTypes.RESOURCES_TAG" />
+			</key>
+			<bean class="org.argeo.connect.people.web.pages.TagLikeInstancePage">
+				<property name="peopleService" ref="peopleService" />
+				<property name="resourcesService" ref="resourcesService" />
+				<property name="iconPathes" ref="peopleEntityIcons" />
+				<property name="propertyName" value="connect:tags" />
+			</bean>
+		</entry>
+		<entry>
+			<key>
+				<util:constant
+					static-field="org.argeo.connect.people.PeopleTypes.PEOPLE_MAILING_LIST" />
+			</key>
+			<bean class="org.argeo.connect.people.web.pages.TagLikeInstancePage">
+				<property name="resourcesService" ref="resourcesService" />
+				<property name="peopleService" ref="peopleService" />
+				<property name="iconPathes" ref="peopleEntityIcons" />
+				<property name="propertyName" value="people:mailingLists" />
+			</bean>
+		</entry>
+	</util:map>
+
+	<!-- Various headers -->
+	<bean id="personHeaderPart" class="org.argeo.connect.people.web.parts.PersonHeaderPart">
+		<property name="resourcesService" ref="resourcesService" />
+		<property name="peopleService" ref="peopleService" />
+		<property name="tagsPart" ref="tagsPart" />
+		<property name="mailingListsPart" ref="mailingListsPart" />
+	</bean>
+
+	<bean id="orgHeaderPart" class="org.argeo.connect.people.web.parts.OrgHeaderPart">
+		<property name="resourcesService" ref="resourcesService" />
+		<property name="peopleService" ref="peopleService" />
+		<property name="tagsPart" ref="tagsPart" />
+		<property name="mailingListsPart" ref="mailingListsPart" />
+	</bean>
+
+	<!-- Contacts -->
+	<bean id="contactsWithNotePart" class="org.argeo.connect.people.web.parts.ContactsWithNotePart">
+		<property name="singleContactPart" ref="singleContactPart" />
+	</bean>
+	<bean id="singleContactPart" class="org.argeo.connect.people.web.parts.SingleContactPart">
+		<property name="resourcesService" ref="resourcesService" />
+		<property name="contactButtonsPart" ref="contactButtonsPart" />
+	</bean>
+	<bean id="contactButtonsPart" class="org.argeo.connect.people.web.parts.ContactButtonsPart">
+	</bean>
+
+	<!-- Activities and workflows -->
+	<bean id="activitiesPart" class="org.argeo.connect.people.web.parts.ActivitiesPart">
+	</bean>
+
+	<!-- Tag like properties -->
+	<bean id="tagsPart" class="org.argeo.connect.people.web.parts.TagLikeValuesPart">
+		<property name="propertyName">
+			<util:constant static-field="org.argeo.connect.ConnectNames.CONNECT_TAGS" />
+		</property>
+	</bean>
+	<bean id="mailingListsPart" class="org.argeo.connect.people.web.parts.TagLikeValuesPart">
+		<property name="propertyName">
+			<util:constant
+				static-field="org.argeo.connect.people.PeopleNames.PEOPLE_MAILING_LISTS" />
+		</property>
+	</bean>
+</beans>

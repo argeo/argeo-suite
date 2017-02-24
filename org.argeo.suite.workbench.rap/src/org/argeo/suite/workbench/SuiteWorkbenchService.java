@@ -16,10 +16,11 @@ public class SuiteWorkbenchService implements AppWorkbenchService {
 	// Injected known AppWorkbenchServices: order is important, first found
 	// result will be returned by the various methods.
 	private List<AppWorkbenchService> knownAppWbServices;
+	private String defaultEditorId = DefaultDashboardEditor.ID;
 
 	@Override
 	public String getDefaultEditorId() {
-		return DefaultDashboardEditor.ID;
+		return defaultEditorId;
 	}
 
 	@Override
@@ -69,5 +70,9 @@ public class SuiteWorkbenchService implements AppWorkbenchService {
 	/* DEPENDENCY INJECTION */
 	public void setKnownAppWbServices(List<AppWorkbenchService> knownAppWbServices) {
 		this.knownAppWbServices = knownAppWbServices;
+	}
+
+	public void setDefaultEditorId(String defaultEditorId) {
+		this.defaultEditorId = defaultEditorId;
 	}
 }

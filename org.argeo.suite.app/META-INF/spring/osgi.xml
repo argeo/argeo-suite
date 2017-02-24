@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/osgi"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/osgi  
+       http://www.springframework.org/schema/osgi/spring-osgi-1.1.xsd
+       http://www.springframework.org/schema/beans   
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<!-- REFERENCES -->
+	<reference id="repository" interface="javax.jcr.Repository"
+		filter="(cn=home)" />
+
+	<reference id="userAdmin" interface="org.osgi.service.useradmin.UserAdmin" />
+	<reference id="userTransaction" interface="javax.transaction.UserTransaction" />
+	<reference id="nodeFileSystemProvider" interface="java.nio.file.spi.FileSystemProvider"
+		filter="(service.pid=org.argeo.node.fsProvider)" />
+
+	<!-- SERVICES -->
+	<service ref="userAdminService" interface="org.argeo.connect.UserAdminService" />
+
+	<!-- Maintenance service -->
+	<service ref="suiteMaintenanceService" interface="org.argeo.connect.AppMaintenanceService" />
+
+	<service ref="suiteAppService" interface="org.argeo.connect.AppService" />
+	<!-- App specific services -->
+	<service ref="resourcesService" interface="org.argeo.connect.resources.ResourcesService" />
+	<service ref="activitiesService" interface="org.argeo.connect.activities.ActivitiesService" />
+	<service ref="peopleService" interface="org.argeo.connect.people.PeopleService" />
+	<service ref="trackerService" interface="org.argeo.connect.tracker.TrackerService" />
+	<service ref="documentsService" interface="org.argeo.connect.documents.DocumentsService" />
+
+	<!-- Assembly of the various apps workbench services -->
+	<service ref="suiteWorkbenchService"
+		interface="org.argeo.connect.ui.workbench.AppWorkbenchService" />
+
+	<!-- Exposes People specific implementation of the AppWorkbenchService -->
+	<service ref="peopleWorkbenchService"
+		interface="org.argeo.connect.people.workbench.PeopleWorkbenchService" />
+
+</beans:beans>

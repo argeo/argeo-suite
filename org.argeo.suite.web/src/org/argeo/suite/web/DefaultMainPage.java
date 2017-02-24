@@ -42,7 +42,7 @@ public class DefaultMainPage implements LifeCycleUiProvider {
 	private CmsUiProvider fsBrowserPage;
 
 	/* DEPENDENCY INJECTION */
-	private ResourcesService resourceService;
+	private ResourcesService resourcesService;
 	private PeopleService peopleService;
 	private FileSystemProvider nodeFileSystemProvider;
 	private Map<String, String> peopleIconPaths;
@@ -52,8 +52,8 @@ public class DefaultMainPage implements LifeCycleUiProvider {
 
 	@Override
 	public void init(Session adminSession) throws RepositoryException {
-		dashboardPage = new DefaultDashboard(resourceService, peopleService, peopleIconPaths);
-		peoplePage = new PeopleDefaultPage(resourceService, peopleService, peopleIconPaths);
+		dashboardPage = new DefaultDashboard(resourcesService, peopleService, peopleIconPaths);
+		peoplePage = new PeopleDefaultPage(resourcesService, peopleService, peopleIconPaths);
 		fsBrowserPage = new MyFilesBrowserPage(nodeFileSystemProvider);
 	}
 
@@ -123,8 +123,8 @@ public class DefaultMainPage implements LifeCycleUiProvider {
 	}
 
 	/* DEPENDENCY INJECTION */
-	public void setResourceService(ResourcesService resourceService) {
-		this.resourceService = resourceService;
+	public void setResourcesService(ResourcesService resourcesService) {
+		this.resourcesService = resourcesService;
 	}
 
 	public void setPeopleService(PeopleService peopleService) {

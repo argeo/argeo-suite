@@ -2,7 +2,7 @@ package org.argeo.suite.workbench.rap;
 
 import org.argeo.cms.ui.workbench.rap.RapWindowAdvisor;
 import org.argeo.cms.ui.workbench.util.CommandUtils;
-import org.argeo.eclipse.ui.EclipseUiUtils;
+import org.argeo.connect.ui.workbench.commands.OpenDefaultEditor;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
@@ -32,9 +32,6 @@ public class AsWindowAdvisor extends RapWindowAdvisor {
 	@Override
 	public void postWindowOpen() {
 		super.postWindowOpen();
-		// TODO use a constant rather than a String
-		String openDfltEdCmdId = System.getProperty("org.argeo.ui.openHomeCommandId");
-		if (EclipseUiUtils.notEmpty(openDfltEdCmdId))
-			CommandUtils.callCommand(openDfltEdCmdId);
+		CommandUtils.callCommand(OpenDefaultEditor.ID);
 	}
 }

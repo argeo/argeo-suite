@@ -15,6 +15,7 @@
 		<module>org.argeo.suite.core</module>
 		<module>org.argeo.suite.web</module>
 		<module>org.argeo.suite.workbench.rap</module>
+		<module>org.argeo.suite.app</module>
 		<module>sdk</module>
 	</modules>
 	<properties>

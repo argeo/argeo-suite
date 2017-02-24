@@ -11,7 +11,7 @@
 	<name>Argeo Suite SDKs</name>
 	<packaging>pom</packaging>
 	<modules>
-		<module>org.argeo.suite.sdk</module>
+		<module>org.argeo.suite.platform</module>
 	</modules>
 	<build>
 		<plugins>

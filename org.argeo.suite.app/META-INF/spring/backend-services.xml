@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
+
+	<bean id="userAdminService" class="org.argeo.connect.UserAdminServiceImpl"
+		scope="singleton" lazy-init="false">
+		<property name="userTransaction" ref="userTransaction" />
+		<property name="userAdmin" ref="userAdmin" />
+		<property name="userAdminServiceReference" ref="userAdmin" />
+	</bean>
+
+	<bean id="resourcesService" class="org.argeo.connect.resources.core.ResourcesServiceImpl" />
+
+	<bean id="activitiesService" class="org.argeo.connect.activities.core.ActivitiesServiceImpl">
+		<property name="userAdminService" ref="userAdminService" />
+		<property name="resourcesService" ref="resourcesService" />
+	</bean>
+
+	<bean id="peopleService" class="org.argeo.connect.people.core.PeopleServiceImpl"
+		init-method="init">
+		<property name="resourcesService" ref="resourcesService" />
+	</bean>
+
+	<bean id="trackerService" class="org.argeo.connect.tracker.core.TrackerServiceImpl">
+		<property name="activitiesService" ref="activitiesService" />
+	</bean>
+
+	<bean id="documentsService" class="org.argeo.connect.documents.DocumentsService" />
+
+	<!--order is important -->
+	<util:list id="knownAppServices">
+		<ref bean="peopleService" />
+		<ref bean="trackerService" />
+		<ref bean="documentsService" />
+		<ref bean="activitiesService" />
+		<ref bean="resourcesService" />
+	</util:list>
+
+	<bean id="suiteAppService" class="org.argeo.suite.core.DefaultSuiteAppService">
+		<property name="knownAppServices" ref="knownAppServices" />
+	</bean>
+</beans>

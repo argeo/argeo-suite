@@ -5,8 +5,3 @@ org.argeo.node,\
 javax.jcr.security,\
 org.eclipse.swt,\
 *
-
-#org.argeo.cms.text,\
-#org.argeo.connect.people,\
-
-    

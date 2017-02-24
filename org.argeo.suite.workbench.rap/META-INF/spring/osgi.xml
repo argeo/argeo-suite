@@ -15,14 +15,8 @@
 	<reference id="peopleService" interface="org.argeo.connect.people.PeopleService" />
 	<reference id="documentsService" interface="org.argeo.connect.documents.DocumentsService" />
 	<reference id="trackerService" interface="org.argeo.connect.tracker.TrackerService" />
-	
-	
-	<!-- Assembly of the various apps workbench services -->
-	<service ref="suiteWorkbenchService"
+
+	<reference id="appWorkbenchService"
 		interface="org.argeo.connect.ui.workbench.AppWorkbenchService" />
 
-	<!-- Exposes People specific implementation of the AppWorkbenchService -->
-	<service ref="peopleWorkbenchService"
-		interface="org.argeo.connect.people.workbench.PeopleWorkbenchService" />
-		
 </beans:beans>
