@@ -14,22 +14,17 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.argeo.connect</groupId>
-			<artifactId>org.argeo.connect.tracker</artifactId>
+			<artifactId>org.argeo.tracker</artifactId>
 			<version>${version.argeo-connect}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.argeo.connect</groupId>
-			<artifactId>org.argeo.connect.people</artifactId>
+			<artifactId>org.argeo.people.core</artifactId>
 			<version>${version.argeo-connect}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.argeo.connect</groupId>
-			<artifactId>org.argeo.connect.documents</artifactId>
-			<version>${version.argeo-connect}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.connect</groupId>
-			<artifactId>org.argeo.connect.activities</artifactId>
+			<artifactId>org.argeo.documents</artifactId>
 			<version>${version.argeo-connect}</version>
 		</dependency>
 	</dependencies>
