@@ -13,21 +13,21 @@
 
 	<bean id="resourcesService" class="org.argeo.connect.resources.core.ResourcesServiceImpl" />
 
-	<bean id="activitiesService" class="org.argeo.connect.activities.core.ActivitiesServiceImpl">
+	<bean id="activitiesService" class="org.argeo.activities.core.ActivitiesServiceImpl">
 		<property name="userAdminService" ref="userAdminService" />
 		<property name="resourcesService" ref="resourcesService" />
 	</bean>
 
-	<bean id="peopleService" class="org.argeo.connect.people.core.PeopleServiceImpl"
+	<bean id="peopleService" class="org.argeo.people.core.PeopleServiceImpl"
 		init-method="init">
 		<property name="resourcesService" ref="resourcesService" />
 	</bean>
 
-	<bean id="trackerService" class="org.argeo.connect.tracker.core.TrackerServiceImpl">
+	<bean id="trackerService" class="org.argeo.tracker.core.TrackerServiceImpl">
 		<property name="activitiesService" ref="activitiesService" />
 	</bean>
 
-	<bean id="documentsService" class="org.argeo.connect.documents.DocumentsService" />
+	<bean id="documentsService" class="org.argeo.documents.DocumentsService" />
 
 	<!--order is important -->
 	<util:list id="knownAppServices">

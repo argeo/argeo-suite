@@ -15,10 +15,10 @@ org.argeo.cms,\
 org.argeo.cms.ui.workbench,\
 org.argeo.cms.ui.workbench.jcr,\
 org.argeo.connect,\
-org.argeo.connect.activities,\
-org.argeo.connect.activities.workbench.parts,\
-org.argeo.connect.documents.workbench.parts,\
-org.argeo.connect.people.workbench.rap.views,\
+org.argeo.activities,\
+org.argeo.activities.workbench.parts,\
+org.argeo.documents.workbench.parts,\
+org.argeo.people.workbench.rap.views,\
 org.argeo.connect.resources,\
 org.argeo.connect.ui,\
 org.argeo.connect.ui.workbench,\

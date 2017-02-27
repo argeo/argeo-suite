@@ -24,10 +24,10 @@
 	<service ref="suiteAppService" interface="org.argeo.connect.AppService" />
 	<!-- App specific services -->
 	<service ref="resourcesService" interface="org.argeo.connect.resources.ResourcesService" />
-	<service ref="activitiesService" interface="org.argeo.connect.activities.ActivitiesService" />
-	<service ref="peopleService" interface="org.argeo.connect.people.PeopleService" />
-	<service ref="trackerService" interface="org.argeo.connect.tracker.TrackerService" />
-	<service ref="documentsService" interface="org.argeo.connect.documents.DocumentsService" />
+	<service ref="activitiesService" interface="org.argeo.activities.ActivitiesService" />
+	<service ref="peopleService" interface="org.argeo.people.PeopleService" />
+	<service ref="trackerService" interface="org.argeo.tracker.TrackerService" />
+	<service ref="documentsService" interface="org.argeo.documents.DocumentsService" />
 
 	<!-- Assembly of the various apps workbench services -->
 	<service ref="suiteWorkbenchService"
@@ -35,6 +35,6 @@
 
 	<!-- Exposes People specific implementation of the AppWorkbenchService -->
 	<service ref="peopleWorkbenchService"
-		interface="org.argeo.connect.people.workbench.PeopleWorkbenchService" />
+		interface="org.argeo.people.workbench.PeopleWorkbenchService" />
 
 </beans:beans>

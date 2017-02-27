@@ -6,7 +6,7 @@
 	 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
 	<!-- People UI -->
-	<bean id="people.mainPage" class="org.argeo.connect.people.web.pages.PeopleDynamicPages">
+	<bean id="people.mainPage" class="org.argeo.people.web.pages.PeopleDynamicPages">
 		<property name="dynamicPages" ref="people.dynamicPages" />
 		<property name="peopleService" ref="peopleService" />
 		<property name="resourcesService" ref="resourcesService" />
@@ -39,9 +39,9 @@
 	<util:map id="people.dynamicPages">
 		<entry>
 			<key>
-				<util:constant static-field="org.argeo.connect.people.PeopleTypes.PEOPLE_PERSON" />
+				<util:constant static-field="org.argeo.people.PeopleTypes.PEOPLE_PERSON" />
 			</key>
-			<bean class="org.argeo.connect.people.web.pages.PersonPage">
+			<bean class="org.argeo.people.web.pages.PersonPage">
 				<property name="personHeaderPart" ref="personHeaderPart" />
 				<property name="contactsWithNotePart" ref="contactsWithNotePart" />
 				<property name="activitiesPart" ref="activitiesPart" />
@@ -49,9 +49,9 @@
 		</entry>
 		<entry>
 			<key>
-				<util:constant static-field="org.argeo.connect.people.PeopleTypes.PEOPLE_ORG" />
+				<util:constant static-field="org.argeo.people.PeopleTypes.PEOPLE_ORG" />
 			</key>
-			<bean class="org.argeo.connect.people.web.pages.OrgPage">
+			<bean class="org.argeo.people.web.pages.OrgPage">
 				<property name="orgHeaderPart" ref="orgHeaderPart" />
 				<property name="contactsWithNotePart" ref="contactsWithNotePart" />
 				<property name="activitiesPart" ref="activitiesPart" />
@@ -62,7 +62,7 @@
 				<util:constant
 					static-field="org.argeo.connect.resources.ResourcesTypes.RESOURCES_TAG" />
 			</key>
-			<bean class="org.argeo.connect.people.web.pages.TagLikeInstancePage">
+			<bean class="org.argeo.people.web.pages.TagLikeInstancePage">
 				<property name="peopleService" ref="peopleService" />
 				<property name="resourcesService" ref="resourcesService" />
 				<property name="iconPathes" ref="peopleEntityIcons" />
@@ -72,9 +72,9 @@
 		<entry>
 			<key>
 				<util:constant
-					static-field="org.argeo.connect.people.PeopleTypes.PEOPLE_MAILING_LIST" />
+					static-field="org.argeo.people.PeopleTypes.PEOPLE_MAILING_LIST" />
 			</key>
-			<bean class="org.argeo.connect.people.web.pages.TagLikeInstancePage">
+			<bean class="org.argeo.people.web.pages.TagLikeInstancePage">
 				<property name="resourcesService" ref="resourcesService" />
 				<property name="peopleService" ref="peopleService" />
 				<property name="iconPathes" ref="peopleEntityIcons" />
@@ -84,14 +84,14 @@
 	</util:map>
 
 	<!-- Various headers -->
-	<bean id="personHeaderPart" class="org.argeo.connect.people.web.parts.PersonHeaderPart">
+	<bean id="personHeaderPart" class="org.argeo.people.web.parts.PersonHeaderPart">
 		<property name="resourcesService" ref="resourcesService" />
 		<property name="peopleService" ref="peopleService" />
 		<property name="tagsPart" ref="tagsPart" />
 		<property name="mailingListsPart" ref="mailingListsPart" />
 	</bean>
 
-	<bean id="orgHeaderPart" class="org.argeo.connect.people.web.parts.OrgHeaderPart">
+	<bean id="orgHeaderPart" class="org.argeo.people.web.parts.OrgHeaderPart">
 		<property name="resourcesService" ref="resourcesService" />
 		<property name="peopleService" ref="peopleService" />
 		<property name="tagsPart" ref="tagsPart" />
@@ -99,30 +99,30 @@
 	</bean>
 
 	<!-- Contacts -->
-	<bean id="contactsWithNotePart" class="org.argeo.connect.people.web.parts.ContactsWithNotePart">
+	<bean id="contactsWithNotePart" class="org.argeo.people.web.parts.ContactsWithNotePart">
 		<property name="singleContactPart" ref="singleContactPart" />
 	</bean>
-	<bean id="singleContactPart" class="org.argeo.connect.people.web.parts.SingleContactPart">
+	<bean id="singleContactPart" class="org.argeo.people.web.parts.SingleContactPart">
 		<property name="resourcesService" ref="resourcesService" />
 		<property name="contactButtonsPart" ref="contactButtonsPart" />
 	</bean>
-	<bean id="contactButtonsPart" class="org.argeo.connect.people.web.parts.ContactButtonsPart">
+	<bean id="contactButtonsPart" class="org.argeo.people.web.parts.ContactButtonsPart">
 	</bean>
 
 	<!-- Activities and workflows -->
-	<bean id="activitiesPart" class="org.argeo.connect.people.web.parts.ActivitiesPart">
+	<bean id="activitiesPart" class="org.argeo.people.web.parts.ActivitiesPart">
 	</bean>
 
 	<!-- Tag like properties -->
-	<bean id="tagsPart" class="org.argeo.connect.people.web.parts.TagLikeValuesPart">
+	<bean id="tagsPart" class="org.argeo.people.web.parts.TagLikeValuesPart">
 		<property name="propertyName">
 			<util:constant static-field="org.argeo.connect.ConnectNames.CONNECT_TAGS" />
 		</property>
 	</bean>
-	<bean id="mailingListsPart" class="org.argeo.connect.people.web.parts.TagLikeValuesPart">
+	<bean id="mailingListsPart" class="org.argeo.people.web.parts.TagLikeValuesPart">
 		<property name="propertyName">
 			<util:constant
-				static-field="org.argeo.connect.people.PeopleNames.PEOPLE_MAILING_LISTS" />
+				static-field="org.argeo.people.PeopleNames.PEOPLE_MAILING_LISTS" />
 		</property>
 	</bean>
 </beans>

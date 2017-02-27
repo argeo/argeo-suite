@@ -7,11 +7,11 @@ import javax.jcr.RepositoryException;
 
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.util.CmsUtils;
-import org.argeo.connect.people.PeopleException;
-import org.argeo.connect.people.PeopleService;
-import org.argeo.connect.people.web.parts.PeopleSearchCmp;
 import org.argeo.connect.resources.ResourcesService;
 import org.argeo.eclipse.ui.EclipseUiUtils;
+import org.argeo.people.PeopleException;
+import org.argeo.people.PeopleService;
+import org.argeo.people.web.parts.PeopleSearchCmp;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;

@@ -5,13 +5,13 @@ import javax.jcr.NodeIterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.connect.activities.ActivitiesTypes;
-import org.argeo.connect.people.PeopleTypes;
+import org.argeo.activities.ActivitiesTypes;
 import org.argeo.connect.resources.ResourcesTypes;
 import org.argeo.connect.ui.workbench.ConnectWorkbenchUtils;
 import org.argeo.connect.ui.workbench.Refreshable;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
+import org.argeo.people.PeopleTypes;
 import org.argeo.suite.workbench.AsUiPlugin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;

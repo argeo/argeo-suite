@@ -11,10 +11,10 @@
 		filter="(cn=home)" />
 	<reference id="resourcesService" interface="org.argeo.connect.resources.ResourcesService" />
 	<reference id="activitiesService"
-		interface="org.argeo.connect.activities.ActivitiesService" />
-	<reference id="peopleService" interface="org.argeo.connect.people.PeopleService" />
-	<reference id="documentsService" interface="org.argeo.connect.documents.DocumentsService" />
-	<reference id="trackerService" interface="org.argeo.connect.tracker.TrackerService" />
+		interface="org.argeo.activities.ActivitiesService" />
+	<reference id="peopleService" interface="org.argeo.people.PeopleService" />
+	<reference id="documentsService" interface="org.argeo.documents.DocumentsService" />
+	<reference id="trackerService" interface="org.argeo.tracker.TrackerService" />
 
 	<reference id="appWorkbenchService"
 		interface="org.argeo.connect.ui.workbench.AppWorkbenchService" />
