@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-	<bean id="userAdminService" class="org.argeo.connect.UserAdminServiceImpl"
+	<bean id="userAdminService" class="org.argeo.connect.core.UserAdminServiceImpl"
 		scope="singleton" lazy-init="false">
 		<property name="userTransaction" ref="userTransaction" />
 		<property name="userAdmin" ref="userAdmin" />
