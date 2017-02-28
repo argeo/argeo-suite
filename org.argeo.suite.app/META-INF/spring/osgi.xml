@@ -31,7 +31,7 @@
 
 	<!-- Assembly of the various apps workbench services -->
 	<service ref="suiteWorkbenchService"
-		interface="org.argeo.connect.ui.workbench.AppWorkbenchService" />
+		interface="org.argeo.connect.workbench.AppWorkbenchService" />
 
 	<!-- Exposes People specific implementation of the AppWorkbenchService -->
 	<service ref="peopleWorkbenchService"

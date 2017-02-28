@@ -21,8 +21,8 @@ org.argeo.documents.workbench.parts,\
 org.argeo.people.workbench.rap.views,\
 org.argeo.connect.resources,\
 org.argeo.connect.ui,\
-org.argeo.connect.ui.workbench,\
-org.argeo.connect.ui.workbench.util,\
+org.argeo.connect.workbench,\
+org.argeo.connect.workbench.util,\
 org.argeo.eclipse.spring,\
 org.argeo.node,\
 org.argeo.suite.workbench.rap,\

@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 
-import org.argeo.connect.ui.workbench.AppWorkbenchService;
+import org.argeo.connect.workbench.AppWorkbenchService;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.suite.workbench.parts.DefaultDashboardEditor;
 import org.eclipse.jface.wizard.Wizard;

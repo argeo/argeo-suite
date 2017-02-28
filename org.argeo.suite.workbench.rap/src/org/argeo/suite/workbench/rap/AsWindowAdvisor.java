@@ -2,7 +2,7 @@ package org.argeo.suite.workbench.rap;
 
 import org.argeo.cms.ui.workbench.rap.RapWindowAdvisor;
 import org.argeo.cms.ui.workbench.util.CommandUtils;
-import org.argeo.connect.ui.workbench.commands.OpenDefaultEditor;
+import org.argeo.connect.workbench.commands.OpenDefaultEditor;
 import org.eclipse.ui.application.ActionBarAdvisor;
 import org.eclipse.ui.application.IActionBarConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
