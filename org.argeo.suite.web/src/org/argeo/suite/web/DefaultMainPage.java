@@ -20,6 +20,7 @@ import org.argeo.connect.ConnectTypes;
 import org.argeo.connect.resources.ResourcesService;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.people.PeopleService;
+import org.argeo.people.PeopleTypes;
 import org.argeo.people.web.pages.PeopleDefaultPage;
 import org.argeo.suite.web.fs.MyFilesBrowserPage;
 import org.eclipse.swt.SWT;
@@ -64,7 +65,7 @@ public class DefaultMainPage implements LifeCycleUiProvider {
 
 		if (context.isNodeType(ConnectTypes.CONNECT_ENTITY))
 			return peoplePage.createUi(parent, context);
-		else if (peopleService.getDefaultBasePath().equals(context.getPath()))
+		else if (("/"+peopleService.getBaseRelPath(PeopleTypes.PEOPLE_PERSON)).equals(context.getPath()))
 			return peoplePage.createUi(parent, context);
 		else if (context.isNodeType(NodeType.NT_FOLDER) || context.isNodeType(NodeType.NT_FILE))
 			return fsBrowserPage.createUi(parent, context);

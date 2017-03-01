@@ -15,8 +15,28 @@ public class DefaultSuiteAppService implements AppService {
 	private List<AppService> knownAppServices;
 
 	@Override
+	public Node createEntity(Node parent, String nodeType, Node srcNode, boolean removeSrcNode)
+			throws RepositoryException {
+		for (AppService appService : knownAppServices) {
+			if (appService.isKnownType(nodeType))
+				return appService.createEntity(parent, nodeType, srcNode, removeSrcNode);
+		}
+		return null;
+	}
+
+	@Override
 	public String getAppBaseName() {
 		return SuiteConstants.SUITE_APP_BASE_NAME;
+	}
+
+	@Override
+	public String getBaseRelPath(String nodeType) {
+		for (AppService appService : knownAppServices) {
+			if (appService.isKnownType(nodeType))
+				return appService.getBaseRelPath(nodeType);
+		}
+		return null;
+		// return getAppBaseName();
 	}
 
 	@Override
@@ -68,4 +88,5 @@ public class DefaultSuiteAppService implements AppService {
 	public void setKnownAppServices(List<AppService> knownAppServices) {
 		this.knownAppServices = knownAppServices;
 	}
+
 }
