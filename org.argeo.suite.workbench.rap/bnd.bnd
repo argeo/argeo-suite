@@ -14,7 +14,7 @@ org.argeo.connect,\
 org.argeo.activities,\
 org.argeo.activities.workbench.parts,\
 org.argeo.documents.workbench.parts,\
-org.argeo.people.workbench.rap.views,\
+org.argeo.people.workbench.rap.parts,\
 org.argeo.connect.resources,\
 org.argeo.connect.ui,\
 org.argeo.connect.workbench.commands,\
