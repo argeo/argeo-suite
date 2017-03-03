@@ -116,7 +116,7 @@
 	<!-- Tag like properties -->
 	<bean id="tagsPart" class="org.argeo.people.web.parts.TagLikeValuesPart">
 		<property name="propertyName">
-			<util:constant static-field="org.argeo.connect.ConnectNames.CONNECT_TAGS" />
+			<util:constant static-field="org.argeo.connect.resources.ResourcesNames.CONNECT_TAGS" />
 		</property>
 	</bean>
 	<bean id="mailingListsPart" class="org.argeo.people.web.parts.TagLikeValuesPart">

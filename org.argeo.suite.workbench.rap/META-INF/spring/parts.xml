@@ -7,11 +7,12 @@
 
 	<!-- COMMANDS -->
 
-<!-- 	<bean id="openEntityEditor" class="org.argeo.suite.workbench.commands.OpenEntityEditor" -->
-<!-- 		scope="prototype"> -->
-<!-- 		<property name="repository" ref="repository" /> -->
-<!-- 		<property name="appWorkbenchService" ref="appWorkbenchService" /> -->
-<!-- 	</bean> -->
+	<bean id="importEntities" class="org.argeo.suite.workbench.commands.ImportEntities"
+		scope="prototype">
+		<property name="repository" ref="repository" />
+		<property name="resourcesService" ref="resourcesService" />
+		<property name="peopleService" ref="peopleService" />
+	</bean>
 
 	<!-- VIEWS -->
 	

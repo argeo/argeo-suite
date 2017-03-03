@@ -31,12 +31,42 @@
 	<!-- COMMANDS --> 	
 	<extension
          point="org.eclipse.ui.commands">
+		<command
+      		id="org.argeo.suite.workbench.rap.importEntities"
+			defaultHandler="org.argeo.eclipse.spring.SpringExtensionFactory"
+            name="Import entities">
+    	</command>    	
 	</extension>
 
 	<!-- MENU CONTRIBUTION --> 
 	<extension
 		id="menu:org.eclipse.ui.main.menu"
 		point="org.eclipse.ui.menus">
+		
+		<menuContribution locationURI="menu:org.argeo.cms.ui.workbench.rap.mainMenu?before=org.argeo.cms.ui.workbench.rap.beforeExit">
+			<menu
+				id="org.argeo.suite.workbench.rap.advancedMenu"
+				label="Administration"
+				icon="theme/argeo-classic/icons/more.gif"
+				tooltip="Access to advanced commands">
+				<visibleWhen
+          			checkEnabled="false">
+		    		<with variable="roles">
+		    			<iterate ifEmpty="false" operator="or">
+		      				<equals value="cn=org.argeo.suite.manager,ou=roles,ou=node" />
+		      			</iterate>
+		    		</with>
+				</visibleWhen>
+	       </menu>
+		</menuContribution>
+		<menuContribution locationURI="menu:org.argeo.suite.workbench.rap.advancedMenu">
+        	<command
+	      		commandId="org.argeo.suite.workbench.rap.importEntities"
+				icon="theme/argeo-classic/icons/upload.gif"
+				label="Import data..."
+				tooltip="Upload XLS file that contains legacy/external data">
+			</command>
+		</menuContribution>
 	</extension>
 	
 	<!-- BRANDING AND THEMES -->
