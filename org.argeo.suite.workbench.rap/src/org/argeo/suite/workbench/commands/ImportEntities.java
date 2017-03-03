@@ -148,7 +148,7 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 				userInputPage.setErrorMessage("Please choose an entity type");
 				return false;
 			} else if (file == null) {
-				userInputPage.setErrorMessage("Please upload a file1");
+				userInputPage.setErrorMessage("Please upload a file");
 				return false;
 			} else {
 				userInputPage.setErrorMessage(null);
