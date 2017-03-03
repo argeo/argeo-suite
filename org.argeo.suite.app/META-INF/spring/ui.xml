@@ -13,6 +13,8 @@
 			<map>
 				<entry key="">
 					<bean class="org.argeo.suite.web.DefaultMainPage">
+						<!-- Blocks the initialisation until maintenance service has been initialised. Must be cleaned  -->
+						<property name="suiteMaintenanceService" ref="suiteMaintenanceService" />
 						<property name="peopleService" ref="peopleService" />
 						<property name="peopleIconPaths" ref="peopleEntityIcons" />
 						<property name="nodeFileSystemProvider" ref="nodeFileSystemProvider" />
