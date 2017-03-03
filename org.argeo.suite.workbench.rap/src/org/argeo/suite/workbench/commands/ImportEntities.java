@@ -82,7 +82,8 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 	}
 
 	// TODO make this configurable
-	private final static String IMPORT_ENCODING = "ISO-8859-1";
+	private final static String IMPORT_ENCODING = "ISO-8859-1";//"UTF-8";
+	
 
 	/* DEPENDENCY INJECTION */
 	private Repository repository;
@@ -130,11 +131,9 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 		@Override
 		public boolean performFinish() {
 			// Session session = null;
-			String templateName = resourceTypeCombo.getItem(resourceTypeCombo.getSelectionIndex());
+			// String templateName = resourceTypeCombo.getItem(resourceTypeCombo.getSelectionIndex());
 			// String type = KNOWN_TEMPLATES.get(templateName);
-
 			importDefaultOrgFile(file);
-
 			return true;
 		}
 
@@ -182,6 +181,7 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 					}
 				});
 				resourceTypeCombo.setItems(KNOWN_TEMPLATES.keySet().toArray(new String[0]));
+				resourceTypeCombo.select(0);
 
 				// File upload
 				Label lbl = new Label(composite, SWT.NONE);
@@ -345,10 +345,10 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 			if (EclipseUiUtils.notEmpty(lastName))
 				tmpPerson.setProperty(PEOPLE_LAST_NAME, lastName);
 			Node newPersonNode = peopleService.createEntity(targetParent, PeopleTypes.PEOPLE_PERSON, tmpPerson);
-			if (EclipseUiUtils.notEmpty(position))
-				PersonJcrUtils.addJob(newPersonNode, newOrgNode, position, true);
+			// if (EclipseUiUtils.notEmpty(position))
+			PersonJcrUtils.addJob(resourcesService, peopleService, newPersonNode, newOrgNode, position, true);
 			// Save the newly created entity without creating a base version
-			newOrgNode = peopleService.saveEntity(newOrgNode, false);
+			newPersonNode = peopleService.saveEntity(newPersonNode, false);
 
 		}
 	}
@@ -467,7 +467,6 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 				String contactsStr = getStringValue(sheet, contactsIndex, i);
 				if (notEmpty(contactsStr))
 					importOrgEmployees(tmpParent, targetParent, newOrgNode, contactsStr);
-
 			}
 		} catch (PeopleException | RepositoryException e) {
 			throw new SuiteException("Cannot import mapping file, error at line: " + (i + 1), e);
