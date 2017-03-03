@@ -16,6 +16,7 @@ import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.LifeCycleUiProvider;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.cms.widgets.auth.CmsLogin;
+import org.argeo.connect.AppMaintenanceService;
 import org.argeo.connect.ConnectTypes;
 import org.argeo.connect.resources.ResourcesService;
 import org.argeo.eclipse.ui.EclipseUiUtils;
@@ -65,7 +66,7 @@ public class DefaultMainPage implements LifeCycleUiProvider {
 
 		if (context.isNodeType(ConnectTypes.CONNECT_ENTITY))
 			return peoplePage.createUi(parent, context);
-		else if (("/"+peopleService.getBaseRelPath(PeopleTypes.PEOPLE_PERSON)).equals(context.getPath()))
+		else if (("/" + peopleService.getBaseRelPath(PeopleTypes.PEOPLE_PERSON)).equals(context.getPath()))
 			return peoplePage.createUi(parent, context);
 		else if (context.isNodeType(NodeType.NT_FOLDER) || context.isNodeType(NodeType.NT_FILE))
 			return fsBrowserPage.createUi(parent, context);
@@ -139,4 +140,9 @@ public class DefaultMainPage implements LifeCycleUiProvider {
 	public void setPeopleIconPaths(Map<String, String> peopleIconPaths) {
 		this.peopleIconPaths = peopleIconPaths;
 	}
+
+	// Only used has a blocker.
+	public void setSuiteMaintenanceService(AppMaintenanceService suiteMaintenanceService) {
+	}
+
 }
