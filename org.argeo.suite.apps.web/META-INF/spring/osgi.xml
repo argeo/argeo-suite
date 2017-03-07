@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/osgi"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+	xsi:schemaLocation="http://www.springframework.org/schema/osgi  
+       http://www.springframework.org/schema/osgi/spring-osgi-1.1.xsd
+       http://www.springframework.org/schema/beans   
+       http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+	<!-- REFERENCES -->
+	<reference id="repository" interface="javax.jcr.Repository"
+		filter="(cn=home)" />
+	<reference id="userAdminService" interface="org.argeo.connect.UserAdminService" />
+
+	<!-- Maintenance service -->
+	<reference id="appMaintenanceService" interface="org.argeo.connect.AppMaintenanceService" />
+	<!-- Generic DJ-ing app -->
+	<reference id="suiteAppService" interface="org.argeo.connect.AppService" />
+	<!-- App specific services -->
+	<reference id="resourcesService" interface="org.argeo.connect.resources.ResourcesService" />
+	<reference id="activitiesService" interface="org.argeo.activities.ActivitiesService" />
+	<reference id="peopleService" interface="org.argeo.people.PeopleService" />
+	<reference id="trackerService" interface="org.argeo.tracker.TrackerService" />
+	<reference id="documentsService" interface="org.argeo.documents.DocumentsService" />
+</beans:beans>

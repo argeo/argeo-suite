@@ -1,0 +1,16 @@
+Require-Capability: cms.datamodel; filter:="(name=people)",\
+cms.datamodel; filter:="(name=documents)",\
+cms.datamodel; filter:="(name=tracker)"
+
+Import-Package:\
+javax.jcr.nodetype,\
+javax.jcr.security,\
+org.argeo.cms,\
+org.argeo.connect,\
+org.argeo.activities,\
+org.argeo.connect.resources,\
+org.argeo.connect.ui,\
+org.argeo.eclipse.spring,\
+org.argeo.node,\
+org.argeo.util,\
+*
