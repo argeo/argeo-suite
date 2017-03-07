@@ -6,7 +6,6 @@
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
 	<!-- COMMANDS -->
-
 	<bean id="importEntities" class="org.argeo.suite.workbench.commands.ImportEntities"
 		scope="prototype">
 		<property name="repository" ref="repository" />

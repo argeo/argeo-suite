@@ -82,8 +82,7 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 	}
 
 	// TODO make this configurable
-	private final static String IMPORT_ENCODING = "ISO-8859-1";//"UTF-8";
-	
+	private final static String IMPORT_ENCODING = "ISO-8859-1";// "UTF-8";
 
 	/* DEPENDENCY INJECTION */
 	private Repository repository;
@@ -131,7 +130,8 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 		@Override
 		public boolean performFinish() {
 			// Session session = null;
-			// String templateName = resourceTypeCombo.getItem(resourceTypeCombo.getSelectionIndex());
+			// String templateName =
+			// resourceTypeCombo.getItem(resourceTypeCombo.getSelectionIndex());
 			// String type = KNOWN_TEMPLATES.get(templateName);
 			importDefaultOrgFile(file);
 			return true;
@@ -447,8 +447,8 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 							stStr, cStr, true, null, ContactValueCatalogs.CONTACT_CAT_MAIN, null);
 				String mobileStr = getStringValue(sheet, mobileIndex, i);
 				if (notEmpty(mobileStr))
-					PeopleJcrUtils.createPhone(peopleService, resourcesService, tmpOrg, mobileStr, true, null,
-							ContactValueCatalogs.CONTACT_CAT_MOBILE, null);
+					PeopleJcrUtils.createPhone(peopleService, resourcesService, tmpOrg, mobileStr, true, null, null,
+							null);
 				String phoneStr = getStringValue(sheet, telephoneNumberIndex, i);
 				if (notEmpty(phoneStr))
 					PeopleJcrUtils.createPhone(peopleService, resourcesService, tmpOrg, phoneStr, true, null,

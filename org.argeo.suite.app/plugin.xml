@@ -66,19 +66,6 @@
                alias="/ui/suite/img/logo-argeo.png"  
                base-name="theme/argeo-classic/img/logo-argeo.png">  
          </resource>  
-         <!-- javascript libraries -->
-         <!--          <resource  
-               alias="/ui/suite/js/Chart.min.js"  
-               base-name="js/Chart.min.js">  
-         </resource>  
-         <resource  
-               alias="/ui/suite/js/leaflet.js"  
-               base-name="js/leaflet.js">  
-         </resource>  
-         <resource  
-               alias="/ui/suite/js/leaflet.css"  
-               base-name="js/leaflet.css">  
-         </resource>   -->
     </extension>  
 	
 	<extension

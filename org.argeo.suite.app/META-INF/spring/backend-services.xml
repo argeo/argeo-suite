@@ -4,8 +4,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
-	<bean id="userAdminService" class="org.argeo.connect.core.UserAdminServiceImpl"
-		scope="singleton" lazy-init="false">
+	<bean id="userAdminService" class="org.argeo.connect.core.UserAdminServiceImpl">
 		<property name="userTransaction" ref="userTransaction" />
 		<property name="userAdmin" ref="userAdmin" />
 		<property name="userAdminServiceReference" ref="userAdmin" />
@@ -29,7 +28,7 @@
 
 	<bean id="documentsService" class="org.argeo.documents.DocumentsService" />
 
-	<!--order is important -->
+	<!-- order is important -->
 	<util:list id="knownAppServices">
 		<ref bean="peopleService" />
 		<ref bean="trackerService" />

@@ -29,8 +29,7 @@
 	</bean>
 
 
-	<!-- Execute initialization with a system authentication -->
+	<!-- Execute initialisation with a system authentication -->
 	<bean
 		class="org.argeo.cms.spring.AuthenticatedApplicationContextInitialization" />
-
 </beans>

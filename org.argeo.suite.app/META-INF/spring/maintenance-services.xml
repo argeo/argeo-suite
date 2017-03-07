@@ -8,13 +8,11 @@
 	<bean id="resourcesMaintenanceService"
 		class="org.argeo.connect.resources.core.ResourcesMaintenanceService" />
 
-	<bean id="activitiesMaintenanceService"
-		class="org.argeo.activities.core.ActivitiesMaintenanceService" />
+	<bean id="activitiesMaintenanceService" class="org.argeo.activities.core.ActivitiesMaintenanceService" />
 
 	<bean id="peopleMaintenanceService" class="org.argeo.people.core.PeopleMaintenanceService" />
 
-	<bean id="trackerMaintenanceService"
-		class="org.argeo.tracker.core.TrackerMaintenanceService" />
+	<bean id="trackerMaintenanceService" class="org.argeo.tracker.core.TrackerMaintenanceService" />
 
 	<!-- There is no maintenance Service for the Documents App yet -->
 	<!-- Order is important -->
@@ -33,7 +31,7 @@
 		<property name="maintenanceServices" ref="knownMaintenanceServices" />
 	</bean>
 
-	<!-- Execute initialization with a system authentication -->
+	<!-- Execute initialisation with a system authentication -->
 	<bean
 		class="org.argeo.cms.spring.AuthenticatedApplicationContextInitialization" />
 </beans>

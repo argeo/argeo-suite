@@ -59,6 +59,11 @@
 	border: none;
 }
 
+.people_icon_twitter {
+	background-image: url(theme/argeo-classic/icons/people/contacts/twitter.png);
+	border: none;
+}
+
 .people_icon_linkedin {
 	background-image: url(theme/argeo-classic/icons/people/contacts/linkedin.png);
 	border: none;
