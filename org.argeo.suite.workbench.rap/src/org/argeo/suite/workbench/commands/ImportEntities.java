@@ -364,12 +364,11 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 			line = line.trim();
 
 			if (line.startsWith("https://www.facebook.com")) {
-				PeopleJcrUtils.createSocialMedia(peopleService, resourcesService, contactable, line,
-						!hasPrimaryFacebook, null, ContactValueCatalogs.CONTACT_CAT_FACEBOOK, null);
+				PeopleJcrUtils.createSocialMedia(resourcesService, peopleService, contactable, line,
+						!hasPrimaryFacebook, ContactValueCatalogs.CONTACT_CAT_FACEBOOK, null);
 				hasPrimaryFacebook = true;
 			} else {
-				PeopleJcrUtils.createWebsite(peopleService, resourcesService, contactable, line, !hasPrimary, null,
-						null);
+				PeopleJcrUtils.createWebsite(resourcesService, peopleService, contactable, line, !hasPrimary, null);
 				hasPrimary = true;
 			}
 		}
@@ -382,8 +381,7 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 			if (EclipseUiUtils.isEmpty(line))
 				continue loop;
 			line = line.trim();
-			PeopleJcrUtils.createEmail(peopleService, resourcesService, contactable, line, !hasPrimary, null, null,
-					null);
+			PeopleJcrUtils.createEmail(resourcesService, peopleService, contactable, line, !hasPrimary, null, null);
 			hasPrimary = true;
 		}
 	}
@@ -443,15 +441,14 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 				String stStr = getStringValue(sheet, stIndex, i);
 				String cStr = getStringValue(sheet, cIndex, i);
 				if (notEmpty(streetStr) || notEmpty(pcStr) || notEmpty(lStr) || notEmpty(stStr) || notEmpty(cStr))
-					PeopleJcrUtils.createAddress(peopleService, resourcesService, tmpOrg, streetStr, null, pcStr, lStr,
-							stStr, cStr, true, null, ContactValueCatalogs.CONTACT_CAT_MAIN, null);
+					PeopleJcrUtils.createAddress(resourcesService, peopleService, tmpOrg, streetStr, null, pcStr, lStr,
+							stStr, cStr, true, ContactValueCatalogs.CONTACT_CAT_MAIN, null);
 				String mobileStr = getStringValue(sheet, mobileIndex, i);
 				if (notEmpty(mobileStr))
-					PeopleJcrUtils.createPhone(peopleService, resourcesService, tmpOrg, mobileStr, true, null, null,
-							null);
+					PeopleJcrUtils.createPhone(resourcesService, peopleService, tmpOrg, mobileStr, true, null, null);
 				String phoneStr = getStringValue(sheet, telephoneNumberIndex, i);
 				if (notEmpty(phoneStr))
-					PeopleJcrUtils.createPhone(peopleService, resourcesService, tmpOrg, phoneStr, true, null,
+					PeopleJcrUtils.createPhone(resourcesService, peopleService, tmpOrg, phoneStr, true,
 							ContactValueCatalogs.CONTACT_CAT_DIRECT, null);
 				String descStr = getStringValue(sheet, descriptionIndex, i);
 				if (notEmpty(descStr))
