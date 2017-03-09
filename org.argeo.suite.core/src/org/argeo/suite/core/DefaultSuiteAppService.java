@@ -6,9 +6,11 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.argeo.connect.AppService;
+import org.argeo.connect.SystemAppService;
 import org.argeo.suite.SuiteConstants;
+import org.argeo.suite.SuiteException;
 
-public class DefaultSuiteAppService implements AppService {
+public class DefaultSuiteAppService implements SystemAppService {
 
 	// Injected known AppWorkbenchServices: order is important, first found
 	// result will be returned by the various methods.
@@ -64,7 +66,8 @@ public class DefaultSuiteAppService implements AppService {
 			if (appService.isKnownType(entity))
 				return appService.saveEntity(entity, publish);
 		}
-		return AppService.super.saveEntity(entity, publish);
+		throw new SuiteException("Unknown NodeType for " + entity + ". Cannot save");
+		// return AppService.super.saveEntity(entity, publish);
 	}
 
 	@Override

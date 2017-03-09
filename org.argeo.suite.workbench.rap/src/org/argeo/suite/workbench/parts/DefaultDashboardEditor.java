@@ -71,7 +71,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		NodeIterator nit = getDocumentsService().getLastUpdatedDocuments(getSession());
 		while (nit.hasNext()) {
 			Node file = nit.nextNode();
-			createOpenEntityEditorLink(getAppWorkbenchService(), bodyCmp, ConnectJcrUtils.getName(file), file);
+			createOpenEntityEditorLink(getSystemWorkbenchService(), bodyCmp, ConnectJcrUtils.getName(file), file);
 		}
 		lastUpdatedDocsGadget.layout(true, true);
 	}
@@ -81,15 +81,15 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		parent.setLayout(EclipseUiUtils.noSpaceGridLayout());
 		createGadgetTitleCmp(parent, "Contacts");
 		Composite bodyCmp = createGadgetBodyCmp(parent);
-		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Persons",
+		ConnectWorkbenchUtils.createOpenSearchEditorLink(getSystemWorkbenchService(), bodyCmp, "Persons",
 				PeopleTypes.PEOPLE_PERSON);
-		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Organisations",
+		ConnectWorkbenchUtils.createOpenSearchEditorLink(getSystemWorkbenchService(), bodyCmp, "Organisations",
 				PeopleTypes.PEOPLE_ORG);
-		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Mailing lists",
+		ConnectWorkbenchUtils.createOpenSearchEditorLink(getSystemWorkbenchService(), bodyCmp, "Mailing lists",
 				PeopleTypes.PEOPLE_MAILING_LIST);
-		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tasks",
+		ConnectWorkbenchUtils.createOpenSearchEditorLink(getSystemWorkbenchService(), bodyCmp, "Tasks",
 				ActivitiesTypes.ACTIVITIES_TASK);
-		ConnectWorkbenchUtils.createOpenSearchEditorLink(getAppWorkbenchService(), bodyCmp, "Tags",
+		ConnectWorkbenchUtils.createOpenSearchEditorLink(getSystemWorkbenchService(), bodyCmp, "Tags",
 				ResourcesTypes.RESOURCES_TAG);
 	}
 }

@@ -10,13 +10,12 @@
 	<reference id="repository" interface="javax.jcr.Repository"
 		filter="(cn=home)" />
 	<reference id="resourcesService" interface="org.argeo.connect.resources.ResourcesService" />
-	<reference id="activitiesService"
-		interface="org.argeo.activities.ActivitiesService" />
+	<reference id="activitiesService" interface="org.argeo.activities.ActivitiesService" />
 	<reference id="peopleService" interface="org.argeo.people.PeopleService" />
 	<reference id="documentsService" interface="org.argeo.documents.DocumentsService" />
 	<reference id="trackerService" interface="org.argeo.tracker.TrackerService" />
 
-	<reference id="appWorkbenchService"
-		interface="org.argeo.connect.workbench.AppWorkbenchService" />
+	<reference id="systemWorkbenchService"
+		interface="org.argeo.connect.workbench.SystemWorkbenchService" />
 
 </beans:beans>

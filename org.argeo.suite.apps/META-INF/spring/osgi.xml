@@ -19,9 +19,9 @@
 	<service ref="userAdminService" interface="org.argeo.connect.UserAdminService" />
 
 	<!-- Maintenance service -->
-	<service ref="suiteMaintenanceService" interface="org.argeo.connect.AppMaintenanceService" />
+	<service ref="suiteMaintenanceService" interface="org.argeo.connect.SystemMaintenanceService" />
 
-	<service ref="suiteAppService" interface="org.argeo.connect.AppService" />
+	<service ref="suiteAppService" interface="org.argeo.connect.SystemAppService" />
 	<!-- App specific services -->
 	<service ref="resourcesService" interface="org.argeo.connect.resources.ResourcesService" />
 	<service ref="activitiesService" interface="org.argeo.activities.ActivitiesService" />
@@ -31,10 +31,6 @@
 
 	<!-- Assembly of the various apps workbench services -->
 	<service ref="suiteWorkbenchService"
-		interface="org.argeo.connect.workbench.AppWorkbenchService" />
-
-	<!-- Exposes People specific implementation of the AppWorkbenchService -->
-	<service ref="peopleWorkbenchService"
-		interface="org.argeo.people.workbench.PeopleWorkbenchService" />
+		interface="org.argeo.connect.workbench.SystemWorkbenchService" />
 
 </beans:beans>

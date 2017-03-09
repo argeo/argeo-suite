@@ -24,7 +24,7 @@
 		<ref bean="resourcesWorkbenchService" />
 	</util:list>
 
-	<bean id="suiteWorkbenchService" class="org.argeo.suite.workbench.SuiteWorkbenchService">
+	<bean id="suiteWorkbenchService" class="org.argeo.suite.workbench.DefaultSuiteWorkbenchService">
 		<property name="knownAppWbServices" ref="knownWbServices" />
 	</bean>
 

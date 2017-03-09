@@ -14,6 +14,7 @@ import org.argeo.connect.resources.ResourcesService;
 import org.argeo.connect.ui.ConnectUiStyles;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.connect.workbench.AppWorkbenchService;
+import org.argeo.connect.workbench.SystemWorkbenchService;
 import org.argeo.connect.workbench.util.EntityEditorInput;
 import org.argeo.documents.DocumentsService;
 import org.argeo.eclipse.ui.EclipseUiUtils;
@@ -44,7 +45,7 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 	private ActivitiesService activitiesService;
 	private PeopleService peopleService;
 	private DocumentsService documentsService;
-	private AppWorkbenchService appWorkbenchService;
+	private SystemWorkbenchService systemWorkbenchService;
 
 	private Session session;
 
@@ -202,8 +203,8 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 		return documentsService;
 	}
 
-	protected AppWorkbenchService getAppWorkbenchService() {
-		return appWorkbenchService;
+	protected SystemWorkbenchService getSystemWorkbenchService() {
+		return systemWorkbenchService;
 	}
 
 	protected Image getLogoImg() {
@@ -235,7 +236,7 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 		this.peopleService = peopleService;
 	}
 
-	public void setAppWorkbenchService(AppWorkbenchService appWorkbenchService) {
-		this.appWorkbenchService = appWorkbenchService;
+	public void setSystemWorkbenchService(SystemWorkbenchService systemWorkbenchService) {
+		this.systemWorkbenchService = systemWorkbenchService;
 	}
 }

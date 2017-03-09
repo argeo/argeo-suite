@@ -5,13 +5,14 @@ import java.util.List;
 import javax.jcr.Node;
 
 import org.argeo.connect.workbench.AppWorkbenchService;
+import org.argeo.connect.workbench.SystemWorkbenchService;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.suite.workbench.parts.DefaultDashboardEditor;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.graphics.Image;
 
-/** Centralize workbench services from the various base apps */
-public class SuiteWorkbenchService implements AppWorkbenchService {
+/** Centralise workbench services from the various base apps */
+public class DefaultSuiteWorkbenchService implements SystemWorkbenchService {
 
 	// Injected known AppWorkbenchServices: order is important, first found
 	// result will be returned by the various methods.

@@ -23,6 +23,6 @@
 		<property name="activitiesService" ref="activitiesService" />
 		<property name="peopleService" ref="peopleService" />
 		<property name="documentsService" ref="documentsService" />
-		<property name="appWorkbenchService" ref="appWorkbenchService" />
+		<property name="systemWorkbenchService" ref="systemWorkbenchService" />
 	</bean>
 </beans>

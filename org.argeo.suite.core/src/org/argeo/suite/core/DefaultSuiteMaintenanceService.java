@@ -11,13 +11,14 @@ import javax.jcr.security.Privilege;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.connect.AppMaintenanceService;
+import org.argeo.connect.SystemMaintenanceService;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.node.NodeConstants;
 import org.argeo.suite.ArgeoSuiteRole;
 import org.argeo.suite.SuiteException;
 
 /** Make the DJay-ing to provide a full running Suite platform */
-public class DefaultSuiteMaintenanceService implements AppMaintenanceService {
+public class DefaultSuiteMaintenanceService implements SystemMaintenanceService {
 	private final static Log log = LogFactory.getLog(DefaultSuiteMaintenanceService.class);
 
 	/* DEPENDENCY INJECTION */

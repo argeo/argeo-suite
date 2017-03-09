@@ -6,7 +6,8 @@
 	 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
 	<!-- Main entry point for the CMS -->
-	<bean id="about" parent="app" init-method="init" destroy-method="destroy" depends-on="appMaintenanceService">
+	<bean id="about" parent="app" init-method="init" destroy-method="destroy"
+		depends-on="systemMaintenanceService">
 		<property name="workspace" value="main" />
 		<property name="header" ref="headerManager" />
 		<property name="pages">

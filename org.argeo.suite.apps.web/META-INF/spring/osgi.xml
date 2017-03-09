@@ -12,9 +12,9 @@
 	<reference id="userAdminService" interface="org.argeo.connect.UserAdminService" />
 
 	<!-- Maintenance service -->
-	<reference id="appMaintenanceService" interface="org.argeo.connect.AppMaintenanceService" />
+	<reference id="systemMaintenanceService" interface="org.argeo.connect.SystemMaintenanceService" />
 	<!-- Generic DJ-ing app -->
-	<reference id="suiteAppService" interface="org.argeo.connect.AppService" />
+	<reference id="systemAppService" interface="org.argeo.connect.SystemAppService" />
 	<!-- App specific services -->
 	<reference id="resourcesService" interface="org.argeo.connect.resources.ResourcesService" />
 	<reference id="activitiesService" interface="org.argeo.activities.ActivitiesService" />
