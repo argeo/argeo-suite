@@ -21,6 +21,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.commons.io.IOUtils;
+import org.argeo.connect.ConnectConstants;
 import org.argeo.connect.ConnectNames;
 import org.argeo.connect.resources.ResourcesNames;
 import org.argeo.connect.resources.ResourcesService;
@@ -465,6 +466,15 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 				if (notEmpty(contactsStr))
 					importOrgEmployees(tmpParent, targetParent, newOrgNode, contactsStr);
 			}
+
+			// Refresh tags and mailing list
+			Node tagParent = resourcesService.getTagLikeResourceParent(session, ConnectConstants.RESOURCE_TAG);
+			resourcesService.refreshKnownTags(tagParent);
+
+			// Create Mailing lists
+			Node mlParent = resourcesService.getTagLikeResourceParent(session, PeopleTypes.PEOPLE_MAILING_LIST);
+			resourcesService.refreshKnownTags(mlParent);
+
 		} catch (PeopleException | RepositoryException e) {
 			throw new SuiteException("Cannot import mapping file, error at line: " + (i + 1), e);
 		} finally {
