@@ -3,7 +3,7 @@ cms.datamodel; filter:="(name=documents)",\
 cms.datamodel; filter:="(name=tracker)"
 
 Bundle-Activator: org.argeo.suite.workbench.AsUiPlugin
-Bundle-SymbolicName: org.argeo.suite.app;singleton:=true
+Bundle-SymbolicName: org.argeo.suite.apps;singleton:=true
 Require-Bundle: org.eclipse.core.runtime,\
  org.eclipse.rap.ui,\
  org.eclipse.rap.ui.workbench
