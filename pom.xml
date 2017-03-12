@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>org.argeo.commons</groupId>
 		<artifactId>argeo-commons</artifactId>
-		<version>2.1.62</version>
+		<version>2.1.63</version>
 	</parent>
 	<groupId>org.argeo.suite</groupId>
 	<artifactId>argeo-suite</artifactId>
@@ -20,9 +20,9 @@
 		<module>sdk</module>
 	</modules>
 	<properties>
-		<version.argeo-suite>0.1.5-SNAPSHOT</version.argeo-suite>
+		<version.argeo-suite>0.1.5</version.argeo-suite>
 		<developmentCycle.argeo-suite>0.1</developmentCycle.argeo-suite>
-		<version.argeo-connect>2.1.68-SNAPSHOT</version.argeo-connect>
+		<version.argeo-connect>2.1.68</version.argeo-connect>
 		<version.argeo-tp-extras>2.1.9</version.argeo-tp-extras>
 		<git.rw />
 	</properties>
