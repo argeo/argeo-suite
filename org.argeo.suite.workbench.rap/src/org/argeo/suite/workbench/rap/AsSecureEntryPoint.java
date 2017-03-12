@@ -39,7 +39,7 @@ public class AsSecureEntryPoint extends RapWorkbenchLogin {
 		// Images are declared via the resources extension point in plugin.xml
 		String headerStr = "<a href=\"http://argeo.org\" "
 				+ "title=\"Smart Data Productivity Suite by Argeo\" target=\"_blank\"> "
-				+ "<img src=\"/ui/suite/img/logo-argeo.png\" width=\"175\" height=\"175\"></img> " + "</a>";
+				+ "<img src=\"/ui/suite/img/logo-argeo.png\" width=\"200\" height=\"200\"></img> " + "</a>";
 		headerLbl.setText(headerStr);
 		GridData gd = new GridData(SWT.LEFT, SWT.CENTER, true, false);
 		headerLbl.setLayoutData(gd);
