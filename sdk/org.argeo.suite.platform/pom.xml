@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.argeo.suite</groupId>
 		<artifactId>sdk</artifactId>
-		<version>0.1.7</version>
+		<version>0.1.8-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>org.argeo.suite.platform</artifactId>
@@ -17,14 +17,14 @@
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.suite.workbench.rap</artifactId>
-			<version>0.1.7</version>
+			<version>0.1.8-SNAPSHOT</version>
 		</dependency>
 		
 		<!-- Web UI -->
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.suite.web</artifactId>
-			<version>0.1.7</version>
+			<version>0.1.8-SNAPSHOT</version>
 		</dependency>
 
 		<!-- Base CMS distribution -->
