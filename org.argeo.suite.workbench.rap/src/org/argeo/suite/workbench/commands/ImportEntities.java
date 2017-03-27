@@ -345,7 +345,7 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 			tmpPerson.setProperty(PEOPLE_FIRST_NAME, firstName);
 			if (EclipseUiUtils.notEmpty(lastName))
 				tmpPerson.setProperty(PEOPLE_LAST_NAME, lastName);
-			Node newPersonNode = peopleService.createEntity(targetParent, PeopleTypes.PEOPLE_PERSON, tmpPerson);
+			Node newPersonNode = peopleService.publishEntity(targetParent, PeopleTypes.PEOPLE_PERSON, tmpPerson);
 			// if (EclipseUiUtils.notEmpty(position))
 			PersonJcrUtils.addJob(resourcesService, peopleService, newPersonNode, newOrgNode, position, true);
 			// Save the newly created entity without creating a base version
@@ -458,7 +458,7 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 				if (notEmpty(tagsStr))
 					tmpOrg.setProperty(ResourcesNames.CONNECT_TAGS, ConnectJcrUtils.parseAndClean(tagsStr, ",", true));
 
-				Node newOrgNode = peopleService.createEntity(targetParent, PeopleTypes.PEOPLE_ORG, tmpOrg);
+				Node newOrgNode = peopleService.publishEntity(targetParent, PeopleTypes.PEOPLE_ORG, tmpOrg);
 				// Save the newly created entity without creating a base version
 				newOrgNode = peopleService.saveEntity(newOrgNode, false);
 

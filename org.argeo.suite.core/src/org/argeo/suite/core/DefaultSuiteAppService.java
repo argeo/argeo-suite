@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
 import org.argeo.connect.AppService;
 import org.argeo.connect.SystemAppService;
@@ -17,11 +18,11 @@ public class DefaultSuiteAppService implements SystemAppService {
 	private List<AppService> knownAppServices;
 
 	@Override
-	public Node createEntity(Node parent, String nodeType, Node srcNode, boolean removeSrcNode)
+	public Node publishEntity(Node parent, String nodeType, Node srcNode, boolean removeSrcNode)
 			throws RepositoryException {
 		for (AppService appService : knownAppServices) {
 			if (appService.isKnownType(nodeType))
-				return appService.createEntity(parent, nodeType, srcNode, removeSrcNode);
+				return appService.publishEntity(parent, nodeType, srcNode, removeSrcNode);
 		}
 		return null;
 	}
@@ -51,10 +52,10 @@ public class DefaultSuiteAppService implements SystemAppService {
 	}
 
 	@Override
-	public String getDefaultRelPath(String nodetype, String id) {
+	public String getDefaultRelPath(Session session, String nodetype, String id) {
 		for (AppService appService : knownAppServices) {
 			if (appService.isKnownType(nodetype))
-				return appService.getDefaultRelPath(nodetype, id);
+				return appService.getDefaultRelPath(session, nodetype, id);
 		}
 		return null;
 	}
