@@ -1,95 +1,152 @@
 package org.argeo.suite.workbench.parts;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.activities.ActivitiesTypes;
-import org.argeo.connect.resources.ResourcesTypes;
-import org.argeo.connect.util.ConnectJcrUtils;
-import org.argeo.connect.workbench.ConnectWorkbenchUtils;
+import org.argeo.activities.ActivitiesNames;
+import org.argeo.activities.ActivitiesService;
+import org.argeo.cms.auth.CurrentUser;
+import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.workbench.Refreshable;
 import org.argeo.eclipse.ui.EclipseUiUtils;
-import org.argeo.people.PeopleTypes;
+import org.argeo.jcr.JcrUtils;
+import org.argeo.node.NodeUtils;
 import org.argeo.suite.workbench.AsUiPlugin;
+import org.argeo.tracker.TrackerNames;
+import org.argeo.tracker.TrackerService;
+import org.argeo.tracker.ui.TaskListLabelProvider;
+import org.argeo.tracker.ui.TaskVirtualListComposite;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 
 /** Argeo Suite Default Dashboard */
 public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Refreshable {
 	final static Log log = LogFactory.getLog(DefaultDashboardEditor.class);
 	public final static String ID = AsUiPlugin.PLUGIN_ID + ".defaultDashboardEditor";
 
-	// Default gadget dimensions
-	private int wh = 300;
-	private int hh = 350;
+	private ActivitiesService activitiesService;
+	private TrackerService trackerService;
 
-	private Composite lastUpdatedDocsGadget;
+	private Composite headerCmp;
+	private Composite taskListCmp;
+	private TaskVirtualListComposite tvlc;
 
 	@Override
 	public void createPartControl(Composite parent) {
 		super.createPartControl(parent);
+		parent.setLayout(EclipseUiUtils.noSpaceGridLayout());
+		Composite bodyCmp = new Composite(parent, SWT.NO_FOCUS);
+		bodyCmp.setLayoutData(EclipseUiUtils.fillAll());
+		bodyCmp.setLayout(new GridLayout());
 
-		parent.setLayout(new GridLayout());
-		// Main Layout
-		Composite body = getFormToolkit().createComposite(parent);
-		body.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
+		// Header
+		try {
+			// Control overviewCmp =
+			createUi(bodyCmp, NodeUtils.getUserHome(getSession()));
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+		}
 
-		GridLayout bodyLayout = new GridLayout(2, true);
-		bodyLayout.horizontalSpacing = 20;
-		bodyLayout.verticalSpacing = 20;
-		body.setLayout(bodyLayout);
+		taskListCmp = new Composite(bodyCmp, SWT.NO_FOCUS);
+		taskListCmp.setLayoutData(EclipseUiUtils.fillAll());
 
-		// Contacts
-		Composite contactGadget = createGadgetCmp(body, wh, hh);
-		populateContactsGadget(contactGadget);
+		populateTaskListCmp();
+	}
 
-		// Last updated doc List
-		lastUpdatedDocsGadget = createGadgetCmp(body, wh, hh);
+	private void populateTaskListCmp() {
+		CmsUtils.clear(taskListCmp);
+		taskListCmp.setLayout(EclipseUiUtils.noSpaceGridLayout());
+		// Composite innerCmp = new Composite(taskListCmp, SWT.NO_FOCUS);
+		// innerCmp.setLayoutData(EclipseUiUtils.fillAll());
+
+		TaskListLabelProvider labelProvider = new TaskListLabelProvider(trackerService);
+		tvlc = new TaskVirtualListComposite(taskListCmp, SWT.NO_FOCUS, labelProvider, 54);
+		tvlc.setLayoutData(EclipseUiUtils.fillAll());
+		forceRefresh(null);
 	}
 
 	@Override
 	public void forceRefresh(Object object) {
-		refreshDocListGadget();
+		NodeIterator nit = activitiesService.getMyTasks(getSession(), true);
+		tvlc.getTableViewer().setInput(JcrUtils.nodeIteratorToList(nit).toArray());
+	}
+
+	private Control createUi(Composite parent, Node context) throws RepositoryException {
+		Composite bodyCmp = new Composite(parent, SWT.NO_FOCUS);
+		bodyCmp.setLayout(new GridLayout());
+
+		// Title
+		Label titleLbl = new Label(bodyCmp, SWT.WRAP | SWT.LEAD);
+		CmsUtils.markup(titleLbl);
+		String titleStr = "<big><b> Hello " + CurrentUser.getDisplayName() + " </b></big>";
+		titleLbl.setText(titleStr);
+		GridData gd = new GridData(SWT.CENTER, SWT.BOTTOM, false, false);
+		gd.verticalIndent = 5;
+		gd.horizontalIndent = 10;
+		titleLbl.setLayoutData(gd);
+
+		Calendar now = GregorianCalendar.getInstance();
+
+		NodeIterator nit = activitiesService.getMyTasks(getSession(), true);
+		if (nit.hasNext()) {
+			List<Node> overdueTasks = new ArrayList<>();
+			while (nit.hasNext()) {
+				Node currNode = nit.nextNode();
+				if (currNode.hasProperty(ActivitiesNames.ACTIVITIES_DUE_DATE)
+						&& currNode.getProperty(ActivitiesNames.ACTIVITIES_DUE_DATE).getDate().before(now))
+					overdueTasks.add(currNode);
+			}
+			if (!overdueTasks.isEmpty()) {
+				Label overdueLbl = new Label(bodyCmp, SWT.WRAP | SWT.LEAD);
+				CmsUtils.markup(overdueLbl);
+				long size = overdueTasks.size();
+				String overdueStr = "You have " + size + " overdue task" + (size > 1 ? "s" : "") + ".";
+				overdueLbl.setText(overdueStr);
+			}
+		}
+
+		nit = trackerService.getMyMilestones(getSession(), true);
+		if (nit.hasNext()) {
+			List<Node> overdueMilestones = new ArrayList<>();
+			while (nit.hasNext()) {
+				Node currNode = nit.nextNode();
+				if (currNode.hasProperty(TrackerNames.TRACKER_TARGET_DATE)
+						&& currNode.getProperty(TrackerNames.TRACKER_TARGET_DATE).getDate().before(now))
+					overdueMilestones.add(currNode);
+			}
+			if (!overdueMilestones.isEmpty()) {
+				Label overdueLbl = new Label(bodyCmp, SWT.WRAP | SWT.LEAD);
+				CmsUtils.markup(overdueLbl);
+				long size = overdueMilestones.size();
+				String overdueStr = "You have " + size + " overdue milestone" + (size > 1 ? "s" : "") + ".";
+				overdueLbl.setText(overdueStr);
+			}
+		}
+		return bodyCmp;
 	}
 
 	@Override
 	public void setFocus() {
-		refreshDocListGadget();
+		// refreshDocListGadget();
 	}
 
-	/** Links to the various last updated docs */
-	private void refreshDocListGadget() {
-		EclipseUiUtils.clear(lastUpdatedDocsGadget);
-		lastUpdatedDocsGadget.setLayout(EclipseUiUtils.noSpaceGridLayout());
-		createGadgetTitleCmp(lastUpdatedDocsGadget, "Last updated documents");
-		Composite bodyCmp = createGadgetBodyCmp(lastUpdatedDocsGadget);
-
-		NodeIterator nit = getDocumentsService().getLastUpdatedDocuments(getSession());
-		while (nit.hasNext()) {
-			Node file = nit.nextNode();
-			createOpenEntityEditorLink(getSystemWorkbenchService(), bodyCmp, ConnectJcrUtils.getName(file), file);
-		}
-		lastUpdatedDocsGadget.layout(true, true);
+	public void setActivitiesService(ActivitiesService activitiesService) {
+		this.activitiesService = activitiesService;
 	}
 
-	/** Links to the various contact search pages */
-	private void populateContactsGadget(Composite parent) {
-		parent.setLayout(EclipseUiUtils.noSpaceGridLayout());
-		createGadgetTitleCmp(parent, "Contacts");
-		Composite bodyCmp = createGadgetBodyCmp(parent);
-		ConnectWorkbenchUtils.createOpenSearchEditorLink(getSystemWorkbenchService(), bodyCmp, "Persons",
-				PeopleTypes.PEOPLE_PERSON);
-		ConnectWorkbenchUtils.createOpenSearchEditorLink(getSystemWorkbenchService(), bodyCmp, "Organisations",
-				PeopleTypes.PEOPLE_ORG);
-		ConnectWorkbenchUtils.createOpenSearchEditorLink(getSystemWorkbenchService(), bodyCmp, "Mailing lists",
-				PeopleTypes.PEOPLE_MAILING_LIST);
-		ConnectWorkbenchUtils.createOpenSearchEditorLink(getSystemWorkbenchService(), bodyCmp, "Tasks",
-				ActivitiesTypes.ACTIVITIES_TASK);
-		ConnectWorkbenchUtils.createOpenSearchEditorLink(getSystemWorkbenchService(), bodyCmp, "Tags",
-				ResourcesTypes.RESOURCES_TAG);
+	public void setTrackerService(TrackerService trackerService) {
+		this.trackerService = trackerService;
 	}
 }

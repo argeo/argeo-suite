@@ -7,19 +7,18 @@ import javax.jcr.Node;
 import javax.jcr.Repository;
 import javax.jcr.Session;
 
-import org.argeo.activities.ActivitiesService;
 import org.argeo.cms.ui.workbench.util.CommandUtils;
 import org.argeo.cms.util.CmsUtils;
+import org.argeo.connect.SystemAppService;
 import org.argeo.connect.resources.ResourcesService;
 import org.argeo.connect.ui.ConnectUiStyles;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.connect.workbench.AppWorkbenchService;
 import org.argeo.connect.workbench.SystemWorkbenchService;
+import org.argeo.connect.workbench.commands.OpenEntityEditor;
 import org.argeo.connect.workbench.util.EntityEditorInput;
-import org.argeo.documents.DocumentsService;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
-import org.argeo.people.PeopleService;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -42,9 +41,7 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 	// DEPENDENCY INJECTION
 	private Repository repository;
 	private ResourcesService resourcesService;
-	private ActivitiesService activitiesService;
-	private PeopleService peopleService;
-	private DocumentsService documentsService;
+	private SystemAppService systemAppService;
 	private SystemWorkbenchService systemWorkbenchService;
 
 	private Session session;
@@ -142,15 +139,14 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 			@Override
 			public void widgetSelected(final SelectionEvent event) {
 				Map<String, String> params = new HashMap<String, String>();
-				// FIXME
-				params.put("param.jcrId", ConnectJcrUtils.getIdentifier(entity));
+				params.put(OpenEntityEditor.PARAM_JCR_ID, ConnectJcrUtils.getIdentifier(entity));
 				CommandUtils.callCommand(peopleUiService.getOpenEntityEditorCmdId(), params);
 			}
 		});
 		return link;
 	}
 
-	// LIFE CYCLE
+	// Life cycle
 	@Override
 	public void dispose() {
 		JcrUtils.logoutQuietly(session);
@@ -187,28 +183,16 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 		return session;
 	}
 
-	public ResourcesService getResourceService() {
+	public ResourcesService getResourcesService() {
 		return resourcesService;
 	}
 
-	protected ActivitiesService getActivityService() {
-		return activitiesService;
-	}
-
-	protected PeopleService getPeopleService() {
-		return peopleService;
-	}
-
-	protected DocumentsService getDocumentsService() {
-		return documentsService;
+	protected SystemAppService getSystemAppService() {
+		return systemAppService;
 	}
 
 	protected SystemWorkbenchService getSystemWorkbenchService() {
 		return systemWorkbenchService;
-	}
-
-	protected Image getLogoImg() {
-		return logoImg;
 	}
 
 	protected FormToolkit getFormToolkit() {
@@ -224,16 +208,8 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 		this.resourcesService = resourcesService;
 	}
 
-	public void setActivitiesService(ActivitiesService activitiesService) {
-		this.activitiesService = activitiesService;
-	}
-
-	public void setDocumentsService(DocumentsService documentsService) {
-		this.documentsService = documentsService;
-	}
-
-	public void setPeopleService(PeopleService peopleService) {
-		this.peopleService = peopleService;
+	public void setSystemAppService(SystemAppService systemAppService) {
+		this.systemAppService = systemAppService;
 	}
 
 	public void setSystemWorkbenchService(SystemWorkbenchService systemWorkbenchService) {

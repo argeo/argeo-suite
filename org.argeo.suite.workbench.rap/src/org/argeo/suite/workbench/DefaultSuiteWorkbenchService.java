@@ -21,6 +21,12 @@ public class DefaultSuiteWorkbenchService implements SystemWorkbenchService {
 
 	@Override
 	public String getDefaultEditorId() {
+		String result = null;
+		for (AppWorkbenchService appWbService : knownAppWbServices) {
+			result = appWbService.getDefaultEditorId();
+			if (EclipseUiUtils.notEmpty(result))
+				return result;
+		}
 		return defaultEditorId;
 	}
 
