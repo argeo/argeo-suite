@@ -30,8 +30,8 @@
 
 	<!-- order is important -->
 	<util:list id="knownAppServices">
-		<ref bean="peopleService" />
 		<ref bean="trackerService" />
+		<ref bean="peopleService" />
 		<ref bean="documentsService" />
 		<ref bean="activitiesService" />
 		<ref bean="resourcesService" />
