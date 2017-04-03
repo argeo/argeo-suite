@@ -50,7 +50,7 @@ public class AsSecureEntryPoint extends RapWorkbenchLogin {
 		String titleStr = "<big> Please sign in to your personal dashboard</big>";
 		titleLbl.setText(titleStr);
 		gd = new GridData(SWT.CENTER, SWT.BOTTOM, false, false);
-		// gd.verticalIndent = 40;
+		gd.verticalIndent = 15;
 		titleLbl.setLayoutData(gd);
 
 		// Login composite

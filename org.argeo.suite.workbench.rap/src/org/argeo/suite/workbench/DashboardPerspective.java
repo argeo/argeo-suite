@@ -1,6 +1,5 @@
 package org.argeo.suite.workbench;
 
-import org.argeo.activities.workbench.parts.MyTodoListView;
 import org.argeo.documents.workbench.parts.MyFilesView;
 import org.argeo.people.workbench.rap.parts.QuickSearchView;
 import org.eclipse.ui.IFolderLayout;
@@ -17,6 +16,6 @@ public class DashboardPerspective implements IPerspectiveFactory {
 		IFolderLayout left = layout.createFolder("left", IPageLayout.LEFT, 0.25f, editorArea);
 		left.addView(MyFilesView.ID);
 		left.addView(QuickSearchView.ID);
-		left.addView(MyTodoListView.ID);
+		// left.addView(MyTodoListView.ID);
 	}
 }
