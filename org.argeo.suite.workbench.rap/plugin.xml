@@ -72,14 +72,12 @@
 	<!-- BRANDING AND THEMES -->
 	<extension  
             point="org.eclipse.equinox.http.registry.resources">  
-		 <!-- Enable overwriting of link styles in the meta tags -->
-         <!-- images -->
          <!-- javascript libraries -->
-         <!--          <resource  
+         <resource  
                alias="/ui/suite/js/Chart.min.js"  
                base-name="js/Chart.min.js">  
          </resource>  
-         <resource  
+         <!--<resource  
                alias="/ui/suite/js/leaflet.js"  
                base-name="js/leaflet.js">  
          </resource>  
