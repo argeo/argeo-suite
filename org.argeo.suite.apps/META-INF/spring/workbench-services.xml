@@ -22,6 +22,7 @@
 	<bean id="trackerWorkbenchService" class="org.argeo.tracker.workbench.TrackerWorkbenchService">
 		<property name="userAdminService" ref="userAdminService" />
 		<property name="trackerService" ref="trackerService" />
+		<property name="activitiesService" ref="activitiesService" />
 	</bean>
 
 	<!-- Order is important -->

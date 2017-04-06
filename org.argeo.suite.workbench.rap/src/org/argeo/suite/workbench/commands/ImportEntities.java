@@ -518,7 +518,6 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 						PeopleJcrUtils.createContact(resourcesService, peopleService, tmpPerson,
 								PeopleTypes.PEOPLE_MAIL, value, false, ContactValueCatalogs.CONTACT_CAT_MAIN,
 								null);
-
 					}
 				}
 
