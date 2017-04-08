@@ -24,7 +24,7 @@
 			id="org.argeo.suite.workbench.rap.defaultDashboardEditor"
 			class="org.argeo.eclipse.spring.SpringExtensionFactory"
 			icon="theme/argeo-classic/icons/dashboard.gif"
-			name="My Dashboard">
+			name="Dashboard">
 		</editor>
 	</extension>
 	

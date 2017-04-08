@@ -14,6 +14,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.activities.ActivitiesNames;
 import org.argeo.activities.ActivitiesService;
+import org.argeo.activities.workbench.parts.TaskViewerContextMenu;
 import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.ui.workbench.util.CommandUtils;
 import org.argeo.cms.util.CmsUtils;
@@ -34,10 +35,15 @@ import org.argeo.tracker.core.TrackerUtils;
 import org.argeo.tracker.ui.TaskListLabelProvider;
 import org.argeo.tracker.ui.TaskVirtualListComposite;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -122,7 +128,38 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 			TaskListLabelProvider labelProvider = new TaskListLabelProvider(trackerService);
 			tvlc = new TaskVirtualListComposite(parent, SWT.NO_FOCUS, labelProvider, 54);
 			tvlc.setLayoutData(EclipseUiUtils.fillAll());
-			tvlc.getTableViewer().setInput(JcrUtils.nodeIteratorToList(nit).toArray());
+			final TableViewer viewer = tvlc.getTableViewer();
+			viewer.setInput(JcrUtils.nodeIteratorToList(nit).toArray());
+			final TaskViewerContextMenu contextMenu = new TaskViewerContextMenu(viewer, getSession(),
+					activitiesService) {
+				private static final long serialVersionUID = 1640863021424194303L;
+
+				@Override
+				public boolean performAction(String actionId) {
+					boolean hasChanged = super.performAction(actionId);
+					if (hasChanged) {
+						viewer.getTable().setFocus();
+						forceRefresh(null);
+						// NodeIterator nit =
+						// activitiesService.getMyTasks(getSession(), true);
+						// viewer.setInput(JcrUtils.nodeIteratorToList(nit).toArray());
+					}
+					return hasChanged;
+				}
+			};
+			viewer.getTable().addMouseListener(new MouseAdapter() {
+				private static final long serialVersionUID = 6737579410648595940L;
+
+				@Override
+				public void mouseDown(MouseEvent e) {
+					if (e.button == 3) {
+						// contextMenu.setCurrFolderPath(currDisplayedFolder);
+						contextMenu.show(viewer.getTable(), new Point(e.x, e.y),
+								(IStructuredSelection) viewer.getSelection());
+					}
+				}
+			});
+
 		}
 	}
 

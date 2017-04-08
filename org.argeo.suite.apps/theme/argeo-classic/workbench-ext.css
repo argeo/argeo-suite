@@ -268,14 +268,14 @@ Button[PUSH][FLAT].createFolder_btn:pressed, Button[PUSH][FLAT].shareFolder_btn:
 	background-color: #fde2d5;
 }
 
-/**  PEOPLE  **/
+/**  ACTIVITIES  **/
 
 Button[PUSH][FLAT].markAsDone_btn {
-	background-image: url( theme/argeo-classic/icons/fs/open.png);
+	background-image: url( theme/argeo-classic/icons/activities/done.png);
 }
 
 Button[PUSH][FLAT].cancel_btn {
-	background-image: url( theme/argeo-classic/icons/fs/open.png);
+	background-image: url( theme/argeo-classic/icons/activities/cancel.gif);
 }
 
 Button[PUSH][FLAT].cancel_btn,
@@ -300,6 +300,8 @@ Button[PUSH][FLAT].cancel_btn:pressed,
 Button[PUSH][FLAT].markAsDone_btn:pressed {
 	background-color: #fde2d5;
 }
+
+/**  PEOPLE  **/
 
 Button[PUSH][FLAT].small_delete_btn{
 	background-image: url( theme/argeo-classic/icons/actions/deleteSmall.gif);
