@@ -23,6 +23,7 @@
 		<property name="activitiesService" ref="activitiesService" />
 		<property name="trackerService" ref="trackerService" />
 		<!-- <property name="documentsService" ref="documentsService" /> -->
+		<property name="systemAppService" ref="systemAppService" />
 		<property name="systemWorkbenchService" ref="systemWorkbenchService" />
 	</bean>
 </beans>

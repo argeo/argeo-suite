@@ -23,7 +23,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -47,7 +46,6 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 	private Session session;
 
 	// UI Objects
-	private Image logoImg;
 	private FormToolkit toolkit;
 
 	@Override
@@ -56,7 +54,6 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 		setInput(input);
 
 		session = ConnectJcrUtils.login(repository);
-		// initialiseImg();
 		updateTooltip(input);
 	}
 
@@ -66,26 +63,6 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 			sei.setTooltipText("My Dashboard");
 		}
 	}
-
-	// private void initialiseImg() {
-	// InputStream is = null;
-	// try {
-	// String imgPath = peopleService.getInstanceConfPath() + "/"
-	// + AoNames.AO_DEFAULT_LOGO;
-	// if (session.nodeExists(imgPath)) {
-	// Node imageNode = session.getNode(imgPath).getNode(
-	// Node.JCR_CONTENT);
-	// is = imageNode.getProperty(Property.JCR_DATA).getBinary()
-	// .getStream();
-	// logoImg = new Image(this.getSite().getShell().getDisplay(), is);
-	// }
-	// } catch (RepositoryException re) {
-	// throw new AoException(
-	// "Unable to initialise specific logo for demo app", re);
-	// } finally {
-	// IOUtils.closeQuietly(is);
-	// }
-	// }
 
 	/**
 	 * Implementing classes must call super in order to create the correct form
@@ -150,8 +127,6 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 	@Override
 	public void dispose() {
 		JcrUtils.logoutQuietly(session);
-		if (logoImg != null)
-			logoImg.dispose();
 		super.dispose();
 	}
 

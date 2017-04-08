@@ -18,6 +18,7 @@ import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.ui.workbench.util.CommandUtils;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.ConnectNames;
+import org.argeo.connect.ui.ConnectUiUtils;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.connect.workbench.Refreshable;
 import org.argeo.connect.workbench.commands.OpenEntityEditor;
@@ -28,6 +29,7 @@ import org.argeo.suite.SuiteException;
 import org.argeo.suite.workbench.AsUiPlugin;
 import org.argeo.tracker.TrackerNames;
 import org.argeo.tracker.TrackerService;
+import org.argeo.tracker.TrackerTypes;
 import org.argeo.tracker.core.TrackerUtils;
 import org.argeo.tracker.ui.TaskListLabelProvider;
 import org.argeo.tracker.ui.TaskVirtualListComposite;
@@ -67,41 +69,73 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		bodyCmp.setLayoutData(EclipseUiUtils.fillAll());
 		bodyCmp.setLayout(new GridLayout());
 
-		// Header
-		try {
-			headerCmp = createHeaderPart(bodyCmp, NodeUtils.getUserHome(getSession()));
-			headerCmp.setLayoutData(EclipseUiUtils.fillWidth());
-
-		} catch (RepositoryException e) {
-			throw new SuiteException("Cannot create dashboard overview", e);
-		}
+		headerCmp = new Composite(bodyCmp, SWT.NO_FOCUS);
+		headerCmp.setLayoutData(EclipseUiUtils.fillWidth());
 
 		taskListCmp = new Composite(bodyCmp, SWT.NO_FOCUS);
 		taskListCmp.setLayoutData(EclipseUiUtils.fillAll());
-
-		populateTaskListCmp();
-	}
-
-	private void populateTaskListCmp() {
-		CmsUtils.clear(taskListCmp);
-		taskListCmp.setLayout(EclipseUiUtils.noSpaceGridLayout());
-		// Composite innerCmp = new Composite(taskListCmp, SWT.NO_FOCUS);
-		// innerCmp.setLayoutData(EclipseUiUtils.fillAll());
-
-		TaskListLabelProvider labelProvider = new TaskListLabelProvider(trackerService);
-		tvlc = new TaskVirtualListComposite(taskListCmp, SWT.NO_FOCUS, labelProvider, 54);
-		tvlc.setLayoutData(EclipseUiUtils.fillAll());
 		forceRefresh(null);
 	}
 
 	@Override
 	public void forceRefresh(Object object) {
-		NodeIterator nit = activitiesService.getMyTasks(getSession(), true);
-		tvlc.getTableViewer().setInput(JcrUtils.nodeIteratorToList(nit).toArray());
+		CmsUtils.clear(headerCmp);
+		populateHeaderPart(headerCmp, NodeUtils.getUserHome(getSession()));
+
+		CmsUtils.clear(taskListCmp);
+		populateTaskListCmp(taskListCmp);
+
+		headerCmp.getParent().layout(true, true);
 	}
 
-	private Composite createHeaderPart(Composite parent, Node context) throws RepositoryException {
-		Composite bodyCmp = new Composite(parent, SWT.NO_FOCUS);
+	private void populateTaskListCmp(Composite parent) {
+		parent.setLayout(EclipseUiUtils.noSpaceGridLayout());
+		NodeIterator nit = activitiesService.getMyTasks(getSession(), true);
+		if (!nit.hasNext()) {
+			Composite noTaskCmp = new Composite(parent, SWT.NO_FOCUS);
+			noTaskCmp.setLayoutData(EclipseUiUtils.fillAll());
+			noTaskCmp.setLayout(new GridLayout());
+
+			Label noTaskLbl = new Label(noTaskCmp, SWT.CENTER);
+			noTaskLbl.setText("<i> <big> You have no pending Task. </big> </i>");
+			CmsUtils.markup(noTaskLbl);
+			noTaskLbl.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, true));
+
+			final Link createTaskLk = new Link(noTaskCmp, SWT.CENTER);
+			createTaskLk.setText("<a> Create a task </a>");
+			createTaskLk.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, true));
+
+			createTaskLk.addSelectionListener(new SelectionAdapter() {
+				private static final long serialVersionUID = -9028457805156989935L;
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					String mainMixin = TrackerTypes.TRACKER_TASK;
+					String pathCreated = ConnectUiUtils.createAndConfigureEntity(createTaskLk.getShell(), getSession(),
+							getSystemAppService(), getSystemWorkbenchService(), mainMixin);
+					if (EclipseUiUtils.notEmpty(pathCreated))
+						forceRefresh(null);
+				}
+			});
+
+		} else {
+			TaskListLabelProvider labelProvider = new TaskListLabelProvider(trackerService);
+			tvlc = new TaskVirtualListComposite(parent, SWT.NO_FOCUS, labelProvider, 54);
+			tvlc.setLayoutData(EclipseUiUtils.fillAll());
+			tvlc.getTableViewer().setInput(JcrUtils.nodeIteratorToList(nit).toArray());
+		}
+	}
+
+	private boolean isOverdue(Node node, String propName) {
+		try {
+			Calendar now = GregorianCalendar.getInstance();
+			return node.hasProperty(propName) && node.getProperty(propName).getDate().before(now);
+		} catch (RepositoryException e) {
+			throw new SuiteException("Cannot check overdue status with property " + propName + " on " + node, e);
+		}
+	}
+
+	private void populateHeaderPart(Composite bodyCmp, Node context) {
 		bodyCmp.setLayout(EclipseUiUtils.noSpaceGridLayout(new GridLayout(2, true)));
 
 		Composite leftCmp = new Composite(bodyCmp, SWT.NO_FOCUS);
@@ -121,15 +155,12 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		gd.horizontalIndent = 10;
 		titleLbl.setLayoutData(gd);
 
-		Calendar now = GregorianCalendar.getInstance();
-
 		NodeIterator nit = activitiesService.getMyTasks(getSession(), true);
 		if (nit.hasNext()) {
 			List<Node> overdueTasks = new ArrayList<>();
 			while (nit.hasNext()) {
 				Node currNode = nit.nextNode();
-				if (currNode.hasProperty(ActivitiesNames.ACTIVITIES_DUE_DATE)
-						&& currNode.getProperty(ActivitiesNames.ACTIVITIES_DUE_DATE).getDate().before(now))
+				if (isOverdue(currNode, ActivitiesNames.ACTIVITIES_DUE_DATE))
 					overdueTasks.add(currNode);
 			}
 			if (!overdueTasks.isEmpty()) {
@@ -148,8 +179,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 			while (nit.hasNext()) {
 				Node currNode = nit.nextNode();
 				openMilestones.add(currNode);
-				if (currNode.hasProperty(TrackerNames.TRACKER_TARGET_DATE)
-						&& currNode.getProperty(TrackerNames.TRACKER_TARGET_DATE).getDate().before(now))
+				if (isOverdue(currNode, TrackerNames.TRACKER_TARGET_DATE))
 					overdueMilestones.add(currNode);
 			}
 			if (!overdueMilestones.isEmpty()) {
@@ -177,7 +207,6 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 			myMilestoneGp.setLayoutData(EclipseUiUtils.fillWidth());
 			populateMuliValueClickableList(myMilestoneGp, openMilestones.toArray(new Node[0]), new MilestoneLp(), null);
 		}
-		return bodyCmp;
 	}
 
 	private class ProjectLp extends ColumnLabelProvider {
@@ -197,7 +226,8 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 			if (allNb < 1)
 				percent = "empty";
 			else {
-				double result = (allNb - openNb) / allNb * 100;
+				double num = allNb - openNb;
+				double result = num / allNb * 100;
 				percent = String.format("%.1f", result) + "% done";
 			}
 			StringBuilder builder = new StringBuilder();
@@ -230,7 +260,8 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 			if (allNb < 1)
 				percent = "empty";
 			else {
-				double result = (allNb - openNb) / allNb * 100;
+				double num = allNb - openNb;
+				double result = num / allNb * 100;
 				percent = String.format("%.1f", result) + "% done";
 			}
 			StringBuilder builder = new StringBuilder();
@@ -296,7 +327,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 	private void populateMuliValueClickableList(Composite parent, Node[] nodes, ColumnLabelProvider lp,
 			String listLabel) {
 		CmsUtils.clear(parent);
-		RowLayout rl = new RowLayout(SWT.HORIZONTAL);
+		RowLayout rl = new RowLayout(SWT.HORIZONTAL | SWT.WRAP);
 		rl.wrap = true;
 		rl.marginLeft = rl.marginTop = rl.marginBottom = 0;
 		rl.marginRight = 8;
@@ -314,9 +345,9 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 			CmsUtils.markup(link);
 			link.setText(lp.getText(node) + (i != nodes.length ? ", " : ""));
 			i++;
-//			Color fc = lp.getForeground(node);
-//			if (fc != null)
-//				link.setForeground(fc);
+			// Color fc = lp.getForeground(node);
+			// if (fc != null)
+			// link.setForeground(fc);
 
 			link.addSelectionListener(new SelectionAdapter() {
 				private static final long serialVersionUID = 1L;
