@@ -15,6 +15,14 @@
 	<!-- VIEWS -->
 	 <extension
 		point="org.eclipse.ui.views">
+		<view
+			class="org.argeo.eclipse.spring.SpringExtensionFactory"
+			icon="theme/argeo-classic/icons/search.png"
+			id="org.argeo.suite.workbench.rap.quickSearchView"
+			name="Search"
+			restorable="true">
+		</view>
+		
 	</extension>
 		
 	<!-- EDITORS --> 
@@ -77,13 +85,13 @@
                alias="/ui/suite/js/Chart.min.js"  
                base-name="js/Chart.min.js">  
          </resource>  
-         <!--<resource  
+         <resource  
                alias="/ui/suite/js/leaflet.js"  
                base-name="js/leaflet.js">  
          </resource>  
          <resource  
                alias="/ui/suite/js/leaflet.css"  
                base-name="js/leaflet.css">  
-         </resource>   -->
+         </resource>
     </extension>  
 </plugin>

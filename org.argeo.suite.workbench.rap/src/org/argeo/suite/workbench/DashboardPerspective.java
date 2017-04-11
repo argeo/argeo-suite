@@ -1,7 +1,7 @@
 package org.argeo.suite.workbench;
 
 import org.argeo.documents.workbench.parts.MyFilesView;
-import org.argeo.people.workbench.rap.parts.QuickSearchView;
+import org.argeo.suite.workbench.parts.QuickSearchView;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;

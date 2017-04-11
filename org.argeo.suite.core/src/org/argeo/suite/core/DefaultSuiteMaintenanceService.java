@@ -40,9 +40,8 @@ public class DefaultSuiteMaintenanceService implements SystemMaintenanceService 
 		}
 	}
 
-	// TODO Hard-coded model initialisation
 	// To be cleaned once first init and config mechanisms have been implemented
-	private final static String publicPath = "/public";
+	// private final static String publicPath = "/public";
 	// FIXME Users must have read access on the jcr:system/jcr:versionStorage
 	// node under JackRabbit to be able to manage versions
 	private final static String jackRabbitVersionSystemPath = "/jcr:system";
@@ -51,7 +50,7 @@ public class DefaultSuiteMaintenanceService implements SystemMaintenanceService 
 	public boolean prepareJcrTree(Session session) {
 		boolean hasCHanged = false;
 		try {
-			JcrUtils.mkdirs(session, publicPath, NodeType.NT_UNSTRUCTURED);
+			// JcrUtils.mkdirs(session, publicPath, NodeType.NT_UNSTRUCTURED);
 			if (session.hasPendingChanges()) {
 				session.save();
 				hasCHanged = true;
@@ -76,9 +75,9 @@ public class DefaultSuiteMaintenanceService implements SystemMaintenanceService 
 					Privilege.JCR_READ);
 			// Default configuration of the workspace
 			JcrUtils.addPrivilege(session, "/", NodeConstants.ROLE_ADMIN, Privilege.JCR_ALL);
-			JcrUtils.addPrivilege(session, publicPath, NodeConstants.ROLE_USER, Privilege.JCR_READ);
-			JcrUtils.addPrivilege(session, publicPath, "anonymous", Privilege.JCR_READ);
-			JcrUtils.addPrivilege(session, publicPath, NodeConstants.ROLE_ANONYMOUS, Privilege.JCR_READ);
+			// JcrUtils.addPrivilege(session, publicPath, NodeConstants.ROLE_USER, Privilege.JCR_READ);
+			// JcrUtils.addPrivilege(session, publicPath, "anonymous", Privilege.JCR_READ);
+			// JcrUtils.addPrivilege(session, publicPath, NodeConstants.ROLE_ANONYMOUS, Privilege.JCR_READ);
 
 			session.save();
 		} catch (RepositoryException e) {

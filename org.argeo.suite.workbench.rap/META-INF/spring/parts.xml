@@ -14,6 +14,15 @@
 	</bean>
 
 	<!-- VIEWS -->
+	<bean id="quickSearchView" class="org.argeo.suite.workbench.parts.QuickSearchView"
+		scope="prototype">
+		<property name="repository" ref="repository" />
+		<property name="resourcesService" ref="resourcesService" />
+		<property name="activitiesService" ref="activitiesService" />
+		<property name="peopleService" ref="peopleService" />
+		<property name="systemWorkbenchService" ref="systemWorkbenchService" />
+	</bean>
+
 
 	<!-- EDITORS -->
 	<bean id="defaultDashboardEditor" class="org.argeo.suite.workbench.parts.DefaultDashboardEditor"
