@@ -8,6 +8,7 @@ import javax.jcr.Session;
 
 import org.argeo.connect.AppService;
 import org.argeo.connect.SystemAppService;
+import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.suite.SuiteConstants;
 import org.argeo.suite.SuiteException;
 
@@ -47,6 +48,16 @@ public class DefaultSuiteAppService implements SystemAppService {
 		for (AppService appService : knownAppServices) {
 			if (appService.isKnownType(entity))
 				return appService.getDefaultRelPath(entity);
+		}
+		return null;
+	}
+
+	@Override
+	public String getMainNodeType(Node node) {
+		for (AppService appService : knownAppServices) {
+			String foundType = appService.getMainNodeType(node);
+			if (EclipseUiUtils.notEmpty(foundType))
+				return foundType;
 		}
 		return null;
 	}
