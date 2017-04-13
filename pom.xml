@@ -20,9 +20,9 @@
 		<module>sdk</module>
 	</modules>
 	<properties>
-		<version.argeo-suite>0.1.9-SNAPSHOT</version.argeo-suite>
+		<version.argeo-suite>0.1.9</version.argeo-suite>
 		<developmentCycle.argeo-suite>0.1</developmentCycle.argeo-suite>
-		<version.argeo-connect>2.1.73-SNAPSHOT</version.argeo-connect>
+		<version.argeo-connect>2.1.73</version.argeo-connect>
 		<version.argeo-tp-extras>2.1.9</version.argeo-tp-extras>
 		<git.rw />
 	</properties>
