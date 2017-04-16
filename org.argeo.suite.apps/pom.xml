@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.argeo.suite</groupId>
 		<artifactId>argeo-suite</artifactId>
-		<version>0.1.10-SNAPSHOT</version>
+		<version>0.1.10</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>org.argeo.suite.apps</artifactId>
@@ -14,12 +14,12 @@
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.suite.workbench.rap</artifactId>
-			<version>0.1.10-SNAPSHOT</version>
+			<version>0.1.10</version>
 		</dependency>
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.suite.web</artifactId>
-			<version>0.1.10-SNAPSHOT</version>
+			<version>0.1.10</version>
 		</dependency>
 	</dependencies>
 </project>
