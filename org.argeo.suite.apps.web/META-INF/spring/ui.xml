@@ -6,17 +6,23 @@
 	 http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.5.xsd">
 
 	<!-- Main entry point for the CMS -->
-	<bean id="about" parent="app" init-method="init" destroy-method="destroy"
-		depends-on="systemMaintenanceService">
+	<bean name="app" class="org.argeo.cms.util.SimpleApp" init-method="init"
+		destroy-method="destroy">
+		<property name="headerHeight" value="40" />
+		<property name="repository" ref="repository" />
+		<property name="bundleContext" ref="bundleContext" />
+		<property name="jcrBasePath" value="/public" />
 		<property name="workspace" value="main" />
 		<property name="header" ref="headerManager" />
 		<property name="pages">
 			<map>
 				<entry key="">
 					<bean class="org.argeo.suite.web.DefaultMainPage">
-						<property name="peopleService" ref="peopleService" />
 						<property name="peopleIconPaths" ref="peopleEntityIcons" />
 						<property name="nodeFileSystemProvider" ref="nodeFileSystemProvider" />
+						<property name="resourcesService" ref="resourcesService" />
+						<property name="peopleService" ref="peopleService" />
+						<property name="suiteMaintenanceService" ref="systemMaintenanceService" />
 					</bean>
 				</entry>
 				<entry key="people" value-ref="people.mainPage" />
@@ -84,4 +90,5 @@
 			</map>
 		</property>
 	</bean>
+
 </beans>

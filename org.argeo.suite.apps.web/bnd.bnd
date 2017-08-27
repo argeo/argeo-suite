@@ -10,6 +10,7 @@ org.argeo.connect,\
 org.argeo.activities,\
 org.argeo.connect.resources,\
 org.argeo.connect.ui,\
+org.argeo.cms.spring,\
 org.argeo.eclipse.spring,\
 org.argeo.node,\
 org.argeo.util,\

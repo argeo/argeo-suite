@@ -9,7 +9,6 @@
 	<bean id="people.mainPage" class="org.argeo.people.web.pages.PeopleDynamicPages">
 		<property name="dynamicPages" ref="people.dynamicPages" />
 		<property name="resourcesService" ref="resourcesService" />
-		<property name="activitiesService" ref="activitiesService" />
 		<property name="peopleService" ref="peopleService" />
 		<property name="iconPathes" ref="peopleEntityIcons" />
 	</bean>
@@ -17,7 +16,7 @@
 	<bean id="people.header" class="org.argeo.cms.util.SimpleCmsHeader">
 		<property name="lead">
 			<list>
-				<bean p:image="theme/argeo-classic/img/byArgeo.png" p:target="/people#"
+				<bean p:image="theme/argeo-classic/img/logo-argeo.png" p:target="/people#"
 					p:custom="cms_header-logo" parent="menuLink" />
 				<bean p:label="All" p:target="people!/search/all" parent="menuLink" />
 				<bean p:label="Persons" p:target="people!/search/persons"

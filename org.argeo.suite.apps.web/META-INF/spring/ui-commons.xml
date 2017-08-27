@@ -16,12 +16,12 @@
 		<property name="bundleContext" ref="bundleContext" />
 	</bean>
 
-	<bean name="app" class="org.argeo.cms.util.SimpleApp" abstract="true">
-		<property name="headerHeight" value="40" />
-		<property name="repository" ref="repository" />
-		<property name="bundleContext" ref="bundleContext" />
-		<property name="jcrBasePath" value="/public" /> 
-	</bean>
+<!-- 	<bean name="app" class="org.argeo.cms.util.SimpleApp" abstract="true"> -->
+<!-- 		<property name="headerHeight" value="40" /> -->
+<!-- 		<property name="repository" ref="repository" /> -->
+<!-- 		<property name="bundleContext" ref="bundleContext" /> -->
+<!-- 		<property name="jcrBasePath" value="/public" />  -->
+<!-- 	</bean> -->
 
 	<bean id="header" class="org.argeo.cms.util.SimpleCmsHeader"
 		abstract="true">
@@ -39,7 +39,7 @@
 			<list>
 				<bean p:label="Dashboard" p:target="/#" parent="menuLink" />
 				<bean p:label="Contacts" p:target="/#/people" parent="menuLink" />
-				<bean p:label="Files" p:target="/#/sharedFiles" parent="menuLink" />
+				<bean p:label="Files" p:target="/#/public" parent="menuLink" />
 			</list>
 		</property>
 		<property name="end" ref="headerEnd" />

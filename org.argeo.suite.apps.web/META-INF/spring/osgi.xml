@@ -10,7 +10,8 @@
 	<reference id="repository" interface="javax.jcr.Repository"
 		filter="(cn=home)" />
 	<reference id="userAdminService" interface="org.argeo.connect.UserAdminService" />
-
+	<reference id="nodeFileSystemProvider" interface="java.nio.file.spi.FileSystemProvider"
+		filter="(service.pid=org.argeo.node.fsProvider)" />
 	<!-- Maintenance service -->
 	<reference id="systemMaintenanceService" interface="org.argeo.connect.SystemMaintenanceService" />
 	<!-- Generic DJ-ing app -->
@@ -21,4 +22,8 @@
 	<reference id="peopleService" interface="org.argeo.people.PeopleService" />
 	<reference id="trackerService" interface="org.argeo.tracker.TrackerService" />
 	<reference id="documentsService" interface="org.argeo.documents.DocumentsService" />
+
+	<!-- Execute initialisation with a system authentication -->
+	<beans:bean
+		class="org.argeo.cms.spring.AuthenticatedApplicationContextInitialization" />
 </beans:beans>
