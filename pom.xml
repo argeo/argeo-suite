@@ -13,7 +13,6 @@
 	<description />
 	<version>0.1.12-SNAPSHOT</version>
 	<modules>
-		<module>org.argeo.suite.core</module>
 		<module>org.argeo.suite.web</module>
 		<module>org.argeo.suite.workbench.rap</module>
 		<module>org.argeo.suite.apps</module>

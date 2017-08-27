@@ -41,7 +41,7 @@ import org.argeo.people.PeopleService;
 import org.argeo.people.PeopleTypes;
 import org.argeo.people.util.PeopleJcrUtils;
 import org.argeo.people.util.PersonJcrUtils;
-import org.argeo.suite.SuiteException;
+import org.argeo.suite.workbench.SuiteWorkbenchException;
 import org.argeo.suite.workbench.AsUiPlugin;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -130,7 +130,7 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 				userInputPage = new UserInputPage("User input page");
 				addPage(userInputPage);
 			} catch (Exception e) {
-				throw new SuiteException("Cannot add page to wizard", e);
+				throw new SuiteWorkbenchException("Cannot add page to wizard", e);
 			}
 		}
 
@@ -147,7 +147,7 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 				else if (PeopleTypes.PEOPLE_PERSON.equals(type))
 					importDefaultPersonFile(in);
 			} catch (IOException e) {
-				throw new SuiteException("Cannot import mapping file", e);
+				throw new SuiteWorkbenchException("Cannot import mapping file", e);
 			} finally {
 				IOUtils.closeQuietly(in);
 			}
@@ -400,7 +400,7 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 			resourcesService.refreshKnownTags(mlParent);
 
 		} catch (PeopleException | RepositoryException e) {
-			throw new SuiteException("Cannot import mapping file, error at line: " + (i + 1), e);
+			throw new SuiteWorkbenchException("Cannot import mapping file, error at line: " + (i + 1), e);
 		} finally {
 			JcrUtils.logoutQuietly(session);
 		}
@@ -570,7 +570,7 @@ public class ImportEntities extends AbstractHandler implements PeopleNames {
 			String message = "Cannot import mapping file, error at line: " + (i + 1);
 			// TODO Check why the error is swallowed.
 			log.error(message, e);
-			throw new SuiteException(message, e);
+			throw new SuiteWorkbenchException(message, e);
 		} finally {
 			JcrUtils.logoutQuietly(session);
 		}

@@ -26,7 +26,7 @@ import org.argeo.connect.workbench.util.JcrViewerDClickListener;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.people.PeopleService;
-import org.argeo.suite.SuiteException;
+import org.argeo.suite.workbench.SuiteWorkbenchException;
 import org.argeo.suite.workbench.AsUiPlugin;
 import org.argeo.suite.workbench.internal.EntitySingleColumnLabelProvider;
 import org.eclipse.jface.layout.TableColumnLayout;
@@ -202,7 +202,7 @@ public class QuickSearchView extends ViewPart implements Refreshable {
 						+ " ms by executing XPath query (" + xpathQueryStr + ").");
 			}
 		} catch (RepositoryException e) {
-			throw new SuiteException("Unable to list entities", e);
+			throw new SuiteWorkbenchException("Unable to list entities", e);
 		}
 	}
 

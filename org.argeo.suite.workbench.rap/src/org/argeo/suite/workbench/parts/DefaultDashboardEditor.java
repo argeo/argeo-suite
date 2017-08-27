@@ -26,7 +26,7 @@ import org.argeo.connect.workbench.commands.OpenEntityEditor;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.node.NodeUtils;
-import org.argeo.suite.SuiteException;
+import org.argeo.suite.workbench.SuiteWorkbenchException;
 import org.argeo.suite.workbench.AsUiPlugin;
 import org.argeo.tracker.TrackerNames;
 import org.argeo.tracker.TrackerService;
@@ -168,7 +168,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 			Calendar now = GregorianCalendar.getInstance();
 			return node.hasProperty(propName) && node.getProperty(propName).getDate().before(now);
 		} catch (RepositoryException e) {
-			throw new SuiteException("Cannot check overdue status with property " + propName + " on " + node, e);
+			throw new SuiteWorkbenchException("Cannot check overdue status with property " + propName + " on " + node, e);
 		}
 	}
 

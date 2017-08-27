@@ -12,11 +12,6 @@
 	<packaging>jar</packaging>
 	<dependencies>
 		<dependency>
-			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.suite.core</artifactId>
-			<version>0.1.12-SNAPSHOT</version>
-		</dependency>
-		<dependency>
 			<groupId>org.argeo.connect</groupId>
 			<artifactId>org.argeo.people.web</artifactId>
 			<version>${version.argeo-connect}</version>

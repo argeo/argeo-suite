@@ -37,7 +37,7 @@
 		<ref bean="resourcesService" />
 	</util:list>
 
-	<bean id="suiteAppService" class="org.argeo.suite.core.DefaultSuiteAppService">
+	<bean id="suiteAppService" class="org.argeo.connect.core.DefaultSystemAppService">
 		<property name="knownAppServices" ref="knownAppServices" />
 	</bean>
 </beans>
