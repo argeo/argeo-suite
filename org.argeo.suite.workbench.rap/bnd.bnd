@@ -24,4 +24,5 @@ org.argeo.eclipse.spring,\
 org.argeo.people.workbench.rap.parts,\
 org.argeo.node,\
 org.argeo.util,\
+jxl.*;resolution:=optional,\
 *

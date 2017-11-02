@@ -11,16 +11,17 @@
 	<name>Argeo Suite Minimal SDK</name>
 	<packaging>jar</packaging>
 	<dependencies>
-		<!-- Default Assembly for supported minimal set of Argeo Suite Features -->
-		
-		<!--  Rap Workbench -->
+		<!-- Default Assembly for supported minimal set of Argeo Suite Features -->		
+		<dependency>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.suite.apps</artifactId>
+			<version>0.1.12-SNAPSHOT</version>
+		</dependency>
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.suite.workbench.rap</artifactId>
 			<version>0.1.12-SNAPSHOT</version>
 		</dependency>
-		
-		<!-- Web UI -->
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.suite.web</artifactId>
@@ -29,9 +30,9 @@
 
 		<!-- Base CMS distribution -->
 		<dependency>
-			<groupId>org.argeo.commons</groupId>
-			<artifactId>org.argeo.dep.cms.platform</artifactId>
-			<version>${version.argeo-commons}</version>
+			<groupId>org.argeo.connect</groupId>
+			<artifactId>org.argeo.connect.platform</artifactId>
+			<version>${version.argeo-connect}</version>
 		</dependency>
 		<!-- We put all third parties in the target platform -->
 		<dependency>
@@ -40,4 +41,70 @@
 			<version>${version.argeo-distribution}</version>
 		</dependency>
 	</dependencies>
+		<profiles>
+		<profile>
+			<id>rpmbuild</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-argeo</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<includeTypes>jar</includeTypes>
+									<outputDirectory>${project.build.directory}/lib-argeo</outputDirectory>
+									<includeGroupIds>org.argeo.suite</includeGroupIds>
+									<includeTypes>jar</includeTypes>
+									<includeScope>runtime</includeScope>
+									<useRepositoryLayout>true</useRepositoryLayout>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>rpm-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>rpm-argeo</id>
+								<phase>package</phase>
+								<goals>
+									<goal>rpm</goal>
+								</goals>
+								<configuration>
+									<name>argeo-suite</name>
+									<mappings>
+										<mapping>
+											<directory>/usr/share/osgi</directory>
+											<username>root</username>
+											<groupname>root</groupname>
+											<filemode>644</filemode>
+											<directoryIncluded>true</directoryIncluded>
+											<sources>
+												<source>
+													<location>${project.build.directory}/lib-argeo</location>
+													<includes>
+														<include>**/*.jar</include>
+													</includes>
+												</source>
+											</sources>
+										</mapping>
+									</mappings>
+									<requires>
+										<require>argeo-connect</require>
+									</requires>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
