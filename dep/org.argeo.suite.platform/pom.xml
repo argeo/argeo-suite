@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.argeo.suite</groupId>
-		<artifactId>sdk</artifactId>
+		<artifactId>dep</artifactId>
 		<version>0.1.12-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>org.argeo.suite.platform</artifactId>
-	<name>Argeo Suite Minimal SDK</name>
+	<name>Argeo Suite Platform</name>
 	<packaging>jar</packaging>
 	<dependencies>
 		<!-- Default Assembly for supported minimal set of Argeo Suite Features -->		
@@ -33,12 +33,6 @@
 			<groupId>org.argeo.connect</groupId>
 			<artifactId>org.argeo.connect.platform</artifactId>
 			<version>${version.argeo-connect}</version>
-		</dependency>
-		<!-- We put all third parties in the target platform -->
-		<dependency>
-			<groupId>org.argeo.tp</groupId>
-			<artifactId>argeo-tp</artifactId>
-			<version>${version.argeo-distribution}</version>
 		</dependency>
 	</dependencies>
 		<profiles>
