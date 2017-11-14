@@ -49,7 +49,7 @@
 		<dependency>
 			<groupId>org.argeo.tp.sdk</groupId>
 			<artifactId>org.junit</artifactId>
-			<scope>provided</scope>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<profiles>
