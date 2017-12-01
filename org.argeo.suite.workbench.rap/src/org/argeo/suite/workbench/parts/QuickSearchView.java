@@ -26,8 +26,8 @@ import org.argeo.connect.workbench.util.JcrViewerDClickListener;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.people.PeopleService;
-import org.argeo.suite.workbench.SuiteWorkbenchException;
 import org.argeo.suite.workbench.AsUiPlugin;
+import org.argeo.suite.workbench.SuiteWorkbenchException;
 import org.argeo.suite.workbench.internal.EntitySingleColumnLabelProvider;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -45,6 +45,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.part.ViewPart;
 
 /** A table with a quick search field. */
@@ -62,7 +63,7 @@ public class QuickSearchView extends ViewPart implements Refreshable {
 
 	// This page widgets
 	private TableViewer entityViewer;
-	private DelayedText filterTxt;
+	private Text filterTxt;
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -79,15 +80,16 @@ public class QuickSearchView extends ViewPart implements Refreshable {
 		// Use a delayed text: the query won't be done until the user stop
 		// typing for 800ms
 		int style = SWT.BORDER | SWT.SEARCH | SWT.ICON_CANCEL;
-		filterTxt = new DelayedText(parent, style, ConnectUiConstants.SEARCH_TEXT_DELAY);
+		DelayedText delayedText = new DelayedText(parent, style, ConnectUiConstants.SEARCH_TEXT_DELAY);
+		filterTxt = delayedText.getText();
 		filterTxt.setLayoutData(EclipseUiUtils.fillWidth());
 
 		final ServerPushSession pushSession = new ServerPushSession();
-		filterTxt.addDelayedModifyListener(pushSession, new ModifyListener() {
+		delayedText.addDelayedModifyListener(pushSession, new ModifyListener() {
 			private static final long serialVersionUID = 5003010530960334977L;
 
 			public void modifyText(ModifyEvent event) {
-				filterTxt.getDisplay().asyncExec(new Runnable() {
+				delayedText.getText().getDisplay().asyncExec(new Runnable() {
 					@Override
 					public void run() {
 						refreshFilteredList();
