@@ -271,11 +271,11 @@ Button[PUSH][FLAT].createFolder_btn:pressed, Button[PUSH][FLAT].shareFolder_btn:
 /**  ACTIVITIES  **/
 
 Button[PUSH][FLAT].markAsDone_btn {
-	background-image: url( icons/activities/done.png);
+	background-image: url( icons/actions/done.png);
 }
 
 Button[PUSH][FLAT].cancel_btn {
-	background-image: url( icons/activities/cancel.gif);
+	background-image: url( icons/actions/cancel.gif);
 }
 
 Button[PUSH][FLAT].cancel_btn,
