@@ -19,7 +19,7 @@
 			class="org.argeo.eclipse.spring.SpringExtensionFactory"
 			id="org.argeo.suite.workbench.rap.quickSearchView"
 			name="Search"
-			restorable="true">
+			restorable="false">
 		</view>
 		
 	</extension>

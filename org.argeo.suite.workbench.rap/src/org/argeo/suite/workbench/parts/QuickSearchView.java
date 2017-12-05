@@ -71,11 +71,11 @@ public class QuickSearchView extends ViewPart implements Refreshable {
 	@Override
 	public void init(IViewSite site) throws PartInitException {
 		super.init(site);
-		setTitleImage(ConnectImages.SEARCH);
 	}
 
 	@Override
 	public void createPartControl(Composite parent) {
+		setTitleImage(ConnectImages.SEARCH);
 		session = ConnectJcrUtils.login(repository);
 		// MainLayout
 		parent.setLayout(new GridLayout());
