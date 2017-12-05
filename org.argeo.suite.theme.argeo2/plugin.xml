@@ -5,7 +5,7 @@
 		point="org.eclipse.rap.ui.themes">
 		<themeContribution
 			themeId="org.eclipse.rap.rwt.theme.Default"
-			file="workbench-ext.css" />
+			file="theme.css" />
  	</extension>
 	
     

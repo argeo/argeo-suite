@@ -93,6 +93,14 @@
                alias="/ui/office/js/leaflet.css"  
                base-name="js/leaflet.css">  
          </resource>
+          <resource  
+               alias="/ui/office/css/headerExt.css"  
+               base-name="css/headerExt.css">  
+         </resource>  
+         <resource  
+               alias="/ui/office/img/logo-argeo.png"  
+               base-name="img/logo-argeo.png">  
+         </resource>  
     </extension>  
     
 	<extension
@@ -105,18 +113,6 @@
 		</entrypoint>
 	</extension>
 
-	<extension  
-            point="org.eclipse.equinox.http.registry.resources">  
-         <resource  
-               alias="/ui/office/classic-headerExt.css"  
-               base-name="workbench-headerExt.css">  
-         </resource>  
-         <resource  
-               alias="/ui/office/img/logo-argeo.png"  
-               base-name="img/logo-argeo.png">  
-         </resource>  
-    </extension>  
-
 	<extension
 		point="org.eclipse.rap.ui.branding">
 		<branding
@@ -126,7 +122,7 @@
 			favicon="img/favicon.ico">
 			<additionalHeaders>
     			 <link 
-    			 	href="/ui/office/classic-headerExt.css"  
+    			 	href="/ui/office/css/headerExt.css"  
     			 	rel="stylesheet" />
 			</additionalHeaders>
 		</branding>
