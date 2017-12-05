@@ -7,7 +7,7 @@
 		<perspective
             class="org.argeo.suite.workbench.DashboardPerspective"
             id="org.argeo.suite.workbench.rap.dashboardPerspective"
-            icon="icons/favicon.ico"
+            icon="img/favicon.ico"
             name="Dashboard">
 		</perspective> 
 	</extension>
@@ -17,7 +17,6 @@
 		point="org.eclipse.ui.views">
 		<view
 			class="org.argeo.eclipse.spring.SpringExtensionFactory"
-			icon="icons/search.png"
 			id="org.argeo.suite.workbench.rap.quickSearchView"
 			name="Search"
 			restorable="true">
@@ -31,7 +30,6 @@
 		<editor
 			id="org.argeo.suite.workbench.rap.defaultDashboardEditor"
 			class="org.argeo.eclipse.spring.SpringExtensionFactory"
-			icon="icons/dashboard.gif"
 			name="Dashboard">
 		</editor>
 	</extension>
@@ -94,11 +92,11 @@
                base-name="js/leaflet.css">  
          </resource>
           <resource  
-               alias="/ui/office/css/headerExt.css"  
+               alias="/css/headerExt.css"  
                base-name="css/headerExt.css">  
          </resource>  
          <resource  
-               alias="/ui/office/img/logo-argeo.png"  
+               alias="/img/logo-argeo.png"  
                base-name="img/logo-argeo.png">  
          </resource>  
     </extension>  
@@ -121,9 +119,7 @@
 			title="Argeo Suite"
 			favicon="img/favicon.ico">
 			<additionalHeaders>
-    			 <link 
-    			 	href="/ui/office/css/headerExt.css"  
-    			 	rel="stylesheet" />
+    			 <link href="/css/headerExt.css" rel="stylesheet" />
 			</additionalHeaders>
 		</branding>
 	</extension> 

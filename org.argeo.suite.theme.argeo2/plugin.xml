@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-	<extension
-		point="org.eclipse.rap.ui.themes">
-		<themeContribution
-			themeId="org.eclipse.rap.rwt.theme.Default"
-			file="theme.css" />
+	<extension point="org.eclipse.rap.ui.themes">
+		<themeContribution themeId="org.eclipse.rap.rwt.theme.Default" file="theme.css" />
+		<!--<theme id="org.argeo.suite.theme.argeo2.Default" name="Argeo 2" file="theme.css"/>-->
  	</extension>
 	
-    
-
 </plugin>

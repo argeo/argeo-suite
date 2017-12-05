@@ -15,6 +15,7 @@ import org.argeo.activities.ActivitiesService;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.ConnectTypes;
 import org.argeo.connect.resources.ResourcesService;
+import org.argeo.connect.ui.ConnectImages;
 import org.argeo.connect.ui.ConnectUiConstants;
 import org.argeo.connect.ui.util.BasicNodeListContentProvider;
 import org.argeo.connect.ui.widgets.DelayedText;
@@ -46,6 +47,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
 /** A table with a quick search field. */
@@ -64,6 +67,12 @@ public class QuickSearchView extends ViewPart implements Refreshable {
 	// This page widgets
 	private TableViewer entityViewer;
 	private Text filterTxt;
+
+	@Override
+	public void init(IViewSite site) throws PartInitException {
+		super.init(site);
+		setTitleImage(ConnectImages.SEARCH);
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {

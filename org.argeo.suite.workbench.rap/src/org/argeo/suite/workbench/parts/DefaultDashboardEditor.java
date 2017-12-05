@@ -19,6 +19,7 @@ import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.ui.workbench.util.CommandUtils;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.ConnectNames;
+import org.argeo.connect.ui.ConnectImages;
 import org.argeo.connect.ui.ConnectUiUtils;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.connect.workbench.Refreshable;
@@ -52,6 +53,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
+import org.eclipse.ui.PartInitException;
 
 /** Argeo Suite Default Dashboard */
 public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Refreshable {
@@ -66,6 +70,12 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 	private Composite headerCmp;
 	private Composite taskListCmp;
 	private TaskVirtualListComposite tvlc;
+
+	@Override
+	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
+		super.init(site, input);
+		setTitleImage(ConnectImages.DASHBOARD);
+	}
 
 	@Override
 	public void createPartControl(Composite parent) {
