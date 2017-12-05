@@ -12,7 +12,7 @@
 			brandingId="org.argeo.suite.workbench.rap.defaultBranding">
 		</entrypoint>
 	</extension>
-	-->
+ -->	
 	<!-- PERSPECTIVES -->
    	<extension
          point="org.eclipse.ui.perspectives">
@@ -40,7 +40,7 @@
 	</extension>
 	
 	<!-- BRANDING AND THEMES -->
-	<!--
+	<!-- 
 	<extension
 		point="org.eclipse.rap.ui.branding">
 		<branding
@@ -74,5 +74,5 @@
 			themeId="org.eclipse.rap.rwt.theme.Default"
 			file="theme/argeo-classic/workbench-ext.css" />
 	</extension>
-	-->
+	 -->
 </plugin>

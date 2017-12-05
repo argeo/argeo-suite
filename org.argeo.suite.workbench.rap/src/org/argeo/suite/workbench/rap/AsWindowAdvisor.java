@@ -32,6 +32,10 @@ public class AsWindowAdvisor extends RapWindowAdvisor {
 	@Override
 	public void postWindowOpen() {
 		super.postWindowOpen();
-		CommandUtils.callCommand(OpenDefaultEditor.ID);
+		try {
+			CommandUtils.callCommand(OpenDefaultEditor.ID);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

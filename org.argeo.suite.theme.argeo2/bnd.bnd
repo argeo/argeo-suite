@@ -1,0 +1,2 @@
+Bundle-SymbolicName: org.argeo.suite.theme.argeo2;singleton:=true
+Fragment-Host: org.argeo.connect.ui
