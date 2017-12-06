@@ -27,6 +27,19 @@ Label {
 	color: #555555;
 }
 
+/** In order to fix the default color */
+Shell-Titlebar {
+  font: 12px Verdana, "Lucida Sans", Arial, Helvetica, sans-serif;
+  background-color: #204a87;
+  padding: 0 10px 0 10px;
+  margin: 0px;
+  height: 38px;
+  border: none;
+  border-radius: 0;
+  text-shadow: none;
+}
+
+/* WIDGETS */
 Text, Combo-Field, DateTime-Field {
 	padding: 2px 8px 2px 8px;
 }
