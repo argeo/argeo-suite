@@ -19,7 +19,6 @@ import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.ui.workbench.util.CommandUtils;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.ConnectNames;
-import org.argeo.connect.ui.ConnectImages;
 import org.argeo.connect.ui.ConnectUiUtils;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.connect.workbench.Refreshable;
@@ -27,8 +26,8 @@ import org.argeo.connect.workbench.commands.OpenEntityEditor;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.node.NodeUtils;
-import org.argeo.suite.workbench.SuiteWorkbenchException;
 import org.argeo.suite.workbench.AsUiPlugin;
+import org.argeo.suite.workbench.SuiteWorkbenchException;
 import org.argeo.tracker.TrackerNames;
 import org.argeo.tracker.TrackerService;
 import org.argeo.tracker.TrackerTypes;
@@ -74,7 +73,6 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 	@Override
 	public void init(IEditorSite site, IEditorInput input) throws PartInitException {
 		super.init(site, input);
-		setTitleImage(ConnectImages.DASHBOARD);
 	}
 
 	@Override
@@ -142,8 +140,6 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 			viewer.setInput(JcrUtils.nodeIteratorToList(nit).toArray());
 			final TaskViewerContextMenu contextMenu = new TaskViewerContextMenu(viewer, getSession(),
 					activitiesService) {
-				private static final long serialVersionUID = 1640863021424194303L;
-
 				@Override
 				public boolean performAction(String actionId) {
 					boolean hasChanged = super.performAction(actionId);
