@@ -27,6 +27,8 @@ public class AsWindowAdvisor extends RapWindowAdvisor {
 		super.preWindowOpen();
 		IWorkbenchWindowConfigurer configurer = getWindowConfigurer();
 		configurer.setShowStatusLine(true);
+		configurer.setShowPerspectiveBar(false);
+		configurer.setShowMenuBar(false);
 	}
 
 	@Override
