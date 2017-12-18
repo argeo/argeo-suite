@@ -1,7 +1,9 @@
 package org.argeo.suite.workbench.internal;
 
 import javax.jcr.Node;
+import javax.jcr.Property;
 import javax.jcr.RepositoryException;
+import javax.jcr.nodetype.NodeType;
 
 import org.argeo.activities.ActivitiesService;
 import org.argeo.activities.ActivitiesTypes;
@@ -68,6 +70,8 @@ public class EntitySingleColumnLabelProvider extends LabelProvider implements Pe
 				result = mlInstanceLp.getText(element);
 			else if (entity.isNodeType(PeopleTypes.PEOPLE_GROUP))
 				result = groupLp.getText(element);
+			else if (entity.isNodeType(NodeType.MIX_TITLE) && entity.hasProperty(Property.JCR_TITLE))
+				result = entity.getProperty(Property.JCR_TITLE).getString();
 			else
 				result = "";
 			return ConnectUiUtils.replaceAmpersand(result);
