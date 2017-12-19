@@ -18,7 +18,7 @@
 		<view
 			class="org.argeo.eclipse.spring.SpringExtensionFactory"
 			id="org.argeo.suite.workbench.rap.quickSearchView"
-			name="Search"
+			name="%search"
       		icon="platform:/plugin/org.argeo.connect.ui/icons/actions/search.png"
 			restorable="false">
 		</view>
