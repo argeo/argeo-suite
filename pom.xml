@@ -109,7 +109,7 @@ which are used as well as that of the covered work.]]>
 		<dependency>
 			<groupId>org.argeo.tp</groupId>
 			<artifactId>argeo-tp-rap-e3</artifactId>
-			<version>${version.argeo-distribution}</version>
+			<version>${version.argeo-tp}</version>
 			<type>pom</type>
 			<scope>provided</scope>
 		</dependency>
