@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.argeo.suite</groupId>
@@ -11,7 +12,7 @@
 	<name>Argeo Suite Platform</name>
 	<packaging>jar</packaging>
 	<dependencies>
-		<!-- Default Assembly for supported minimal set of Argeo Suite Features -->		
+		<!-- Default Assembly for supported minimal set of Argeo Suite Features -->
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.suite.apps</artifactId>
@@ -23,9 +24,9 @@
 			<version>0.1.13-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.suite.theme.argeo2</artifactId>
-			<version>0.1.13-SNAPSHOT</version>
+			<groupId>org.argeo.connect</groupId>
+			<artifactId>org.argeo.theme.argeo2</artifactId>
+			<version>2.1.79-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
@@ -40,7 +41,7 @@
 			<version>${version.argeo-connect}</version>
 		</dependency>
 	</dependencies>
-		<profiles>
+	<profiles>
 		<profile>
 			<id>rpmbuild</id>
 			<build>
