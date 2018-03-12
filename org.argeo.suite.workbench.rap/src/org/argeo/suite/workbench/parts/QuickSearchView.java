@@ -6,6 +6,9 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.observation.Event;
+import javax.jcr.observation.EventIterator;
+import javax.jcr.observation.EventListener;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
 
@@ -81,6 +84,20 @@ public class QuickSearchView extends ViewPart implements Refreshable {
 		entityViewer = createListPart(parent, new EntitySingleColumnLabelProvider(resourcesService, activitiesService,
 				peopleService, systemWorkbenchService));
 		refreshFilteredList();
+
+		try {
+			session.getWorkspace().getObservationManager().addEventListener(new EventListener() {
+
+				@Override
+				public void onEvent(EventIterator events) {
+					parent.getDisplay().asyncExec(() -> refreshFilteredList());
+				}
+			}, Event.PROPERTY_CHANGED | Event.NODE_ADDED | Event.NODE_REMOVED | Event.PROPERTY_ADDED, "/", true, null,
+					new String[] { ConnectTypes.CONNECT_ENTITY }, true);
+		} catch (RepositoryException e) {
+			throw new SuiteWorkbenchException("Cannot add JCR observer", e);
+		}
+
 	}
 
 	public void addFilterPanel(Composite parent) {
@@ -223,11 +240,11 @@ public class QuickSearchView extends ViewPart implements Refreshable {
 	public void setResourcesService(ResourcesService resourcesService) {
 		this.resourcesService = resourcesService;
 	}
-	
+
 	public void setActivitiesService(ActivitiesService activitiesService) {
 		this.activitiesService = activitiesService;
 	}
-	
+
 	public void setPeopleService(PeopleService peopleService) {
 		this.peopleService = peopleService;
 	}
