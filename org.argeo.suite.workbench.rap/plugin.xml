@@ -82,15 +82,15 @@
             point="org.eclipse.equinox.http.registry.resources">  
          <!-- javascript libraries -->
          <resource  
-               alias="/ui/office/js/Chart.min.js"  
+               alias="/ui/suite/js/Chart.min.js"  
                base-name="js/Chart.min.js">  
          </resource>  
          <resource  
-               alias="/ui/office/js/leaflet.js"  
+               alias="/ui/suite/js/leaflet.js"  
                base-name="js/leaflet.js">  
          </resource>  
          <resource  
-               alias="/ui/office/js/leaflet.css"  
+               alias="/ui/suite/js/leaflet.css"  
                base-name="js/leaflet.css">  
          </resource>
           <resource  
