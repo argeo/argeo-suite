@@ -19,7 +19,7 @@
 			class="org.argeo.eclipse.spring.SpringExtensionFactory"
 			id="org.argeo.suite.workbench.rap.quickSearchView"
 			name="%search"
-      		icon="platform:/plugin/org.argeo.connect.ui/icons/actions/search.png"
+      		icon="platform:/plugin/org.argeo.connect.ui.workbench/icons/actions/search.png"
 			restorable="false">
 		</view>
 		
@@ -31,7 +31,7 @@
 		<editor
 			id="org.argeo.suite.workbench.rap.defaultDashboardEditor"
 			class="org.argeo.eclipse.spring.SpringExtensionFactory"
-      		icon="platform:/plugin/org.argeo.connect.ui/icons/types/dashboard.png"
+      		icon="platform:/plugin/org.argeo.connect.ui.workbench//icons/types/dashboard.png"
 			name="Dashboard">
 		</editor>
 	</extension>
