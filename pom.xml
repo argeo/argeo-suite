@@ -15,7 +15,7 @@
 	<modules>
 		<module>org.argeo.suite.web</module>
 		<module>org.argeo.suite.workbench.rap</module>
-<!-- 		<module>org.argeo.suite.theme.argeo2</module> -->
+		<!-- <module>org.argeo.suite.theme.argeo2</module> -->
 		<module>org.argeo.suite.apps</module>
 		<module>org.argeo.suite.apps.web</module>
 		<module>dep</module>
@@ -80,18 +80,6 @@ which are used as well as that of the covered work.]]>
 				<role>QA</role>
 			</roles>
 		</developer>
-		<developer>
-			<id>bsinou</id>
-			<name>Bruno Sinou</name>
-			<email><![CDATA[http://www.google.com/recaptcha/mailhide/d?k=01SZoYvDnJzcw0KOR7M7u6Qg==&c=SVgEjXA_Uu9ZrNzLES92w1ght6puLFiVpoNUddCfSU8=]]></email>
-			<organization>Argeo</organization>
-			<organizationUrl>http://www.argeo.org</organizationUrl>
-			<roles>
-				<role>architect</role>
-				<role>developer</role>
-				<role>QA</role>
-			</roles>
-		</developer>
 	</developers>
 	<build>
 		<plugins>
@@ -104,6 +92,17 @@ which are used as well as that of the covered work.]]>
 			</plugin>
 		</plugins>
 	</build>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.argeo.tp.extras</groupId>
+				<artifactId>argeo-tp-extras</artifactId>
+				<version>${version.argeo-tp-extras}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<!-- RAP workbench -->
 		<dependency>

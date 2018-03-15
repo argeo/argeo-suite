@@ -1,7 +1,7 @@
 package org.argeo.suite.workbench.commands;
 
-import static org.argeo.connect.util.JxlUtils.getStringValue;
 import static org.argeo.eclipse.ui.EclipseUiUtils.notEmpty;
+import static org.argeo.suite.workbench.commands.JxlUtils.getStringValue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -31,7 +31,6 @@ import org.argeo.connect.ConnectNames;
 import org.argeo.connect.resources.ResourcesNames;
 import org.argeo.connect.resources.ResourcesService;
 import org.argeo.connect.util.ConnectJcrUtils;
-import org.argeo.connect.util.JxlUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.people.ContactValueCatalogs;

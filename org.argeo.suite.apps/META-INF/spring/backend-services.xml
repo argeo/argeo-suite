@@ -26,7 +26,7 @@
 		<property name="activitiesService" ref="activitiesService" />
 	</bean>
 
-	<bean id="documentsService" class="org.argeo.documents.DocumentsService" />
+	<bean id="documentsService" class="org.argeo.documents.core.DocumentsServiceImpl" />
 
 	<!-- order is important -->
 	<util:list id="knownAppServices">
