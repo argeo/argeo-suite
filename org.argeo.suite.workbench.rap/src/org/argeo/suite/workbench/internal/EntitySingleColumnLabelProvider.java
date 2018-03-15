@@ -10,8 +10,8 @@ import org.argeo.activities.ActivitiesTypes;
 import org.argeo.activities.ui.ActivityListLabelProvider;
 import org.argeo.connect.resources.ResourcesService;
 import org.argeo.connect.ui.ConnectUiConstants;
-import org.argeo.connect.ui.ConnectUiUtils;
 import org.argeo.connect.ui.util.TagLabelProvider;
+import org.argeo.connect.util.ConnectUtils;
 import org.argeo.connect.workbench.SystemWorkbenchService;
 import org.argeo.people.PeopleException;
 import org.argeo.people.PeopleNames;
@@ -74,7 +74,7 @@ public class EntitySingleColumnLabelProvider extends LabelProvider implements Pe
 				result = entity.getProperty(Property.JCR_TITLE).getString();
 			else
 				result = "";
-			return ConnectUiUtils.replaceAmpersand(result);
+			return ConnectUtils.replaceAmpersand(result);
 		} catch (RepositoryException re) {
 			throw new PeopleException("Unable to get formatted value for node", re);
 		}
