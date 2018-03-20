@@ -11,11 +11,11 @@ import org.argeo.cms.ui.workbench.util.CommandUtils;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.SystemAppService;
 import org.argeo.connect.resources.ResourcesService;
+import org.argeo.connect.ui.AppWorkbenchService;
+import org.argeo.connect.ui.ConnectEditor;
 import org.argeo.connect.ui.ConnectUiStyles;
+import org.argeo.connect.ui.SystemWorkbenchService;
 import org.argeo.connect.util.ConnectJcrUtils;
-import org.argeo.connect.workbench.AppWorkbenchService;
-import org.argeo.connect.workbench.SystemWorkbenchService;
-import org.argeo.connect.workbench.commands.OpenEntityEditor;
 import org.argeo.connect.workbench.util.EntityEditorInput;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
@@ -116,7 +116,7 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 			@Override
 			public void widgetSelected(final SelectionEvent event) {
 				Map<String, String> params = new HashMap<String, String>();
-				params.put(OpenEntityEditor.PARAM_JCR_ID, ConnectJcrUtils.getIdentifier(entity));
+				params.put(ConnectEditor.PARAM_JCR_ID, ConnectJcrUtils.getIdentifier(entity));
 				CommandUtils.callCommand(peopleUiService.getOpenEntityEditorCmdId(), params);
 			}
 		});

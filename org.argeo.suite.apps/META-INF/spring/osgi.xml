@@ -31,6 +31,6 @@
 
 	<!-- Assembly of the various apps workbench services -->
 	<service ref="suiteWorkbenchService"
-		interface="org.argeo.connect.workbench.SystemWorkbenchService" />
+		interface="org.argeo.connect.ui.SystemWorkbenchService" />
 
 </beans:beans>

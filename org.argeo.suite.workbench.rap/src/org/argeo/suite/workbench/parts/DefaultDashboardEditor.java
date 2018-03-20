@@ -19,10 +19,10 @@ import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.ui.workbench.util.CommandUtils;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.ConnectNames;
+import org.argeo.connect.ui.ConnectEditor;
+import org.argeo.connect.ui.Refreshable;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.connect.workbench.ConnectWorkbenchUtils;
-import org.argeo.connect.workbench.Refreshable;
-import org.argeo.connect.workbench.commands.OpenEntityEditor;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.node.NodeUtils;
@@ -398,7 +398,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 				@Override
 				public void widgetSelected(final SelectionEvent event) {
 					CommandUtils.callCommand(getSystemWorkbenchService().getOpenEntityEditorCmdId(),
-							OpenEntityEditor.PARAM_JCR_ID, ConnectJcrUtils.getIdentifier(node));
+							ConnectEditor.PARAM_JCR_ID, ConnectJcrUtils.getIdentifier(node));
 				}
 			});
 		}

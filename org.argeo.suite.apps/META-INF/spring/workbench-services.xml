@@ -35,7 +35,7 @@
 	</util:list>
 
 	<bean id="suiteWorkbenchService"
-		class="org.argeo.connect.workbench.DefaultSystemWorkbenchService">
+		class="org.argeo.connect.ui.DefaultSystemWorkbenchService">
 		<property name="knownAppWbServices" ref="knownWbServices" />
 		<property name="defaultEditorId"
 			value="org.argeo.suite.workbench.rap.defaultDashboardEditor" />
