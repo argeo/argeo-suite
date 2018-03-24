@@ -14,15 +14,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.activities.ActivitiesNames;
 import org.argeo.activities.ActivitiesService;
-import org.argeo.activities.workbench.parts.TaskViewerContextMenu;
+import org.argeo.activities.ui.TaskViewerContextMenu;
 import org.argeo.cms.auth.CurrentUser;
-import org.argeo.cms.ui.workbench.util.CommandUtils;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.ConnectNames;
-import org.argeo.connect.ui.ConnectEditor;
+import org.argeo.connect.ui.ConnectWorkbenchUtils;
 import org.argeo.connect.ui.Refreshable;
 import org.argeo.connect.util.ConnectJcrUtils;
-import org.argeo.connect.workbench.ConnectWorkbenchUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.node.NodeUtils;
@@ -125,8 +123,8 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 					String mainMixin = TrackerTypes.TRACKER_TASK;
-					String pathCreated = ConnectWorkbenchUtils.createAndConfigureEntity(createTaskLk.getShell(), getSession(),
-							getSystemAppService(), getSystemWorkbenchService(), mainMixin);
+					String pathCreated = ConnectWorkbenchUtils.createAndConfigureEntity(createTaskLk.getShell(),
+							getSession(), getSystemAppService(), getSystemWorkbenchService(), mainMixin);
 					if (EclipseUiUtils.notEmpty(pathCreated))
 						forceRefresh(null);
 				}
@@ -174,7 +172,8 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 			Calendar now = GregorianCalendar.getInstance();
 			return node.hasProperty(propName) && node.getProperty(propName).getDate().before(now);
 		} catch (RepositoryException e) {
-			throw new SuiteWorkbenchException("Cannot check overdue status with property " + propName + " on " + node, e);
+			throw new SuiteWorkbenchException("Cannot check overdue status with property " + propName + " on " + node,
+					e);
 		}
 	}
 
@@ -397,8 +396,9 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 
 				@Override
 				public void widgetSelected(final SelectionEvent event) {
-					CommandUtils.callCommand(getSystemWorkbenchService().getOpenEntityEditorCmdId(),
-							ConnectEditor.PARAM_JCR_ID, ConnectJcrUtils.getIdentifier(node));
+					// CommandUtils.callCommand(getSystemWorkbenchService().getOpenEntityEditorCmdId(),
+					// ConnectEditor.PARAM_JCR_ID, ConnectJcrUtils.getIdentifier(node));
+					getSystemWorkbenchService().openEntityEditor(node);
 				}
 			});
 		}

@@ -22,10 +22,10 @@ import org.argeo.connect.ui.ConnectUiConstants;
 import org.argeo.connect.ui.Refreshable;
 import org.argeo.connect.ui.SystemWorkbenchService;
 import org.argeo.connect.ui.util.BasicNodeListContentProvider;
+import org.argeo.connect.ui.util.JcrViewerDClickListener;
 import org.argeo.connect.ui.widgets.DelayedText;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.connect.util.XPathUtils;
-import org.argeo.connect.workbench.util.JcrViewerDClickListener;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.people.PeopleService;
@@ -171,7 +171,7 @@ public class QuickSearchView extends ViewPart implements Refreshable {
 		CmsUtils.setItemHeight(table, 26);
 
 		v.setContentProvider(new BasicNodeListContentProvider());
-		v.addDoubleClickListener(new JcrViewerDClickListener());
+		v.addDoubleClickListener(new JcrViewerDClickListener(systemWorkbenchService));
 		return v;
 	}
 

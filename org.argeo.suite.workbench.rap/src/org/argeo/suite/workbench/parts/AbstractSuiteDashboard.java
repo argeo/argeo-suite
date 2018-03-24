@@ -1,18 +1,13 @@
 package org.argeo.suite.workbench.parts;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.jcr.Node;
 import javax.jcr.Repository;
 import javax.jcr.Session;
 
-import org.argeo.cms.ui.workbench.util.CommandUtils;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.SystemAppService;
 import org.argeo.connect.resources.ResourcesService;
 import org.argeo.connect.ui.AppWorkbenchService;
-import org.argeo.connect.ui.ConnectEditor;
 import org.argeo.connect.ui.ConnectUiStyles;
 import org.argeo.connect.ui.SystemWorkbenchService;
 import org.argeo.connect.util.ConnectJcrUtils;
@@ -115,9 +110,11 @@ public abstract class AbstractSuiteDashboard extends EditorPart {
 
 			@Override
 			public void widgetSelected(final SelectionEvent event) {
-				Map<String, String> params = new HashMap<String, String>();
-				params.put(ConnectEditor.PARAM_JCR_ID, ConnectJcrUtils.getIdentifier(entity));
-				CommandUtils.callCommand(peopleUiService.getOpenEntityEditorCmdId(), params);
+				// Map<String, String> params = new HashMap<String, String>();
+				// params.put(ConnectEditor.PARAM_JCR_ID,
+				// ConnectJcrUtils.getIdentifier(entity));
+				// CommandUtils.callCommand(peopleUiService.getOpenEntityEditorCmdId(), params);
+				peopleUiService.openEntityEditor(entity);
 			}
 		});
 		return link;
