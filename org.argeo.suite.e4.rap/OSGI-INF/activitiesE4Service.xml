@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="Activities Service">
+   <implementation class="org.argeo.activities.e4.ActivitiesE4Service"/>
+   <service>
+      <provide interface="org.argeo.connect.ui.AppWorkbenchService"/>
+   </service>
+   <reference bind="setUserAdminService" cardinality="1..1" interface="org.argeo.connect.UserAdminService" name="UserAdminService" policy="static"/>
+   <reference bind="setActivitiesService" cardinality="1..1" interface="org.argeo.activities.ActivitiesService" name="ActivitiesService" policy="static"/>
+</scr:component>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" configuration-policy="optional" name="CMS Admin RAP">
+   <implementation class="org.argeo.suite.e4.rap.ArgeoOfficeRapE4App"/>
+   <service>
+      <provide interface="org.eclipse.rap.rwt.application.ApplicationConfiguration"/>
+      <property name="contextName" type="String" value="suite"/>
+   </service>
+</scr:component>

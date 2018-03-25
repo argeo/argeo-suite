@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ASCII"?>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_bQjNYDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.application">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_dKIlMDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.trimmedwindow.0">
+    <persistedState key="styleOverride" value="8"/>
+    <tags>shellMaximized</tags>
+    <children xsi:type="advanced:PerspectiveStack" xmi:id="_gm_toDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.perspectivestack.0">
+      <children xsi:type="advanced:Perspective" xmi:id="_hr-YsDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.perspective.dashboard" label="Dashboard">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_mAC18DAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partsashcontainer.0" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_orJxUDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.0" containerData="4000">
+            <children xsi:type="basic:Part" xmi:id="_qAM4sDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.part.search" containerData="" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.QuickSearchView" label="Search"/>
+          </children>
+          <children xsi:type="basic:PartStack" xmi:id="_vLza4DAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.1" containerData="6000">
+            <tags>entityEditorArea</tags>
+          </children>
+        </children>
+      </children>
+    </children>
+    <trimBars xmi:id="_24OSADArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.trimbar.0">
+      <children xsi:type="menu:ToolBar" xmi:id="_3e5QcDArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.toolbar.0">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_4Ssr8DArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handledtoolitem.createTask" label="New Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" command="_2Xkt8DApEei3AbO1ldMI0w">
+          <parameters xmi:id="_NYpK8DAsEei3AbO1ldMI0w" elementId="targetNodeType" name="targetNodeType" value="activities:task"/>
+        </children>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_p_MsIDBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handledtoolitem.createPerson" label="New Person" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/person.png" command="_2Xkt8DApEei3AbO1ldMI0w">
+          <parameters xmi:id="_6LHhIDBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.parameter.0" name="targetNodeType" value="people:person"/>
+        </children>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_cnaWMDBjEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handledtoolitem.neworg" label="New Org" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/organisation.png" command="_2Xkt8DApEei3AbO1ldMI0w">
+          <parameters xmi:id="_iEUDwDBjEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.parameter.1" name="targetNodeType" value="people:org"/>
+        </children>
+      </children>
+    </trimBars>
+  </children>
+  <handlers xmi:id="_ipB00DArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handler.0" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.CreateEntity" command="_2Xkt8DApEei3AbO1ldMI0w"/>
+  <descriptors xmi:id="_pud7kDAtEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.taskEditor" label="Task" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.activities.e4.parts.TaskEditor"/>
+  <descriptors xmi:id="_JsNs8DBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.personEditor" label="Person" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.parts.PersonEditor"/>
+  <descriptors xmi:id="_RxqxIDBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.orgEditor" label="Organisation" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.parts.OrgEditor"/>
+  <commands xmi:id="_2Xkt8DApEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.command.createEntity" commandName="Create">
+    <parameters xmi:id="_GnXrcDAsEei3AbO1ldMI0w" elementId="targetNodeType" name="targetNodeType" optional="false"/>
+  </commands>
+  <addons xmi:id="_bQjNYTAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
+  <addons xmi:id="_bQjNYjAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
+  <addons xmi:id="_bQjNYzAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
+  <addons xmi:id="_bQjNZDAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.workbench.commands.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
+  <addons xmi:id="_bQjNZTAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
+  <addons xmi:id="_bQjNZjAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
+  <addons xmi:id="_bQjNZzAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.workbench.handler.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
+</application:Application>

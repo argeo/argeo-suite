@@ -1,0 +1,7 @@
+Bundle-ActivationPolicy: lazy
+Service-Component: OSGI-INF/argeo-office-rap.xml
+
+Import-Package: org.argeo.node,\
+org.eclipse.swt,\
+org.eclipse.rap.rwt.client,\
+*

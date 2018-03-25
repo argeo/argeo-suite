@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="System App Service">
+   <implementation class="org.argeo.connect.core.DynamicSystemAppService"/>
+   <service>
+      <provide interface="org.argeo.connect.SystemAppService"/>
+   </service>
+   <reference bind="addAppService" cardinality="0..n" interface="org.argeo.connect.AppService" name="AppService" policy="dynamic" unbind="removeAppService"/>
+</scr:component>

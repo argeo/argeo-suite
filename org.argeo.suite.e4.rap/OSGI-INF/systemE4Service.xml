@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="System E4 Service">
+   <implementation class="org.argeo.connect.e4.SystemE4Service"/>
+   <service>
+      <provide interface="org.eclipse.e4.core.contexts.IContextFunction"/>
+   </service>
+   <reference bind="addAppService" cardinality="0..n" interface="org.argeo.connect.ui.AppWorkbenchService" name="AppWorkbenchService" policy="dynamic" unbind="removeAppService"/>
+   <property name="service.context.key" type="String" value="org.argeo.connect.ui.SystemWorkbenchService"/>
+</scr:component>

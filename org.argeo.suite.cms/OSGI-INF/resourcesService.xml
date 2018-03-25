@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="Resources Service">
+   <implementation class="org.argeo.connect.resources.core.ResourcesServiceImpl"/>
+   <service>
+      <provide interface="org.argeo.connect.resources.ResourcesService"/>
+      <provide interface="org.argeo.connect.AppService"/>
+   </service>
+</scr:component>
