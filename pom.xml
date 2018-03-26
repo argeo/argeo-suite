@@ -13,11 +13,19 @@
 	<description />
 	<version>0.1.13-SNAPSHOT</version>
 	<modules>
+		<!-- Web -->
 		<module>org.argeo.suite.web</module>
-		<module>org.argeo.suite.workbench.rap</module>
-		<!-- <module>org.argeo.suite.theme.argeo2</module> -->
-		<module>org.argeo.suite.apps</module>
 		<module>org.argeo.suite.apps.web</module>
+
+		<!-- Eclipse 4 -->
+		<module>org.argeo.suite.cms</module>
+		<module>org.argeo.suite.e4</module>
+		<module>org.argeo.suite.e4.rap</module>
+
+		<!-- Workbench -->
+		<module>org.argeo.suite.apps</module>
+		<module>org.argeo.suite.workbench.rap</module>
+
 		<module>dep</module>
 	</modules>
 	<properties>

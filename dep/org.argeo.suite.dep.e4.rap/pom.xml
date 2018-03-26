@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.argeo.suite</groupId>
+		<artifactId>dep</artifactId>
+		<version>0.1.13-SNAPSHOT</version>
+		<relativePath>..</relativePath>
+	</parent>
+	<artifactId>org.argeo.suite.dep.e4.rap</artifactId>
+	<name>Suite E4 Platform</name>
+	<packaging>jar</packaging>
+	<dependencies>
+		<!-- Default Assembly for supported minimal set of Argeo Suite Features -->
+		<dependency>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.suite.cms</artifactId>
+			<version>0.1.13-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.suite.e4</artifactId>
+			<version>0.1.13-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.suite.e4.rap</artifactId>
+			<version>0.1.13-SNAPSHOT</version>
+		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.argeo.suite</groupId> -->
+<!-- 			<artifactId>org.argeo.suite.web</artifactId> -->
+<!-- 			<version>0.1.13-SNAPSHOT</version> -->
+<!-- 		</dependency> -->
+
+		<!-- Base CMS distribution -->
+		<dependency>
+			<groupId>org.argeo.connect</groupId>
+			<artifactId>org.argeo.connect.dep.e4.rap</artifactId>
+			<version>${version.argeo-connect}</version>
+		</dependency>
+		
+		<!-- Argeo TP Extras -->
+		<dependency>
+			<groupId>org.argeo.tp.payment</groupId>
+			<artifactId>com.stripe</artifactId>
+		</dependency>
+		
+	</dependencies>
+	<profiles>
+		<profile>
+			<id>rpmbuild</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-argeo</id>
+								<phase>package</phase>
+								<goals>
+									<goal>copy-dependencies</goal>
+								</goals>
+								<configuration>
+									<includeTypes>jar</includeTypes>
+									<outputDirectory>${project.build.directory}/lib-argeo</outputDirectory>
+									<includeGroupIds>org.argeo.suite</includeGroupIds>
+									<includeTypes>jar</includeTypes>
+									<includeScope>runtime</includeScope>
+									<useRepositoryLayout>true</useRepositoryLayout>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>rpm-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>rpm-argeo</id>
+								<phase>package</phase>
+								<goals>
+									<goal>rpm</goal>
+								</goals>
+								<configuration>
+									<name>argeo-suite-e4</name>
+									<mappings>
+										<mapping>
+											<directory>/usr/share/osgi</directory>
+											<username>root</username>
+											<groupname>root</groupname>
+											<filemode>644</filemode>
+											<directoryIncluded>true</directoryIncluded>
+											<sources>
+												<source>
+													<location>${project.build.directory}/lib-argeo</location>
+													<includes>
+														<include>**/*.jar</include>
+													</includes>
+												</source>
+											</sources>
+										</mapping>
+									</mappings>
+									<requires>
+										<require>argeo-connect-e4-tp</require>
+									</requires>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

@@ -12,6 +12,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>org.argeo.suite.platform</module>
+		<module>org.argeo.suite.dep.e4.rap</module>
 	</modules>
 	<build>
 		<plugins>

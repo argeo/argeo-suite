@@ -12,3 +12,19 @@ Service-Component: OSGI-INF/systemAppService.xml,\
  OSGI-INF/peopleMaintenanceService.xml,\
  OSGI-INF/trackerMaintenanceService.xml
  
+Import-Package: javax.jcr,\
+javax.transaction,\
+org.osgi.service.useradmin,\
+org.argeo.connect,\
+org.argeo.activities,\
+org.argeo.people,\
+org.argeo.documents,\
+org.argeo.tracker,\
+org.argeo.connect.resources,\
+org.argeo.connect.core,\
+org.argeo.activities.core,\
+org.argeo.people.core,\
+org.argeo.documents.core,\
+org.argeo.tracker.core,\
+org.argeo.connect.resources.core,\
+*

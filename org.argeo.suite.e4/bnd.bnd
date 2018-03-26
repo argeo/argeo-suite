@@ -1,2 +1,17 @@
 Bundle-ActivationPolicy: lazy
-Service-Component: OSGI-INF/systemE4Service.xml,OSGI-INF/activitiesE4Service.xml,OSGI-INF/peopleE4Service.xml,OSGI-INF/documentsE4Service.xml
+Service-Component: OSGI-INF/systemE4Service.xml,\
+OSGI-INF/activitiesE4Service.xml,\
+OSGI-INF/peopleE4Service.xml,\
+OSGI-INF/documentsE4Service.xml
+
+Import-Package: org.eclipse.swt,\
+org.eclipse.core.commands.common,\
+javax.jcr.nodetype,\
+org.eclipse.e4.core.contexts,\
+org.argeo.connect.ui,\
+org.argeo.connect.e4,\
+org.argeo.activities.e4,\
+org.argeo.people.e4,\
+org.argeo.documents.e4,\
+org.argeo.tracker.e4,\
+*
