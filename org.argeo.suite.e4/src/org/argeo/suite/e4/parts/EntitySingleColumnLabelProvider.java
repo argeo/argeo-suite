@@ -22,15 +22,14 @@ import org.argeo.people.ui.providers.OrgListLabelProvider;
 import org.argeo.people.ui.providers.PersonListLabelProvider;
 import org.argeo.tracker.TrackerTypes;
 import org.argeo.tracker.ui.TrackerSingleColLP;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 /**
  * Provide a single column label provider for entity lists. Icon and displayed
  * text vary with the element node type
  */
-public class EntitySingleColumnLabelProvider implements PeopleNames, ILabelProvider {
+public class EntitySingleColumnLabelProvider extends ColumnLabelProvider implements PeopleNames {
 	private static final long serialVersionUID = 3111885324210673320L;
 
 	private SystemWorkbenchService systemWorkbenchService;
@@ -85,30 +84,6 @@ public class EntitySingleColumnLabelProvider implements PeopleNames, ILabelProvi
 	@Override
 	public Image getImage(Object element) {
 		return systemWorkbenchService.getIconForType((Node) element);
-	}
-
-	@Override
-	public void addListener(ILabelProviderListener listener) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean isLabelProperty(Object element, String property) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void removeListener(ILabelProviderListener listener) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

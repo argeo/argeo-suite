@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="Tracker Maintenance Service">
+   <implementation class="org.argeo.tracker.core.TrackerMaintenanceService"/>
+   <service>
+      <provide interface="org.argeo.connect.AppMaintenanceService"/>
+   </service>
+</scr:component>

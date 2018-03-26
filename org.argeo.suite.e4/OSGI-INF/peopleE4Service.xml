@@ -3,5 +3,6 @@
    <implementation class="org.argeo.people.e4.PeopleE4Service"/>
    <service>
       <provide interface="org.argeo.connect.ui.AppWorkbenchService"/>
+      <provide interface="org.argeo.connect.e4.AppE4Service"/>
    </service>
 </scr:component>

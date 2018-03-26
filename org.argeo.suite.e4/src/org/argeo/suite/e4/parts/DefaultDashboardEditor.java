@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Property;
@@ -59,7 +60,9 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 	// public final static String ID = AsUiPlugin.PLUGIN_ID +
 	// ".defaultDashboardEditor";
 
+	@Inject
 	private ActivitiesService activitiesService;
+	@Inject
 	private TrackerService trackerService;
 
 	private String datePattern = "dd MMM yyyy";

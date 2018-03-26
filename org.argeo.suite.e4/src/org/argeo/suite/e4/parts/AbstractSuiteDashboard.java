@@ -2,6 +2,7 @@ package org.argeo.suite.e4.parts;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 import javax.jcr.Node;
 import javax.jcr.Repository;
 import javax.jcr.Session;
@@ -30,9 +31,13 @@ import org.eclipse.swt.widgets.Link;
 public abstract class AbstractSuiteDashboard {
 
 	// DEPENDENCY INJECTION
+	@Inject
 	private Repository repository;
+	@Inject
 	private ResourcesService resourcesService;
+	@Inject
 	private SystemAppService systemAppService;
+	@Inject
 	private SystemWorkbenchService systemWorkbenchService;
 
 	private Session session;
