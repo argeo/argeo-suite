@@ -6,17 +6,23 @@
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_gm_toDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.perspectivestack.0">
       <children xsi:type="advanced:Perspective" xmi:id="_hr-YsDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.perspective.dashboard" label="Dashboard">
         <children xsi:type="basic:PartSashContainer" xmi:id="_mAC18DAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partsashcontainer.0" horizontal="true">
-          <children xsi:type="basic:PartStack" xmi:id="_orJxUDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.0" containerData="4000">
-            <children xsi:type="basic:Part" xmi:id="_qAM4sDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.part.search" containerData="" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.QuickSearchView" label="Search"/>
+          <children xsi:type="basic:PartStack" xmi:id="_orJxUDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.0" containerData="3000">
+            <tags>minimized</tags>
+            <children xsi:type="basic:Part" xmi:id="_qAM4sDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.part.search" containerData="" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.QuickSearchView" label="Search" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/search.png"/>
           </children>
-          <children xsi:type="basic:PartStack" xmi:id="_vLza4DAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.1" containerData="6000">
+          <children xsi:type="basic:PartStack" xmi:id="_vLza4DAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.1" containerData="7000">
             <tags>entityEditorArea</tags>
+            <children xsi:type="basic:Part" xmi:id="_n83mkDDnEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.part.0" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.DefaultDashboardEditor" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/dashboard.png"/>
           </children>
         </children>
       </children>
     </children>
     <trimBars xmi:id="_24OSADArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.trimbar.0">
-      <children xsi:type="menu:ToolBar" xmi:id="_3e5QcDArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.toolbar.0">
+      <children xsi:type="menu:ToolBar" xmi:id="_JIUjADDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.toolbar.standard">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_P-4LIDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.save" label="Save" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save.png" enabled="false" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_W4V9UDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.saveall" label="Save All" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save-all.png" enabled="false" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_bV4tYDDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.closeall" label="Close All" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/close-all.png" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
+        <children xsi:type="menu:ToolBarSeparator" xmi:id="_Bn7o0DDjEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.toolbarseparator.0"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_4Ssr8DArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handledtoolitem.createTask" label="New Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" command="_2Xkt8DApEei3AbO1ldMI0w">
           <parameters xmi:id="_NYpK8DAsEei3AbO1ldMI0w" elementId="targetNodeType" name="targetNodeType" value="activities:task"/>
         </children>
@@ -30,12 +36,22 @@
     </trimBars>
   </children>
   <handlers xmi:id="_ipB00DArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handler.0" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.CreateEntity" command="_2Xkt8DApEei3AbO1ldMI0w"/>
-  <descriptors xmi:id="_pud7kDAtEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.taskEditor" label="Task" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.activities.e4.parts.TaskEditor"/>
-  <descriptors xmi:id="_JsNs8DBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.personEditor" label="Person" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.parts.PersonEditor"/>
-  <descriptors xmi:id="_RxqxIDBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.orgEditor" label="Organisation" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.parts.OrgEditor"/>
+  <handlers xmi:id="_9gu00DDgEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handler.1" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.SavePart" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
+  <handlers xmi:id="_ADDAkDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handler.2" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.SaveAllParts" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
+  <handlers xmi:id="_ZBWe8DDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handler.3" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.CloseAllParts" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
+  <bindingTables xmi:id="_gxEm4DDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.bindingtable.0">
+    <bindings xmi:id="_hj9cYDDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.keybinding.0" keySequence="CTRL+S" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
+    <bindings xmi:id="_pEAGYDDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.keybinding.1" keySequence="SHIFT+CTRL+S" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
+  </bindingTables>
+  <descriptors xmi:id="_pud7kDAtEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.taskEditor" label="Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.activities.e4.parts.TaskEditor"/>
+  <descriptors xmi:id="_JsNs8DBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.personEditor" label="Person" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/person.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.parts.PersonEditor"/>
+  <descriptors xmi:id="_RxqxIDBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.orgEditor" label="Organisation" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/organisation.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.parts.OrgEditor"/>
   <commands xmi:id="_2Xkt8DApEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.command.createEntity" commandName="Create">
     <parameters xmi:id="_GnXrcDAsEei3AbO1ldMI0w" elementId="targetNodeType" name="targetNodeType" optional="false"/>
   </commands>
+  <commands xmi:id="_1lO94DDgEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.command.savePart" commandName="Save"/>
+  <commands xmi:id="_5EpEADDgEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.command.saveAll" commandName="Save All"/>
+  <commands xmi:id="_VdldQDDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.command.closeAll" commandName="Close All"/>
   <addons xmi:id="_bQjNYTAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_bQjNYjAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_bQjNYzAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
