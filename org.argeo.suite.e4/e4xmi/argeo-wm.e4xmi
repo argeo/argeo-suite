@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ASCII"?>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_2pcH4DOIEeiPp86Vqakt2A" elementId="org.argeo.cms.e4.rcp.application">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_352m4DOIEeiPp86Vqakt2A" elementId="org.argeo.cms.e4.rcp.trimmedwindow.0">
+    <persistedState key="styleOverride" value="8"/>
+    <tags>shellMaximized</tags>
+    <children xsi:type="advanced:PerspectiveStack" xmi:id="_YATMoDOOEeiPp86Vqakt2A" elementId="org.argeo.suite.e4.perspectivestack.0">
+      <children xsi:type="advanced:Perspective" xmi:id="_YXOe4DOOEeiPp86Vqakt2A" elementId="org.argeo.suite.e4.perspective.0">
+        <children xsi:type="basic:Part" xmi:id="_ba6SUDOOEeiPp86Vqakt2A" elementId="org.argeo.suite.e4.part.0"/>
+      </children>
+    </children>
+    <trimBars xmi:id="_MmIMMDOKEeiPp86Vqakt2A" elementId="org.argeo.cms.e4.rcp.trimbar.left" side="Left">
+      <children xsi:type="menu:ToolBar" xmi:id="_NwmbQDOKEeiPp86Vqakt2A" elementId="org.argeo.cms.e4.rcp.toolbar.0">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_anN2cDOMEeiPp86Vqakt2A" elementId="org.argeo.cms.e4.rcp.handledtoolitem.argeo" label="Argeo" iconURI="platform:/plugin/org.argeo.suite.e4/icons/argeo-icon-32.png" command="_X_FPMDOPEeiPp86Vqakt2A">
+          <menu xmi:id="_82sXgDOMEeiPp86Vqakt2A" elementId="org.argeo.cms.e4.rcp.menu.0">
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_95jisDOMEeiPp86Vqakt2A" elementId="org.argeo.cms.e4.rcp.handledmenuitem.shutdown" label="Shutdown..." iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/remove.gif" command="_X_FPMDOPEeiPp86Vqakt2A"/>
+          </menu>
+        </children>
+      </children>
+    </trimBars>
+    <trimBars xmi:id="_tkrzwDOREeinOIvgpqR75A" elementId="org.argeo.suite.e4.trimbar.bottom" side="Bottom"/>
+  </children>
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_vDXDIDOPEeiPp86Vqakt2A" elementId="org.argeo.suite.e4.trimmedwindow.dataexplorer" label="Data Explorer" iconURI="platform:/plugin/org.argeo.cms.ui.theme/icons/browser.gif">
+    <children xsi:type="basic:PartSashContainer" xmi:id="_pGAtMDOKEeiPp86Vqakt2A" elementId="org.argeo.cms.e4.rcp.partsashcontainer.0" containerData="" horizontal="true">
+      <children xsi:type="basic:Part" xmi:id="_tI23kDOKEeiPp86Vqakt2A" elementId="org.argeo.cms.e4.rcp.part.0" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.jcr.JcrBrowserView"/>
+      <children xsi:type="basic:PartStack" xmi:id="_zfQY8DOKEeiPp86Vqakt2A" elementId="org.argeo.cms.e4.rcp.partstack.0">
+        <tags>dataExplorer</tags>
+      </children>
+    </children>
+  </children>
+  <handlers xmi:id="_cyihsDOQEeiPp86Vqakt2A" elementId="org.argeo.suite.e4.handler.shutdown" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.sys.commands.Shutdown" command="_kNjXMDOPEeiPp86Vqakt2A"/>
+  <handlers xmi:id="_SxT34DOREeinOIvgpqR75A" elementId="org.argeo.suite.e4.handler.0" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.sys.commands.ShowDesktop" command="_X_FPMDOPEeiPp86Vqakt2A"/>
+  <descriptors xmi:id="_MJVtEDOLEeiPp86Vqakt2A" elementId="org.argeo.cms.e4.partdescriptor.nodeEditor" iconURI="platform:/plugin/org.argeo.cms.ui.theme/icons/node.gif" allowMultiple="true" category="dataExplorer" closeable="true" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.jcr.JcrNodeEditor"/>
+  <commands xmi:id="_X_FPMDOPEeiPp86Vqakt2A" elementId="org.argeo.suite.e4.command.showDesktop" commandName="Show Desktop"/>
+  <commands xmi:id="_kNjXMDOPEeiPp86Vqakt2A" elementId="org.argeo.suite.e4.command.shutdown" commandName="Shutdown"/>
+  <addons xmi:id="_2pcH4TOIEeiPp86Vqakt2A" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
+  <addons xmi:id="_2pcH4jOIEeiPp86Vqakt2A" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
+  <addons xmi:id="_2pcH4zOIEeiPp86Vqakt2A" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
+  <addons xmi:id="_2pcH5DOIEeiPp86Vqakt2A" elementId="org.eclipse.e4.ui.workbench.commands.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
+  <addons xmi:id="_2pcH5TOIEeiPp86Vqakt2A" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
+  <addons xmi:id="_2pcH5jOIEeiPp86Vqakt2A" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
+  <addons xmi:id="_2pcH5zOIEeiPp86Vqakt2A" elementId="org.eclipse.e4.ui.workbench.handler.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
+</application:Application>
