@@ -8,8 +8,8 @@
 		<version>0.1.13-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>org.argeo.suite.dep.e4.rap</artifactId>
-	<name>Suite E4 Platform RAP</name>
+	<artifactId>org.argeo.suite.dep.e4.rcp</artifactId>
+	<name>Suite E4 Platform RCP</name>
 	<packaging>jar</packaging>
 	<dependencies>
 		<!-- Default Assembly for supported minimal set of Argeo Suite Features -->
@@ -23,21 +23,16 @@
 			<artifactId>org.argeo.suite.e4</artifactId>
 			<version>0.1.13-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.suite.e4.rap</artifactId>
-			<version>0.1.13-SNAPSHOT</version>
-		</dependency>
 <!-- 		<dependency> -->
 <!-- 			<groupId>org.argeo.suite</groupId> -->
-<!-- 			<artifactId>org.argeo.suite.web</artifactId> -->
+<!-- 			<artifactId>org.argeo.suite.e4.rap</artifactId> -->
 <!-- 			<version>0.1.13-SNAPSHOT</version> -->
 <!-- 		</dependency> -->
 
 		<!-- Base CMS distribution -->
 		<dependency>
 			<groupId>org.argeo.connect</groupId>
-			<artifactId>org.argeo.connect.dep.e4.rap</artifactId>
+			<artifactId>org.argeo.connect.dep.e4.rcp</artifactId>
 			<version>${version.argeo-connect}</version>
 		</dependency>
 		

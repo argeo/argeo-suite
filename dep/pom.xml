@@ -13,6 +13,7 @@
 	<modules>
 		<module>org.argeo.suite.platform</module>
 		<module>org.argeo.suite.dep.e4.rap</module>
+		<module>org.argeo.suite.dep.e4.rcp</module>
 	</modules>
 	<build>
 		<plugins>
