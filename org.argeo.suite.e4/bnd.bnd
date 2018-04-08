@@ -2,6 +2,7 @@ Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/systemE4Service.xml,\
 OSGI-INF/activitiesE4Service.xml,\
 OSGI-INF/peopleE4Service.xml,\
+OSGI-INF/trackerE4Service.xml,\
 OSGI-INF/documentsE4Service.xml
 
 Import-Package: org.eclipse.swt,\

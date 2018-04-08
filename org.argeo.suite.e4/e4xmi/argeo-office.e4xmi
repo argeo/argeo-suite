@@ -24,7 +24,7 @@
         <children xsi:type="menu:HandledToolItem" xmi:id="_W4V9UDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.saveall" label="Save All" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save-all.png" enabled="false" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_bV4tYDDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.closeall" label="Close All" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/close-all.png" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_Bn7o0DDjEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.toolbarseparator.0"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_4Ssr8DArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handledtoolitem.createTask" label="New Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" command="_2Xkt8DApEei3AbO1ldMI0w">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_4Ssr8DArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handledtoolitem.createTask" label="New Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/todo.png" command="_2Xkt8DApEei3AbO1ldMI0w">
           <parameters xmi:id="_NYpK8DAsEei3AbO1ldMI0w" elementId="targetNodeType" name="targetNodeType" value="activities:task"/>
         </children>
         <children xsi:type="menu:HandledToolItem" xmi:id="_p_MsIDBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handledtoolitem.createPerson" label="New Person" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/person.png" command="_2Xkt8DApEei3AbO1ldMI0w">
@@ -32,6 +32,15 @@
         </children>
         <children xsi:type="menu:HandledToolItem" xmi:id="_cnaWMDBjEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handledtoolitem.neworg" label="New Org" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/organisation.png" command="_2Xkt8DApEei3AbO1ldMI0w">
           <parameters xmi:id="_iEUDwDBjEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.parameter.1" name="targetNodeType" value="people:org"/>
+        </children>
+        <children xsi:type="menu:HandledToolItem" xmi:id="__3aVwDpLEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.handledtoolitem.newproject" label="New Project" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/project.png" command="_2Xkt8DApEei3AbO1ldMI0w">
+          <parameters xmi:id="_JiLx8DpMEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.parameter.2" name="targetNodeType" value="tracker:project"/>
+        </children>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_fYJ_sDpMEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.handledtoolitem.newmilestone" label="New Milestone" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/milestone.png" command="_2Xkt8DApEei3AbO1ldMI0w">
+          <parameters xmi:id="_iVMYkDpMEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.parameter.3" name="targetNodeType" value="tracker:milestone"/>
+        </children>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_M5t5ADpNEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.handledtoolitem.newtask" label="New Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" command="_2Xkt8DApEei3AbO1ldMI0w">
+          <parameters xmi:id="_Wj5fUDpNEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.parameter.4" name="targetNodeType" value="tracker:task"/>
         </children>
       </children>
     </trimBars>
@@ -50,6 +59,9 @@
   <descriptors xmi:id="_RxqxIDBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.orgEditor" label="Organisation" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/organisation.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.parts.OrgEditor"/>
   <descriptors xmi:id="_GkmucDD0EeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.partdescriptor.file" label="File" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/file.png" allowMultiple="true" category="entityEditorArea" closeable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.FileEditor"/>
   <descriptors xmi:id="_NjQioDD0EeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.partdescriptor.folder" label="Folder" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png" allowMultiple="true" category="entityEditorArea" closeable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.FolderEditor"/>
+  <descriptors xmi:id="_muk20DpQEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.projectTaskEditor" label="Project Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.TaskEditor"/>
+  <descriptors xmi:id="_vnVAMDpQEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.projectEditor" label="Project" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/project.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.ProjectEditor"/>
+  <descriptors xmi:id="_TZol8DpREeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.milestoneEditor" label="Milestone" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/milestone.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.MilestoneEditor"/>
   <commands xmi:id="_2Xkt8DApEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.command.createEntity" commandName="Create">
     <parameters xmi:id="_GnXrcDAsEei3AbO1ldMI0w" elementId="targetNodeType" name="targetNodeType" optional="false"/>
   </commands>
