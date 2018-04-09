@@ -27,8 +27,8 @@
       </children>
     </children>
   </children>
-  <handlers xmi:id="_cyihsDOQEeiPp86Vqakt2A" elementId="org.argeo.suite.e4.handler.shutdown" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.sys.commands.Shutdown" command="_kNjXMDOPEeiPp86Vqakt2A"/>
-  <handlers xmi:id="_SxT34DOREeinOIvgpqR75A" elementId="org.argeo.suite.e4.handler.0" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.sys.commands.ShowDesktop" command="_X_FPMDOPEeiPp86Vqakt2A"/>
+  <handlers xmi:id="_cyihsDOQEeiPp86Vqakt2A" elementId="org.argeo.suite.e4.handler.shutdown" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.sys.handlers.Shutdown" command="_kNjXMDOPEeiPp86Vqakt2A"/>
+  <handlers xmi:id="_SxT34DOREeinOIvgpqR75A" elementId="org.argeo.suite.e4.handler.0" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.sys.handlers.ShowDesktop" command="_X_FPMDOPEeiPp86Vqakt2A"/>
   <descriptors xmi:id="_MJVtEDOLEeiPp86Vqakt2A" elementId="org.argeo.cms.e4.partdescriptor.nodeEditor" iconURI="platform:/plugin/org.argeo.cms.ui.theme/icons/node.gif" allowMultiple="true" category="dataExplorer" closeable="true" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.jcr.JcrNodeEditor"/>
   <commands xmi:id="_X_FPMDOPEeiPp86Vqakt2A" elementId="org.argeo.suite.e4.command.showDesktop" commandName="Show Desktop"/>
   <commands xmi:id="_kNjXMDOPEeiPp86Vqakt2A" elementId="org.argeo.suite.e4.command.shutdown" commandName="Shutdown"/>
