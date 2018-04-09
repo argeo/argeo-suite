@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="ASCII"?>
 <application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_bQjNYDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.application">
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_dKIlMDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.trimmedwindow.0">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_dKIlMDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.trimmedwindow.main">
     <persistedState key="styleOverride" value="8"/>
     <tags>shellMaximized</tags>
-    <children xsi:type="advanced:PerspectiveStack" xmi:id="_gm_toDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.perspectivestack.0">
+    <children xsi:type="advanced:PerspectiveStack" xmi:id="_gm_toDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.perspectivestack.main">
       <children xsi:type="advanced:Perspective" xmi:id="_hr-YsDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.perspective.dashboard" label="Dashboard">
         <children xsi:type="basic:PartSashContainer" xmi:id="_mAC18DAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partsashcontainer.0" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_orJxUDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.navigation" containerData="3000">
             <tags>minimized</tags>
-            <children xsi:type="basic:Part" xmi:id="_qAM4sDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.part.search" containerData="" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.QuickSearchView" label="Search" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/search.png"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_3kRAoDwIEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.placeholder.0" ref="_qAM4sDAVEei3AbO1ldMI0w"/>
             <children xsi:type="basic:Part" xmi:id="_xi1k0DDzEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.part.documents" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.MyFilesView" label="Documents" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/documents.png"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_vLza4DAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.1" containerData="7000">
@@ -18,7 +18,8 @@
         </children>
       </children>
     </children>
-    <trimBars xmi:id="_24OSADArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.trimbar.0">
+    <sharedElements xsi:type="basic:Part" xmi:id="_qAM4sDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.part.search" containerData="" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.QuickSearchView" label="Search" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/search.png"/>
+    <trimBars xmi:id="_24OSADArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.trimbar.top">
       <children xsi:type="menu:ToolBar" xmi:id="_JIUjADDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.toolbar.standard">
         <children xsi:type="menu:HandledToolItem" xmi:id="_P-4LIDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.save" label="Save" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save.png" enabled="false" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_W4V9UDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.saveall" label="Save All" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save-all.png" enabled="false" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
