@@ -24,18 +24,13 @@
       </children>
     </children>
     <sharedElements xsi:type="basic:Part" xmi:id="_qAM4sDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.part.search" containerData="" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.QuickSearchView" label="Search" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/search.png"/>
-    <trimBars xmi:id="_8QObED4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.trimbar.0" side="Left">
-      <children xsi:type="menu:ToolBar" xmi:id="_9NxBYD4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.toolbar.perspectives">
-        <children xsi:type="menu:HandledToolItem" xmi:id="_-KE4oD4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledtoolitem.0" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/dashboard.png" command="__usGAD4ZEeiR-OuUuIB1Aw">
-          <parameters xmi:id="_QjVu8D4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.parameter.5" name="perspectiveId" value="org.argeo.suite.e4.perspective.dashboard"/>
-        </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_evdPYD4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledtoolitem.1" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png" command="__usGAD4ZEeiR-OuUuIB1Aw">
-          <parameters xmi:id="_gW_08D4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.parameter.6" name="perspectiveId" value="org.argeo.suite.e4.perspective.folders"/>
-        </children>
-      </children>
-    </trimBars>
     <trimBars xmi:id="_24OSADArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.trimbar.top">
       <children xsi:type="menu:ToolBar" xmi:id="_JIUjADDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.toolbar.standard">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_55lzgD4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledtoolitem.2" iconURI="platform:/plugin/org.argeo.cms.ui.theme/icons/person-logged-in.png" command="__L724D4cEeiR-OuUuIB1Aw">
+          <menu xmi:id="_9ls44D4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.menu.0">
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_H5bLcD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledmenuitem.logout" label="Log out" iconURI="platform:/plugin/org.argeo.cms.ui.theme/icons/delete.png"/>
+          </menu>
+        </children>
         <children xsi:type="menu:HandledToolItem" xmi:id="_P-4LIDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.save" label="Save" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save.png" enabled="false" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_W4V9UDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.saveall" label="Save All" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save-all.png" enabled="false" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_bV4tYDDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.closeall" label="Close All" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/close-all.png" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
@@ -62,12 +57,24 @@
         </children>
       </children>
     </trimBars>
+    <trimBars xmi:id="_8QObED4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.trimbar.0" side="Left">
+      <children xsi:type="menu:ToolBar" xmi:id="_9NxBYD4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.toolbar.perspectives">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_-KE4oD4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledtoolitem.0" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/dashboard.png" command="__usGAD4ZEeiR-OuUuIB1Aw">
+          <parameters xmi:id="_QjVu8D4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.parameter.5" name="perspectiveId" value="org.argeo.suite.e4.perspective.dashboard"/>
+        </children>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_evdPYD4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledtoolitem.1" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png" command="__usGAD4ZEeiR-OuUuIB1Aw">
+          <parameters xmi:id="_gW_08D4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.parameter.6" name="perspectiveId" value="org.argeo.suite.e4.perspective.folders"/>
+        </children>
+      </children>
+    </trimBars>
   </children>
   <handlers xmi:id="_HCDl8D4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handler.openPerspective" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.OpenPerspective" command="__usGAD4ZEeiR-OuUuIB1Aw"/>
   <handlers xmi:id="_ipB00DArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handler.createEntity" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.CreateEntity" command="_2Xkt8DApEei3AbO1ldMI0w"/>
   <handlers xmi:id="_9gu00DDgEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handler.1" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.SavePart" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
   <handlers xmi:id="_ADDAkDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handler.2" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.SaveAllParts" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
   <handlers xmi:id="_ZBWe8DDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handler.3" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.CloseAllParts" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
+  <handlers xmi:id="_ClgawD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handler.0" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.DoNothing" command="__L724D4cEeiR-OuUuIB1Aw"/>
+  <handlers xmi:id="_oOUPID4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handler.4" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.DoNothing" command="_lhxJUD4dEeiR-OuUuIB1Aw"/>
   <bindingTables xmi:id="_gxEm4DDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.bindingtable.0" bindingContext="_Byl7gDD1EeiUfOa4rxEKwQ">
     <bindings xmi:id="_hj9cYDDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.keybinding.0" keySequence="CTRL+S" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
     <bindings xmi:id="_pEAGYDDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.keybinding.1" keySequence="SHIFT+CTRL+S" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
@@ -90,6 +97,8 @@
   <commands xmi:id="__usGAD4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.command.openperspective" commandName="Open Perspective">
     <parameters xmi:id="_TgkVED4aEeiR-OuUuIB1Aw" elementId="perspectiveId" name="Perspective Id" optional="false"/>
   </commands>
+  <commands xmi:id="__L724D4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.command.doNothing" commandName="Do Nothing"/>
+  <commands xmi:id="_lhxJUD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.command.logout" commandName="Log out"/>
   <addons xmi:id="_bQjNYTAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_bQjNYjAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_bQjNYzAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
