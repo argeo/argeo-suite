@@ -4,22 +4,26 @@
     <persistedState key="styleOverride" value="8"/>
     <tags>shellMaximized</tags>
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_gm_toDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.perspectivestack.main">
-      <children xsi:type="advanced:Perspective" xmi:id="_hr-YsDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.perspective.dashboard" label="Dashboard" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/dashboard.png">
+      <children xsi:type="advanced:Perspective" xmi:id="_hr-YsDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.perspective.dashboard" label="%dashboard" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/dashboard.png">
         <children xsi:type="basic:PartSashContainer" xmi:id="_mAC18DAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partsashcontainer.0" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_orJxUDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.navigation" containerData="3000">
             <tags>minimized</tags>
-            <children xsi:type="basic:Part" xmi:id="_qAM4sDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.part.search" containerData="" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.QuickSearchView" label="Search" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/search.png"/>
-            <children xsi:type="basic:Part" xmi:id="_yNz1oEIkEeiuKIc56c-N_g" elementId="org.argeo.suite.e4.part.documents" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.MyFilesView" label="Documents" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/documents.png"/>
+            <children xsi:type="basic:Part" xmi:id="_qAM4sDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.part.search" containerData="" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.QuickSearchView" label="%search" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/search.png"/>
+            <children xsi:type="basic:Part" xmi:id="_yNz1oEIkEeiuKIc56c-N_g" elementId="org.argeo.suite.e4.part.documents" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.MyFilesView" label="%documents" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/documents.png"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_vLza4DAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.1" containerData="7000">
             <tags>entityEditorArea</tags>
-            <children xsi:type="basic:Part" xmi:id="_n83mkDDnEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.part.defaultDashboard" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.DefaultDashboardEditor" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/dashboard.png"/>
+            <children xsi:type="basic:Part" xmi:id="_n83mkDDnEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.part.defaultDashboard" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.DefaultDashboardEditor" label="" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/dashboard.png" tooltip="%dashboard">
+              <toolbar xmi:id="_zlZE4EIqEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.toolbar.0">
+                <children xsi:type="menu:HandledToolItem" xmi:id="_2ZdvAEIqEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem." label="" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/close-all.png" tooltip="%closeAll" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
+              </toolbar>
+            </children>
           </children>
         </children>
       </children>
-      <children xsi:type="advanced:Perspective" xmi:id="_bu5BYD4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.perspective.folders" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png">
+      <children xsi:type="advanced:Perspective" xmi:id="_bu5BYD4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.perspective.folders" label="%folders" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png">
         <children xsi:type="basic:PartStack" xmi:id="_p66bMD4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.partstack.0">
-          <children xsi:type="basic:Part" xmi:id="_xi1k0DDzEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.part.documents" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.MyFilesView" label="Documents" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/documents.png"/>
+          <children xsi:type="basic:Part" xmi:id="_xi1k0DDzEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.part.documents" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.MyFilesView" label="%documents" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/documents.png"/>
         </children>
       </children>
     </children>
@@ -30,9 +34,9 @@
             <children xsi:type="menu:HandledMenuItem" xmi:id="_H5bLcD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledmenuitem.logout" label="Log out" iconURI="platform:/plugin/org.argeo.cms.ui.theme/icons/delete.png"/>
           </menu>
         </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_P-4LIDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.save" label="Save" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save.png" enabled="false" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_W4V9UDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.saveall" label="Save All" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save-all.png" enabled="false" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_bV4tYDDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.closeall" label="Close All" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/close-all.png" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_P-4LIDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.save" label="" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save.png" tooltip="%save" enabled="false" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_W4V9UDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.saveall" label="" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save-all.png" tooltip="%saveAll" enabled="false" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_bV4tYDDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.closeall" label="" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/close-all.png" tooltip="%closeAll" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
       </children>
     </trimBars>
     <trimBars xmi:id="_8QObED4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.trimbar.0" side="Left"/>
@@ -50,14 +54,14 @@
   </bindingTables>
   <rootContext xmi:id="_Byl7gDD1EeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.bindingcontext.main" name="Main"/>
   <descriptors xmi:id="_pud7kDAtEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.taskEditor" label="Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.activities.e4.parts.TaskEditor"/>
-  <descriptors xmi:id="_JsNs8DBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.personEditor" label="Person" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/person.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.parts.PersonEditor"/>
-  <descriptors xmi:id="_RxqxIDBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.orgEditor" label="Organisation" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/organisation.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.parts.OrgEditor"/>
+  <descriptors xmi:id="_JsNs8DBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.personEditor" label="%person" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/person.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.parts.PersonEditor"/>
+  <descriptors xmi:id="_RxqxIDBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.orgEditor" label="%organisation" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/organisation.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.parts.OrgEditor"/>
   <descriptors xmi:id="_GkmucDD0EeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.partdescriptor.file" label="File" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/file.png" allowMultiple="true" category="entityEditorArea" closeable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.FileEditor"/>
   <descriptors xmi:id="_NjQioDD0EeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.partdescriptor.folder" label="Folder" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png" allowMultiple="true" category="entityEditorArea" closeable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.FolderEditor"/>
   <descriptors xmi:id="_muk20DpQEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.projectTaskEditor" label="Project Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.TaskEditor"/>
   <descriptors xmi:id="_vnVAMDpQEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.projectEditor" label="Project" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/project.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.ProjectEditor"/>
   <descriptors xmi:id="_TZol8DpREeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.milestoneEditor" label="Milestone" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/milestone.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.MilestoneEditor"/>
-  <commands xmi:id="_2Xkt8DApEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.command.createEntity" commandName="Create">
+  <commands xmi:id="_2Xkt8DApEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.command.createEntity" commandName="%newEntity">
     <parameters xmi:id="_GnXrcDAsEei3AbO1ldMI0w" elementId="targetNodeType" name="targetNodeType" optional="false"/>
   </commands>
   <commands xmi:id="_1lO94DDgEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.command.savePart" commandName="Save"/>
@@ -75,4 +79,5 @@
   <addons xmi:id="_bQjNZTAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
   <addons xmi:id="_bQjNZjAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
   <addons xmi:id="_bQjNZzAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.workbench.handler.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
+  <addons xmi:id="_srLWsEIoEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.addon.ageoLocale" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.LocaleAddon"/>
 </application:Application>
