@@ -29,7 +29,7 @@
     </children>
     <trimBars xmi:id="_24OSADArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.trimbar.top">
       <children xsi:type="menu:ToolBar" xmi:id="_JIUjADDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.toolbar.standard">
-        <children xsi:type="menu:HandledToolItem" xmi:id="_55lzgD4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledtoolitem.2" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/person-logged-in.png" tooltip="%dashboard" command="__usGAD4ZEeiR-OuUuIB1Aw">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_55lzgD4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledtoolitem.2" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/dashboard.png" tooltip="%dashboard" command="__usGAD4ZEeiR-OuUuIB1Aw">
           <menu xmi:id="_9ls44D4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.menu.0">
             <children xsi:type="menu:HandledMenuItem" xmi:id="_H5bLcD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledmenuitem.logout" label="Log out" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/delete.png"/>
           </menu>
@@ -63,7 +63,7 @@
   <descriptors xmi:id="_muk20DpQEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.projectTaskEditor" label="Project Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.TaskEditor"/>
   <descriptors xmi:id="_vnVAMDpQEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.projectEditor" label="Project" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/project.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.ProjectEditor"/>
   <descriptors xmi:id="_TZol8DpREeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.milestoneEditor" label="Milestone" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/milestone.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.MilestoneEditor"/>
-  <descriptors xmi:id="_q__ZsEJIEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.partdescriptor.activityEditor" label="Activity" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/activity.gif" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.activities.e4.parts.ActivityEditor"/>
+  <descriptors xmi:id="_q__ZsEJIEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.partdescriptor.activityEditor" label="Activity" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/activity.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.activities.e4.parts.ActivityEditor"/>
   <commands xmi:id="_2Xkt8DApEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.command.createEntity" commandName="New Entity">
     <parameters xmi:id="_GnXrcDAsEei3AbO1ldMI0w" elementId="targetNodeType" name="targetNodeType" optional="false"/>
   </commands>
