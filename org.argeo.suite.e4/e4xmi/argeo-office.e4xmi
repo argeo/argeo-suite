@@ -8,22 +8,21 @@
         <children xsi:type="basic:PartSashContainer" xmi:id="_mAC18DAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partsashcontainer.0" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_orJxUDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.navigation" containerData="3000">
             <tags>minimized</tags>
-            <children xsi:type="advanced:Placeholder" xmi:id="_3kRAoDwIEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.placeholder.0" ref="_qAM4sDAVEei3AbO1ldMI0w"/>
-            <children xsi:type="basic:Part" xmi:id="_xi1k0DDzEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.part.documents" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.MyFilesView" label="Documents" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/documents.png"/>
+            <children xsi:type="basic:Part" xmi:id="_qAM4sDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.part.search" containerData="" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.QuickSearchView" label="Search" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/search.png"/>
+            <children xsi:type="basic:Part" xmi:id="_yNz1oEIkEeiuKIc56c-N_g" elementId="org.argeo.suite.e4.part.documents" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.MyFilesView" label="Documents" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/documents.png"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_vLza4DAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.1" containerData="7000">
             <tags>entityEditorArea</tags>
-            <children xsi:type="basic:Part" xmi:id="_n83mkDDnEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.part.0" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.DefaultDashboardEditor" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/dashboard.png"/>
+            <children xsi:type="basic:Part" xmi:id="_n83mkDDnEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.part.defaultDashboard" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.DefaultDashboardEditor" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/dashboard.png"/>
           </children>
         </children>
       </children>
       <children xsi:type="advanced:Perspective" xmi:id="_bu5BYD4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.perspective.folders" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png">
         <children xsi:type="basic:PartStack" xmi:id="_p66bMD4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.partstack.0">
-          <children xsi:type="basic:Part" xmi:id="_qgWDgD4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.part.1" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.MyFilesView" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/documents.png"/>
+          <children xsi:type="basic:Part" xmi:id="_xi1k0DDzEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.part.documents" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.MyFilesView" label="Documents" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/documents.png"/>
         </children>
       </children>
     </children>
-    <sharedElements xsi:type="basic:Part" xmi:id="_qAM4sDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.part.search" containerData="" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.QuickSearchView" label="Search" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/search.png"/>
     <trimBars xmi:id="_24OSADArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.trimbar.top">
       <children xsi:type="menu:ToolBar" xmi:id="_JIUjADDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.toolbar.standard">
         <children xsi:type="menu:HandledToolItem" xmi:id="_55lzgD4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledtoolitem.2" iconURI="platform:/plugin/org.argeo.cms.ui.theme/icons/person-logged-in.png" command="__L724D4cEeiR-OuUuIB1Aw">
@@ -34,39 +33,9 @@
         <children xsi:type="menu:HandledToolItem" xmi:id="_P-4LIDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.save" label="Save" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save.png" enabled="false" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_W4V9UDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.saveall" label="Save All" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save-all.png" enabled="false" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_bV4tYDDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.closeall" label="Close All" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/close-all.png" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
-        <children xsi:type="menu:ToolBarSeparator" xmi:id="_Bn7o0DDjEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.toolbarseparator.0"/>
-      </children>
-      <children xsi:type="menu:ToolBar" xmi:id="_k0mYYD28EeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.toolbar.newEntity">
-        <children xsi:type="menu:HandledToolItem" xmi:id="_4Ssr8DArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handledtoolitem.createTask" label="New Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/todo.png" command="_2Xkt8DApEei3AbO1ldMI0w">
-          <parameters xmi:id="_NYpK8DAsEei3AbO1ldMI0w" elementId="targetNodeType" name="targetNodeType" value="activities:task"/>
-        </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_p_MsIDBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handledtoolitem.createPerson" label="New Person" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/person.png" command="_2Xkt8DApEei3AbO1ldMI0w">
-          <parameters xmi:id="_6LHhIDBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.parameter.0" name="targetNodeType" value="people:person"/>
-        </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_cnaWMDBjEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handledtoolitem.neworg" label="New Org" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/organisation.png" command="_2Xkt8DApEei3AbO1ldMI0w">
-          <parameters xmi:id="_iEUDwDBjEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.parameter.1" name="targetNodeType" value="people:org"/>
-        </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="__3aVwDpLEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.handledtoolitem.newproject" label="New Project" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/project.png" command="_2Xkt8DApEei3AbO1ldMI0w">
-          <parameters xmi:id="_JiLx8DpMEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.parameter.2" name="targetNodeType" value="tracker:project"/>
-        </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_fYJ_sDpMEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.handledtoolitem.newmilestone" label="New Milestone" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/milestone.png" command="_2Xkt8DApEei3AbO1ldMI0w">
-          <parameters xmi:id="_iVMYkDpMEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.parameter.3" name="targetNodeType" value="tracker:milestone"/>
-        </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_M5t5ADpNEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.handledtoolitem.newtask" label="New Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" command="_2Xkt8DApEei3AbO1ldMI0w">
-          <parameters xmi:id="_Wj5fUDpNEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.parameter.4" name="targetNodeType" value="tracker:task"/>
-        </children>
       </children>
     </trimBars>
-    <trimBars xmi:id="_8QObED4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.trimbar.0" side="Left">
-      <children xsi:type="menu:ToolBar" xmi:id="_9NxBYD4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.toolbar.perspectives">
-        <children xsi:type="menu:HandledToolItem" xmi:id="_-KE4oD4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledtoolitem.0" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/dashboard.png" command="__usGAD4ZEeiR-OuUuIB1Aw">
-          <parameters xmi:id="_QjVu8D4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.parameter.5" name="perspectiveId" value="org.argeo.suite.e4.perspective.dashboard"/>
-        </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_evdPYD4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledtoolitem.1" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png" command="__usGAD4ZEeiR-OuUuIB1Aw">
-          <parameters xmi:id="_gW_08D4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.parameter.6" name="perspectiveId" value="org.argeo.suite.e4.perspective.folders"/>
-        </children>
-      </children>
-    </trimBars>
+    <trimBars xmi:id="_8QObED4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.trimbar.0" side="Left"/>
   </children>
   <handlers xmi:id="_HCDl8D4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handler.openPerspective" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.OpenPerspective" command="__usGAD4ZEeiR-OuUuIB1Aw"/>
   <handlers xmi:id="_ipB00DArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handler.createEntity" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.CreateEntity" command="_2Xkt8DApEei3AbO1ldMI0w"/>
@@ -94,7 +63,7 @@
   <commands xmi:id="_1lO94DDgEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.command.savePart" commandName="Save"/>
   <commands xmi:id="_5EpEADDgEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.command.saveAll" commandName="Save All"/>
   <commands xmi:id="_VdldQDDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.command.closeAll" commandName="Close All"/>
-  <commands xmi:id="__usGAD4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.command.openperspective" commandName="Open Perspective">
+  <commands xmi:id="__usGAD4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.command.openPerspective" commandName="Open Perspective">
     <parameters xmi:id="_TgkVED4aEeiR-OuUuIB1Aw" elementId="perspectiveId" name="Perspective Id" optional="false"/>
   </commands>
   <commands xmi:id="__L724D4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.command.doNothing" commandName="Do Nothing"/>

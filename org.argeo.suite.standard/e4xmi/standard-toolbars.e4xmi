@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_IEOXAEIfEeij3Nr_iRrJtw">
+  <imports xsi:type="commands:Command" xmi:id="_IEOXAUIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.command.createEntity" commandName="Create">
+    <parameters xmi:id="_IEOXAkIfEeij3Nr_iRrJtw" elementId="targetNodeType" name="targetNodeType" optional="false"/>
+  </imports>
+  <imports xsi:type="commands:Command" xmi:id="_M5YvJkIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.command.openPerspective" commandName="Open Perspective">
+    <parameters xmi:id="_M5YvJ0IfEeij3Nr_iRrJtw" elementId="perspectiveId" name="Perspective Id" optional="false"/>
+  </imports>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_IEOXA0IfEeij3Nr_iRrJtw" featurename="children" parentElementId="org.argeo.suite.e4.trimbar.top">
+    <elements xsi:type="menu:ToolBar" xmi:id="_IEOXBEIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.toolbar.newEntity">
+      <children xsi:type="menu:HandledToolItem" xmi:id="_IEOXBUIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.createTask" label="New Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/todo.png" command="_IEOXAUIfEeij3Nr_iRrJtw">
+        <parameters xmi:id="_IEOXBkIfEeij3Nr_iRrJtw" elementId="targetNodeType" name="targetNodeType" value="activities:task"/>
+      </children>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_IEOXB0IfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.createPerson" label="New Person" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/person.png" command="_IEOXAUIfEeij3Nr_iRrJtw">
+        <parameters xmi:id="_IEOXCEIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.parameter.0" name="targetNodeType" value="people:person"/>
+      </children>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_IEOXCUIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.neworg" label="New Org" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/organisation.png" command="_IEOXAUIfEeij3Nr_iRrJtw">
+        <parameters xmi:id="_IEOXCkIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.parameter.1" name="targetNodeType" value="people:org"/>
+      </children>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_IEOXC0IfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.newproject" label="New Project" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/project.png" command="_IEOXAUIfEeij3Nr_iRrJtw">
+        <parameters xmi:id="_IEOXDEIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.parameter.2" name="targetNodeType" value="tracker:project"/>
+      </children>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_IEOXDUIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.newmilestone" label="New Milestone" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/milestone.png" command="_IEOXAUIfEeij3Nr_iRrJtw">
+        <parameters xmi:id="_IEOXDkIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.parameter.3" name="targetNodeType" value="tracker:milestone"/>
+      </children>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_IEOXD0IfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.newtask" label="New Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" command="_IEOXAUIfEeij3Nr_iRrJtw">
+        <parameters xmi:id="_IEOXEEIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.parameter.4" name="targetNodeType" value="tracker:task"/>
+      </children>
+    </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_M5YvIEIfEeij3Nr_iRrJtw" featurename="children" parentElementId="org.argeo.suite.e4.trimbar.0">
+    <elements xsi:type="menu:ToolBar" xmi:id="_M5YvIUIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.toolbar.perspectives">
+      <children xsi:type="menu:HandledToolItem" xmi:id="_M5YvIkIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.0" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/dashboard.png" command="_M5YvJkIfEeij3Nr_iRrJtw">
+        <parameters xmi:id="_M5YvI0IfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.parameter.5" name="perspectiveId" value="org.argeo.suite.e4.perspective.dashboard"/>
+      </children>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_M5YvJEIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.1" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png" command="_M5YvJkIfEeij3Nr_iRrJtw">
+        <parameters xmi:id="_M5YvJUIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.parameter.6" name="perspectiveId" value="org.argeo.suite.e4.perspective.folders"/>
+      </children>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>

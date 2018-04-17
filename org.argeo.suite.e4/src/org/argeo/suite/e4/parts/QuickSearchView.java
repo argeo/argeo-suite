@@ -33,6 +33,7 @@ import org.argeo.connect.util.XPathUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.people.PeopleService;
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -183,7 +184,7 @@ public class QuickSearchView implements Refreshable {
 		JcrUtils.logoutQuietly(session);
 	}
 
-	
+	@Focus
 	public void setFocus() {
 		refreshFilteredList();
 		filterTxt.setFocus();

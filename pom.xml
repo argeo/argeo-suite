@@ -21,6 +21,7 @@
 		<module>org.argeo.suite.cms</module>
 		<module>org.argeo.suite.e4</module>
 		<module>org.argeo.suite.e4.rap</module>
+		<module>org.argeo.suite.standard</module>
 
 		<!-- Workbench -->
 		<module>org.argeo.suite.apps</module>
