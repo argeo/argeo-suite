@@ -48,6 +48,7 @@
   <handlers xmi:id="_ZBWe8DDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handler.3" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.CloseAllParts" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
   <handlers xmi:id="_ClgawD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handler.0" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.DoNothing" command="__L724D4cEeiR-OuUuIB1Aw"/>
   <handlers xmi:id="_oOUPID4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handler.4" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.DoNothing" command="_lhxJUD4dEeiR-OuUuIB1Aw"/>
+  <handlers xmi:id="_FXgZoEJBEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handler.5" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.OpenEntity" command="_CSkpAEJBEeij3Nr_iRrJtw"/>
   <bindingTables xmi:id="_gxEm4DDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.bindingtable.0" bindingContext="_Byl7gDD1EeiUfOa4rxEKwQ">
     <bindings xmi:id="_hj9cYDDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.keybinding.0" keySequence="CTRL+S" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
     <bindings xmi:id="_pEAGYDDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.keybinding.1" keySequence="SHIFT+CTRL+S" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
@@ -61,7 +62,8 @@
   <descriptors xmi:id="_muk20DpQEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.projectTaskEditor" label="Project Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.TaskEditor"/>
   <descriptors xmi:id="_vnVAMDpQEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.projectEditor" label="Project" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/project.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.ProjectEditor"/>
   <descriptors xmi:id="_TZol8DpREeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.milestoneEditor" label="Milestone" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/milestone.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.MilestoneEditor"/>
-  <commands xmi:id="_2Xkt8DApEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.command.createEntity" commandName="%newEntity">
+  <descriptors xmi:id="_q__ZsEJIEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.partdescriptor.activityEditor" label="Activity" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/activity.gif" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.activities.e4.parts.ActivityEditor"/>
+  <commands xmi:id="_2Xkt8DApEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.command.createEntity" commandName="New Entity">
     <parameters xmi:id="_GnXrcDAsEei3AbO1ldMI0w" elementId="targetNodeType" name="targetNodeType" optional="false"/>
   </commands>
   <commands xmi:id="_1lO94DDgEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.command.savePart" commandName="Save"/>
@@ -72,6 +74,10 @@
   </commands>
   <commands xmi:id="__L724D4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.command.doNothing" commandName="Do Nothing"/>
   <commands xmi:id="_lhxJUD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.command.logout" commandName="Log out"/>
+  <commands xmi:id="_CSkpAEJBEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.command.openEntity" commandName="Open Entity">
+    <parameters xmi:id="_yfo0YEJDEeij3Nr_iRrJtw" elementId="param.jcrId" name="JCR ID" optional="false"/>
+    <parameters xmi:id="_2M2F8EJDEeij3Nr_iRrJtw" elementId="param.openForEdit" name="Open for edit"/>
+  </commands>
   <addons xmi:id="_bQjNYTAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_bQjNYjAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_bQjNYzAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
