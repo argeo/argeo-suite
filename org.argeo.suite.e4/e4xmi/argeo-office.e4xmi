@@ -29,9 +29,9 @@
     </children>
     <trimBars xmi:id="_24OSADArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.trimbar.top">
       <children xsi:type="menu:ToolBar" xmi:id="_JIUjADDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.toolbar.standard">
-        <children xsi:type="menu:HandledToolItem" xmi:id="_55lzgD4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledtoolitem.2" iconURI="platform:/plugin/org.argeo.cms.ui.theme/icons/person-logged-in.png" command="__L724D4cEeiR-OuUuIB1Aw">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_55lzgD4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledtoolitem.2" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/person-logged-in.png" command="__L724D4cEeiR-OuUuIB1Aw">
           <menu xmi:id="_9ls44D4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.menu.0">
-            <children xsi:type="menu:HandledMenuItem" xmi:id="_H5bLcD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledmenuitem.logout" label="Log out" iconURI="platform:/plugin/org.argeo.cms.ui.theme/icons/delete.png"/>
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_H5bLcD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledmenuitem.logout" label="Log out" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/delete.png"/>
           </menu>
         </children>
         <children xsi:type="menu:HandledToolItem" xmi:id="_P-4LIDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.save" label="" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save.png" tooltip="%save" enabled="false" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
