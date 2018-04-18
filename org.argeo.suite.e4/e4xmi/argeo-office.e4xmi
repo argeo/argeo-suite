@@ -4,11 +4,16 @@
     <persistedState key="styleOverride" value="8"/>
     <tags>shellMaximized</tags>
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_gm_toDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.perspectivestack.main">
-      <children xsi:type="advanced:Perspective" xmi:id="_hr-YsDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.perspective.dashboard" label="%dashboard" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/dashboard.png">
+      <children xsi:type="advanced:Perspective" xmi:id="_hr-YsDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.perspective.dashboard" label="%dashboard" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/dashboard.png">
         <children xsi:type="basic:PartSashContainer" xmi:id="_mAC18DAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partsashcontainer.0" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_orJxUDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.navigation" containerData="3000">
             <tags>minimized</tags>
-            <children xsi:type="basic:Part" xmi:id="_qAM4sDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.part.search" containerData="" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.QuickSearchView" label="%search" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/search.png"/>
+            <children xsi:type="basic:Part" xmi:id="_qAM4sDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.part.search" containerData="" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.QuickSearchView" label="%search" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/search.png">
+              <handlers xmi:id="_fXnekELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.handler.6" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.DeleteSelectedEntity" command="_EvkB4ELbEeim_a9htzedPA"/>
+              <toolbar xmi:id="_DCPkcELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.toolbar.1">
+                <children xsi:type="menu:HandledToolItem" xmi:id="_DvXJIELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.handledtoolitem.0" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/delete.png" command="_EvkB4ELbEeim_a9htzedPA"/>
+              </toolbar>
+            </children>
             <children xsi:type="basic:Part" xmi:id="_yNz1oEIkEeiuKIc56c-N_g" elementId="org.argeo.suite.e4.part.documents" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.MyFilesView" label="%documents" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/documents.png"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_vLza4DAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.1" containerData="7000">
@@ -21,7 +26,7 @@
           </children>
         </children>
       </children>
-      <children xsi:type="advanced:Perspective" xmi:id="_bu5BYD4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.perspective.folders" label="%folders" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png">
+      <children xsi:type="advanced:Perspective" xmi:id="_bu5BYD4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.perspective.folders" label="%folders" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/folder.png">
         <children xsi:type="basic:PartStack" xmi:id="_p66bMD4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.partstack.0">
           <children xsi:type="basic:Part" xmi:id="_xi1k0DDzEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.part.documents" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.MyFilesView" label="%documents" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/documents.png"/>
         </children>
@@ -29,15 +34,15 @@
     </children>
     <trimBars xmi:id="_24OSADArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.trimbar.top">
       <children xsi:type="menu:ToolBar" xmi:id="_JIUjADDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.toolbar.standard">
-        <children xsi:type="menu:HandledToolItem" xmi:id="_55lzgD4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledtoolitem.2" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/dashboard.png" tooltip="%dashboard" command="__usGAD4ZEeiR-OuUuIB1Aw">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_55lzgD4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledtoolitem.2" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/dashboard.png" tooltip="%dashboard" command="__usGAD4ZEeiR-OuUuIB1Aw">
           <menu xmi:id="_9ls44D4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.menu.0">
-            <children xsi:type="menu:HandledMenuItem" xmi:id="_H5bLcD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledmenuitem.logout" label="Log out" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/delete.png"/>
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_H5bLcD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledmenuitem.logout" label="Log out" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/logout.png"/>
           </menu>
           <parameters xmi:id="_d_2RcEJ6Eeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.parameter.0" name="perspectiveId" value="org.argeo.suite.e4.perspective.dashboard"/>
         </children>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_P-4LIDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.save" label="" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save.png" tooltip="%save" enabled="false" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_W4V9UDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.saveall" label="" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/save-all.png" tooltip="%saveAll" enabled="false" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_bV4tYDDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.closeall" label="" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/close-all.png" tooltip="%closeAll" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_P-4LIDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.save" label="" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/save.png" tooltip="%save" enabled="false" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_W4V9UDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.saveall" label="" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/save-all.png" tooltip="%saveAll" enabled="false" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_bV4tYDDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handledtoolitem.closeall" label="" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/close-all.png" tooltip="%closeAll" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
       </children>
     </trimBars>
     <trimBars xmi:id="_8QObED4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.trimbar.0" side="Left"/>
@@ -79,6 +84,7 @@
     <parameters xmi:id="_yfo0YEJDEeij3Nr_iRrJtw" elementId="param.jcrId" name="JCR ID" optional="false"/>
     <parameters xmi:id="_2M2F8EJDEeij3Nr_iRrJtw" elementId="param.openForEdit" name="Open for edit"/>
   </commands>
+  <commands xmi:id="_EvkB4ELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.command.deleteEntity" commandName="Delete Entity"/>
   <addons xmi:id="_bQjNYTAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_bQjNYjAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_bQjNYzAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
