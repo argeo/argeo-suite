@@ -2,6 +2,8 @@ package org.argeo.suite.e4.parts;
 
 import static org.argeo.eclipse.ui.EclipseUiUtils.notEmpty;
 
+import java.util.List;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
@@ -34,9 +36,13 @@ import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.people.PeopleService;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.workbench.modeling.ESelectionService;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -68,6 +74,9 @@ public class QuickSearchView implements Refreshable {
 	@Inject
 	private SystemWorkbenchService systemWorkbenchService;
 
+	@Inject
+	private ESelectionService selectionService;
+
 	// This page widgets
 	private TableViewer entityViewer;
 	private Text filterTxt;
@@ -90,6 +99,7 @@ public class QuickSearchView implements Refreshable {
 		refreshFilteredList();
 
 		try {
+			// new String[] { ConnectTypes.CONNECT_ENTITY }
 			session.getWorkspace().getObservationManager().addEventListener(new EventListener() {
 
 				@Override
@@ -97,7 +107,7 @@ public class QuickSearchView implements Refreshable {
 					parent.getDisplay().asyncExec(() -> refreshFilteredList());
 				}
 			}, Event.PROPERTY_CHANGED | Event.NODE_ADDED | Event.NODE_REMOVED | Event.PROPERTY_ADDED, "/", true, null,
-					new String[] { ConnectTypes.CONNECT_ENTITY }, true);
+					null, false);
 		} catch (RepositoryException e) {
 			throw new ConnectException("Cannot add JCR observer", e);
 		}
@@ -176,6 +186,16 @@ public class QuickSearchView implements Refreshable {
 
 		v.setContentProvider(new BasicNodeListContentProvider());
 		v.addDoubleClickListener(new JcrViewerDClickListener(systemWorkbenchService));
+		v.addSelectionChangedListener(new ISelectionChangedListener() {
+			public void selectionChanged(SelectionChangedEvent event) {
+				IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+				List<?> lst = selection.toList();
+				if (lst != null && !lst.isEmpty())
+					selectionService.setSelection(selection.toList());
+				else
+					selectionService.setSelection(null);
+			}
+		});
 		return v;
 	}
 
@@ -218,6 +238,7 @@ public class QuickSearchView implements Refreshable {
 			// }
 
 			long begin = System.currentTimeMillis();
+			// session.refresh(false);
 			Query xpathQuery = XPathUtils.createQuery(session, xpathQueryStr);
 
 			xpathQuery.setLimit(ConnectUiConstants.SEARCH_DEFAULT_LIMIT);
@@ -235,23 +256,24 @@ public class QuickSearchView implements Refreshable {
 		}
 	}
 
-//	public void setRepository(Repository repository) {
-//		this.repository = repository;
-//	}
-//
-//	public void setResourcesService(ResourcesService resourcesService) {
-//		this.resourcesService = resourcesService;
-//	}
-//
-//	public void setActivitiesService(ActivitiesService activitiesService) {
-//		this.activitiesService = activitiesService;
-//	}
-//
-//	public void setPeopleService(PeopleService peopleService) {
-//		this.peopleService = peopleService;
-//	}
-//
-//	public void setSystemWorkbenchService(SystemWorkbenchService systemWorkbenchService) {
-//		this.systemWorkbenchService = systemWorkbenchService;
-//	}
+	// public void setRepository(Repository repository) {
+	// this.repository = repository;
+	// }
+	//
+	// public void setResourcesService(ResourcesService resourcesService) {
+	// this.resourcesService = resourcesService;
+	// }
+	//
+	// public void setActivitiesService(ActivitiesService activitiesService) {
+	// this.activitiesService = activitiesService;
+	// }
+	//
+	// public void setPeopleService(PeopleService peopleService) {
+	// this.peopleService = peopleService;
+	// }
+	//
+	// public void setSystemWorkbenchService(SystemWorkbenchService
+	// systemWorkbenchService) {
+	// this.systemWorkbenchService = systemWorkbenchService;
+	// }
 }
