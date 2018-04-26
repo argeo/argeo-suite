@@ -36,7 +36,7 @@
       <children xsi:type="menu:ToolBar" xmi:id="_JIUjADDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.toolbar.standard">
         <children xsi:type="menu:HandledToolItem" xmi:id="_55lzgD4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledtoolitem.2" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/dashboard.png" tooltip="%dashboard" command="__usGAD4ZEeiR-OuUuIB1Aw">
           <menu xmi:id="_9ls44D4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.menu.0">
-            <children xsi:type="menu:HandledMenuItem" xmi:id="_H5bLcD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledmenuitem.logout" label="Log out" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/logout.png"/>
+            <children xsi:type="menu:HandledMenuItem" xmi:id="_H5bLcD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handledmenuitem.logout" label="Log out" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/logout.png" command="_lhxJUD4dEeiR-OuUuIB1Aw"/>
           </menu>
           <parameters xmi:id="_d_2RcEJ6Eeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.parameter.0" name="perspectiveId" value="org.argeo.suite.e4.perspective.dashboard"/>
         </children>
@@ -53,7 +53,7 @@
   <handlers xmi:id="_ADDAkDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handler.2" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.SaveAllParts" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
   <handlers xmi:id="_ZBWe8DDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handler.3" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.CloseAllParts" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
   <handlers xmi:id="_ClgawD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handler.0" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.DoNothing" command="__L724D4cEeiR-OuUuIB1Aw"/>
-  <handlers xmi:id="_oOUPID4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handler.4" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.DoNothing" command="_lhxJUD4dEeiR-OuUuIB1Aw"/>
+  <handlers xmi:id="_oOUPID4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handler.4" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.CloseWorkbench" command="_lhxJUD4dEeiR-OuUuIB1Aw"/>
   <handlers xmi:id="_FXgZoEJBEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handler.5" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.OpenEntity" command="_CSkpAEJBEeij3Nr_iRrJtw"/>
   <bindingTables xmi:id="_gxEm4DDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.bindingtable.0" bindingContext="_Byl7gDD1EeiUfOa4rxEKwQ">
     <bindings xmi:id="_hj9cYDDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.keybinding.0" keySequence="CTRL+S" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
@@ -61,8 +61,12 @@
   </bindingTables>
   <rootContext xmi:id="_Byl7gDD1EeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.bindingcontext.main" name="Main"/>
   <descriptors xmi:id="_pud7kDAtEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.taskEditor" label="Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.activities.e4.parts.TaskEditor"/>
-  <descriptors xmi:id="_JsNs8DBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.personEditor" label="%person" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/person.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.parts.PersonEditor"/>
-  <descriptors xmi:id="_RxqxIDBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.orgEditor" label="%organisation" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/organisation.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.parts.OrgEditor"/>
+  <descriptors xmi:id="_JsNs8DBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.personEditor" label="%person" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/person.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.parts.PersonEditor">
+    <tags>removeOnHide</tags>
+  </descriptors>
+  <descriptors xmi:id="_RxqxIDBiEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partdescriptor.orgEditor" label="%organisation" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/organisation.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.parts.OrgEditor">
+    <tags>removeOnHide</tags>
+  </descriptors>
   <descriptors xmi:id="_GkmucDD0EeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.partdescriptor.file" label="File" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/file.png" allowMultiple="true" category="entityEditorArea" closeable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.FileEditor"/>
   <descriptors xmi:id="_NjQioDD0EeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.partdescriptor.folder" label="Folder" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png" allowMultiple="true" category="entityEditorArea" closeable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.FolderEditor"/>
   <descriptors xmi:id="_muk20DpQEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.projectTaskEditor" label="Project Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.TaskEditor"/>
