@@ -39,6 +39,7 @@
 			<groupId>org.argeo.connect</groupId>
 			<artifactId>org.argeo.connect.dep.e4.rap</artifactId>
 			<version>${version.argeo-connect}</version>
+			<type>pom</type>
 		</dependency>
 		
 		<!-- Argeo TP Extras -->
@@ -54,26 +55,43 @@
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-dependency-plugin</artifactId>
+						<artifactId>maven-assembly-plugin</artifactId>
 						<executions>
 							<execution>
-								<id>copy-argeo</id>
+								<id>prepare-source</id>
 								<phase>package</phase>
 								<goals>
-									<goal>copy-dependencies</goal>
+									<goal>single</goal>
 								</goals>
 								<configuration>
-									<includeTypes>jar</includeTypes>
-									<outputDirectory>${project.build.directory}/lib-argeo</outputDirectory>
-									<includeGroupIds>org.argeo.suite</includeGroupIds>
-									<includeTypes>jar</includeTypes>
-									<includeScope>runtime</includeScope>
-									<useRepositoryLayout>true</useRepositoryLayout>
+									<descriptorRefs>
+										<descriptorRef>a2-source</descriptorRef>
+									</descriptorRefs>
 								</configuration>
 							</execution>
 						</executions>
 					</plugin>
+<!-- 					<plugin> -->
+<!-- 						<groupId>org.apache.maven.plugins</groupId> -->
+<!-- 						<artifactId>maven-dependency-plugin</artifactId> -->
+<!-- 						<executions> -->
+<!-- 							<execution> -->
+<!-- 								<id>copy-argeo</id> -->
+<!-- 								<phase>package</phase> -->
+<!-- 								<goals> -->
+<!-- 									<goal>copy-dependencies</goal> -->
+<!-- 								</goals> -->
+<!-- 								<configuration> -->
+<!-- 									<includeTypes>jar</includeTypes> -->
+<!-- 									<outputDirectory>${project.build.directory}/lib-argeo</outputDirectory> -->
+<!-- 									<includeGroupIds>org.argeo.suite</includeGroupIds> -->
+<!-- 									<includeTypes>jar</includeTypes> -->
+<!-- 									<includeScope>runtime</includeScope> -->
+<!-- 									<useRepositoryLayout>true</useRepositoryLayout> -->
+<!-- 								</configuration> -->
+<!-- 							</execution> -->
+<!-- 						</executions> -->
+<!-- 					</plugin> -->
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>rpm-maven-plugin</artifactId>
@@ -85,7 +103,7 @@
 									<goal>rpm</goal>
 								</goals>
 								<configuration>
-									<name>argeo-suite-e4</name>
+									<name>argeo-suite-e4-rap</name>
 									<mappings>
 										<mapping>
 											<directory>/usr/share/osgi</directory>
@@ -95,7 +113,7 @@
 											<directoryIncluded>true</directoryIncluded>
 											<sources>
 												<source>
-													<location>${project.build.directory}/lib-argeo</location>
+													<location>${project.build.directory}/${project.artifactId}-${project.version}-a2-source</location>
 													<includes>
 														<include>**/*.jar</include>
 													</includes>
@@ -104,7 +122,7 @@
 										</mapping>
 									</mappings>
 									<requires>
-										<require>argeo-connect-e4-tp</require>
+										<require>argeo-connect-e4-rap</require>
 									</requires>
 								</configuration>
 							</execution>
