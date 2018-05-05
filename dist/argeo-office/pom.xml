@@ -76,15 +76,15 @@
 									<name>argeo-office</name>
 									<mappings>
 										<mapping>
-											<directory>/etc/node/conf.d</directory>
+											<directory>/etc/argeo/conf.d</directory>
 											<username>root</username>
-											<groupname>node</groupname>
+											<groupname>argeo</groupname>
 											<filemode>640</filemode>
 											<configuration>noreplace</configuration>
 											<directoryIncluded>false</directoryIncluded>
 											<sources>
 												<source>
-													<location>base/etc/node/conf.d</location>
+													<location>base/etc/argeo/conf.d</location>
 													<includes>
 														<include>*.ini</include>
 														<include>*.txt</include>
@@ -94,6 +94,7 @@
 										</mapping>
 									</mappings>
 									<requires>
+										<require>argeo-node</require>
 										<require>argeo-suite-e4-rap</require>
 									</requires>
 								</configuration>
