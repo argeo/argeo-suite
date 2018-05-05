@@ -28,6 +28,7 @@
 		<module>org.argeo.suite.workbench.rap</module>
 
 		<module>dep</module>
+		<module>dist</module>
 	</modules>
 	<properties>
 		<version.argeo-suite>0.1.13-SNAPSHOT</version.argeo-suite>
