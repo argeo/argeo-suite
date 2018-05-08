@@ -55,6 +55,8 @@
   <handlers xmi:id="_ClgawD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handler.0" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.DoNothing" command="__L724D4cEeiR-OuUuIB1Aw"/>
   <handlers xmi:id="_oOUPID4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handler.4" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.CloseWorkbench" command="_lhxJUD4dEeiR-OuUuIB1Aw"/>
   <handlers xmi:id="_FXgZoEJBEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handler.5" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.OpenEntity" command="_CSkpAEJBEeij3Nr_iRrJtw"/>
+  <handlers xmi:id="_rpYtUFKhEeiMg9Tl6PNQtg" elementId="org.argeo.suite.e4.handler.7" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.handlers.EditJob" command="_SZBRwFKgEeiMg9Tl6PNQtg"/>
+  <handlers xmi:id="_NG13YFKpEeiMg9Tl6PNQtg" elementId="org.argeo.suite.e4.handler.8" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.handlers.RemoveEntityReference" command="_ABz60FKpEeiMg9Tl6PNQtg"/>
   <bindingTables xmi:id="_gxEm4DDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.bindingtable.0" bindingContext="_Byl7gDD1EeiUfOa4rxEKwQ">
     <bindings xmi:id="_hj9cYDDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.keybinding.0" keySequence="CTRL+S" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
     <bindings xmi:id="_pEAGYDDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.keybinding.1" keySequence="SHIFT+CTRL+S" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
@@ -89,6 +91,13 @@
     <parameters xmi:id="_2M2F8EJDEeij3Nr_iRrJtw" elementId="param.openForEdit" name="Open for edit"/>
   </commands>
   <commands xmi:id="_EvkB4ELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.command.deleteEntity" commandName="Delete Entity"/>
+  <commands xmi:id="_SZBRwFKgEeiMg9Tl6PNQtg" elementId="org.argeo.suite.e4.command.editJob" commandName="Edit Job">
+    <parameters xmi:id="_UcMDYFKgEeiMg9Tl6PNQtg" elementId="relevantNodeJcrId" name="Relevant Node JCR ID" optional="false"/>
+    <parameters xmi:id="_tsxAsFKpEeiMg9Tl6PNQtg" elementId="isBackward" name="Is Backward"/>
+  </commands>
+  <commands xmi:id="_ABz60FKpEeiMg9Tl6PNQtg" elementId="org.argeo.suite.e4.command.removeEntityReference" commandName="Remove Entity Reference">
+    <parameters xmi:id="_D__AkFKpEeiMg9Tl6PNQtg" elementId="toRemoveJcrId" name="To Remove JCR ID" optional="false"/>
+  </commands>
   <addons xmi:id="_bQjNYTAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_bQjNYjAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_bQjNYzAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
