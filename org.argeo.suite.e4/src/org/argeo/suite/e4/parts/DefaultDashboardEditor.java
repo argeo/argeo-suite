@@ -16,6 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.activities.ActivitiesNames;
 import org.argeo.activities.ActivitiesService;
+import org.argeo.activities.ActivitiesTypes;
 import org.argeo.activities.ui.TaskViewerContextMenu;
 import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.util.CmsUtils;
@@ -29,12 +30,13 @@ import org.argeo.jcr.JcrUtils;
 import org.argeo.node.NodeUtils;
 import org.argeo.tracker.TrackerNames;
 import org.argeo.tracker.TrackerService;
-import org.argeo.tracker.TrackerTypes;
 import org.argeo.tracker.core.TrackerUtils;
 import org.argeo.tracker.ui.TaskListLabelProvider;
 import org.argeo.tracker.ui.TaskVirtualListComposite;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
@@ -106,27 +108,10 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 			noTaskCmp.setLayoutData(EclipseUiUtils.fillAll());
 			noTaskCmp.setLayout(new GridLayout());
 
-			Label noTaskLbl = new Label(noTaskCmp, SWT.CENTER);
-			noTaskLbl.setText("<i> <big> You have no pending Task. </big> </i>");
-			CmsUtils.markup(noTaskLbl);
-			noTaskLbl.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, true));
-
-			final Link createTaskLk = new Link(noTaskCmp, SWT.CENTER);
-			createTaskLk.setText("<a> Create a task </a>");
-			createTaskLk.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, true));
-
-			createTaskLk.addSelectionListener(new SelectionAdapter() {
-				private static final long serialVersionUID = -9028457805156989935L;
-
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-					String mainMixin = TrackerTypes.TRACKER_TASK;
-					String pathCreated = ConnectWorkbenchUtils.createAndConfigureEntity(createTaskLk.getShell(),
-							getSession(), getSystemAppService(), getSystemWorkbenchService(), mainMixin);
-					if (EclipseUiUtils.notEmpty(pathCreated))
-						forceRefresh(null);
-				}
-			});
+			// Label noTaskLbl = new Label(noTaskCmp, SWT.CENTER);
+			// noTaskLbl.setText("<i> <big> You have no pending Task. </big> </i>");
+			// CmsUtils.markup(noTaskLbl);
+			// noTaskLbl.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, true));
 
 		} else {
 			TaskListLabelProvider labelProvider = new TaskListLabelProvider(trackerService);
@@ -161,7 +146,15 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 					}
 				}
 			});
+			viewer.addDoubleClickListener(new IDoubleClickListener() {
 
+				@Override
+				public void doubleClick(DoubleClickEvent event) {
+					IStructuredSelection sel = (IStructuredSelection) viewer.getSelection();
+					Node task = (Node) sel.getFirstElement();
+					getSystemWorkbenchService().openEntityEditor(task);
+				}
+			});
 		}
 	}
 
@@ -187,12 +180,33 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		// Title
 		Label titleLbl = new Label(leftCmp, SWT.WRAP | SWT.LEAD);
 		CmsUtils.markup(titleLbl);
-		String titleStr = "<big><b> Hello " + CurrentUser.getDisplayName() + " </b></big>";
+		String titleStr = "<big><b>" + CurrentUser.getDisplayName() + "</b></big>";
 		titleLbl.setText(titleStr);
-		GridData gd = new GridData(SWT.TOP, SWT.BOTTOM, false, false);
-		gd.verticalIndent = 5;
-		gd.horizontalIndent = 10;
+		GridData gd = new GridData(SWT.BEGINNING, SWT.TOP, false, false);
+		// gd.verticalIndent = 5;
+		// gd.horizontalIndent = 10;
 		titleLbl.setLayoutData(gd);
+
+		final Link createTaskLk = new Link(leftCmp, SWT.CENTER);
+		createTaskLk.setText("<a>Create a task</a>");
+		gd = new GridData(SWT.BEGINNING, SWT.TOP, false, false);
+		// gd.verticalIndent = 5;
+		gd.horizontalIndent = 10;
+		createTaskLk.setLayoutData(gd);
+
+		createTaskLk.addSelectionListener(new SelectionAdapter() {
+			private static final long serialVersionUID = -9028457805156989935L;
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				// String mainMixin = TrackerTypes.TRACKER_TASK;
+				String mainMixin = ActivitiesTypes.ACTIVITIES_TASK;
+				String pathCreated = ConnectWorkbenchUtils.createAndConfigureEntity(createTaskLk.getShell(),
+						getSession(), getSystemAppService(), getSystemWorkbenchService(), mainMixin);
+				if (EclipseUiUtils.notEmpty(pathCreated))
+					forceRefresh(null);
+			}
+		});
 
 		NodeIterator nit = activitiesService.getMyTasks(getSession(), true);
 		if (nit.hasNext()) {
