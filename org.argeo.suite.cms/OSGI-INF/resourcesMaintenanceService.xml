@@ -4,4 +4,5 @@
    <service>
       <provide interface="org.argeo.connect.AppMaintenanceService"/>
    </service>
+   <reference bind="setResourcesService" cardinality="1..1" interface="org.argeo.connect.resources.ResourcesService" name="ResourcesService" policy="static"/>
 </scr:component>

@@ -14,7 +14,6 @@
                 <children xsi:type="menu:HandledToolItem" xmi:id="_DvXJIELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.handledtoolitem.0" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/delete.png" command="_EvkB4ELbEeim_a9htzedPA"/>
               </toolbar>
             </children>
-            <children xsi:type="basic:Part" xmi:id="_yNz1oEIkEeiuKIc56c-N_g" elementId="org.argeo.suite.e4.part.documents" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.MyFilesView" label="%documents" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/documents.png"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_vLza4DAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.1" containerData="7000">
             <tags>entityEditorArea</tags>
@@ -75,6 +74,8 @@
   <descriptors xmi:id="_vnVAMDpQEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.projectEditor" label="Project" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/project.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.ProjectEditor"/>
   <descriptors xmi:id="_TZol8DpREeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.milestoneEditor" label="Milestone" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/milestone.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.MilestoneEditor"/>
   <descriptors xmi:id="_q__ZsEJIEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.partdescriptor.activityEditor" label="Activity" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/activity.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.activities.e4.parts.ActivityEditor"/>
+  <descriptors xmi:id="_OqeE8FeZEeiknZQLx-vtnA" elementId="org.argeo.suite.e4.partdescriptor.tagEditor" label="Tag" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/tag.png" allowMultiple="true" closeable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.resources.parts.TagEditor"/>
+  <descriptors xmi:id="_xvss0FeaEeiknZQLx-vtnA" elementId="org.argeo.suite.e4.partdescriptor.searchEntityPart" label="Search Entity" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/search.png" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.parts.DefaultSearchEntityEditor"/>
   <commands xmi:id="_2Xkt8DApEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.command.createEntity" commandName="New Entity">
     <parameters xmi:id="_GnXrcDAsEei3AbO1ldMI0w" elementId="targetNodeType" name="targetNodeType" optional="false"/>
   </commands>
