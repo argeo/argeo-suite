@@ -5,8 +5,11 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.jcr.Node;
 import javax.jcr.Repository;
+import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.argeo.cms.ui.eclipse.forms.FormToolkit;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.SystemAppService;
@@ -17,6 +20,9 @@ import org.argeo.connect.ui.SystemWorkbenchService;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
+import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.rap.rwt.RWT;
+import org.eclipse.rap.rwt.client.service.BrowserNavigation;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -29,6 +35,7 @@ import org.eclipse.swt.widgets.Link;
 
 /** Generic dashboard for Argeo Suite applications */
 public abstract class AbstractSuiteDashboard {
+	private final static Log log = LogFactory.getLog(AbstractSuiteDashboard.class);
 
 	// DEPENDENCY INJECTION
 	@Inject
@@ -45,17 +52,20 @@ public abstract class AbstractSuiteDashboard {
 	// UI Objects
 	private FormToolkit toolkit;
 
-	public void init()  {
+	// RAP specific
+	private BrowserNavigation browserNavigation;
+
+	public void init() {
 		session = ConnectJcrUtils.login(repository);
-//		updateTooltip(input);
+		// updateTooltip(input);
 	}
 
-//	private void updateTooltip(IEditorInput input) {
-//		if (input instanceof EntityEditorInput) {
-//			EntityEditorInput sei = (EntityEditorInput) input;
-//			sei.setTooltipText("My Dashboard");
-//		}
-//	}
+	// private void updateTooltip(IEditorInput input) {
+	// if (input instanceof EntityEditorInput) {
+	// EntityEditorInput sei = (EntityEditorInput) input;
+	// sei.setTooltipText("My Dashboard");
+	// }
+	// }
 
 	/**
 	 * Implementing classes must call super in order to create the correct form
@@ -65,6 +75,7 @@ public abstract class AbstractSuiteDashboard {
 	public void createPartControl(Composite parent) {
 		toolkit = new FormToolkit(Display.getCurrent());
 		init();
+		browserNavigation = RWT.getClient().getService(BrowserNavigation.class);
 	}
 
 	// UTILS
@@ -125,6 +136,10 @@ public abstract class AbstractSuiteDashboard {
 		JcrUtils.logoutQuietly(session);
 	}
 
+	@Focus
+	public void setFocus() {
+		browserNavigation.pushState("~", "Dashboard");
+	}
 
 	// Expose to implementing classes
 	protected Session getSession() {

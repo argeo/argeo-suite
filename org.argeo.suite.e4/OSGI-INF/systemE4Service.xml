@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="System E4 Service">
-   <implementation class="org.argeo.connect.e4.SystemE4Service"/>
+   <implementation class="org.argeo.connect.e4.SystemE4ServiceFunction"/>
    <service>
       <provide interface="org.eclipse.e4.core.contexts.IContextFunction"/>
    </service>

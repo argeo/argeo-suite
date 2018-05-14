@@ -363,11 +363,6 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		}
 	}
 
-	@Focus
-	public void setFocus() {
-		// refreshDocListGadget();
-	}
-
 	public void setActivitiesService(ActivitiesService activitiesService) {
 		this.activitiesService = activitiesService;
 	}
