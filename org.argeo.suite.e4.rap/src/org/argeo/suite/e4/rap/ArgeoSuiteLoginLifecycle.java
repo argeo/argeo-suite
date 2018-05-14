@@ -4,6 +4,7 @@ import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jcr.Node;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
@@ -22,6 +23,7 @@ public class ArgeoSuiteLoginLifecycle extends CmsLoginLifecycle {
 	SystemWorkbenchService systemWorkbenchService;
 
 	@Inject
+	@Named("(cn=home)")
 	Repository repository;
 
 	@Override
@@ -36,31 +38,33 @@ public class ArgeoSuiteLoginLifecycle extends CmsLoginLifecycle {
 
 	private void loadState() {
 		String state = getState();
-		if (state != null && state.startsWith("/")) {
-			Session session = null;
-			try {
-				Subject subject = getSubject();
-				session = Subject.doAs(subject, new PrivilegedExceptionAction<Session>() {
+		// for the time being we systematically open a session, in order to make sure
+		// that home is initialised
+		Session session = null;
+		try {
+			Subject subject = getSubject();
+			session = Subject.doAs(subject, new PrivilegedExceptionAction<Session>() {
 
-					@Override
-					public Session run() throws PrivilegedActionException {
-						try {
-							return repository.login();
-						} catch (RepositoryException e) {
-							throw new PrivilegedActionException(e);
-						}
+				@Override
+				public Session run() throws PrivilegedActionException {
+					try {
+						return repository.login();
+					} catch (RepositoryException e) {
+						throw new PrivilegedActionException(e);
 					}
+				}
 
-				});
+			});
+			if (state != null && state.startsWith("/")) {
 				if (state.startsWith("/")) {
 					Node node = session.getNode(state);
 					systemWorkbenchService.openEntityEditor(node);
 				}
-			} catch (RepositoryException | PrivilegedActionException e) {
-				log.error("Cannot load state " + state, e);
-			} finally {
-				JcrUtils.logoutQuietly(session);
 			}
+		} catch (RepositoryException | PrivilegedActionException e) {
+			log.error("Cannot load state " + state, e);
+		} finally {
+			JcrUtils.logoutQuietly(session);
 		}
 	}
 }
