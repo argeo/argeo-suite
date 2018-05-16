@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="Activities Maintenance Service">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" immediate="true" name="Activities Maintenance Service">
    <implementation class="org.argeo.activities.core.ActivitiesMaintenanceService"/>
    <service>
       <provide interface="org.argeo.connect.AppMaintenanceService"/>
    </service>
+   <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="static" target="(cn=connect)"/>
+   <reference bind="setUserAdminService" cardinality="1..1" interface="org.argeo.connect.UserAdminService" name="UserAdminService" policy="static"/>
 </scr:component>
