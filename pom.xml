@@ -22,6 +22,9 @@
 		<module>org.argeo.suite.e4</module>
 		<module>org.argeo.suite.e4.rap</module>
 		<module>org.argeo.suite.standard</module>
+		
+		<!-- Apps -->
+		<module>org.argeo.suite.tracker</module>
 
 		<!-- Workbench -->
 		<module>org.argeo.suite.apps</module>

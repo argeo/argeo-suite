@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ASCII"?>
+<fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_1ISvQFuKEeioOJZqIpekPQ">
+  <imports xsi:type="commands:Command" xmi:id="_Dppf4FuLEeioOJZqIpekPQ" elementId="org.argeo.suite.e4.command.createEntity">
+    <parameters xmi:id="_HsY8kFuLEeioOJZqIpekPQ" elementId="targetNodeType" name="targetNodeType" optional="false"/>
+  </imports>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_1ISvQVuKEeioOJZqIpekPQ" featurename="children" parentElementId="org.argeo.suite.e4.trimbar.top">
+    <elements xsi:type="menu:ToolBar" xmi:id="_1ISvQluKEeioOJZqIpekPQ" elementId="org.argeo.suite.e4.toolbar.2">
+      <children xsi:type="menu:HandledToolItem" xmi:id="_3CFicFuKEeioOJZqIpekPQ" elementId="org.argeo.suite.tracker.handledtoolitem.newTrackerTask" label="New Tracker Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" command="_Dppf4FuLEeioOJZqIpekPQ">
+        <parameters xmi:id="_4EGjoFuLEeioOJZqIpekPQ" elementId="org.argeo.suite.tracker.parameter.1" name="targetNodeType" value="tracker:task"/>
+      </children>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_Q4QPMFuLEeioOJZqIpekPQ" elementId="org.argeo.suite.tracker.handledtoolitem.newMilestone" label="New Milestone" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/milestone.png" command="_Dppf4FuLEeioOJZqIpekPQ">
+        <parameters xmi:id="_6NTEwFuLEeioOJZqIpekPQ" elementId="org.argeo.suite.tracker.parameter.2" name="targetNodeType" value="tracker:milestone"/>
+      </children>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_VOG1IFuLEeioOJZqIpekPQ" elementId="org.argeo.suite.tracker.handledtoolitem.newProject" label="New Project" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/project.png" command="_Dppf4FuLEeioOJZqIpekPQ">
+        <parameters xmi:id="_0l_eAFuLEeioOJZqIpekPQ" elementId="org.argeo.suite.tracker.parameter.0" name="targetNodeType" value="tracker:project"/>
+      </children>
+    </elements>
+  </fragments>
+</fragment:ModelFragments>
