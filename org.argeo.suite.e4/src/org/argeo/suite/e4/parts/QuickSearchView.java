@@ -246,9 +246,9 @@ public class QuickSearchView implements Refreshable {
 
 			NodeIterator nit = result.getNodes();
 			entityViewer.setInput(JcrUtils.nodeIteratorToList(nit));
-			if (log.isDebugEnabled()) {
+			if (log.isTraceEnabled()) {
 				long end = System.currentTimeMillis();
-				log.debug("Quick Search - Found: " + nit.getSize() + " in " + (end - begin)
+				log.trace("Quick Search - Found: " + nit.getSize() + " in " + (end - begin)
 						+ " ms by executing XPath query (" + xpathQueryStr + ").");
 			}
 		} catch (RepositoryException e) {
