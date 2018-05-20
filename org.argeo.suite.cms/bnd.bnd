@@ -1,16 +1,15 @@
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/systemAppService.xml,\
- OSGI-INF/userManagerService.xml,\
- OSGI-INF/resourcesService.xml,\
- OSGI-INF/activitiesService.xml,\
- OSGI-INF/peopleService.xml,\
- OSGI-INF/trackerService.xml,\
- OSGI-INF/documentsService.xml,\
- OSGI-INF/systemMaintenanceService.xml,\
- OSGI-INF/activitiesMaintenanceService.xml,\
- OSGI-INF/resourcesMaintenanceService.xml,\
- OSGI-INF/peopleMaintenanceService.xml,\
- OSGI-INF/trackerMaintenanceService.xml
+OSGI-INF/userManagerService.xml,\
+OSGI-INF/resourcesService.xml,\
+OSGI-INF/activitiesService.xml,\
+OSGI-INF/peopleService.xml,\
+OSGI-INF/trackerService.xml,\
+OSGI-INF/documentsService.xml,\
+OSGI-INF/systemMaintenanceService.xml,\
+OSGI-INF/activitiesMaintenanceService.xml,\
+OSGI-INF/resourcesMaintenanceService.xml,\
+OSGI-INF/peopleMaintenanceService.xml
  
 Import-Package: javax.jcr,\
 javax.transaction,\

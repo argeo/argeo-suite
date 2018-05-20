@@ -5,11 +5,8 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 import javax.jcr.Node;
 import javax.jcr.Repository;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.argeo.cms.ui.eclipse.forms.FormToolkit;
 import org.argeo.cms.util.CmsUtils;
 import org.argeo.connect.SystemAppService;
@@ -35,7 +32,8 @@ import org.eclipse.swt.widgets.Link;
 
 /** Generic dashboard for Argeo Suite applications */
 public abstract class AbstractSuiteDashboard {
-	private final static Log log = LogFactory.getLog(AbstractSuiteDashboard.class);
+	// private final static Log log =
+	// LogFactory.getLog(AbstractSuiteDashboard.class);
 
 	// DEPENDENCY INJECTION
 	@Inject
@@ -163,19 +161,20 @@ public abstract class AbstractSuiteDashboard {
 	}
 
 	/* DEPENDENCY INJECTION */
-	public void setRepository(Repository repository) {
-		this.repository = repository;
-	}
-
-	public void setResourcesService(ResourcesService resourcesService) {
-		this.resourcesService = resourcesService;
-	}
-
-	public void setSystemAppService(SystemAppService systemAppService) {
-		this.systemAppService = systemAppService;
-	}
-
-	public void setSystemWorkbenchService(SystemWorkbenchService systemWorkbenchService) {
-		this.systemWorkbenchService = systemWorkbenchService;
-	}
+	// public void setRepository(Repository repository) {
+	// this.repository = repository;
+	// }
+	//
+	// public void setResourcesService(ResourcesService resourcesService) {
+	// this.resourcesService = resourcesService;
+	// }
+	//
+	// public void setSystemAppService(SystemAppService systemAppService) {
+	// this.systemAppService = systemAppService;
+	// }
+	//
+	// public void setSystemWorkbenchService(SystemWorkbenchService
+	// systemWorkbenchService) {
+	// this.systemWorkbenchService = systemWorkbenchService;
+	// }
 }

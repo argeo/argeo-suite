@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" immediate="true" name="System Maintenance Service">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" immediate="true" name="System Maintenance Service">
    <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="static" target="(cn=connect)"/>
    <service>
       <provide interface="org.argeo.connect.SystemMaintenanceService"/>
    </service>
    <reference bind="addAppService" cardinality="0..n" interface="org.argeo.connect.AppMaintenanceService" name="AppMaintenanceService" policy="static"/>
    <implementation class="org.argeo.connect.core.DynamicSystemMaintenanceService"/>
+   <reference bind="setUserAdminService" cardinality="1..1" interface="org.argeo.connect.UserAdminService" name="UserAdminService" policy="static"/>
 </scr:component>

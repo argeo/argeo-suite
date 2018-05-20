@@ -3,8 +3,8 @@
   <imports xsi:type="commands:Command" xmi:id="_Dppf4FuLEeioOJZqIpekPQ" elementId="org.argeo.suite.e4.command.createEntity">
     <parameters xmi:id="_HsY8kFuLEeioOJZqIpekPQ" elementId="targetNodeType" name="targetNodeType" optional="false"/>
   </imports>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_1ISvQVuKEeioOJZqIpekPQ" featurename="children" parentElementId="org.argeo.suite.e4.trimbar.top">
-    <elements xsi:type="menu:ToolBar" xmi:id="_1ISvQluKEeioOJZqIpekPQ" elementId="org.argeo.suite.e4.toolbar.2">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_1ISvQVuKEeioOJZqIpekPQ" featurename="children" parentElementId="org.argeo.suite.e4.trimbar.top" positionInList="">
+    <elements xsi:type="menu:ToolBar" xmi:id="_1ISvQluKEeioOJZqIpekPQ" elementId="org.argeo.suite.e4.toolbar.newTrackerEntity">
       <children xsi:type="menu:HandledToolItem" xmi:id="_3CFicFuKEeioOJZqIpekPQ" elementId="org.argeo.suite.tracker.handledtoolitem.newTrackerTask" label="New Tracker Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" command="_Dppf4FuLEeioOJZqIpekPQ">
         <parameters xmi:id="_4EGjoFuLEeioOJZqIpekPQ" elementId="org.argeo.suite.tracker.parameter.1" name="targetNodeType" value="tracker:task"/>
       </children>

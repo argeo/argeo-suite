@@ -33,7 +33,7 @@ import org.argeo.tracker.TrackerService;
 import org.argeo.tracker.core.TrackerUtils;
 import org.argeo.tracker.ui.TaskListLabelProvider;
 import org.argeo.tracker.ui.TaskVirtualListComposite;
-import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -64,7 +64,9 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 
 	@Inject
 	private ActivitiesService activitiesService;
+
 	@Inject
+	@Optional
 	private TrackerService trackerService;
 
 	private String datePattern = "dd MMM yyyy";
@@ -114,7 +116,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 			// noTaskLbl.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, true));
 
 		} else {
-			TaskListLabelProvider labelProvider = new TaskListLabelProvider(trackerService);
+			TaskListLabelProvider labelProvider = new TaskListLabelProvider(getSystemAppService());
 			tvlc = new TaskVirtualListComposite(parent, SWT.NO_FOCUS, (ILabelProvider) labelProvider, 54);
 			tvlc.setLayoutData(EclipseUiUtils.fillAll());
 			final TableViewer viewer = tvlc.getTableViewer();
@@ -224,41 +226,44 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 			}
 		}
 
-		nit = trackerService.getMyMilestones(getSession(), true);
-		List<Node> openMilestones = new ArrayList<>();
+		if (trackerService != null) {
+			nit = trackerService.getMyMilestones(getSession(), true);
+			List<Node> openMilestones = new ArrayList<>();
 
-		if (nit.hasNext()) {
-			List<Node> overdueMilestones = new ArrayList<>();
-			while (nit.hasNext()) {
-				Node currNode = nit.nextNode();
-				openMilestones.add(currNode);
-				if (isOverdue(currNode, TrackerNames.TRACKER_TARGET_DATE))
-					overdueMilestones.add(currNode);
+			if (nit.hasNext()) {
+				List<Node> overdueMilestones = new ArrayList<>();
+				while (nit.hasNext()) {
+					Node currNode = nit.nextNode();
+					openMilestones.add(currNode);
+					if (isOverdue(currNode, TrackerNames.TRACKER_TARGET_DATE))
+						overdueMilestones.add(currNode);
+				}
+				if (!overdueMilestones.isEmpty()) {
+					Composite overdueCmp = new Composite(leftCmp, SWT.NO_FOCUS);
+					long size = overdueMilestones.size();
+					String overdueStr = "You have " + size + " overdue milestone" + (size > 1 ? "s" : "") + ": ";
+					populateMuliValueClickableList(overdueCmp, overdueMilestones.toArray(new Node[0]),
+							new MilestoneLp(), overdueStr);
+				}
 			}
-			if (!overdueMilestones.isEmpty()) {
-				Composite overdueCmp = new Composite(leftCmp, SWT.NO_FOCUS);
-				long size = overdueMilestones.size();
-				String overdueStr = "You have " + size + " overdue milestone" + (size > 1 ? "s" : "") + ": ";
-				populateMuliValueClickableList(overdueCmp, overdueMilestones.toArray(new Node[0]), new MilestoneLp(),
-						overdueStr);
+
+			// My projects
+			List<Node> openProjects = JcrUtils.nodeIteratorToList(trackerService.getMyProjects(getSession(), true));
+			if (!openProjects.isEmpty()) {
+				Group myProjectsGp = new Group(rightCmp, SWT.NO_FOCUS);
+				myProjectsGp.setText("My open projects");
+				myProjectsGp.setLayoutData(EclipseUiUtils.fillWidth());
+				populateMuliValueClickableList(myProjectsGp, openProjects.toArray(new Node[0]), new ProjectLp(), null);
 			}
-		}
 
-		// My projects
-		List<Node> openProjects = JcrUtils.nodeIteratorToList(trackerService.getMyProjects(getSession(), true));
-		if (!openProjects.isEmpty()) {
-			Group myProjectsGp = new Group(rightCmp, SWT.NO_FOCUS);
-			myProjectsGp.setText("My open projects");
-			myProjectsGp.setLayoutData(EclipseUiUtils.fillWidth());
-			populateMuliValueClickableList(myProjectsGp, openProjects.toArray(new Node[0]), new ProjectLp(), null);
-		}
-
-		// My Milestones
-		if (!openMilestones.isEmpty()) {
-			Group myMilestoneGp = new Group(rightCmp, SWT.NO_FOCUS);
-			myMilestoneGp.setText("My open milestones");
-			myMilestoneGp.setLayoutData(EclipseUiUtils.fillWidth());
-			populateMuliValueClickableList(myMilestoneGp, openMilestones.toArray(new Node[0]), new MilestoneLp(), null);
+			// My Milestones
+			if (!openMilestones.isEmpty()) {
+				Group myMilestoneGp = new Group(rightCmp, SWT.NO_FOCUS);
+				myMilestoneGp.setText("My open milestones");
+				myMilestoneGp.setLayoutData(EclipseUiUtils.fillWidth());
+				populateMuliValueClickableList(myMilestoneGp, openMilestones.toArray(new Node[0]), new MilestoneLp(),
+						null);
+			}
 		}
 	}
 
@@ -363,13 +368,13 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		}
 	}
 
-	public void setActivitiesService(ActivitiesService activitiesService) {
-		this.activitiesService = activitiesService;
-	}
-
-	public void setTrackerService(TrackerService trackerService) {
-		this.trackerService = trackerService;
-	}
+	// public void setActivitiesService(ActivitiesService activitiesService) {
+	// this.activitiesService = activitiesService;
+	// }
+	//
+	// public void setTrackerService(TrackerService trackerService) {
+	// this.trackerService = trackerService;
+	// }
 
 	// LOCAL HELPERS
 	private void populateMuliValueClickableList(Composite parent, Node[] nodes, ColumnLabelProvider lp,

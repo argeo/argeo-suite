@@ -6,8 +6,8 @@
   <imports xsi:type="commands:Command" xmi:id="_M5YvJkIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.command.openPerspective" commandName="Open Perspective">
     <parameters xmi:id="_M5YvJ0IfEeij3Nr_iRrJtw" elementId="perspectiveId" name="Perspective Id" optional="false"/>
   </imports>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_IEOXA0IfEeij3Nr_iRrJtw" featurename="children" parentElementId="org.argeo.suite.e4.trimbar.top">
-    <elements xsi:type="menu:ToolBar" xmi:id="_IEOXBEIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.toolbar.newEntity">
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_IEOXA0IfEeij3Nr_iRrJtw" featurename="children" parentElementId="org.argeo.suite.e4.trimbar.top" positionInList="after:org.argeo.suite.e4.toolbar.standard">
+    <elements xsi:type="menu:ToolBar" xmi:id="_IEOXBEIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.toolbar.newStandardEntity">
       <children xsi:type="menu:HandledToolItem" xmi:id="_IEOXBUIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.createTask" label="New Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/todo.png" command="_IEOXAUIfEeij3Nr_iRrJtw">
         <parameters xmi:id="_IEOXBkIfEeij3Nr_iRrJtw" elementId="targetNodeType" name="targetNodeType" value="activities:task"/>
       </children>
