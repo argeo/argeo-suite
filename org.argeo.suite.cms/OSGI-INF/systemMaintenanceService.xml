@@ -7,4 +7,5 @@
    <reference bind="addAppService" cardinality="0..n" interface="org.argeo.connect.AppMaintenanceService" name="AppMaintenanceService" policy="static"/>
    <implementation class="org.argeo.connect.core.DynamicSystemMaintenanceService"/>
    <reference bind="setUserAdminService" cardinality="1..1" interface="org.argeo.connect.UserAdminService" name="UserAdminService" policy="static"/>
+   <property name="cn" type="String" value="system"/>
 </scr:component>

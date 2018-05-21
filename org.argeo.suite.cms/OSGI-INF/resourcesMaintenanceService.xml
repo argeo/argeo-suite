@@ -7,4 +7,5 @@
    <reference bind="setResourcesService" cardinality="1..1" interface="org.argeo.connect.resources.ResourcesService" name="ResourcesService" policy="static"/>
    <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="static" target="(cn=connect)"/>
    <reference bind="setUserAdminService" cardinality="1..1" interface="org.argeo.connect.UserAdminService" name="UserAdminService" policy="static"/>
+   <property name="cn" type="String" value="resources"/>
 </scr:component>
