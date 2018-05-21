@@ -131,7 +131,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 			});
 
 		} else {
-			TaskListLabelProvider labelProvider = new TaskListLabelProvider(trackerService);
+			TaskListLabelProvider labelProvider = new TaskListLabelProvider(getSystemAppService());
 			tvlc = new TaskVirtualListComposite(parent, SWT.NO_FOCUS, labelProvider, 54);
 			tvlc.setLayoutData(EclipseUiUtils.fillAll());
 			final TableViewer viewer = tvlc.getTableViewer();
