@@ -10,7 +10,7 @@
             <tags>minimized</tags>
             <children xsi:type="basic:Part" xmi:id="_qAM4sDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.part.search" containerData="" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.QuickSearchView" label="%search" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/search.png">
               <toolbar xmi:id="_DCPkcELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.toolbar.1">
-                <children xsi:type="menu:HandledToolItem" xmi:id="_DvXJIELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.handledtoolitem.0" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/delete.png" command="_EvkB4ELbEeim_a9htzedPA"/>
+                <children xsi:type="menu:HandledToolItem" xmi:id="_DvXJIELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.handledtoolitem.delete" label="%delete" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/delete.png" tooltip="%delete" command="_EvkB4ELbEeim_a9htzedPA"/>
               </toolbar>
             </children>
           </children>
@@ -91,7 +91,7 @@
     <parameters xmi:id="_yfo0YEJDEeij3Nr_iRrJtw" elementId="param.jcrId" name="JCR ID" optional="false"/>
     <parameters xmi:id="_2M2F8EJDEeij3Nr_iRrJtw" elementId="param.openForEdit" name="Open for edit"/>
   </commands>
-  <commands xmi:id="_EvkB4ELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.command.deleteEntity" commandName="Delete Entity"/>
+  <commands xmi:id="_EvkB4ELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.command.deleteEntity" commandName="Delete Entity" description="%delete"/>
   <commands xmi:id="_SZBRwFKgEeiMg9Tl6PNQtg" elementId="org.argeo.suite.e4.command.editJob" commandName="Edit Job">
     <parameters xmi:id="_UcMDYFKgEeiMg9Tl6PNQtg" elementId="relevantNodeJcrId" name="Relevant Node JCR ID" optional="false"/>
     <parameters xmi:id="_tsxAsFKpEeiMg9Tl6PNQtg" elementId="isBackward" name="Is Backward"/>
