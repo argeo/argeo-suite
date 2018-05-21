@@ -63,6 +63,7 @@ public class ArgeoSuiteLoginLifecycle extends CmsLoginLifecycle {
 			}
 		} catch (RepositoryException | PrivilegedActionException e) {
 			log.error("Cannot load state " + state, e);
+			getBrowserNavigation().pushState("~", null);
 		} finally {
 			JcrUtils.logoutQuietly(session);
 		}
