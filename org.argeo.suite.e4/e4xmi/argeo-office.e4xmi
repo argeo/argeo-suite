@@ -9,7 +9,6 @@
           <children xsi:type="basic:PartStack" xmi:id="_orJxUDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partstack.navigation" containerData="3000">
             <tags>minimized</tags>
             <children xsi:type="basic:Part" xmi:id="_qAM4sDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.part.search" containerData="" contributionURI="bundleclass://org.argeo.suite.e4/org.argeo.suite.e4.parts.QuickSearchView" label="%search" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/search.png">
-              <handlers xmi:id="_fXnekELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.handler.6" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.DeleteSelectedEntity" command="_EvkB4ELbEeim_a9htzedPA"/>
               <toolbar xmi:id="_DCPkcELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.toolbar.1">
                 <children xsi:type="menu:HandledToolItem" xmi:id="_DvXJIELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.handledtoolitem.0" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/delete.png" command="_EvkB4ELbEeim_a9htzedPA"/>
               </toolbar>
@@ -56,6 +55,7 @@
   <handlers xmi:id="_FXgZoEJBEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handler.5" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.OpenEntity" command="_CSkpAEJBEeij3Nr_iRrJtw"/>
   <handlers xmi:id="_rpYtUFKhEeiMg9Tl6PNQtg" elementId="org.argeo.suite.e4.handler.7" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.handlers.EditJob" command="_SZBRwFKgEeiMg9Tl6PNQtg"/>
   <handlers xmi:id="_NG13YFKpEeiMg9Tl6PNQtg" elementId="org.argeo.suite.e4.handler.8" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.handlers.RemoveEntityReference" command="_ABz60FKpEeiMg9Tl6PNQtg"/>
+  <handlers xmi:id="_fXnekELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.handler.6" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.DeleteSelectedEntity" command="_EvkB4ELbEeim_a9htzedPA"/>
   <bindingTables xmi:id="_gxEm4DDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.bindingtable.0" bindingContext="_Byl7gDD1EeiUfOa4rxEKwQ">
     <bindings xmi:id="_hj9cYDDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.keybinding.0" keySequence="CTRL+S" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
     <bindings xmi:id="_pEAGYDDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.keybinding.1" keySequence="SHIFT+CTRL+S" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
