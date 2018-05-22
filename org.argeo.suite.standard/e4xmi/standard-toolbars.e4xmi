@@ -8,7 +8,7 @@
   </imports>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_IEOXA0IfEeij3Nr_iRrJtw" featurename="children" parentElementId="org.argeo.suite.e4.trimbar.top" positionInList="after:org.argeo.suite.e4.toolbar.standard">
     <elements xsi:type="menu:ToolBar" xmi:id="_IEOXBEIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.toolbar.newStandardEntity">
-      <children xsi:type="menu:HandledToolItem" xmi:id="_IEOXBUIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.createTask" label="New Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/todo.png" command="_IEOXAUIfEeij3Nr_iRrJtw">
+      <children xsi:type="menu:HandledToolItem" xmi:id="_IEOXBUIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.createTask" label="New Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/todo-add.png" command="_IEOXAUIfEeij3Nr_iRrJtw">
         <parameters xmi:id="_IEOXBkIfEeij3Nr_iRrJtw" elementId="targetNodeType" name="targetNodeType" value="activities:task"/>
       </children>
       <children xsi:type="menu:HandledToolItem" xmi:id="_IEOXB0IfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.createPerson" label="New Person" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/person-add.png" command="_IEOXAUIfEeij3Nr_iRrJtw">

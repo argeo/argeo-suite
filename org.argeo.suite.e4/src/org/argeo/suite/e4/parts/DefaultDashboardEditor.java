@@ -28,6 +28,7 @@ import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.node.NodeUtils;
+import org.argeo.suite.e4.SuiteMsg;
 import org.argeo.tracker.TrackerNames;
 import org.argeo.tracker.TrackerService;
 import org.argeo.tracker.core.TrackerUtils;
@@ -190,7 +191,8 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		titleLbl.setLayoutData(gd);
 
 		final Link createTaskLk = new Link(leftCmp, SWT.CENTER);
-		createTaskLk.setText("<a>Create a task</a>");
+		// createTaskLk.setText("<a>Create a task</a>");
+		createTaskLk.setText("<a>" + SuiteMsg.newTodo.lead() + "</a>");
 		gd = new GridData(SWT.BEGINNING, SWT.TOP, false, false);
 		// gd.verticalIndent = 5;
 		gd.horizontalIndent = 10;
