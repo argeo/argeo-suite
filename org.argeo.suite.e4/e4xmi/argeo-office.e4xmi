@@ -79,7 +79,17 @@
     </toolbar>
   </descriptors>
   <descriptors xmi:id="_GkmucDD0EeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.partdescriptor.file" label="File" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/file.png" allowMultiple="true" category="entityEditorArea" closeable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.FileEditor"/>
-  <descriptors xmi:id="_NjQioDD0EeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.partdescriptor.folder" label="Folder" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png" allowMultiple="true" category="entityEditorArea" closeable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.FolderEditor"/>
+  <descriptors xmi:id="_NjQioDD0EeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.partdescriptor.folder" label="Folder" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png" allowMultiple="true" category="entityEditorArea" closeable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.FolderEditor">
+    <menus xsi:type="menu:PopupMenu" xmi:id="_bXH1kGQBEei4MaDg_iG6fg" elementId="org.argeo.suite.e4.popupmenu.folder">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_U4pEUGQDEei4MaDg_iG6fg" elementId="org.argeo.suite.e4.handledmenuitem.test" label="Test" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
+      <children xsi:type="menu:DynamicMenuContribution" xmi:id="_fVnEYGQBEei4MaDg_iG6fg" elementId="org.argeo.suite.e4.dynamicmenucontribution.0" label="Dynamic" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.FolderMenu"/>
+      <children xsi:type="menu:DirectMenuItem" xmi:id="_5-x-kGQFEei4MaDg_iG6fg" elementId="org.argeo.suite.e4.directmenuitem.testdirectmenuitem" label="Test Direct Menu Item" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.TestDirectMenuItem"/>
+    </menus>
+    <menus xmi:id="_tt2DUGQDEei4MaDg_iG6fg" elementId="org.argeo.suite.e4.menu.1">
+      <tags>ViewMenu</tags>
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_uPn6sGQDEei4MaDg_iG6fg" elementId="org.argeo.suite.e4.handledmenuitem.test" label="tEST" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
+    </menus>
+  </descriptors>
   <descriptors xmi:id="_muk20DpQEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.projectTaskEditor" label="Project Task" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/task.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.TaskEditor"/>
   <descriptors xmi:id="_vnVAMDpQEeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.projectEditor" label="Project" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/project.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.ProjectEditor"/>
   <descriptors xmi:id="_TZol8DpREeiqA-HRq--JMg" elementId="org.argeo.suite.e4.partdescriptor.milestoneEditor" label="Milestone" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/milestone.png" allowMultiple="true" category="entityEditorArea" closeable="true" dirtyable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.tracker.e4.parts.MilestoneEditor"/>
