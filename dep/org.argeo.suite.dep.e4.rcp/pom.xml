@@ -98,7 +98,7 @@
 									<goal>rpm</goal>
 								</goals>
 								<configuration>
-									<name>argeo-suite-e4</name>
+									<name>argeo-suite-e4-rcp</name>
 									<mappings>
 										<mapping>
 											<directory>/usr/share/osgi</directory>
@@ -117,7 +117,7 @@
 										</mapping>
 									</mappings>
 									<requires>
-										<require>argeo-connect-e4-tp</require>
+										<require>argeo-connect-e4-rcp</require>
 									</requires>
 								</configuration>
 							</execution>

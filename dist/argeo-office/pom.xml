@@ -11,6 +11,18 @@
 	<artifactId>argeo-office</artifactId>
 	<packaging>pom</packaging>
 	<name>Argeo Office</name>
+	<dependencies>
+		<dependency>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.suite.standard</artifactId>
+			<version>0.1.13-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.suite.tracker</artifactId>
+			<version>0.1.13-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 	<profiles>
 		<profile>
 			<id>dist</id>
@@ -63,6 +75,23 @@
 			<build>
 				<plugins>
 					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>prepare-source</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<descriptorRefs>
+										<descriptorRef>a2-source</descriptorRef>
+									</descriptorRefs>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>rpm-maven-plugin</artifactId>
 						<executions>
@@ -88,6 +117,21 @@
 													<includes>
 														<include>*.ini</include>
 														<include>*.txt</include>
+													</includes>
+												</source>
+											</sources>
+										</mapping>
+										<mapping>
+											<directory>/usr/share/osgi</directory>
+											<username>root</username>
+											<groupname>root</groupname>
+											<filemode>644</filemode>
+											<directoryIncluded>true</directoryIncluded>
+											<sources>
+												<source>
+													<location>${project.build.directory}/${project.artifactId}-${project.version}-a2-source</location>
+													<includes>
+														<include>**/*.jar</include>
 													</includes>
 												</source>
 											</sources>
