@@ -21,7 +21,7 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_M5YvIEIfEeij3Nr_iRrJtw" featurename="children" parentElementId="org.argeo.suite.e4.trimbar.0">
     <elements xsi:type="menu:ToolBar" xmi:id="_M5YvIUIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.toolbar.perspectives">
-      <children xsi:type="menu:HandledToolItem" xmi:id="_M5YvJEIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.1" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png" command="_M5YvJkIfEeij3Nr_iRrJtw">
+      <children xsi:type="menu:HandledToolItem" xmi:id="_M5YvJEIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.folders" label="%folders" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png" tooltip="%folders" command="_M5YvJkIfEeij3Nr_iRrJtw">
         <parameters xmi:id="_M5YvJUIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.parameter.6" name="perspectiveId" value="org.argeo.suite.e4.perspective.folders"/>
       </children>
     </elements>
