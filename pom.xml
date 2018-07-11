@@ -94,17 +94,17 @@ which are used as well as that of the covered work.]]>
 			</roles>
 		</developer>
 	</developers>
-	<build>
-		<plugins>
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.4</version>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+<!-- 	<build> -->
+<!-- 		<plugins> -->
+<!-- 			<plugin> -->
+<!-- 				<artifactId>maven-javadoc-plugin</artifactId> -->
+<!-- 				<version>2.10.4</version> -->
+<!-- 				<configuration> -->
+<!-- 					<skip>true</skip> -->
+<!-- 				</configuration> -->
+<!-- 			</plugin> -->
+<!-- 		</plugins> -->
+<!-- 	</build> -->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -116,20 +116,19 @@ which are used as well as that of the covered work.]]>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	<dependencies>
-		<!-- RAP workbench -->
-		<dependency>
-			<groupId>org.argeo.tp</groupId>
-			<artifactId>argeo-tp-rap-e3</artifactId>
-			<version>${version.argeo-tp}</version>
-			<type>pom</type>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+<!-- 	<dependencies> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.argeo.tp</groupId> -->
+<!-- 			<artifactId>argeo-tp-rap-e3</artifactId> -->
+<!-- 			<version>${version.argeo-tp}</version> -->
+<!-- 			<type>pom</type> -->
+<!-- 			<scope>provided</scope> -->
+<!-- 		</dependency> -->
+<!-- 	</dependencies> -->
 	<repositories>
 		<repository>
 			<id>argeo</id>
-			<url>http://forge.argeo.org/data/java/argeo-2.1</url>
+			<url>http://repo.argeo.org/data/java/argeo-2.1</url>
 			<releases>
 				<enabled>true</enabled>
 				<updatePolicy>daily</updatePolicy>
@@ -138,7 +137,7 @@ which are used as well as that of the covered work.]]>
 		</repository>
 		<repository>
 			<id>argeo-extras</id>
-			<url>http://forge.argeo.org/data/java/argeo-extras-2.1</url>
+			<url>http://repo.argeo.org/data/java/argeo-extras-2.1</url>
 			<releases>
 				<enabled>true</enabled>
 				<updatePolicy>daily</updatePolicy>
@@ -153,4 +152,80 @@ which are used as well as that of the covered work.]]>
 			<uniqueVersion>false</uniqueVersion>
 		</repository>
 	</distributionManagement>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.9</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>index</report>
+							<report>summary</report>
+							<report>license</report>
+							<report>scm</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.0.0</version>
+				<configuration>
+					<failOnError>false</failOnError>
+					<additionalJOption>-Xdoclint:none</additionalJOption>
+					<excludePackageNames>*.internal.*,org.eclipse.*</excludePackageNames>
+					<encoding>UTF-8</encoding>
+					<detectLinks>true</detectLinks>
+					<!-- <sourcepath>src</sourcepath> -->
+					<links>
+						<!-- Java -->
+						<link>http://docs.oracle.com/javase/8/docs/api</link>
+						<!-- OSGi -->
+						<link>http://www.osgi.org/javadoc/r5/core</link>
+						<link>http://www.osgi.org/javadoc/r5/enterprise</link>
+						<!-- Spring -->
+						<link>http://docs.spring.io/spring/docs/3.2.x/javadoc-api</link>
+						<!-- JCR -->
+						<link>http://www.day.com/maven/javax.jcr/javadocs/jcr-2.0</link>
+						<!-- Eclipse -->
+						<link>http://help.eclipse.org/neon/topic/org.eclipse.platform.doc.isv/reference/api</link>
+					</links>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<id>aggregate-javadoc</id>
+						<inherited>false</inherited>
+						<reports>
+							<report>aggregate</report>
+						</reports>
+					</reportSet>
+					<reportSet>
+						<id>javadoc</id>
+						<reports>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<artifactId>maven-jxr-plugin</artifactId>
+				<version>2.5</version>
+				<reportSets>
+					<reportSet>
+						<id>aggregate-jxr</id>
+						<inherited>false</inherited>
+						<reports>
+							<report>aggregate</report>
+						</reports>
+					</reportSet>
+					<reportSet>
+						<id>jxr</id>
+						<reports>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>
