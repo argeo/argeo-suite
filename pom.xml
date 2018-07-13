@@ -12,6 +12,13 @@
 	<name>Argeo Suite</name>
 	<description />
 	<version>0.1.13-SNAPSHOT</version>
+	<properties>
+		<version.argeo-suite>0.1.13-SNAPSHOT</version.argeo-suite>
+		<developmentCycle.argeo-suite>0.1</developmentCycle.argeo-suite>
+		<version.argeo-connect>2.1.79-SNAPSHOT</version.argeo-connect>
+		<version.argeo-tp-extras>2.1.10</version.argeo-tp-extras>
+		<git.rw />
+	</properties>
 	<modules>
 		<!-- Web -->
 		<module>org.argeo.suite.web</module>
@@ -33,13 +40,6 @@
 		<module>dep</module>
 		<module>dist</module>
 	</modules>
-	<properties>
-		<version.argeo-suite>0.1.13-SNAPSHOT</version.argeo-suite>
-		<developmentCycle.argeo-suite>0.1</developmentCycle.argeo-suite>
-		<version.argeo-connect>2.1.79-SNAPSHOT</version.argeo-connect>
-		<version.argeo-tp-extras>2.1.10</version.argeo-tp-extras>
-		<git.rw />
-	</properties>
 	<scm>
 		<connection>scm:git:http://git.argeo.org/gpl/argeo-suite.git</connection>
 		<url>http://git.argeo.org/?p=gpl/argeo-suite.git;a=summary</url>
