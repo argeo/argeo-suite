@@ -1,5 +1,4 @@
 Bundle-SymbolicName: org.argeo.suite.e4.rap;singleton:=true
-Bundle-ActivationPolicy: lazy
 
 Service-Component: OSGI-INF/argeo-office-rap.xml
 
