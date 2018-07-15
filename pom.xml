@@ -145,13 +145,6 @@ which are used as well as that of the covered work.]]>
 			</releases>
 		</repository>
 	</repositories>
-	<distributionManagement>
-		<repository>
-			<id>staging</id>
-			<url>dav:https://forge.argeo.org/data/java/argeo-extras-2.1</url>
-			<uniqueVersion>false</uniqueVersion>
-		</repository>
-	</distributionManagement>
 	<reporting>
 		<plugins>
 			<plugin>
@@ -219,4 +212,21 @@ which are used as well as that of the covered work.]]>
 			</plugin>
 		</plugins>
 	</reporting>
+	<distributionManagement>
+		<site>
+			<id>staging</id>
+			<url>dav:https://forge.argeo.org/data/docs/argeo-2.1/site/argeo-suite/</url>
+		</site>
+	</distributionManagement>
+	<profiles>
+		<profile>
+			<id>localrepo</id>
+			<distributionManagement>
+				<site>
+					<id>staging</id>
+					<url>dav:http://localhost:7080/data/docs/argeo-2.1/site/argeo-suite/</url>
+				</site>
+			</distributionManagement>
+		</profile>
+	</profiles>
 </project>
