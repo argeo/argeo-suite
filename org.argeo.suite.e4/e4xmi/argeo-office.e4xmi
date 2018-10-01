@@ -25,8 +25,12 @@
         </children>
       </children>
       <children xsi:type="advanced:Perspective" xmi:id="_bu5BYD4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.perspective.folders" label="%folders" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/folder.png" tooltip="%folders">
-        <children xsi:type="basic:PartStack" xmi:id="_p66bMD4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.partstack.0">
+        <children xsi:type="basic:PartStack" xmi:id="_p66bMD4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.partstack.0" containerData="3000">
           <children xsi:type="basic:Part" xmi:id="_xi1k0DDzEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.part.documents" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.MyFilesView" label="%documents" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/documents.png"/>
+          <children xsi:type="basic:Part" xmi:id="_dr0bwMSbEeifiPIP7QsPQg" elementId="org.argeo.suite.e4.part.search" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.SearchDocumentsView" label="%search" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/search.png"/>
+        </children>
+        <children xsi:type="basic:PartStack" xmi:id="__v8wAMS9EeifiPIP7QsPQg" elementId="org.argeo.suite.e4.partstack.2" containerData="7000">
+          <tags>entityEditorArea</tags>
         </children>
       </children>
     </children>

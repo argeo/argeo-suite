@@ -4,7 +4,6 @@ OSGI-INF/userManagerService.xml,\
 OSGI-INF/resourcesService.xml,\
 OSGI-INF/activitiesService.xml,\
 OSGI-INF/peopleService.xml,\
-OSGI-INF/trackerService.xml,\
 OSGI-INF/documentsService.xml,\
 OSGI-INF/systemMaintenanceService.xml,\
 OSGI-INF/activitiesMaintenanceService.xml,\
