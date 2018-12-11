@@ -134,5 +134,6 @@
   <addons xmi:id="_bQjNZTAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
   <addons xmi:id="_bQjNZjAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
   <addons xmi:id="_bQjNZzAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.workbench.handler.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
-  <addons xmi:id="_srLWsEIoEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.addon.ageoLocale" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.addons.LocaleAddon"/>
+  <addons xmi:id="_srLWsEIoEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.addon.locale" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.addons.LocaleAddon"/>
+  <addons xmi:id="_vN5UgP1IEeia6ei0NV0Yrw" elementId="org.argeo.suite.e4.addon.auth" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.addons.AuthAddon"/>
 </application:Application>

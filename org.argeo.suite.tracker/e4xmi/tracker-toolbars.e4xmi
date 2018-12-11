@@ -6,12 +6,15 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_1ISvQVuKEeioOJZqIpekPQ" featurename="children" parentElementId="org.argeo.suite.e4.trimbar.top" positionInList="">
     <elements xsi:type="menu:ToolBar" xmi:id="_1ISvQluKEeioOJZqIpekPQ" elementId="org.argeo.suite.e4.toolbar.newTrackerEntity">
       <children xsi:type="menu:HandledToolItem" xmi:id="_3CFicFuKEeioOJZqIpekPQ" elementId="org.argeo.suite.tracker.handledtoolitem.newTrackerTask" label="%newProjectTask" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/task-add.png" tooltip="%newProjectTask" command="_Dppf4FuLEeioOJZqIpekPQ">
+        <tags>auth.cn=org.argeo.tracker.editor,ou=roles,ou=node</tags>
         <parameters xmi:id="_4EGjoFuLEeioOJZqIpekPQ" elementId="org.argeo.suite.tracker.parameter.1" name="targetNodeType" value="tracker:task"/>
       </children>
       <children xsi:type="menu:HandledToolItem" xmi:id="_Q4QPMFuLEeioOJZqIpekPQ" elementId="org.argeo.suite.tracker.handledtoolitem.newMilestone" label="%newMilestone" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/milestone-add.png" tooltip="%newMilestone" command="_Dppf4FuLEeioOJZqIpekPQ">
+        <tags>auth.cn=org.argeo.tracker.editor,ou=roles,ou=node</tags>
         <parameters xmi:id="_6NTEwFuLEeioOJZqIpekPQ" elementId="org.argeo.suite.tracker.parameter.2" name="targetNodeType" value="tracker:milestone"/>
       </children>
       <children xsi:type="menu:HandledToolItem" xmi:id="_VOG1IFuLEeioOJZqIpekPQ" elementId="org.argeo.suite.tracker.handledtoolitem.newProject" label="%newProject" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/project-add.png" tooltip="%newProject" command="_Dppf4FuLEeioOJZqIpekPQ">
+        <tags>auth.cn=org.argeo.tracker.editor,ou=roles,ou=node</tags>
         <parameters xmi:id="_0l_eAFuLEeioOJZqIpekPQ" elementId="org.argeo.suite.tracker.parameter.0" name="targetNodeType" value="tracker:project"/>
       </children>
     </elements>

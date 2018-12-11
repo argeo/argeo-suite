@@ -9,12 +9,15 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_IEOXA0IfEeij3Nr_iRrJtw" featurename="children" parentElementId="org.argeo.suite.e4.trimbar.top" positionInList="after:org.argeo.suite.e4.toolbar.standard">
     <elements xsi:type="menu:ToolBar" xmi:id="_IEOXBEIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.toolbar.newStandardEntity">
       <children xsi:type="menu:HandledToolItem" xmi:id="_IEOXBUIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.createTask" label="%newTask" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/todo-add.png" tooltip="%newTask" command="_IEOXAUIfEeij3Nr_iRrJtw">
+        <tags>auth.cn=org.argeo.activities.editor,ou=roles,ou=node</tags>
         <parameters xmi:id="_IEOXBkIfEeij3Nr_iRrJtw" elementId="targetNodeType" name="targetNodeType" value="activities:task"/>
       </children>
       <children xsi:type="menu:HandledToolItem" xmi:id="_IEOXB0IfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.createPerson" label="%newPerson" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/person-add.png" tooltip="%newPerson" command="_IEOXAUIfEeij3Nr_iRrJtw">
+        <tags>auth.cn=org.argeo.people.editor,ou=roles,ou=node</tags>
         <parameters xmi:id="_IEOXCEIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.parameter.0" name="targetNodeType" value="people:person"/>
       </children>
       <children xsi:type="menu:HandledToolItem" xmi:id="_IEOXCUIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handledtoolitem.neworg" label="%newOrganisation" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/organisation-add.png" tooltip="%newOrganisation" command="_IEOXAUIfEeij3Nr_iRrJtw">
+        <tags>auth.cn=org.argeo.people.editor,ou=roles,ou=node</tags>
         <parameters xmi:id="_IEOXCkIfEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.parameter.1" name="targetNodeType" value="people:org"/>
       </children>
     </elements>
