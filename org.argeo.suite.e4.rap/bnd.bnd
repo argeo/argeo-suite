@@ -1,6 +1,7 @@
 Bundle-SymbolicName: org.argeo.suite.e4.rap;singleton:=true
+Bundle-Activator: org.argeo.cms.script.ScriptAppActivator
 
-Service-Component: OSGI-INF/argeo-office-rap.xml
+#Service-Component: OSGI-INF/argeo-office-rap.xml
 
 Import-Package: org.argeo.node,\
 org.eclipse.swt,\
