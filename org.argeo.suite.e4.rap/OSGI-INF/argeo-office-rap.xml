@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" configuration-policy="optional" name="CMS Office RAP">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" configuration-policy="optional" deactivate="destroy" name="Argeo Office RAP">
    <implementation class="org.argeo.suite.e4.rap.ArgeoOfficeRapE4App"/>
    <service>
       <provide interface="org.eclipse.rap.rwt.application.ApplicationConfiguration"/>
       <property name="contextName" type="String" value="suite"/>
    </service>
+   <property name="org.eclipse.rap.rwt.webclient.pageTitle" type="String" value="Argeo Office"/>
+   <property name="org.eclipse.rap.rwt.webclient.favicon" type="String" value="icons/argeo-e.png"/>
 </scr:component>
