@@ -3,6 +3,7 @@
   <children xsi:type="basic:TrimmedWindow" xmi:id="_dKIlMDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.trimmedwindow.main">
     <persistedState key="styleOverride" value="8"/>
     <tags>shellMaximized</tags>
+    <tags>auth.cn=org.argeo.office.coworker,ou=roles,ou=node</tags>
     <children xsi:type="basic:PartSashContainer" xmi:id="__LhVQMlHEeic2PiQZ6_KRg" elementId="org.argeo.suite.e4.partsashcontainer.1" selectedElement="_8xaqAP3vEeia6ei0NV0Yrw" horizontal="true">
       <children xsi:type="basic:Part" xmi:id="_xi1k0DDzEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.part.documents" containerData="2000" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.MyFilesView" label="%documents" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/documents.png"/>
       <children xsi:type="basic:PartStack" xmi:id="_8xaqAP3vEeia6ei0NV0Yrw" elementId="org.argeo.suite.e4.partstack.entityEditorArea" containerData="8000">

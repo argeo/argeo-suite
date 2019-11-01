@@ -3,6 +3,7 @@
   <children xsi:type="basic:TrimmedWindow" xmi:id="_dKIlMDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.trimmedwindow.main">
     <persistedState key="styleOverride" value="8"/>
     <tags>shellMaximized</tags>
+    <tags>auth.cn=org.argeo.office.coworker,ou=roles,ou=node</tags>
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_gm_toDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.perspectivestack.main">
       <children xsi:type="advanced:Perspective" xmi:id="_hr-YsDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.perspective.dashboard" label="%dashboard" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/24/dashboard.png" tooltip="%dashboard">
         <children xsi:type="basic:PartSashContainer" xmi:id="_mAC18DAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.partsashcontainer.0" horizontal="true">
