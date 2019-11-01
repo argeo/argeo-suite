@@ -15,8 +15,8 @@
 	<version>2.1.15-SNAPSHOT</version>
 	<properties>
 		<argeo.rpm.stagingRepository>/srv/rpmfactory/argeo-osgi-2-gpl/el7</argeo.rpm.stagingRepository>
-		<version.argeo-suite>2.1.15-SNAPSHOT</version.argeo-suite>
-		<version.argeo-connect>2.1.81-SNAPSHOT</version.argeo-connect>
+		<version.argeo-suite>2.1.15</version.argeo-suite>
+		<version.argeo-connect>2.1.81</version.argeo-connect>
 		<version.argeo-tp-extras>2.1.13</version.argeo-tp-extras>
 		<git.rw />
 	</properties>
