@@ -1,7 +1,0 @@
-Import-Package:\
-javax.jcr.nodetype,\
-org.argeo.connect,\
-org.argeo.node,\
-javax.jcr.security,\
-org.eclipse.swt,\
-*

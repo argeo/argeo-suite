@@ -21,10 +21,6 @@
 		<git.rw />
 	</properties>
 	<modules>
-		<!-- Web -->
-		<module>org.argeo.suite.web</module>
-		<module>org.argeo.suite.apps.web</module>
-
 		<!-- Eclipse 4 -->
 		<module>org.argeo.suite.cms</module>
 		<module>org.argeo.suite.e4</module>
@@ -33,10 +29,6 @@
 
 		<!-- Apps -->
 		<module>org.argeo.suite.tracker</module>
-
-		<!-- Workbench -->
-		<module>org.argeo.suite.apps</module>
-		<module>org.argeo.suite.workbench.rap</module>
 
 		<module>dep</module>
 		<module>dist</module>
