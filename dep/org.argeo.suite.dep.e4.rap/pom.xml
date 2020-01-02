@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.argeo.suite</groupId>
@@ -27,11 +29,11 @@
 			<artifactId>org.argeo.suite.e4.rap</artifactId>
 			<version>2.1.16-SNAPSHOT</version>
 		</dependency>
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.argeo.suite</groupId> -->
-<!-- 			<artifactId>org.argeo.suite.web</artifactId> -->
-<!-- 			<version>0.1.13-SNAPSHOT</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.argeo.suite</groupId> -->
+		<!-- <artifactId>org.argeo.suite.web</artifactId> -->
+		<!-- <version>0.1.13-SNAPSHOT</version> -->
+		<!-- </dependency> -->
 
 		<!-- Base CMS distribution -->
 		<dependency>
@@ -40,13 +42,19 @@
 			<version>${version.argeo-connect}</version>
 			<type>pom</type>
 		</dependency>
-		
+		<dependency>
+			<groupId>org.argeo.slc</groupId>
+			<artifactId>org.argeo.slc.dep.e4.rap</artifactId>
+			<version>${version.argeo-slc}</version>
+			<type>pom</type>
+		</dependency>
+
 		<!-- Argeo TP Extras -->
 		<dependency>
 			<groupId>org.argeo.tp.payment</groupId>
 			<artifactId>com.stripe</artifactId>
 		</dependency>
-		
+
 	</dependencies>
 	<profiles>
 		<profile>
@@ -70,27 +78,27 @@
 							</execution>
 						</executions>
 					</plugin>
-<!-- 					<plugin> -->
-<!-- 						<groupId>org.apache.maven.plugins</groupId> -->
-<!-- 						<artifactId>maven-dependency-plugin</artifactId> -->
-<!-- 						<executions> -->
-<!-- 							<execution> -->
-<!-- 								<id>copy-argeo</id> -->
-<!-- 								<phase>package</phase> -->
-<!-- 								<goals> -->
-<!-- 									<goal>copy-dependencies</goal> -->
-<!-- 								</goals> -->
-<!-- 								<configuration> -->
-<!-- 									<includeTypes>jar</includeTypes> -->
-<!-- 									<outputDirectory>${project.build.directory}/lib-argeo</outputDirectory> -->
-<!-- 									<includeGroupIds>org.argeo.suite</includeGroupIds> -->
-<!-- 									<includeTypes>jar</includeTypes> -->
-<!-- 									<includeScope>runtime</includeScope> -->
-<!-- 									<useRepositoryLayout>true</useRepositoryLayout> -->
-<!-- 								</configuration> -->
-<!-- 							</execution> -->
-<!-- 						</executions> -->
-<!-- 					</plugin> -->
+					<!-- <plugin> -->
+					<!-- <groupId>org.apache.maven.plugins</groupId> -->
+					<!-- <artifactId>maven-dependency-plugin</artifactId> -->
+					<!-- <executions> -->
+					<!-- <execution> -->
+					<!-- <id>copy-argeo</id> -->
+					<!-- <phase>package</phase> -->
+					<!-- <goals> -->
+					<!-- <goal>copy-dependencies</goal> -->
+					<!-- </goals> -->
+					<!-- <configuration> -->
+					<!-- <includeTypes>jar</includeTypes> -->
+					<!-- <outputDirectory>${project.build.directory}/lib-argeo</outputDirectory> -->
+					<!-- <includeGroupIds>org.argeo.suite</includeGroupIds> -->
+					<!-- <includeTypes>jar</includeTypes> -->
+					<!-- <includeScope>runtime</includeScope> -->
+					<!-- <useRepositoryLayout>true</useRepositoryLayout> -->
+					<!-- </configuration> -->
+					<!-- </execution> -->
+					<!-- </executions> -->
+					<!-- </plugin> -->
 					<plugin>
 						<groupId>org.codehaus.mojo</groupId>
 						<artifactId>rpm-maven-plugin</artifactId>
