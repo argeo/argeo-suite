@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ASCII"?>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_bQjNYDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.application">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_dKIlMDAVEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.trimmedwindow.main">
+    <persistedState key="styleOverride" value="8"/>
+    <tags>shellMaximized</tags>
+    <tags>auth.cn=org.argeo.office.coworker,ou=roles,ou=node</tags>
+    <children xsi:type="basic:PartSashContainer" xmi:id="__LhVQMlHEeic2PiQZ6_KRg" elementId="org.argeo.suite.e4.partsashcontainer.1" selectedElement="_8xaqAP3vEeia6ei0NV0Yrw" horizontal="true">
+      <children xsi:type="basic:Part" xmi:id="_xi1k0DDzEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.part.documents" containerData="2000" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.MyFilesView" label="%documents" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/documents.png"/>
+      <children xsi:type="basic:PartStack" xmi:id="_8xaqAP3vEeia6ei0NV0Yrw" elementId="org.argeo.suite.e4.partstack.entityEditorArea" containerData="8000">
+        <tags>entityEditorArea</tags>
+        <children xsi:type="basic:Part" xmi:id="_EQBUIP3xEeia6ei0NV0Yrw" elementId="org.argeo.suite.e4.part.defaultDashboard" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.DocumentsDashboard" label="" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/dashboard.png" tooltip="%dashboard">
+          <toolbar xmi:id="_EQB7MP3xEeia6ei0NV0Yrw" elementId="org.argeo.suite.e4.toolbar.0">
+            <children xsi:type="menu:HandledToolItem" xmi:id="_MEMbEP3xEeia6ei0NV0Yrw" elementId="org.argeo.suite.e4.handledtoolitem.changepassword" label="%changePassword" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/person-logged-in.png" command="_UJVGgOdFEeijEOqYKRSeoQ"/>
+            <children xsi:type="menu:HandledToolItem" xmi:id="_Qbo8cP3xEeia6ei0NV0Yrw" elementId="org.argeo.suite.e4.handledtoolitem.exit" label="%exit" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/logout.png" command="_lhxJUD4dEeiR-OuUuIB1Aw"/>
+          </toolbar>
+        </children>
+      </children>
+    </children>
+  </children>
+  <handlers xmi:id="_HCDl8D4aEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handler.openPerspective" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.OpenPerspective" command="__usGAD4ZEeiR-OuUuIB1Aw"/>
+  <handlers xmi:id="_ipB00DArEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.handler.createEntity" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.CreateEntity" command="_2Xkt8DApEei3AbO1ldMI0w"/>
+  <handlers xmi:id="_9gu00DDgEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handler.1" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.SavePart" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
+  <handlers xmi:id="_ADDAkDDhEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handler.2" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.SaveAllParts" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
+  <handlers xmi:id="_ZBWe8DDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.handler.3" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.CloseAllParts" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
+  <handlers xmi:id="_ClgawD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handler.0" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.DoNothing" command="__L724D4cEeiR-OuUuIB1Aw"/>
+  <handlers xmi:id="_oOUPID4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.handler.4" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.CloseWorkbench" command="_lhxJUD4dEeiR-OuUuIB1Aw"/>
+  <handlers xmi:id="_FXgZoEJBEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.handler.5" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.OpenEntity" command="_CSkpAEJBEeij3Nr_iRrJtw"/>
+  <handlers xmi:id="_rpYtUFKhEeiMg9Tl6PNQtg" elementId="org.argeo.suite.e4.handler.7" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.handlers.EditJob" command="_SZBRwFKgEeiMg9Tl6PNQtg"/>
+  <handlers xmi:id="_NG13YFKpEeiMg9Tl6PNQtg" elementId="org.argeo.suite.e4.handler.8" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.people.e4.handlers.RemoveEntityReference" command="_ABz60FKpEeiMg9Tl6PNQtg"/>
+  <handlers xmi:id="_fXnekELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.handler.6" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.handlers.DeleteSelectedEntity" command="_EvkB4ELbEeim_a9htzedPA"/>
+  <handlers xmi:id="_WbOlwOdHEeijEOqYKRSeoQ" elementId="org.argeo.suite.e4.handler.9" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.handlers.ChangePassword" command="_UJVGgOdFEeijEOqYKRSeoQ"/>
+  <bindingTables xmi:id="_gxEm4DDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.bindingtable.0" bindingContext="_Byl7gDD1EeiUfOa4rxEKwQ">
+    <bindings xmi:id="_hj9cYDDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.keybinding.0" keySequence="CTRL+S" command="_1lO94DDgEeiUfOa4rxEKwQ"/>
+    <bindings xmi:id="_pEAGYDDqEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.keybinding.1" keySequence="SHIFT+CTRL+S" command="_5EpEADDgEeiUfOa4rxEKwQ"/>
+  </bindingTables>
+  <rootContext xmi:id="_Byl7gDD1EeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.bindingcontext.main" name="Main"/>
+  <descriptors xmi:id="_GkmucDD0EeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.partdescriptor.file" label="File" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/file.png" allowMultiple="true" category="entityEditorArea" closeable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.FileEditor">
+    <toolbar xmi:id="_UaykgP3vEeia6ei0NV0Yrw" elementId="org.argeo.suite.e4.toolbar.3">
+      <children xsi:type="menu:HandledToolItem" xmi:id="_Up3iUP3vEeia6ei0NV0Yrw" elementId="org.argeo.suite.e4.handledtoolitem.closeall" label="%closeAll" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/close-all.png" tooltip="%closeAll" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
+    </toolbar>
+  </descriptors>
+  <descriptors xmi:id="_NjQioDD0EeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.partdescriptor.folder" label="Folder" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/folder.png" allowMultiple="true" category="entityEditorArea" closeable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.FolderEditor">
+    <menus xsi:type="menu:PopupMenu" xmi:id="_bXH1kGQBEei4MaDg_iG6fg" elementId="org.argeo.suite.e4.popupmenu.folder">
+      <children xsi:type="menu:HandledMenuItem" xmi:id="_U4pEUGQDEei4MaDg_iG6fg" elementId="org.argeo.suite.e4.handledmenuitem.test" label="Test" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
+      <children xsi:type="menu:DynamicMenuContribution" xmi:id="_fVnEYGQBEei4MaDg_iG6fg" elementId="org.argeo.suite.e4.dynamicmenucontribution.0" label="Dynamic" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.FolderMenu"/>
+      <children xsi:type="menu:DirectMenuItem" xmi:id="_5-x-kGQFEei4MaDg_iG6fg" elementId="org.argeo.suite.e4.directmenuitem.testdirectmenuitem" label="Test Direct Menu Item" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.documents.e4.parts.TestDirectMenuItem"/>
+    </menus>
+    <toolbar xmi:id="_TIkHoP3vEeia6ei0NV0Yrw" elementId="org.argeo.suite.e4.toolbar.2">
+      <children xsi:type="menu:HandledToolItem" xmi:id="_Ttc9YP3vEeia6ei0NV0Yrw" elementId="org.argeo.suite.e4.handledtoolitem.closeall" label="%closeAll" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/close-all.png" tooltip="%closeAll" command="_VdldQDDmEeiUfOa4rxEKwQ"/>
+    </toolbar>
+  </descriptors>
+  <commands xmi:id="_2Xkt8DApEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.command.createEntity" commandName="New Entity">
+    <parameters xmi:id="_GnXrcDAsEei3AbO1ldMI0w" elementId="targetNodeType" name="targetNodeType" optional="false"/>
+  </commands>
+  <commands xmi:id="_1lO94DDgEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.command.savePart" commandName="Save"/>
+  <commands xmi:id="_5EpEADDgEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.command.saveAll" commandName="Save All"/>
+  <commands xmi:id="_VdldQDDmEeiUfOa4rxEKwQ" elementId="org.argeo.suite.e4.command.closeAll" commandName="Close All"/>
+  <commands xmi:id="__usGAD4ZEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.command.openPerspective" commandName="Open Perspective">
+    <parameters xmi:id="_TgkVED4aEeiR-OuUuIB1Aw" elementId="perspectiveId" name="Perspective Id" optional="false"/>
+  </commands>
+  <commands xmi:id="__L724D4cEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.command.doNothing" commandName="Do Nothing"/>
+  <commands xmi:id="_lhxJUD4dEeiR-OuUuIB1Aw" elementId="org.argeo.suite.e4.command.logout" commandName="Log out"/>
+  <commands xmi:id="_CSkpAEJBEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.command.openEntity" commandName="Open Entity">
+    <parameters xmi:id="_yfo0YEJDEeij3Nr_iRrJtw" elementId="param.jcrId" name="JCR ID" optional="false"/>
+    <parameters xmi:id="_2M2F8EJDEeij3Nr_iRrJtw" elementId="param.openForEdit" name="Open for edit"/>
+  </commands>
+  <commands xmi:id="_EvkB4ELbEeim_a9htzedPA" elementId="org.argeo.suite.e4.command.deleteEntity" commandName="Delete Entity" description="%delete"/>
+  <commands xmi:id="_SZBRwFKgEeiMg9Tl6PNQtg" elementId="org.argeo.suite.e4.command.editJob" commandName="Edit Job">
+    <parameters xmi:id="_UcMDYFKgEeiMg9Tl6PNQtg" elementId="relevantNodeJcrId" name="Relevant Node JCR ID" optional="false"/>
+    <parameters xmi:id="_tsxAsFKpEeiMg9Tl6PNQtg" elementId="isBackward" name="Is Backward"/>
+  </commands>
+  <commands xmi:id="_ABz60FKpEeiMg9Tl6PNQtg" elementId="org.argeo.suite.e4.command.removeEntityReference" commandName="Remove Entity Reference">
+    <parameters xmi:id="_D__AkFKpEeiMg9Tl6PNQtg" elementId="toRemoveJcrId" name="To Remove JCR ID" optional="false"/>
+  </commands>
+  <commands xmi:id="_UJVGgOdFEeijEOqYKRSeoQ" elementId="org.argeo.suite.e4.command.changePassword" commandName="Change Password"/>
+  <addons xmi:id="_bQjNYTAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
+  <addons xmi:id="_bQjNYjAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
+  <addons xmi:id="_bQjNYzAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
+  <addons xmi:id="_bQjNZDAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.workbench.commands.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
+  <addons xmi:id="_bQjNZTAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
+  <addons xmi:id="_bQjNZjAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
+  <addons xmi:id="_bQjNZzAVEei3AbO1ldMI0w" elementId="org.eclipse.e4.ui.workbench.handler.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
+  <addons xmi:id="_srLWsEIoEeij3Nr_iRrJtw" elementId="org.argeo.suite.e4.addon.locale" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.addons.LocaleAddon"/>
+  <addons xmi:id="_vN5UgP1IEeia6ei0NV0Yrw" elementId="org.argeo.suite.e4.addon.auth" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.addons.AuthAddon"/>
+</application:Application>

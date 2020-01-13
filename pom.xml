@@ -28,6 +28,8 @@
 		<module>org.argeo.suite.standard</module>
 
 		<!-- Apps -->
+		<module>library</module>
+		<module>systems</module>
 		<module>org.argeo.suite.tracker</module>
 
 		<module>dep</module>

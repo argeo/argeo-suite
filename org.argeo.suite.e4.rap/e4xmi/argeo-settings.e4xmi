@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="ASCII"?>
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmi:id="_sLyMYDXeEeqJorAtA3e9xg" elementId="org.argeo.suite.e4.application">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_KPcNQDXfEeqJorAtA3e9xg" elementId="org.argeo.suite.e4.trimmedwindow.0">
+    <children xsi:type="advanced:PerspectiveStack" xmi:id="_MAQqoDXfEeqJorAtA3e9xg" elementId="org.argeo.suite.e4.perspectivestack.0">
+      <children xsi:type="advanced:Perspective" xmi:id="_MfQTwDXfEeqJorAtA3e9xg" elementId="org.argeo.suite.e4.perspective.apps">
+        <children xsi:type="basic:Part" xmi:id="_QjgzYDXfEeqJorAtA3e9xg" elementId="org.argeo.suite.e4.part.0"/>
+      </children>
+    </children>
+  </children>
+  <addons xmi:id="_sLyMYTXeEeqJorAtA3e9xg" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
+  <addons xmi:id="_sLyMYjXeEeqJorAtA3e9xg" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
+  <addons xmi:id="_sLyMYzXeEeqJorAtA3e9xg" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>
+  <addons xmi:id="_sLyMZDXeEeqJorAtA3e9xg" elementId="org.eclipse.e4.ui.workbench.commands.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.CommandProcessingAddon"/>
+  <addons xmi:id="_sLyMZTXeEeqJorAtA3e9xg" elementId="org.eclipse.e4.ui.workbench.contexts.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.ContextProcessingAddon"/>
+  <addons xmi:id="_sLyMZjXeEeqJorAtA3e9xg" elementId="org.eclipse.e4.ui.workbench.bindings.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.swt/org.eclipse.e4.ui.workbench.swt.util.BindingProcessingAddon"/>
+  <addons xmi:id="_sLyMZzXeEeqJorAtA3e9xg" elementId="org.eclipse.e4.ui.workbench.handler.model" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
+  <addons xmi:id="_3xRBwDXeEeqJorAtA3e9xg" elementId="org.argeo.suite.e4.addon.locale" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.addons.LocaleAddon"/>
+  <addons xmi:id="_6uMs8DXeEeqJorAtA3e9xg" elementId="org.argeo.suite.e4.addon.auth" contributionURI="bundleclass://org.argeo.cms.e4/org.argeo.cms.e4.addons.AuthAddon"/>
+</application:Application>

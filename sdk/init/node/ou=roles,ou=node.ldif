@@ -1,0 +1,74 @@
+dn: cn=admin,ou=roles,ou=node
+objectClass: groupOfNames
+objectClass: top
+cn: admin
+member: uid=root,ou=People,dc=example,dc=com
+
+dn: cn=org.argeo.activities.editor,ou=roles,ou=node
+objectClass: groupOfNames
+objectClass: top
+cn: org.argeo.activities.editor
+member: cn=org.argeo.office.manager,ou=roles,ou=node
+
+dn: cn=org.argeo.activities.reader,ou=roles,ou=node
+objectClass: groupOfNames
+objectClass: top
+cn: org.argeo.activities.reader
+member: cn=org.argeo.office.coworker,ou=roles,ou=node
+
+dn: cn=org.argeo.connect.resources.editor,ou=roles,ou=node
+objectClass: groupOfNames
+objectClass: top
+cn: org.argeo.connect.resources.editor
+member: cn=org.argeo.office.manager,ou=roles,ou=node
+
+dn: cn=org.argeo.connect.resources.reader,ou=roles,ou=node
+objectClass: groupOfNames
+objectClass: top
+cn: org.argeo.connect.resources.reader
+member: cn=org.argeo.office.coworker,ou=roles,ou=node
+
+dn: cn=org.argeo.office.coworker,ou=roles,ou=node
+objectClass: groupOfNames
+objectClass: top
+cn: org.argeo.office.coworker
+member: cn=org.argeo.office.manager,ou=roles,ou=node
+member: uid=coworker,ou=People,dc=example,dc=com
+
+dn: cn=org.argeo.office.manager,ou=roles,ou=node
+objectClass: groupOfNames
+objectClass: top
+cn: org.argeo.office.manager
+member: uid=manager,ou=People,dc=example,dc=com
+member: uid=root,ou=People,dc=example,dc=com
+
+dn: cn=org.argeo.people.editor,ou=roles,ou=node
+objectClass: groupOfNames
+objectClass: top
+cn: org.argeo.people.editor
+member: cn=org.argeo.office.manager,ou=roles,ou=node
+
+dn: cn=org.argeo.people.reader,ou=roles,ou=node
+objectClass: groupOfNames
+objectClass: top
+cn: org.argeo.people.reader
+member: cn=org.argeo.office.coworker,ou=roles,ou=node
+
+dn: cn=org.argeo.tracker.editor,ou=roles,ou=node
+objectClass: groupOfNames
+objectClass: top
+cn: org.argeo.tracker.editor
+member: cn=org.argeo.office.manager,ou=roles,ou=node
+
+dn: cn=org.argeo.tracker.reader,ou=roles,ou=node
+objectClass: groupOfNames
+objectClass: top
+cn: org.argeo.tracker.reader
+member: cn=org.argeo.office.coworker,ou=roles,ou=node
+
+dn: cn=userAdmin,ou=roles,ou=node
+objectClass: groupOfNames
+objectClass: top
+cn: userAdmin
+member: cn=admin,ou=roles,ou=node
+

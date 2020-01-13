@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" configuration-policy="optional" deactivate="destroy">
+   <implementation class="org.argeo.suite.e4.rap.settings.AppDeployer"/>
+</scr:component>

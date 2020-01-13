@@ -1,7 +1,8 @@
 Bundle-SymbolicName: org.argeo.suite.e4.rap;singleton:=true
 Bundle-ActivationPolicy: lazy
 
-Service-Component: OSGI-INF/argeo-office-rap.xml
+Service-Component: OSGI-INF/argeo-office-rap.xml,\
+OSGI-INF/appDeployer.xml
 
 Import-Package: org.argeo.node,\
 org.eclipse.swt,\
