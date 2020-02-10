@@ -34,6 +34,18 @@
 		<!-- <artifactId>org.argeo.suite.web</artifactId> -->
 		<!-- <version>0.1.13-SNAPSHOT</version> -->
 		<!-- </dependency> -->
+		
+		<!-- Apps -->
+		<dependency>
+			<groupId>org.argeo.suite.library</groupId>
+			<artifactId>org.argeo.suite.docs</artifactId>
+			<version>2.1.16-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.suite.systems</groupId>
+			<artifactId>org.argeo.suite.studio</artifactId>
+			<version>2.1.16-SNAPSHOT</version>
+		</dependency>
 
 		<!-- Base CMS distribution -->
 		<dependency>
