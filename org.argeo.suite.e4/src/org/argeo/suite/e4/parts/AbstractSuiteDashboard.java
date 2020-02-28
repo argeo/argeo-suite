@@ -17,6 +17,7 @@ import org.argeo.connect.ui.SystemWorkbenchService;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
+import org.argeo.node.NodeConstants;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.client.service.BrowserNavigation;
@@ -45,7 +46,8 @@ public abstract class AbstractSuiteDashboard {
 	@Inject
 	private SystemWorkbenchService systemWorkbenchService;
 
-	private Session session;
+	private Session homeSession;
+	private Session mainSession;
 
 	// UI Objects
 	private FormToolkit toolkit;
@@ -54,7 +56,8 @@ public abstract class AbstractSuiteDashboard {
 	private BrowserNavigation browserNavigation;
 
 	public void init() {
-		session = ConnectJcrUtils.login(repository);
+		homeSession = ConnectJcrUtils.login(repository, NodeConstants.HOME);
+		mainSession = ConnectJcrUtils.login(repository);
 		// updateTooltip(input);
 	}
 
@@ -131,7 +134,8 @@ public abstract class AbstractSuiteDashboard {
 	// Life cycle
 	@PreDestroy
 	public void dispose() {
-		JcrUtils.logoutQuietly(session);
+		JcrUtils.logoutQuietly(homeSession);
+		JcrUtils.logoutQuietly(mainSession);
 	}
 
 	@Focus
@@ -140,8 +144,12 @@ public abstract class AbstractSuiteDashboard {
 	}
 
 	// Expose to implementing classes
-	protected Session getSession() {
-		return session;
+	protected Session getHomeSession() {
+		return homeSession;
+	}
+
+	public Session getMainSession() {
+		return mainSession;
 	}
 
 	public ResourcesService getResourcesService() {

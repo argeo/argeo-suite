@@ -16,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.argeo.cms.e4.rap.CmsLoginLifecycle;
 import org.argeo.connect.ui.SystemWorkbenchService;
 import org.argeo.jcr.JcrUtils;
+import org.argeo.node.NodeConstants;
 
 public class ArgeoSuiteLoginLifecycle extends CmsLoginLifecycle {
 	private final static Log log = LogFactory.getLog(ArgeoSuiteLoginLifecycle.class);
@@ -48,7 +49,7 @@ public class ArgeoSuiteLoginLifecycle extends CmsLoginLifecycle {
 				@Override
 				public Session run() throws PrivilegedActionException {
 					try {
-						return repository.login();
+						return repository.login(NodeConstants.HOME);
 					} catch (RepositoryException e) {
 						throw new PrivilegedActionException(e);
 					}

@@ -95,7 +95,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 	@Override
 	public void forceRefresh(Object object) {
 		CmsUtils.clear(headerCmp);
-		populateHeaderPart(headerCmp, NodeUtils.getUserHome(getSession()));
+		populateHeaderPart(headerCmp, NodeUtils.getUserHome(getHomeSession()));
 
 		CmsUtils.clear(taskListCmp);
 		populateTaskListCmp(taskListCmp);
@@ -105,7 +105,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 
 	private void populateTaskListCmp(Composite parent) {
 		parent.setLayout(EclipseUiUtils.noSpaceGridLayout());
-		NodeIterator nit = activitiesService.getMyTasks(getSession(), true);
+		NodeIterator nit = activitiesService.getMyTasks(getMainSession(), true);
 		if (!nit.hasNext()) {
 			Composite noTaskCmp = new Composite(parent, SWT.NO_FOCUS);
 			noTaskCmp.setLayoutData(EclipseUiUtils.fillAll());
@@ -122,7 +122,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 			tvlc.setLayoutData(EclipseUiUtils.fillAll());
 			final TableViewer viewer = tvlc.getTableViewer();
 			viewer.setInput(JcrUtils.nodeIteratorToList(nit).toArray());
-			final TaskViewerContextMenu contextMenu = new TaskViewerContextMenu(viewer, getSession(),
+			final TaskViewerContextMenu contextMenu = new TaskViewerContextMenu(viewer, getHomeSession(),
 					activitiesService) {
 				@Override
 				public boolean performAction(String actionId) {
@@ -206,13 +206,13 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 				// String mainMixin = TrackerTypes.TRACKER_TASK;
 				String mainMixin = ActivitiesTypes.ACTIVITIES_TASK;
 				String pathCreated = ConnectWorkbenchUtils.createAndConfigureEntity(createTaskLk.getShell(),
-						getSession(), getSystemAppService(), getSystemWorkbenchService(), mainMixin);
+						getHomeSession(), getSystemAppService(), getSystemWorkbenchService(), mainMixin);
 				if (EclipseUiUtils.notEmpty(pathCreated))
 					forceRefresh(null);
 			}
 		});
 
-		NodeIterator nit = activitiesService.getMyTasks(getSession(), true);
+		NodeIterator nit = activitiesService.getMyTasks(getHomeSession(), true);
 		if (nit.hasNext()) {
 			List<Node> overdueTasks = new ArrayList<>();
 			while (nit.hasNext()) {
@@ -229,7 +229,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		}
 
 		if (trackerService != null) {
-			nit = trackerService.getMyMilestones(getSession(), true);
+			nit = trackerService.getMyMilestones(getHomeSession(), true);
 			List<Node> openMilestones = new ArrayList<>();
 
 			if (nit.hasNext()) {
@@ -250,7 +250,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 			}
 
 			// My projects
-			List<Node> openProjects = JcrUtils.nodeIteratorToList(trackerService.getMyProjects(getSession(), true));
+			List<Node> openProjects = JcrUtils.nodeIteratorToList(trackerService.getMyProjects(getHomeSession(), true));
 			if (!openProjects.isEmpty()) {
 				Group myProjectsGp = new Group(rightCmp, SWT.NO_FOCUS);
 				myProjectsGp.setText("My open projects");
