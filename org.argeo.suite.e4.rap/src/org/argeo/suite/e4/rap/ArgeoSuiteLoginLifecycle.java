@@ -4,7 +4,6 @@ import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.jcr.Node;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
@@ -24,7 +23,6 @@ public class ArgeoSuiteLoginLifecycle extends CmsLoginLifecycle {
 	SystemWorkbenchService systemWorkbenchService;
 
 	@Inject
-	@Named("(cn=home)")
 	Repository repository;
 
 	@Override
