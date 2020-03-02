@@ -1,6 +1,5 @@
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/systemAppService.xml,\
-OSGI-INF/userManagerService.xml,\
 OSGI-INF/resourcesService.xml,\
 OSGI-INF/activitiesService.xml,\
 OSGI-INF/peopleService.xml,\
