@@ -6,7 +6,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.cms.e4.rap.AbstractRapE4App;
-import org.argeo.cms.util.CmsTheme;
+import org.argeo.cms.ui.util.CmsTheme;
 import org.eclipse.rap.rwt.application.Application;
 import org.eclipse.rap.rwt.client.WebClient;
 import org.osgi.framework.Bundle;

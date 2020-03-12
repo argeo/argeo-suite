@@ -18,8 +18,9 @@ import org.argeo.activities.ActivitiesNames;
 import org.argeo.activities.ActivitiesService;
 import org.argeo.activities.ActivitiesTypes;
 import org.argeo.activities.ui.TaskViewerContextMenu;
+import org.argeo.api.NodeUtils;
 import org.argeo.cms.auth.CurrentUser;
-import org.argeo.cms.util.CmsUtils;
+import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.connect.ConnectException;
 import org.argeo.connect.ConnectNames;
 import org.argeo.connect.ui.ConnectWorkbenchUtils;
@@ -27,7 +28,6 @@ import org.argeo.connect.ui.Refreshable;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
-import org.argeo.node.NodeUtils;
 import org.argeo.suite.e4.SuiteMsg;
 import org.argeo.tracker.TrackerNames;
 import org.argeo.tracker.TrackerService;
@@ -94,10 +94,10 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 
 	@Override
 	public void forceRefresh(Object object) {
-		CmsUtils.clear(headerCmp);
+		CmsUiUtils.clear(headerCmp);
 		populateHeaderPart(headerCmp, NodeUtils.getUserHome(getHomeSession()));
 
-		CmsUtils.clear(taskListCmp);
+		CmsUiUtils.clear(taskListCmp);
 		populateTaskListCmp(taskListCmp);
 
 		headerCmp.getParent().layout(true, true);
@@ -113,7 +113,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 
 			// Label noTaskLbl = new Label(noTaskCmp, SWT.CENTER);
 			// noTaskLbl.setText("<i> <big> You have no pending Task. </big> </i>");
-			// CmsUtils.markup(noTaskLbl);
+			// CmsUiUtils.markup(noTaskLbl);
 			// noTaskLbl.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, true));
 
 		} else {
@@ -182,7 +182,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 
 		// Title
 		Label titleLbl = new Label(leftCmp, SWT.WRAP | SWT.LEAD);
-		CmsUtils.markup(titleLbl);
+		CmsUiUtils.markup(titleLbl);
 		String titleStr = "<big><b>" + CurrentUser.getDisplayName() + "</b></big>";
 		titleLbl.setText(titleStr);
 		GridData gd = new GridData(SWT.BEGINNING, SWT.TOP, false, false);
@@ -381,7 +381,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 	// LOCAL HELPERS
 	private void populateMuliValueClickableList(Composite parent, Node[] nodes, ColumnLabelProvider lp,
 			String listLabel) {
-		CmsUtils.clear(parent);
+		CmsUiUtils.clear(parent);
 		RowLayout rl = new RowLayout(SWT.HORIZONTAL | SWT.WRAP);
 		rl.wrap = true;
 		rl.marginLeft = rl.marginTop = rl.marginBottom = 0;
@@ -397,7 +397,7 @@ public class DefaultDashboardEditor extends AbstractSuiteDashboard implements Re
 		int i = 1;
 		for (Node node : nodes) {
 			Link link = new Link(parent, SWT.NONE);
-			CmsUtils.markup(link);
+			CmsUiUtils.markup(link);
 			link.setText(lp.getText(node) + (i != nodes.length ? ", " : ""));
 			i++;
 			// Color fc = lp.getForeground(node);

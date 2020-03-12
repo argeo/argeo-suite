@@ -1,7 +1,7 @@
 package org.argeo.suite.e4.rap;
 
 import org.argeo.cms.e4.rap.AbstractRapE4App;
-import org.argeo.cms.util.CmsTheme;
+import org.argeo.cms.ui.util.CmsTheme;
 import org.eclipse.rap.rwt.application.Application;
 import org.eclipse.rap.rwt.client.WebClient;
 import org.osgi.framework.BundleContext;

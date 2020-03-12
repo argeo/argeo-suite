@@ -7,8 +7,9 @@ import javax.jcr.Node;
 import javax.jcr.Repository;
 import javax.jcr.Session;
 
+import org.argeo.api.NodeConstants;
 import org.argeo.cms.ui.eclipse.forms.FormToolkit;
-import org.argeo.cms.util.CmsUtils;
+import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.connect.SystemAppService;
 import org.argeo.connect.resources.ResourcesService;
 import org.argeo.connect.ui.AppWorkbenchService;
@@ -17,7 +18,6 @@ import org.argeo.connect.ui.SystemWorkbenchService;
 import org.argeo.connect.util.ConnectJcrUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.JcrUtils;
-import org.argeo.node.NodeConstants;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.rap.rwt.client.service.BrowserNavigation;
@@ -86,20 +86,20 @@ public abstract class AbstractSuiteDashboard {
 		gd.widthHint = widthHint;
 		gd.heightHint = heightHint;
 		gadgetCmp.setLayoutData(gd);
-		CmsUtils.style(gadgetCmp, ConnectUiStyles.GADGET_BOX);
+		CmsUiUtils.style(gadgetCmp, ConnectUiStyles.GADGET_BOX);
 		return gadgetCmp;
 	}
 
 	protected Composite createGadgetTitleCmp(Composite parent, String title) {
 		Composite titleCmp = toolkit.createComposite(parent, SWT.BACKGROUND | SWT.INHERIT_NONE);
-		CmsUtils.style(titleCmp, ConnectUiStyles.GADGET_HEADER);
+		CmsUiUtils.style(titleCmp, ConnectUiStyles.GADGET_HEADER);
 		titleCmp.setBackground(null);
 		GridData gd = new GridData(SWT.FILL, SWT.TOP, true, false);
 		titleCmp.setLayoutData(gd);
 		titleCmp.setLayout(new GridLayout());
 
 		Label titleLbl = toolkit.createLabel(titleCmp, title + " ", SWT.BOLD);
-		CmsUtils.style(titleLbl, ConnectUiStyles.GADGET_HEADER);
+		CmsUiUtils.style(titleLbl, ConnectUiStyles.GADGET_HEADER);
 		titleLbl.setBackground(null);
 		return titleCmp;
 	}

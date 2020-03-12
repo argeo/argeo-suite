@@ -12,10 +12,10 @@ import javax.security.auth.Subject;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.argeo.api.NodeConstants;
 import org.argeo.cms.e4.rap.CmsLoginLifecycle;
 import org.argeo.connect.ui.SystemWorkbenchService;
 import org.argeo.jcr.JcrUtils;
-import org.argeo.node.NodeConstants;
 
 public class ArgeoSuiteLoginLifecycle extends CmsLoginLifecycle {
 	private final static Log log = LogFactory.getLog(ArgeoSuiteLoginLifecycle.class);

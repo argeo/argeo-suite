@@ -20,7 +20,7 @@ import javax.jcr.query.QueryResult;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.activities.ActivitiesService;
-import org.argeo.cms.util.CmsUtils;
+import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.connect.ConnectException;
 import org.argeo.connect.ConnectTypes;
 import org.argeo.connect.resources.ResourcesService;
@@ -181,8 +181,8 @@ public class QuickSearchView implements Refreshable {
 		Table table = v.getTable();
 		table.setLinesVisible(true);
 		table.setHeaderVisible(false);
-		CmsUtils.markup(table);
-		CmsUtils.setItemHeight(table, 26);
+		CmsUiUtils.markup(table);
+		CmsUiUtils.setItemHeight(table, 26);
 
 		v.setContentProvider(new BasicNodeListContentProvider());
 		v.addDoubleClickListener(new JcrViewerDClickListener(systemWorkbenchService));
