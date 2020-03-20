@@ -56,7 +56,7 @@ public abstract class AbstractSuiteDashboard {
 	private BrowserNavigation browserNavigation;
 
 	public void init() {
-		homeSession = ConnectJcrUtils.login(repository, NodeConstants.HOME);
+		homeSession = ConnectJcrUtils.login(repository, NodeConstants.HOME_WORKSPACE);
 		mainSession = ConnectJcrUtils.login(repository);
 		// updateTooltip(input);
 	}

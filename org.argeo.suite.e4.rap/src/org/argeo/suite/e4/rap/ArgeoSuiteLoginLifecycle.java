@@ -47,7 +47,7 @@ public class ArgeoSuiteLoginLifecycle extends CmsLoginLifecycle {
 				@Override
 				public Session run() throws PrivilegedActionException {
 					try {
-						return repository.login(NodeConstants.HOME);
+						return repository.login(NodeConstants.HOME_WORKSPACE);
 					} catch (RepositoryException e) {
 						throw new PrivilegedActionException(e);
 					}
