@@ -17,4 +17,5 @@ org.argeo.people.e4,\
 org.argeo.people.e4.handlers,\
 org.argeo.documents.e4,\
 org.argeo.connect.e4.resources,\
+org.eclipse.rap.*;version="0.0.0",\
 *

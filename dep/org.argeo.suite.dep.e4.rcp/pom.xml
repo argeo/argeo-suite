@@ -30,6 +30,14 @@
 		<!-- <version>0.1.13-SNAPSHOT</version> -->
 		<!-- </dependency> -->
 
+		<!-- Base Argeo platform distribution -->
+		<dependency>
+			<groupId>org.argeo.connect</groupId>
+			<artifactId>org.argeo.connect.dep.node</artifactId>
+			<version>${version.argeo-connect}</version>
+			<type>pom</type>
+		</dependency>
+
 		<!-- Base CMS distribution -->
 		<dependency>
 			<groupId>org.argeo.connect</groupId>
@@ -40,16 +48,6 @@
 		<!-- UIs -->
 		<dependency>
 			<groupId>org.argeo.connect</groupId>
-			<artifactId>org.argeo.connect.api</artifactId>
-			<version>${version.argeo-connect}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.connect</groupId>
-			<artifactId>org.argeo.connect.core</artifactId>
-			<version>${version.argeo-connect}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.connect</groupId>
 			<artifactId>org.argeo.connect.ui</artifactId>
 			<version>${version.argeo-connect}</version>
 		</dependency>
@@ -57,32 +55,6 @@
 			<groupId>org.argeo.connect</groupId>
 			<artifactId>org.argeo.connect.e4</artifactId>
 			<version>${version.argeo-connect}</version>
-		</dependency>
-
-		<!-- Additional third parties -->
-		<dependency>
-			<groupId>org.argeo.tp.javax</groupId>
-			<artifactId>javax.activation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.javax</groupId>
-			<artifactId>javax.xml.bind</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.misc</groupId>
-			<artifactId>net.sf.jxl</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.apache</groupId>
-			<artifactId>org.apache.pdfbox</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.apache</groupId>
-			<artifactId>org.apache.pdfbox.fontbox</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.apache.commons</groupId>
-			<artifactId>org.apache.commons.lang3</artifactId>
 		</dependency>
 
 		<!-- Base Argeo platform distribution -->
