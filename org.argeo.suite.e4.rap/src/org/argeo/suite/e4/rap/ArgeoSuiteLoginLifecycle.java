@@ -12,7 +12,6 @@ import javax.security.auth.Subject;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.api.NodeConstants;
 import org.argeo.cms.e4.rap.CmsLoginLifecycle;
 import org.argeo.connect.ui.SystemWorkbenchService;
 import org.argeo.jcr.JcrUtils;
@@ -41,24 +40,41 @@ public class ArgeoSuiteLoginLifecycle extends CmsLoginLifecycle {
 		// that home is initialised
 		Session session = null;
 		try {
-			Subject subject = getSubject();
-			session = Subject.doAs(subject, new PrivilegedExceptionAction<Session>() {
-
-				@Override
-				public Session run() throws PrivilegedActionException {
-					try {
-						return repository.login(NodeConstants.HOME_WORKSPACE);
-					} catch (RepositoryException e) {
-						throw new PrivilegedActionException(e);
+			if (state != null && state.startsWith("/")) {
+				String path = state.substring(1);
+				String workspace;
+				if (path.equals("")) {
+					workspace = null;
+					path = "/";
+				} else {
+					int index = path.indexOf('/');
+					if (index == 0) {
+						log.error("Cannot interpret // " + state);
+						getBrowserNavigation().pushState("~", null);
+						return;
+					} else if (index > 0) {
+						workspace = path.substring(0, index);
+						path = path.substring(index);
+					} else {// index<0, assuming root node
+						workspace = path;
+						path = "/";
 					}
 				}
+				Subject subject = getSubject();
+				session = Subject.doAs(subject, new PrivilegedExceptionAction<Session>() {
 
-			});
-			if (state != null && state.startsWith("/")) {
-				if (state.startsWith("/")) {
-					Node node = session.getNode(state);
-					systemWorkbenchService.openEntityEditor(node);
-				}
+					@Override
+					public Session run() throws PrivilegedActionException {
+						try {
+							return repository.login(workspace);
+						} catch (RepositoryException e) {
+							throw new PrivilegedActionException(e);
+						}
+					}
+
+				});
+				Node node = session.getNode(path);
+				systemWorkbenchService.openEntityEditor(node);
 			}
 		} catch (RepositoryException | PrivilegedActionException e) {
 			log.error("Cannot load state " + state, e);
