@@ -12,6 +12,7 @@ OSGI-INF/peopleMaintenanceService.xml
 Import-Package: javax.jcr,\
 javax.transaction,\
 org.osgi.service.useradmin,\
+org.argeo.cms,\
 org.argeo.connect,\
 org.argeo.activities,\
 org.argeo.people,\

@@ -5,7 +5,6 @@
       <provide interface="org.argeo.connect.ui.AppWorkbenchService"/>
       <provide interface="org.argeo.connect.e4.AppE4Service"/>
    </service>
-   <reference bind="setUserAdminService" cardinality="1..1" interface="org.argeo.connect.UserAdminService" name="UserAdminService" policy="static"/>
-   <reference bind="setPeopleService" cardinality="1..1" interface="org.argeo.people.PeopleService" name="PeopleService" policy="static"/>
-   <reference bind="setResourcesService" cardinality="1..1" interface="org.argeo.connect.resources.ResourcesService" name="ResourcesService" policy="static"/>
+   <reference bind="setPeopleService" cardinality="1..1" interface="org.argeo.people.PeopleService" policy="static"/>
+   <reference bind="setResourcesService" cardinality="1..1" interface="org.argeo.connect.resources.ResourcesService" policy="static"/>
 </scr:component>

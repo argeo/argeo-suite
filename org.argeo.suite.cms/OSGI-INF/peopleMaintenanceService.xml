@@ -4,7 +4,7 @@
    <service>
       <provide interface="org.argeo.connect.AppMaintenanceService"/>
    </service>
-   <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="static" target="(cn=connect)"/>
-   <reference bind="setUserAdminService" cardinality="1..1" interface="org.argeo.cms.CmsUserManager" name="UserAdminService" policy="static"/>
+   <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" policy="static" target="(cn=connect)"/>
+   <reference bind="setCmsUserManager" cardinality="1..1" interface="org.argeo.cms.CmsUserManager" policy="static"/>
    <property name="cn" type="String" value="people"/>
 </scr:component>

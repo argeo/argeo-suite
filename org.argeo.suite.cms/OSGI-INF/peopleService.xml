@@ -5,6 +5,6 @@
       <provide interface="org.argeo.connect.AppService"/>
       <provide interface="org.argeo.people.PeopleService"/>
    </service>
-   <reference bind="setResourcesService" cardinality="1..1" interface="org.argeo.connect.resources.ResourcesService" name="ResourcesService" policy="static"/>
-   <reference bind="setUserAdminService" cardinality="1..1" interface="org.argeo.cms.CmsUserManager" name="UserAdminService" policy="static"/>
+   <reference bind="setResourcesService" cardinality="1..1" interface="org.argeo.connect.resources.ResourcesService" policy="static"/>
+   <reference bind="setCmsUserManager" cardinality="1..1" interface="org.argeo.cms.CmsUserManager" policy="static"/>
 </scr:component>
