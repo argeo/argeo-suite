@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="peopleService">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" immediate="true" name="People Service">
    <implementation class="org.argeo.people.core.PeopleServiceImpl"/>
    <service>
       <provide interface="org.argeo.connect.AppService"/>
