@@ -6,5 +6,5 @@
       <property name="contextName" type="String" value="suite"/>
    </service>
    <property name="org.eclipse.rap.rwt.webclient.pageTitle" type="String" value="Argeo Office"/>
-   <property name="org.eclipse.rap.rwt.webclient.favicon" type="String" value="icons/argeo-e.png"/>
+   <property name="org.eclipse.rap.rwt.webclient.favicon" type="String" value="icons/argeo-alpha.png"/>
 </scr:component>
