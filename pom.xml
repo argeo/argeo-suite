@@ -45,54 +45,17 @@
 		<developerConnection>scm:git:https://code.argeo.org/git/gpl/argeo-suite.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
+	<organization>
+		<name>Argeo GmbH</name>
+	</organization>
 	<inceptionYear>2014</inceptionYear>
 	<licenses>
 		<license>
-			<name>GPL v3 with exception</name>
+			<name> 	GPL-3.0-or-later</name>
 			<url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
 			<distribution>repo</distribution>
-			<comments><![CDATA[
-Smart Data Productivity Suite - Lean, robust and secured distributed Java applications
-Copyright (C) 2017 Argeo GmbH
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses />
-
-Additional permission under GNU GPL version 3 section 7
-
-If you modify this Program, or any covered work, by linking or combining it 
-with software covered by the terms of the Eclipse Public License, the 
-licensors of this Program grant you additional permission to convey the 
-resulting work. Corresponding Source for a non-source form of such a 
-combination shall include the source code for the parts of such software 
-which are used as well as that of the covered work.]]>
-			</comments>
 		</license>
 	</licenses>
-	<developers>
-		<developer>
-			<id>mbaudier</id>
-			<name>Mathieu Baudier</name>
-			<email><![CDATA[http://mailhide.recaptcha.net/d?k=01EM7GpnvY3k8woQ2tnnZLUA==&c=crsNpHjhOBDPswHG6HD_gXaqymhC69wmBf7wlagcSHw=]]></email>
-			<organization>Argeo</organization>
-			<organizationUrl>http://www.argeo.org</organizationUrl>
-			<roles>
-				<role>architect</role>
-				<role>developer</role>
-				<role>QA</role>
-			</roles>
-		</developer>
-	</developers>
 	<dependencies>
 		<dependency>
 			<groupId>org.argeo.tp</groupId>
