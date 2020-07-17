@@ -16,6 +16,7 @@ import org.argeo.cms.e4.rap.CmsLoginLifecycle;
 import org.argeo.connect.ui.SystemWorkbenchService;
 import org.argeo.jcr.JcrUtils;
 
+/** Extends the CMS login lifecycle by managing the state of the current context. */
 public class ArgeoSuiteLoginLifecycle extends CmsLoginLifecycle {
 	private final static Log log = LogFactory.getLog(ArgeoSuiteLoginLifecycle.class);
 	@Inject
