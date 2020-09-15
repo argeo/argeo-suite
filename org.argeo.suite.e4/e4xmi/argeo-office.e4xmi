@@ -102,7 +102,7 @@
       <children xsi:type="menu:HandledToolItem" xmi:id="_Q0gDUF3KEeiDGN42AP6WZg" elementId="org.argeo.suite.e4.handledtoolitem.delete" label="%delete" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/delete.png" tooltip="%delete" command="_EvkB4ELbEeim_a9htzedPA"/>
     </toolbar>
   </descriptors>
-  <descriptors xmi:id="_OqeE8FeZEeiknZQLx-vtnA" elementId="org.argeo.suite.e4.partdescriptor.tagEditor" label="Tag" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/tag.png" allowMultiple="true" closeable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.resources.parts.TagEditor"/>
+  <descriptors xmi:id="_OqeE8FeZEeiknZQLx-vtnA" elementId="org.argeo.suite.e4.partdescriptor.tagEditor" label="Tag" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/types/tag.png" allowMultiple="true" category="entityEditorArea" closeable="true" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.resources.parts.TagEditor"/>
   <descriptors xmi:id="_xvss0FeaEeiknZQLx-vtnA" elementId="org.argeo.suite.e4.partdescriptor.searchEntityPart" label="Search Entity" iconURI="platform:/plugin/org.argeo.theme.argeo2/icons/actions/search.png" contributionURI="bundleclass://org.argeo.connect.e4/org.argeo.connect.e4.parts.DefaultSearchEntityEditor"/>
   <commands xmi:id="_2Xkt8DApEei3AbO1ldMI0w" elementId="org.argeo.suite.e4.command.createEntity" commandName="New Entity">
     <parameters xmi:id="_GnXrcDAsEei3AbO1ldMI0w" elementId="targetNodeType" name="targetNodeType" optional="false"/>
