@@ -11,4 +11,6 @@ org.argeo.activities,\
 org.argeo.tracker,\
 org.argeo.tracker.core,\
 org.argeo.tracker.e4,\
+org.argeo.cms,\
+org.argeo.connect.ui,\
 *

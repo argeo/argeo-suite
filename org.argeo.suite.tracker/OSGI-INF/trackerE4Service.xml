@@ -7,6 +7,6 @@
    </service>
    <property name="service.ranking" type="Integer" value="10"/>
    <reference bind="setActivitiesService" cardinality="1..1" interface="org.argeo.activities.ActivitiesService" name="ActivitiesService" policy="static"/>
-   <reference bind="setUserAdminService" cardinality="1..1" interface="org.argeo.connect.UserAdminService" name="UserAdminService" policy="static"/>
+   <reference bind="setCmsUserManager" cardinality="1..1" interface="org.argeo.cms.CmsUserManager" policy="static"/>
    <reference bind="setTrackerService" cardinality="1..1" interface="org.argeo.tracker.TrackerService" name="TrackerService" policy="static"/>
 </scr:component>
