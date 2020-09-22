@@ -70,9 +70,12 @@ public class EntitySingleColumnLabelProvider extends ColumnLabelProvider impleme
 				result = mlInstanceLp.getText(element);
 			else if (entity.isNodeType(PeopleTypes.PEOPLE_GROUP))
 				result = groupLp.getText(element);
-			else if (entity.isNodeType(NodeType.MIX_TITLE) && entity.hasProperty(Property.JCR_TITLE))
-				result = entity.getProperty(Property.JCR_TITLE).getString();
-			else
+			else if (entity.isNodeType(NodeType.MIX_TITLE)) {
+				if (entity.hasProperty(Property.JCR_TITLE))
+					result = entity.getProperty(Property.JCR_TITLE).getString();
+				else
+					result = entity.getName();
+			} else
 				result = "";
 			return ConnectUtils.replaceAmpersand(result);
 		} catch (RepositoryException re) {

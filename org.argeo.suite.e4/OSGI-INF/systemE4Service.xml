@@ -6,4 +6,5 @@
    </service>
    <reference bind="addAppService" cardinality="0..n" interface="org.argeo.connect.ui.AppWorkbenchService" name="AppWorkbenchService" policy="dynamic" unbind="removeAppService"/>
    <property name="service.context.key" type="String" value="org.argeo.connect.ui.SystemWorkbenchService"/>
+   <reference bind="addEntityDefinition" cardinality="0..n" interface="org.argeo.entity.EntityDefinition" name="EntityDefinition" policy="dynamic" unbind="removeEntityDefinition"/>
 </scr:component>
