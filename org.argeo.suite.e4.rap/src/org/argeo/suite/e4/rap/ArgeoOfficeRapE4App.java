@@ -1,3 +1,4 @@
+
 package org.argeo.suite.e4.rap;
 
 import org.argeo.cms.e4.rap.AbstractRapE4App;
