@@ -19,9 +19,6 @@ import org.osgi.service.cm.ManagedServiceFactory;
  * Managed service factory deploying Argeo RAP app based on OSGi configurations.
  */
 public class AppDeployer implements ManagedServiceFactory {
-	public final static String CMS_THEME_BUNDLE_PROPERTY = "argeo.cms.theme.bundle";
-	public final static String DEFAULT_CMS_THEME_BUNDLE = "org.argeo.theme.argeo2";
-
 	private final static Log log = LogFactory.getLog(AppDeployer.class);
 	private BundleContext bundleContext;
 
@@ -49,11 +46,11 @@ public class AppDeployer implements ManagedServiceFactory {
 
 	protected void deploy(Bundle bundle, Map<String, String> properties) {
 		CmsTheme cmsTheme;
-		if (properties.containsKey(CMS_THEME_BUNDLE_PROPERTY)) {
-			String cmsThemeBundle = properties.get(CMS_THEME_BUNDLE_PROPERTY);
+		if (properties.containsKey(CmsTheme.CMS_THEME_BUNDLE_PROPERTY)) {
+			String cmsThemeBundle = properties.get(CmsTheme.CMS_THEME_BUNDLE_PROPERTY);
 			cmsTheme = new CmsTheme(bundleContext, cmsThemeBundle);
 		} else {
-			cmsTheme = new CmsTheme(bundleContext, DEFAULT_CMS_THEME_BUNDLE);
+			cmsTheme = new CmsTheme(bundleContext, CmsTheme.DEFAULT_CMS_THEME_BUNDLE);
 		}
 
 		ArgeoRapApp app = new ArgeoRapApp(bundleContext, bundle, cmsTheme);

@@ -1,8 +1,5 @@
 package org.argeo.suite.e4.rap.settings;
 
-import static org.argeo.suite.e4.rap.settings.AppDeployer.CMS_THEME_BUNDLE_PROPERTY;
-import static org.argeo.suite.e4.rap.settings.AppDeployer.DEFAULT_CMS_THEME_BUNDLE;
-
 import java.util.Enumeration;
 import java.util.Map;
 
@@ -41,11 +38,11 @@ public class ArgeoRapApp extends AbstractRapE4App {
 	public void init(BundleContext bundleContext, Map<String, Object> properties) {
 		super.init(bundleContext, properties);
 		// super must be first
-		if (getBaseProperties().containsKey(CMS_THEME_BUNDLE_PROPERTY)) {
-			String cmsThemeBundle = getBaseProperties().get(CMS_THEME_BUNDLE_PROPERTY);
+		if (getBaseProperties().containsKey(CmsTheme.CMS_THEME_BUNDLE_PROPERTY)) {
+			String cmsThemeBundle = getBaseProperties().get(CmsTheme.CMS_THEME_BUNDLE_PROPERTY);
 			cmsTheme = new CmsTheme(getBundleContext(), cmsThemeBundle);
 		} else {
-			cmsTheme = new CmsTheme(getBundleContext(), DEFAULT_CMS_THEME_BUNDLE);
+			cmsTheme = new CmsTheme(getBundleContext(), CmsTheme.DEFAULT_CMS_THEME_BUNDLE);
 		}
 		bundle = bundleContext.getBundle();
 	}
