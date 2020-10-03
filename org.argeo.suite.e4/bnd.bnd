@@ -9,6 +9,7 @@ Import-Package: org.eclipse.swt,\
 org.eclipse.core.commands.common,\
 javax.jcr.nodetype,\
 org.eclipse.e4.core.contexts,\
+org.eclipse.e4.ui.model.application.ui,\
 org.argeo.entity,\
 org.argeo.connect.ui,\
 org.argeo.connect.e4,\
