@@ -26,7 +26,7 @@ public class ArgeoRapApp extends AbstractRapE4App {
 		this.cmsTheme = cmsTheme;
 		this.bundle = bundle;
 		setLifeCycleUri("bundleclass://org.argeo.suite.e4.rap/org.argeo.suite.e4.rap.ArgeoSuiteLoginLifecycle");
-		String contextName = "argeo/" + FilenameUtils.getExtension(bundle.getSymbolicName());
+		String contextName = "apps/" + FilenameUtils.getExtension(bundle.getSymbolicName());
 		setContextName(contextName);
 	}
 
