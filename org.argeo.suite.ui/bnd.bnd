@@ -1,0 +1,10 @@
+Service-Component:\
+OSGI-INF/argeoSuiteApp.xml,\
+OSGI-INF/workHeader.xml,\
+OSGI-INF/leadPane.xml
+
+Import-Package:\
+org.argeo.api,\
+org.eclipse.swt,\
+org.osgi.framework,\
+*

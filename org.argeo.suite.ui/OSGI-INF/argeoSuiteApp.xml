@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="Argeo Suite App">
+   <implementation class="org.argeo.suite.ui.ArgeoSuiteApp"/>
+   <property name="contextName" type="String" value="argeo"/>
+   <service>
+      <provide interface="org.argeo.cms.ui.CmsApp"/>
+   </service>
+   <reference bind="addUiProvider" cardinality="1..n" interface="org.argeo.cms.ui.CmsUiProvider" name="CmsUiProvider" policy="static" unbind="removeUiProvider"/>
+</scr:component>

@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.argeo.maven</groupId>
@@ -24,8 +26,13 @@
 		<git.rw />
 	</properties>
 	<modules>
-		<!-- Eclipse 4 -->
+		<!-- Lightweight -->
 		<module>org.argeo.suite.cms</module>
+		<module>org.argeo.suite.ui</module>
+		<module>org.argeo.suite.ui.rap</module>
+		<module>org.argeo.suite.theme.default</module>
+
+		<!-- Eclipse 4 -->
 		<module>org.argeo.suite.e4</module>
 		<module>org.argeo.suite.e4.rap</module>
 		<module>org.argeo.suite.standard</module>
