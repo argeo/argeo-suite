@@ -1,5 +1,5 @@
 Service-Component:\
-OSGI-INF/argeoSuiteApp.xml,\
+OSGI-INF/cmsApp.xml,\
 OSGI-INF/workHeader.xml,\
 OSGI-INF/leadPane.xml
 

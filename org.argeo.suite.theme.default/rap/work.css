@@ -9,3 +9,9 @@
 	color: white;
 	background-color: #204a87;
 }
+
+Button.argeo-work-leadPane {
+	font: bold 14px sans-serif;
+	color: white;
+	background-color: white;
+}

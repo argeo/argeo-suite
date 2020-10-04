@@ -1,4 +1,4 @@
-Service-Component: OSGI-INF/argeoSuiteWebApp.xml
+Service-Component: OSGI-INF/cmsWebApp.xml
 
 Import-Package:\
 org.argeo.cms.web,\

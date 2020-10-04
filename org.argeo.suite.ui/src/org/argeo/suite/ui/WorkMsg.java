@@ -4,5 +4,5 @@ import org.argeo.cms.Localized;
 
 /** Localized messages. */
 public enum WorkMsg implements Localized {
-	dashboard;
+	dashboard,people,documents;
 }

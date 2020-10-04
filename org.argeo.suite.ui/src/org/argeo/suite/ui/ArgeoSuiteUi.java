@@ -1,10 +1,14 @@
 package org.argeo.suite.ui;
 
+import static org.argeo.suite.ui.ArgeoSuiteIcon.dashboard;
+
+import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -17,11 +21,15 @@ public class ArgeoSuiteUi {
 
 	private SashForm dynamicArea;
 	private Composite entryArea;
-	private CTabFolder editorArea;
+	private Composite editorArea;
+	private CTabFolder editorTabFolder;
 
 	private Composite defaultBody;
 
+	private CmsTheme theme;
+
 	public ArgeoSuiteUi(Composite parent, int style) {
+		theme = CmsTheme.getCmsTheme(parent);
 		this.parent = parent;
 		parent.setLayout(CmsUiUtils.noSpaceGridLayout());
 
@@ -45,25 +53,39 @@ public class ArgeoSuiteUi {
 		dynamicArea.setLayoutData(CmsUiUtils.fillAll());
 
 		if (SWT.RIGHT_TO_LEFT == (style & SWT.RIGHT_TO_LEFT)) {// arabic, hebrew, etc.
-			editorArea = new CTabFolder(dynamicArea, SWT.NONE);
-			entryArea = new Composite(dynamicArea, SWT.NONE);
+			editorArea = new Composite(dynamicArea, SWT.BORDER);
+			entryArea = new Composite(dynamicArea, SWT.BORDER);
 		} else {
 			entryArea = new Composite(dynamicArea, SWT.NONE);
-			editorArea = new CTabFolder(dynamicArea, SWT.NONE);
+			editorArea = new Composite(dynamicArea, SWT.NONE);
 		}
 		int[] weights = new int[] { 2000, 8000 };
 		dynamicArea.setWeights(weights);
+		editorArea.setLayout(new GridLayout());
 
-		Composite buttons = new Composite(editorArea, SWT.NONE);
-		buttons.setLayout(new RowLayout(SWT.HORIZONTAL));
-		Button delete = new Button(buttons, SWT.PUSH);
-		delete.setText("Delete");
-		editorArea.setTopRight(buttons);
+		// TODO make it dynamic
+		RecentItems recentItems = new RecentItems();
+		recentItems.createUiPart(entryArea);
 
-		CTabItem defaultTab = new CTabItem(editorArea, SWT.NONE);
-		defaultTab.setText("Home");
-		defaultBody = new Composite(editorArea, SWT.NONE);
+		editorTabFolder = new CTabFolder(editorArea, SWT.NONE);
+		editorTabFolder.setLayoutData(CmsUiUtils.fillAll());
+		Composite buttons = new Composite(editorTabFolder, SWT.NONE);
+		RowLayout buttonsLayout = new RowLayout(SWT.HORIZONTAL);
+		buttonsLayout.pack = false;
+		buttons.setLayout(buttonsLayout);
+		Button delete = new Button(buttons, SWT.FLAT);
+		delete.setImage(ArgeoSuiteIcon.delete.getSmallIcon(theme));
+		// int size = ArgeoSuiteIcon.delete.getSmallIconSize();
+		// delete.setBounds(delete.getBounds().x,delete.getBounds().y,size,size);
+		// delete.setSize(size, size);
+		editorTabFolder.setTopRight(buttons);
+
+		CTabItem defaultTab = new CTabItem(editorTabFolder, SWT.NONE);
+		// defaultTab.setText("Home");
+		defaultTab.setImage(dashboard.getSmallIcon(theme));
+		defaultBody = new Composite(editorTabFolder, SWT.NONE);
 		defaultTab.setControl(defaultBody);
+		editorTabFolder.setSelection(defaultTab);
 
 		// editorArea.setSingle(true);
 	}
@@ -88,8 +110,8 @@ public class ArgeoSuiteUi {
 		return entryArea;
 	}
 
-	CTabFolder getEditorArea() {
-		return editorArea;
+	CTabFolder getEditorTabFolder() {
+		return editorTabFolder;
 	}
 
 	Composite getDefaultBody() {
