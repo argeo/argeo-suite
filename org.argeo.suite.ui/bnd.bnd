@@ -1,7 +1,10 @@
 Service-Component:\
 OSGI-INF/cmsApp.xml,\
 OSGI-INF/workHeader.xml,\
-OSGI-INF/leadPane.xml
+OSGI-INF/leadPane.xml,\
+OSGI-INF/loginScreen.xml,\
+OSGI-INF/recentItems.xml,\
+OSGI-INF/dashboard.xml
 
 Import-Package:\
 org.argeo.api,\

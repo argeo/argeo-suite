@@ -13,6 +13,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
 
 /** List recent items. */
 public class RecentItems implements CmsUiProvider {
@@ -29,13 +30,15 @@ public class RecentItems implements CmsUiProvider {
 		top.setLayout(new GridLayout(2, false));
 
 		Label search = new Label(top, SWT.NONE);
-		search.setImage(ArgeoSuiteIcon.search.getSmallIcon(theme));
-		DelayedText delayedText = new DelayedText(top, SWT.SINGLE | SWT.BORDER, SEARCH_TEXT_DELAY);
-		delayedText.getText().setLayoutData(CmsUiUtils.fillWidth());
+		search.setImage(SuiteIcon.search.getSmallIcon(theme));
+		Text text = new Text(top, SWT.SINGLE | SWT.BORDER);
+		text.setLayoutData(CmsUiUtils.fillWidth());
+//		DelayedText delayedText = new DelayedText(top, SWT.SINGLE | SWT.BORDER, SEARCH_TEXT_DELAY);
+//		delayedText.getText().setLayoutData(CmsUiUtils.fillWidth());
 
 		TableViewer viewer = new TableViewer(parent);
 		viewer.getTable().setLayoutData(CmsUiUtils.fillAll());
-		return delayedText.getText();
+		return text;
 	}
 
 }

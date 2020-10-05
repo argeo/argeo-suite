@@ -6,28 +6,34 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import javax.jcr.Node;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.cms.ui.AbstractCmsApp;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
+import org.argeo.cms.ui.CmsView;
+import org.argeo.jcr.JcrUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.osgi.framework.Constants;
 
 /** The Argeo Suite App. */
 public class ArgeoSuiteApp extends AbstractCmsApp {
 	private final static Log log = LogFactory.getLog(ArgeoSuiteApp.class);
 
-	public final static String PID_PREFIX = "argeo.work.";
+	public final static String PID_PREFIX = "argeo.suite.ui.";
 	public final static String HEADER_PID = PID_PREFIX + "header";
 	public final static String LEAD_PANE_PID = PID_PREFIX + "leadPane";
+	public final static String LOGIN_SCREEN_PID = PID_PREFIX + "loginScreen";
+	public final static String DASHBOARD_PID = PID_PREFIX + "dashboard";
+	public final static String RECENT_ITEMS_PID = PID_PREFIX + "recentItems";
 
 	private final static String DEFAULT_UI_NAME = "work";
 	private final static String DEFAULT_THEME_ID = "org.argeo.suite.theme.default";
-
-	private ArgeoSuiteUi argeoSuiteUi;
 
 	private Map<String, CmsUiProvider> uiProviders = new TreeMap<>();
 
@@ -50,15 +56,14 @@ public class ArgeoSuiteApp extends AbstractCmsApp {
 	}
 
 	@Override
-	public void initUi(String uiName, Composite parent) {
-		if (DEFAULT_UI_NAME.equals(uiName)) {
-			CmsTheme theme = getTheme(uiName);
-			if (theme != null)
-				CmsTheme.registerCmsTheme(parent.getShell(), theme);
-			argeoSuiteUi = new ArgeoSuiteUi(parent, SWT.NONE);
-			refresh(uiName);
-		}
-
+	public Composite initUi(Composite parent) {
+		String uiName = parent.getData(UI_NAME_PROPERTY) != null ? parent.getData(UI_NAME_PROPERTY).toString() : null;
+		CmsTheme theme = getTheme(uiName);
+		if (theme != null)
+			CmsTheme.registerCmsTheme(parent.getShell(), theme);
+		ArgeoSuiteUi argeoSuiteUi = new ArgeoSuiteUi(parent, SWT.NONE);
+		refreshUi(argeoSuiteUi, null);
+		return argeoSuiteUi;
 	}
 
 	@Override
@@ -67,13 +72,91 @@ public class ArgeoSuiteApp extends AbstractCmsApp {
 		return DEFAULT_THEME_ID;
 	}
 
-	public void refresh(String uiName) {
-		if (DEFAULT_UI_NAME.equals(uiName)) {
-			Node context = null;
-			uiProviders.get(HEADER_PID).createUiPart(argeoSuiteUi.getHeader(), context);
-			uiProviders.get(LEAD_PANE_PID).createUiPart(argeoSuiteUi.getLeadPane(), context);
+	@Override
+	public void refreshUi(Composite parent, String state) {
+		Node context = null;
+		ArgeoSuiteUi argeoSuiteUi = (ArgeoSuiteUi) parent;
+		refreshPart(findUiProvider(HEADER_PID, context), argeoSuiteUi.getHeader(), context);
+		CmsView cmsView = CmsView.getCmsView(parent);
+		if (cmsView.isAnonymous()) {
+			refreshPart(findUiProvider(LOGIN_SCREEN_PID, context), argeoSuiteUi.getDefaultBody(), context);
+		} else {
+			refreshPart(findUiProvider(DASHBOARD_PID, context), argeoSuiteUi.getDefaultBody(), context);
+		}
+		refreshPart(findUiProvider(LEAD_PANE_PID, context), argeoSuiteUi.getLeadPane(), context);
+		refreshPart(findUiProvider(RECENT_ITEMS_PID, context), argeoSuiteUi.getEntryArea(), context);
+		argeoSuiteUi.layout(true, true);
+	}
+
+	private void refreshPart(CmsUiProvider uiProvider, Composite part, Node context) {
+		for (Control child : part.getChildren())
+			child.dispose();
+		uiProvider.createUiPart(part, context);
+	}
+
+	private CmsUiProvider findUiProvider(String pid, Node context) {
+		if (pid != null) {
+			if (uiProviders.containsKey(pid))
+				return uiProviders.get(pid);
+		}
+
+		// nothing
+		return new CmsUiProvider() {
+
+			@Override
+			public Control createUi(Composite parent, Node context) throws RepositoryException {
+				return parent;
+			}
+		};
+	}
+
+	@Override
+	public void setState(Composite parent, String state) {
+		CmsView cmsView = CmsView.getCmsView(parent);
+		// for the time being we systematically open a session, in order to make sure
+		// that home is initialised
+		Session session = null;
+		try {
+			if (state != null && state.startsWith("/")) {
+				String path = state.substring(1);
+				String workspace;
+				if (path.equals("")) {
+					workspace = null;
+					path = "/";
+				} else {
+					int index = path.indexOf('/');
+					if (index == 0) {
+						log.error("Cannot interpret // " + state);
+						cmsView.navigateTo("~");
+						return;
+					} else if (index > 0) {
+						workspace = path.substring(0, index);
+						path = path.substring(index);
+					} else {// index<0, assuming root node
+						workspace = path;
+						path = "/";
+					}
+				}
+				session = getRepository().login(workspace);
+
+				Node node = session.getNode(path);
+				refreshEntityUi(node);
+			}
+		} catch (RepositoryException e) {
+			log.error("Cannot load state " + state, e);
+			cmsView.navigateTo("~");
+		} finally {
+			JcrUtils.logoutQuietly(session);
 		}
 	}
+
+	private void refreshEntityUi(Node node) {
+
+	}
+
+	/*
+	 * Dependency injection.
+	 */
 
 	public void addUiProvider(CmsUiProvider uiProvider, Map<String, String> properties) {
 		String servicePid = properties.get(Constants.SERVICE_PID);
@@ -92,14 +175,4 @@ public class ArgeoSuiteApp extends AbstractCmsApp {
 		uiProviders.remove(servicePid);
 
 	}
-
-//	static class UiProviderKey {
-//		private Map<String, String> properties;
-//
-//		public UiProviderKey(Map<String, String> properties) {
-//			super();
-//			this.properties = properties;
-//		}
-//
-//	}
 }

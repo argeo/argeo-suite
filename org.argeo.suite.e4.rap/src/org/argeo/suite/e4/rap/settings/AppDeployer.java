@@ -7,7 +7,6 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.cms.e4.rap.AbstractRapE4App;
-import org.argeo.cms.ui.util.CmsTheme;
 import org.argeo.util.LangUtils;
 import org.eclipse.rap.rwt.application.ApplicationConfiguration;
 import org.osgi.framework.Bundle;
@@ -45,15 +44,15 @@ public class AppDeployer implements ManagedServiceFactory {
 	}
 
 	protected void deploy(Bundle bundle, Map<String, String> properties) {
-		CmsTheme cmsTheme;
-		if (properties.containsKey(CmsTheme.CMS_THEME_BUNDLE_PROPERTY)) {
-			String cmsThemeBundle = properties.get(CmsTheme.CMS_THEME_BUNDLE_PROPERTY);
-			cmsTheme = new CmsTheme(bundleContext, cmsThemeBundle);
-		} else {
-			cmsTheme = new CmsTheme(bundleContext, CmsTheme.DEFAULT_CMS_THEME_BUNDLE);
-		}
+//		CmsTheme cmsTheme;
+//		if (properties.containsKey(CmsTheme.CMS_THEME_BUNDLE_PROPERTY)) {
+//			String cmsThemeBundle = properties.get(CmsTheme.CMS_THEME_BUNDLE_PROPERTY);
+//			cmsTheme = new CmsTheme(bundleContext, cmsThemeBundle);
+//		} else {
+//			cmsTheme = new CmsTheme(bundleContext, CmsTheme.DEFAULT_CMS_THEME_BUNDLE);
+//		}
 
-		ArgeoRapApp app = new ArgeoRapApp(bundleContext, bundle, cmsTheme);
+		ArgeoRapApp app = new ArgeoRapApp(bundleContext, bundle, null);
 
 		Hashtable<String, String> props = new Hashtable<String, String>();
 		props.put(AbstractRapE4App.CONTEXT_NAME_PROPERTY, app.getContextName());

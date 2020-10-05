@@ -1,22 +1,28 @@
 package org.argeo.suite.ui;
 
-import static org.argeo.suite.ui.ArgeoSuiteIcon.dashboard;
+import static org.argeo.suite.ui.SuiteIcon.dashboard;
 
 import org.argeo.cms.ui.CmsTheme;
+import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 
-public class ArgeoSuiteUi {
-	private Composite parent;
+/** The {@link CmsView} for the work ergonomics of Argeo Suite. */
+public class ArgeoSuiteUi extends Composite {
+	private static final long serialVersionUID = 6207018859086689108L;
 
 	private Composite header;
+	private Composite belowHeader;
 	private Composite leadPane;
 
 	private SashForm dynamicArea;
@@ -29,15 +35,15 @@ public class ArgeoSuiteUi {
 	private CmsTheme theme;
 
 	public ArgeoSuiteUi(Composite parent, int style) {
+		super(parent, style);
 		theme = CmsTheme.getCmsTheme(parent);
-		this.parent = parent;
-		parent.setLayout(CmsUiUtils.noSpaceGridLayout());
+		this.setLayout(CmsUiUtils.noSpaceGridLayout());
 
-		header = new Composite(parent, SWT.NONE);
-		CmsUiUtils.style(header, WorkStyles.header);
+		header = new Composite(this, SWT.NONE);
+		CmsUiUtils.style(header, SuiteStyle.header);
 		header.setLayoutData(CmsUiUtils.fillWidth());
 
-		Composite belowHeader = new Composite(parent, SWT.NONE);
+		belowHeader = new Composite(this, SWT.NONE);
 		belowHeader.setLayoutData(CmsUiUtils.fillAll());
 		belowHeader.setLayout(CmsUiUtils.noSpaceGridLayout(2));
 
@@ -49,7 +55,7 @@ public class ArgeoSuiteUi {
 			dynamicArea = new SashForm(belowHeader, SWT.HORIZONTAL);
 		}
 		leadPane.setLayoutData(CmsUiUtils.fillHeight());
-		CmsUiUtils.style(leadPane, WorkStyles.leadPane);
+		CmsUiUtils.style(leadPane, SuiteStyle.leadPane);
 		dynamicArea.setLayoutData(CmsUiUtils.fillAll());
 
 		if (SWT.RIGHT_TO_LEFT == (style & SWT.RIGHT_TO_LEFT)) {// arabic, hebrew, etc.
@@ -63,21 +69,17 @@ public class ArgeoSuiteUi {
 		dynamicArea.setWeights(weights);
 		editorArea.setLayout(new GridLayout());
 
-		// TODO make it dynamic
-		RecentItems recentItems = new RecentItems();
-		recentItems.createUiPart(entryArea);
-
 		editorTabFolder = new CTabFolder(editorArea, SWT.NONE);
 		editorTabFolder.setLayoutData(CmsUiUtils.fillAll());
+
+		// TODO make it dynamic
 		Composite buttons = new Composite(editorTabFolder, SWT.NONE);
-		RowLayout buttonsLayout = new RowLayout(SWT.HORIZONTAL);
-		buttonsLayout.pack = false;
-		buttons.setLayout(buttonsLayout);
-		Button delete = new Button(buttons, SWT.FLAT);
-		delete.setImage(ArgeoSuiteIcon.delete.getSmallIcon(theme));
-		// int size = ArgeoSuiteIcon.delete.getSmallIconSize();
-		// delete.setBounds(delete.getBounds().x,delete.getBounds().y,size,size);
-		// delete.setSize(size, size);
+		buttons.setLayout(CmsUiUtils.noSpaceGridLayout());
+		ToolBar toolBar = new ToolBar(buttons, SWT.NONE);
+		toolBar.setLayoutData(new GridData(SWT.END, SWT.TOP, false, false));
+		ToolItem deleteItem = new ToolItem(toolBar, SWT.PUSH);
+		deleteItem.setImage(SuiteIcon.delete.getSmallIcon(theme));
+		deleteItem.setEnabled(false);
 		editorTabFolder.setTopRight(buttons);
 
 		CTabItem defaultTab = new CTabItem(editorTabFolder, SWT.NONE);
@@ -90,9 +92,9 @@ public class ArgeoSuiteUi {
 		// editorArea.setSingle(true);
 	}
 
-	Composite getParent() {
-		return parent;
-	}
+	/*
+	 * GETTERS / SETTERS
+	 */
 
 	Composite getHeader() {
 		return header;
@@ -116,6 +118,10 @@ public class ArgeoSuiteUi {
 
 	Composite getDefaultBody() {
 		return defaultBody;
+	}
+
+	Composite getBelowHeader() {
+		return belowHeader;
 	}
 
 }

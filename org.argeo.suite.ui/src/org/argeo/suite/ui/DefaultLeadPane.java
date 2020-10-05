@@ -9,6 +9,7 @@ import javax.jcr.RepositoryException;
 import org.argeo.cms.Localized;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
+import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsIcon;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.eclipse.swt.SWT;
@@ -21,11 +22,9 @@ import org.osgi.service.cm.ManagedService;
 
 /** Side pane listing various perspectives. */
 public class DefaultLeadPane implements CmsUiProvider, ManagedService {
-	private CmsTheme theme;
-
 	@Override
 	public Control createUi(Composite parent, Node node) throws RepositoryException {
-		theme = CmsTheme.getCmsTheme(parent);
+		CmsView cmsView = CmsView.getCmsView(parent);
 		GridLayout layout = new GridLayout();
 		layout.verticalSpacing = 10;
 		layout.marginTop = 10;
@@ -33,15 +32,19 @@ public class DefaultLeadPane implements CmsUiProvider, ManagedService {
 		layout.marginRight = 10;
 		parent.setLayout(layout);
 
-		Button dashboardB = createButton(parent, WorkMsg.dashboard, ArgeoSuiteIcon.dashboard);
-		createButton(parent, WorkMsg.people, ArgeoSuiteIcon.people);
-		createButton(parent, WorkMsg.documents, ArgeoSuiteIcon.documents);
+		Button dashboardB = createButton(parent, SuiteMsg.dashboard, SuiteIcon.dashboard);
+		if (!cmsView.isAnonymous()) {
+			createButton(parent, SuiteMsg.documents, SuiteIcon.documents);
+			createButton(parent, SuiteMsg.people, SuiteIcon.people);
+			createButton(parent, SuiteMsg.locations, SuiteIcon.location);
+		}
 		return dashboardB;
 	}
 
 	protected Button createButton(Composite parent, Localized msg, CmsIcon icon) {
+		CmsTheme theme = CmsTheme.getCmsTheme(parent);
 		Button button = new Button(parent, SWT.FLAT);
-		CmsUiUtils.style(button, WorkStyles.leadPane);
+		CmsUiUtils.style(button, SuiteStyle.leadPane);
 		button.setToolTipText(msg.lead());
 		button.setImage(icon.getBigIcon(theme));
 		return button;

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" name="Argeo Suite App">
    <implementation class="org.argeo.suite.ui.ArgeoSuiteApp"/>
-   <property name="contextName" type="String" value="argeo"/>
    <service>
       <provide interface="org.argeo.cms.ui.CmsApp"/>
    </service>
-   <reference bind="addUiProvider" cardinality="0..n" interface="org.argeo.cms.ui.CmsUiProvider" name="CmsUiProvider" policy="dynamic" unbind="removeUiProvider"/>
+   <reference bind="addUiProvider" cardinality="0..n" interface="org.argeo.cms.ui.CmsUiProvider" name="CmsUiProvider" policy="dynamic" target="(argeo.suite.ui=*)" unbind="removeUiProvider"/>
    <reference bind="addTheme" cardinality="0..n" interface="org.argeo.cms.ui.CmsTheme" name="CmsTheme" policy="dynamic" unbind="removeTheme"/>
+   <properties entry="config/cmsApp.properties"/>
 </scr:component>

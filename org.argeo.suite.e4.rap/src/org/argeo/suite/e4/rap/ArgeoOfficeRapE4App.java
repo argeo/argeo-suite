@@ -2,7 +2,6 @@
 package org.argeo.suite.e4.rap;
 
 import org.argeo.cms.e4.rap.AbstractRapE4App;
-import org.argeo.cms.ui.util.CmsTheme;
 import org.eclipse.rap.rwt.application.Application;
 import org.eclipse.rap.rwt.client.WebClient;
 import org.osgi.framework.BundleContext;
@@ -21,8 +20,8 @@ public class ArgeoOfficeRapE4App extends AbstractRapE4App {
 
 	@Override
 	protected void addEntryPoints(Application application) {
-		CmsTheme cmsTheme = new CmsTheme(bc, "org.argeo.theme.argeo2");
-		cmsTheme.apply(application);
+//		CmsTheme cmsTheme = new CmsTheme(bc, "org.argeo.theme.argeo2");
+//		cmsTheme.apply(application);
 
 		String font = "<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Source+Sans+Pro'/>";
 		getBaseProperties().put(WebClient.HEAD_HTML, font);

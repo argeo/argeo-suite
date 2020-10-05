@@ -1,16 +1,21 @@
-.argeo-work-header {
+.argeo-suite-header {
+	color: white;
+	background-color: #204a87;
+}
+
+.argeo-suite-headerTitle {
 	font: bold 22px sans-serif;
 	color: white;
 	background-color: #204a87;
 }
 
-.argeo-work-leadPane {
+.argeo-suite-leadPane {
 	font: bold 14px sans-serif;
 	color: white;
 	background-color: #204a87;
 }
 
-Button.argeo-work-leadPane {
+Button.argeo-suite-leadPane {
 	font: bold 14px sans-serif;
 	color: white;
 	background-color: white;

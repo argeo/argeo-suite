@@ -7,7 +7,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.cms.e4.rap.AbstractRapE4App;
-import org.argeo.cms.ui.util.CmsTheme;
+import org.argeo.cms.ui.CmsTheme;
 import org.eclipse.rap.rwt.application.Application;
 import org.eclipse.rap.rwt.client.WebClient;
 import org.osgi.framework.Bundle;
@@ -38,19 +38,19 @@ public class ArgeoRapApp extends AbstractRapE4App {
 	public void init(BundleContext bundleContext, Map<String, Object> properties) {
 		super.init(bundleContext, properties);
 		// super must be first
-		if (getBaseProperties().containsKey(CmsTheme.CMS_THEME_BUNDLE_PROPERTY)) {
-			String cmsThemeBundle = getBaseProperties().get(CmsTheme.CMS_THEME_BUNDLE_PROPERTY);
-			cmsTheme = new CmsTheme(getBundleContext(), cmsThemeBundle);
-		} else {
-			cmsTheme = new CmsTheme(getBundleContext(), CmsTheme.DEFAULT_CMS_THEME_BUNDLE);
-		}
+//		if (getBaseProperties().containsKey(CmsTheme.CMS_THEME_BUNDLE_PROPERTY)) {
+//			String cmsThemeBundle = getBaseProperties().get(CmsTheme.CMS_THEME_BUNDLE_PROPERTY);
+//			cmsTheme = new CmsTheme(getBundleContext(), cmsThemeBundle);
+//		} else {
+//			cmsTheme = new CmsTheme(getBundleContext(), CmsTheme.DEFAULT_CMS_THEME_BUNDLE);
+//		}
 		bundle = bundleContext.getBundle();
 	}
 
 	@Override
 	protected void addEntryPoints(Application application) {
-		if (cmsTheme != null)
-			cmsTheme.apply(application);
+//		if (cmsTheme != null)
+//			cmsTheme.apply(application);
 
 		String font = "<link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Source+Sans+Pro'/>";
 		getBaseProperties().put(WebClient.HEAD_HTML, font);

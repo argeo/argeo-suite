@@ -5,5 +5,5 @@
       <provide interface="org.argeo.cms.ui.CmsUiProvider"/>
       <provide interface="org.osgi.service.cm.ManagedService"/>
    </service>
-   <properties entry="OSGI-INF/leadPane.properties"/>
+   <properties entry="config/leadPane.properties"/>
 </scr:component>

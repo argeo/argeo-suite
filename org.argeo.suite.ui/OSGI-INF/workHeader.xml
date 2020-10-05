@@ -5,5 +5,5 @@
       <provide interface="org.argeo.cms.ui.CmsUiProvider"/>
       <provide interface="org.osgi.service.cm.ManagedService"/>
    </service>
-   <properties entry="OSGI-INF/workHeader.properties"/>
+   <properties entry="config/workHeader.properties"/>
 </scr:component>
