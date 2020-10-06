@@ -6,7 +6,6 @@ import javax.jcr.RepositoryException;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.util.CmsUiUtils;
-import org.argeo.connect.ui.widgets.DelayedText;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
