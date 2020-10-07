@@ -1,6 +1,6 @@
 Service-Component:\
 OSGI-INF/cmsApp.xml,\
-OSGI-INF/workHeader.xml,\
+OSGI-INF/header.xml,\
 OSGI-INF/leadPane.xml,\
 OSGI-INF/loginScreen.xml,\
 OSGI-INF/recentItems.xml,\
@@ -10,4 +10,7 @@ Import-Package:\
 org.argeo.api,\
 org.eclipse.swt,\
 org.osgi.framework,\
+org.argeo.connect.ui,\
+org.argeo.entity,\
+org.eclipse.core.commands.common,\
 *

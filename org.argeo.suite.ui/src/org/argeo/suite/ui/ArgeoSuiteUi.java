@@ -2,6 +2,8 @@ package org.argeo.suite.ui;
 
 import static org.argeo.suite.ui.SuiteIcon.dashboard;
 
+import javax.jcr.Session;
+
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsUiUtils;
@@ -11,8 +13,6 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -33,6 +33,8 @@ public class ArgeoSuiteUi extends Composite {
 	private Composite defaultBody;
 
 	private CmsTheme theme;
+	
+	private Session session;
 
 	public ArgeoSuiteUi(Composite parent, int style) {
 		super(parent, style);
@@ -124,4 +126,13 @@ public class ArgeoSuiteUi extends Composite {
 		return belowHeader;
 	}
 
+	Session getSession() {
+		return session;
+	}
+
+	void setSession(Session session) {
+		this.session = session;
+	}
+
+	
 }

@@ -1,8 +1,12 @@
 package org.argeo.suite.ui;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import javax.jcr.Node;
@@ -11,15 +15,16 @@ import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.argeo.api.RankingKey;
 import org.argeo.cms.ui.AbstractCmsApp;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
+import org.argeo.cms.ui.dialogs.CmsFeedback;
 import org.argeo.jcr.JcrUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.osgi.framework.Constants;
 
 /** The Argeo Suite App. */
 public class ArgeoSuiteApp extends AbstractCmsApp {
@@ -35,7 +40,12 @@ public class ArgeoSuiteApp extends AbstractCmsApp {
 	private final static String DEFAULT_UI_NAME = "work";
 	private final static String DEFAULT_THEME_ID = "org.argeo.suite.theme.default";
 
-	private Map<String, CmsUiProvider> uiProviders = new TreeMap<>();
+	private SortedMap<RankingKey, CmsUiProvider> uiProviders = Collections.synchronizedSortedMap(new TreeMap<>());
+
+	// TODO make more optimal or via CmsSession/CmsView
+	private List<ArgeoSuiteUi> knownUis = new ArrayList<>();
+
+//	private CmsUiProvider headerPart = null;
 
 	public void init(Map<String, String> properties) {
 		if (log.isDebugEnabled())
@@ -43,6 +53,9 @@ public class ArgeoSuiteApp extends AbstractCmsApp {
 	}
 
 	public void destroy(Map<String, String> properties) {
+		for (ArgeoSuiteUi ui : knownUis)
+			if (!ui.isDisposed())
+				ui.dispose();
 		if (log.isDebugEnabled())
 			log.info("Argeo Suite App stopped");
 
@@ -62,6 +75,7 @@ public class ArgeoSuiteApp extends AbstractCmsApp {
 		if (theme != null)
 			CmsTheme.registerCmsTheme(parent.getShell(), theme);
 		ArgeoSuiteUi argeoSuiteUi = new ArgeoSuiteUi(parent, SWT.NONE);
+		knownUis.add(argeoSuiteUi);
 		refreshUi(argeoSuiteUi, null);
 		return argeoSuiteUi;
 	}
@@ -74,18 +88,30 @@ public class ArgeoSuiteApp extends AbstractCmsApp {
 
 	@Override
 	public void refreshUi(Composite parent, String state) {
-		Node context = null;
-		ArgeoSuiteUi argeoSuiteUi = (ArgeoSuiteUi) parent;
-		refreshPart(findUiProvider(HEADER_PID, context), argeoSuiteUi.getHeader(), context);
-		CmsView cmsView = CmsView.getCmsView(parent);
-		if (cmsView.isAnonymous()) {
-			refreshPart(findUiProvider(LOGIN_SCREEN_PID, context), argeoSuiteUi.getDefaultBody(), context);
-		} else {
-			refreshPart(findUiProvider(DASHBOARD_PID, context), argeoSuiteUi.getDefaultBody(), context);
+		try {
+			Node context = null;
+			ArgeoSuiteUi argeoSuiteUi = (ArgeoSuiteUi) parent;
+			refreshPart(findUiProvider(HEADER_PID, context), argeoSuiteUi.getHeader(), context);
+			CmsView cmsView = CmsView.getCmsView(parent);
+			if (cmsView.isAnonymous()) {
+				refreshPart(findUiProvider(LOGIN_SCREEN_PID, context), argeoSuiteUi.getDefaultBody(), context);
+			} else {
+				try {
+					if (argeoSuiteUi.getSession() == null)
+						argeoSuiteUi.setSession(getRepository().login());
+					context = argeoSuiteUi.getSession().getRootNode();
+
+				} catch (RepositoryException e) {
+					e.printStackTrace();
+				}
+				refreshPart(findUiProvider(DASHBOARD_PID, context), argeoSuiteUi.getDefaultBody(), context);
+			}
+			refreshPart(findUiProvider(LEAD_PANE_PID, context), argeoSuiteUi.getLeadPane(), context);
+			refreshPart(findUiProvider(RECENT_ITEMS_PID, context), argeoSuiteUi.getEntryArea(), context);
+			argeoSuiteUi.layout(true, true);
+		} catch (Exception e) {
+			CmsFeedback.show("Unexpected exception", e);
 		}
-		refreshPart(findUiProvider(LEAD_PANE_PID, context), argeoSuiteUi.getLeadPane(), context);
-		refreshPart(findUiProvider(RECENT_ITEMS_PID, context), argeoSuiteUi.getEntryArea(), context);
-		argeoSuiteUi.layout(true, true);
 	}
 
 	private void refreshPart(CmsUiProvider uiProvider, Composite part, Node context) {
@@ -96,8 +122,19 @@ public class ArgeoSuiteApp extends AbstractCmsApp {
 
 	private CmsUiProvider findUiProvider(String pid, Node context) {
 		if (pid != null) {
-			if (uiProviders.containsKey(pid))
-				return uiProviders.get(pid);
+			SortedMap<RankingKey, CmsUiProvider> subMap = uiProviders.subMap(RankingKey.minPid(pid),
+					RankingKey.maxPid(pid));
+			CmsUiProvider found = null;
+			providers: for (RankingKey key : subMap.keySet()) {
+				if (key.getPid() == null || !key.getPid().equals(pid))
+					break providers;
+				found = subMap.get(key);
+				log.debug(key);
+			}
+//			if (uiProviders.containsKey(pid))
+//				return uiProviders.get(pid);
+			if (found != null)
+				return found;
 		}
 
 		// nothing
@@ -158,21 +195,30 @@ public class ArgeoSuiteApp extends AbstractCmsApp {
 	 * Dependency injection.
 	 */
 
-	public void addUiProvider(CmsUiProvider uiProvider, Map<String, String> properties) {
-		String servicePid = properties.get(Constants.SERVICE_PID);
-		if (servicePid == null) {
-			log.error("No service pid found for " + uiProvider.getClass() + ", " + properties);
-		} else {
-			uiProviders.put(servicePid, uiProvider);
-			if (log.isDebugEnabled())
-				log.debug("Added UI provider " + servicePid + " to CMS app.");
-		}
+	public void addUiProvider(CmsUiProvider uiProvider, Map<String, Object> properties) {
+		RankingKey partKey = new RankingKey(properties);
+//		String servicePid = properties.get(Constants.SERVICE_PID);
+//		if (servicePid == null) {
+//			log.error("No service pid found for " + uiProvider.getClass() + ", " + properties);
+//		} else {
+		uiProviders.put(partKey, uiProvider);
+		if (log.isDebugEnabled())
+			log.debug("Added UI provider " + partKey + " to CMS app.");
+//		}
 
 	}
 
-	public void removeUiProvider(CmsUiProvider uiProvider, Map<String, String> properties) {
-		String servicePid = properties.get(Constants.SERVICE_PID);
-		uiProviders.remove(servicePid);
+	public void removeUiProvider(CmsUiProvider uiProvider, Map<String, Object> properties) {
+		RankingKey partKey = new RankingKey(properties);
+//		String servicePid = properties.get(Constants.SERVICE_PID);
+		uiProviders.remove(partKey);
 
 	}
+
+//	public void setHeaderPart(CmsUiProvider headerPart) {
+//		this.headerPart = headerPart;
+//		if (log.isDebugEnabled())
+//			log.debug("Header set.");
+//	}
+
 }

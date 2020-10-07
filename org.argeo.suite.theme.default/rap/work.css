@@ -20,3 +20,9 @@ Button.argeo-suite-leadPane {
 	color: white;
 	background-color: white;
 }
+
+.argeo-suite-recentItems {
+	font: bold 14px sans-serif;
+	color: white;
+	background-color: #204a87;
+}

@@ -6,6 +6,8 @@ import org.argeo.cms.ui.util.CmsStyle;
 public enum SuiteStyle implements CmsStyle {
 	// Header
 	header,headerTitle,
+	// Recent items
+	recentItems,
 	// Lead pane
 	leadPane;
 
