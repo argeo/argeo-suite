@@ -10,11 +10,15 @@ public enum SuiteStyle implements CmsStyle {
 	recentItems,
 	// Lead pane
 	leadPane,leadPaneItem,
-	// Groups composite
-	titleLabel,subTitleLabel,
+	// Group composite
+	titleContainer,titleLabel,subTitleLabel,
 	// Forms elements
-	simpleLabel, simpleText;
-
+	simpleLabel, simpleText,
+	// table
+	titleCell,
+	// Buttons
+	inlineButton;
+	
 	@Override
 	public String getClassPrefix() {
 		return "argeo-suite";

@@ -1,12 +1,12 @@
 .argeo-suite-header {
 	color: white;
-	background-color: #113f64;
+	background-color: #00294b;
 }
 
 .argeo-suite-headerTitle {
 	font: bold 18px sans-serif;
 	color: white;
-	background-color: #113f64;
+	background-color: #00294b;
 }
 
 .argeo-suite-leadPane {
@@ -23,27 +23,50 @@ Button.argeo-suite-leadPane {
 .argeo-suite-recentItems {
 	font: bold 14px sans-serif;
 	color: white;
-	background-color: #204a87;
+	background-color: #00294b;
 	padding: 8px 16px;
+}
+
+.argeo-suite-titleContainer {
+	background-color: #00294b;
+	padding: 6px 8px 4px 8px;
 }
 
 .argeo-suite-titleLabel {
 	font: bold 14px sans-serif;
 	color: white;
-	background-color: #204a87;
-	padding: 8px 16px;
+	background-color: #00294b;
 }
 
 .argeo-suite-subTitleLabel {
 	font: italic 14px sans-serif;
 	color: #777;
-	padding: 4px 16px 8px 16px;
+	padding: 4px 8px;
 }
 
 .argeo-suite-simpleLabel {
 	font:bold 14px sans-serif;
+	padding:0 0 0 8px;
 }
 
 .argeo-suite-simpleText {
-	
+}
+
+.argeo-suite-titleCell{
+	font:bold 14px sans-serif;
+	background-color:#ddd;
+}
+
+.argeo-suite-inlineButton {
+	padding:0px 4px;
+	font: 12px sans-serif;
+	border:1px solid white;
+	color:white;
+	background-image:none;
+	background-color:#00294b;
+}
+
+.argeo-suite-inlineButton:hover {
+	color:#00294b;
+	background-color:white;
 }
