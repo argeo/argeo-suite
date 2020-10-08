@@ -1,9 +1,10 @@
 package org.argeo.suite.ui;
 
-import java.util.ArrayList;
+import static org.argeo.cms.ui.CmsView.CMS_VIEW_UID_PROPERTY;
+
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
@@ -25,9 +26,11 @@ import org.argeo.jcr.JcrUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventHandler;
 
 /** The Argeo Suite App. */
-public class ArgeoSuiteApp extends AbstractCmsApp {
+public class ArgeoSuiteApp extends AbstractCmsApp implements EventHandler {
 	private final static Log log = LogFactory.getLog(ArgeoSuiteApp.class);
 
 	public final static String PID_PREFIX = "argeo.suite.ui.";
@@ -43,7 +46,7 @@ public class ArgeoSuiteApp extends AbstractCmsApp {
 	private SortedMap<RankingKey, CmsUiProvider> uiProviders = Collections.synchronizedSortedMap(new TreeMap<>());
 
 	// TODO make more optimal or via CmsSession/CmsView
-	private List<ArgeoSuiteUi> knownUis = new ArrayList<>();
+	private Map<String, ArgeoSuiteUi> managedUis = new HashMap<>();
 
 //	private CmsUiProvider headerPart = null;
 
@@ -53,7 +56,7 @@ public class ArgeoSuiteApp extends AbstractCmsApp {
 	}
 
 	public void destroy(Map<String, String> properties) {
-		for (ArgeoSuiteUi ui : knownUis)
+		for (ArgeoSuiteUi ui : managedUis.values())
 			if (!ui.isDisposed())
 				ui.dispose();
 		if (log.isDebugEnabled())
@@ -71,11 +74,18 @@ public class ArgeoSuiteApp extends AbstractCmsApp {
 	@Override
 	public Composite initUi(Composite parent) {
 		String uiName = parent.getData(UI_NAME_PROPERTY) != null ? parent.getData(UI_NAME_PROPERTY).toString() : null;
+		CmsView cmsView = CmsView.getCmsView(parent);
 		CmsTheme theme = getTheme(uiName);
 		if (theme != null)
 			CmsTheme.registerCmsTheme(parent.getShell(), theme);
 		ArgeoSuiteUi argeoSuiteUi = new ArgeoSuiteUi(parent, SWT.NONE);
-		knownUis.add(argeoSuiteUi);
+		String uid = cmsView.getUid();
+		managedUis.put(uid, argeoSuiteUi);
+		argeoSuiteUi.addDisposeListener((e) -> {
+			managedUis.remove(uid);
+			if (log.isDebugEnabled())
+				log.debug("Suite UI " + uid + " has been disposed.");
+		});
 		refreshUi(argeoSuiteUi, null);
 		return argeoSuiteUi;
 	}
@@ -212,6 +222,23 @@ public class ArgeoSuiteApp extends AbstractCmsApp {
 		RankingKey partKey = new RankingKey(properties);
 //		String servicePid = properties.get(Constants.SERVICE_PID);
 		uiProviders.remove(partKey);
+
+	}
+
+	@Override
+	public void handleEvent(Event event) {
+		if (event.getTopic().equals(SuiteEvent.switchLayer.topic())) {
+			String layer = get(event, SuiteEvent.LAYER_PARAM);
+			managedUis.get(get(event, CMS_VIEW_UID_PROPERTY)).switchToLayer(layer);
+		}
+
+	}
+
+	private static String get(Event event, String key) {
+		Object value = event.getProperty(key);
+		if (value == null)
+			throw new IllegalArgumentException("Property " + key + " must be set");
+		return value.toString();
 
 	}
 
