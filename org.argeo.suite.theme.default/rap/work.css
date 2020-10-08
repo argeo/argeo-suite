@@ -1,18 +1,17 @@
 .argeo-suite-header {
 	color: white;
-	background-color: #204a87;
+	background-color: #113f64;
 }
 
 .argeo-suite-headerTitle {
-	font: bold 22px sans-serif;
+	font: bold 18px sans-serif;
 	color: white;
-	background-color: #204a87;
+	background-color: #113f64;
 }
 
 .argeo-suite-leadPane {
 	font: bold 14px sans-serif;
-	color: white;
-	background-color: #204a87;
+	background-color:#ddd;
 }
 
 Button.argeo-suite-leadPane {
@@ -25,4 +24,26 @@ Button.argeo-suite-leadPane {
 	font: bold 14px sans-serif;
 	color: white;
 	background-color: #204a87;
+	padding: 8px 16px;
+}
+
+.argeo-suite-titleLabel {
+	font: bold 14px sans-serif;
+	color: white;
+	background-color: #204a87;
+	padding: 8px 16px;
+}
+
+.argeo-suite-subTitleLabel {
+	font: italic 14px sans-serif;
+	color: #777;
+	padding: 4px 16px 8px 16px;
+}
+
+.argeo-suite-simpleLabel {
+	font:bold 14px sans-serif;
+}
+
+.argeo-suite-simpleText {
+	
 }
