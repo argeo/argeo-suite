@@ -49,10 +49,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 
 /** List recent items. */
 public class RecentItems implements CmsUiProvider {
-	int SEARCH_TEXT_DELAY = 800;
+//	private final static int SEARCH_TEXT_DELAY = 800;
 	private CmsTheme theme;
 
 	private String entityType;
@@ -62,21 +64,61 @@ public class RecentItems implements CmsUiProvider {
 		theme = CmsTheme.getCmsTheme(parent);
 		parent.setLayout(new GridLayout());
 
-//		Composite top = new Composite(parent, SWT.NONE);
-//		top.setLayoutData(CmsUiUtils.fillWidth());
-//		top.setLayout(new GridLayout(2, false));
-
-		Label lbl = new Label(parent, SWT.NONE);
-//		search.setImage(SuiteIcon.search.getSmallIcon(theme));
+		Composite top = new Composite(parent, SWT.NONE);
+		CmsUiUtils.style(top, SuiteStyle.recentItems);
+		top.setLayoutData(CmsUiUtils.fillWidth());
+		top.setLayout(CmsUiUtils.noSpaceGridLayout(2));
+		Label lbl = new Label(top, SWT.NONE);
+		lbl.setLayoutData(CmsUiUtils.fillAll());
 		lbl.setText(SuiteMsg.recentItems.lead());
 		CmsUiUtils.style(lbl, SuiteStyle.recentItems);
+
+		ToolBar topToolBar = new ToolBar(top, SWT.NONE);
+		ToolItem addItem = new ToolItem(topToolBar, SWT.FLAT);
+//		CmsUiUtils.style(addItem, SuiteStyle.recentItems);
+		addItem.setImage(SuiteIcon.add.getSmallIcon(theme));
 
 		if (context == null)
 			return null;
 		SingleEntityViewer entityViewer = new SingleEntityViewer(parent, SWT.NONE, context.getSession());
-		entityViewer.setLayoutData(CmsUiUtils.fillAll());
 		entityViewer.createUi();
-		return entityViewer;
+		entityViewer.getViewer().getTable().setLayoutData(CmsUiUtils.fillAll());
+
+		Composite bottom = new Composite(parent, SWT.NONE);
+		bottom.setLayoutData(CmsUiUtils.fillWidth());
+		bottom.setLayout(CmsUiUtils.noSpaceGridLayout());
+		ToolBar bottomToolBar = new ToolBar(bottom, SWT.NONE);
+		bottomToolBar.setLayoutData(new GridData(SWT.END, SWT.FILL, true, false));
+		ToolItem deleteItem = new ToolItem(bottomToolBar, SWT.FLAT);
+		deleteItem.setEnabled(false);
+//		CmsUiUtils.style(deleteItem, SuiteStyle.recentItems);
+		deleteItem.setImage(SuiteIcon.delete.getSmallIcon(theme));
+
+		entityViewer.getViewer().addDoubleClickListener(new IDoubleClickListener() {
+
+			@Override
+			public void doubleClick(DoubleClickEvent event) {
+				Node node = (Node) entityViewer.getViewer().getStructuredSelection().getFirstElement();
+				if (node != null)
+					CmsView.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(), SuiteEvent.NODE_ID,
+							Jcr.getIdentifier(node));
+
+			}
+		});
+		entityViewer.getViewer().addSelectionChangedListener(new ISelectionChangedListener() {
+			public void selectionChanged(SelectionChangedEvent event) {
+				Node node = (Node) entityViewer.getViewer().getStructuredSelection().getFirstElement();
+				if (node != null) {
+					CmsView.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.NODE_ID,
+							Jcr.getIdentifier(node));
+					deleteItem.setEnabled(true);
+				} else {
+					deleteItem.setEnabled(false);
+				}
+			}
+		});
+
+		return entityViewer.filterTxt;
 
 	}
 
@@ -84,22 +126,21 @@ public class RecentItems implements CmsUiProvider {
 		entityType = properties.get(NodeConstants.DATA_TYPE);
 	}
 
-	class SingleEntityViewer extends Composite {
-		private static final long serialVersionUID = -4712523256962131370L;
+	class SingleEntityViewer {
+		Composite parent;
 		Text filterTxt;
-		TableViewer entityViewer;
+		TableViewer viewer;
 		Session session;
 
 		public SingleEntityViewer(Composite parent, int style, Session session) {
-			super(parent, style);
+			this.parent = parent;
 			this.session = session;
 		}
 
 		public void createUi() {
 			// MainLayout
-			setLayout(new GridLayout());
-			addFilterPanel(this);
-			entityViewer = createListPart(this, new SingleEntityLabelProvider());
+			addFilterPanel(parent);
+			viewer = createListPart(parent, new SingleEntityLabelProvider());
 			refreshFilteredList();
 
 			try {
@@ -109,7 +150,7 @@ public class RecentItems implements CmsUiProvider {
 
 					@Override
 					public void onEvent(EventIterator events) {
-						getDisplay().asyncExec(() -> refreshFilteredList());
+						parent.getDisplay().asyncExec(() -> refreshFilteredList());
 					}
 				}, Event.PROPERTY_CHANGED | Event.NODE_ADDED | Event.NODE_REMOVED | Event.PROPERTY_ADDED, "/", true,
 						null, nodeTypes, false);
@@ -165,7 +206,7 @@ public class RecentItems implements CmsUiProvider {
 				}
 			});
 
-			addDisposeListener((e) -> {
+			parent.addDisposeListener((e) -> {
 				delayedText.close();
 			});
 		}
@@ -220,44 +261,13 @@ public class RecentItems implements CmsUiProvider {
 			CmsUiUtils.setItemHeight(table, 26);
 
 			viewer.setContentProvider(new BasicNodeListContentProvider());
-			viewer.addDoubleClickListener(new IDoubleClickListener() {
-
-				@Override
-				public void doubleClick(DoubleClickEvent event) {
-					Node node = (Node) viewer.getStructuredSelection().getFirstElement();
-					if (node != null)
-						CmsView.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(), SuiteEvent.NODE_ID,
-								Jcr.getIdentifier(node));
-
-				}
-			});
-			// v.addDoubleClickListener(new
-			// JcrViewerDClickListener(systemWorkbenchService));
-			viewer.addSelectionChangedListener(new ISelectionChangedListener() {
-				public void selectionChanged(SelectionChangedEvent event) {
-//					IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-					Node node = (Node) viewer.getStructuredSelection().getFirstElement();
-					if (node != null)
-						CmsView.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.NODE_ID,
-								Jcr.getIdentifier(node));
-//				if (lst != null && !lst.isEmpty())
-//					selectionService.setSelection(selection.toList());
-//				else
-//					selectionService.setSelection(null);
-				}
-			});
 			return viewer;
 		}
 
-//	public void dispose() {
-//		JcrUtils.logoutQuietly(session);
-//	}
-
-		public boolean setFocus() {
-			refreshFilteredList();
-			return super.setFocus();
-//		filterTxt.setFocus();
-		}
+//		public boolean setFocus() {
+//			refreshFilteredList();
+//			return parent.setFocus();
+//		}
 
 		public void forceRefresh(Object object) {
 			refreshFilteredList();
@@ -292,7 +302,7 @@ public class RecentItems implements CmsUiProvider {
 				QueryResult result = xpathQuery.execute();
 
 				NodeIterator nit = result.getNodes();
-				entityViewer.setInput(JcrUtils.nodeIteratorToList(nit));
+				viewer.setInput(JcrUtils.nodeIteratorToList(nit));
 //				if (log.isTraceEnabled()) {
 //					long end = System.currentTimeMillis();
 //					log.trace("Quick Search - Found: " + nit.getSize() + " in " + (end - begin)
@@ -301,6 +311,10 @@ public class RecentItems implements CmsUiProvider {
 			} catch (RepositoryException e) {
 				throw new IllegalStateException("Unable to list entities", e);
 			}
+		}
+
+		public TableViewer getViewer() {
+			return viewer;
 		}
 
 		class SingleEntityLabelProvider extends ColumnLabelProvider {
