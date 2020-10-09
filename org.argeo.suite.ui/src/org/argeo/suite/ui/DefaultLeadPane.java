@@ -14,10 +14,12 @@ import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsIcon;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 
 /** Side pane listing various perspectives. */
 public class DefaultLeadPane implements CmsUiProvider {
@@ -46,8 +48,13 @@ public class DefaultLeadPane implements CmsUiProvider {
 		CmsTheme theme = CmsTheme.getCmsTheme(parent);
 		Button button = new Button(parent, SWT.PUSH);
 		CmsUiUtils.style(button, SuiteStyle.leadPane);
-		button.setToolTipText(msg.lead());
 		button.setImage(icon.getBigIcon(theme));
+		button.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, false));
+		//button.setToolTipText(msg.lead());
+		Label lbl = new Label(parent,SWT.NONE);
+		CmsUiUtils.style(lbl, SuiteStyle.leadPane);
+		lbl.setText(msg.lead());
+		lbl.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));
 		CmsUiUtils.sendEventOnSelect(button, SuiteEvent.switchLayer.topic(), SuiteEvent.LAYER, layer);
 		return button;
 	}

@@ -151,9 +151,11 @@ public class ArgeoSuiteUi extends Composite {
 			}
 			int[] weights = new int[] { 2000, 8000 };
 			area.setWeights(weights);
+//			editorArea.setLayout(CmsUiUtils.noSpaceGridLayout());
 			editorArea.setLayout(new GridLayout());
 
 			tabbedArea = new TabbedArea(editorArea, SWT.NONE);
+			tabbedArea.setBodyStyle(SuiteStyle.mainTabBody.toStyleClass());
 			tabbedArea.setTabStyle(SuiteStyle.mainTab.toStyleClass());
 			tabbedArea.setTabSelectedStyle(SuiteStyle.mainTabSelected.toStyleClass());
 			tabbedArea.setCloseIcon(SuiteIcon.close.getSmallIcon(theme));

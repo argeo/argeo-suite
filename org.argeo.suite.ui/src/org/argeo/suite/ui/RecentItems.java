@@ -63,20 +63,22 @@ public class RecentItems implements CmsUiProvider {
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
 		theme = CmsTheme.getCmsTheme(parent);
 		parent.setLayout(new GridLayout());
+//		parent.setLayout(CmsUiUtils.noSpaceGridLayout());
+		parent.setLayout(new GridLayout());
 
-		Composite top = new Composite(parent, SWT.NONE);
-		CmsUiUtils.style(top, SuiteStyle.recentItems);
-		top.setLayoutData(CmsUiUtils.fillWidth());
-		top.setLayout(CmsUiUtils.noSpaceGridLayout(2));
-		Label lbl = new Label(top, SWT.NONE);
-		lbl.setLayoutData(CmsUiUtils.fillAll());
-		lbl.setText(SuiteMsg.recentItems.lead());
-		CmsUiUtils.style(lbl, SuiteStyle.recentItems);
-
-		ToolBar topToolBar = new ToolBar(top, SWT.NONE);
-		ToolItem addItem = new ToolItem(topToolBar, SWT.FLAT);
-//		CmsUiUtils.style(addItem, SuiteStyle.recentItems);
-		addItem.setImage(SuiteIcon.add.getSmallIcon(theme));
+//		Composite top = new Composite(parent, SWT.BORDER);
+//		CmsUiUtils.style(top, SuiteStyle.recentItems);
+//		top.setLayoutData(CmsUiUtils.fillWidth());
+//		top.setLayout(CmsUiUtils.noSpaceGridLayout(2));
+//		Label lbl = new Label(top, SWT.FLAT);
+//		lbl.setLayoutData(CmsUiUtils.fillWidth());
+//		lbl.setText(SuiteMsg.recentItems.lead());
+//		CmsUiUtils.style(lbl, SuiteStyle.recentItems);
+//
+//		ToolBar topToolBar = new ToolBar(top, SWT.NONE);
+//		ToolItem addItem = new ToolItem(topToolBar, SWT.FLAT);
+////		CmsUiUtils.style(addItem, SuiteStyle.recentItems);
+//		addItem.setImage(SuiteIcon.add.getSmallIcon(theme));
 
 		if (context == null)
 			return null;
@@ -93,7 +95,8 @@ public class RecentItems implements CmsUiProvider {
 		deleteItem.setEnabled(false);
 //		CmsUiUtils.style(deleteItem, SuiteStyle.recentItems);
 		deleteItem.setImage(SuiteIcon.delete.getSmallIcon(theme));
-
+		ToolItem addItem = new ToolItem(bottomToolBar, SWT.FLAT);
+		addItem.setImage(SuiteIcon.add.getSmallIcon(theme));
 		entityViewer.getViewer().addDoubleClickListener(new IDoubleClickListener() {
 
 			@Override
@@ -212,7 +215,8 @@ public class RecentItems implements CmsUiProvider {
 		}
 
 		protected TableViewer createListPart(Composite parent, ILabelProvider labelProvider) {
-			parent.setLayout(new GridLayout());
+//			parent.setLayout(new GridLayout());
+//			parent.setLayout(CmsUiUtils.noSpaceGridLayout());
 
 			Composite tableComposite = new Composite(parent, SWT.NONE);
 			GridData gd = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_VERTICAL

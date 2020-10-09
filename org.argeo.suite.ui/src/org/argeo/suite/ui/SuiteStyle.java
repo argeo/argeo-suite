@@ -17,7 +17,7 @@ public enum SuiteStyle implements CmsStyle {
 	// table
 	titleCell,
 	// tabbed area
-	mainTabSelected, mainTab,
+	mainTabBody,mainTabSelected, mainTab,
 	// Buttons
 	inlineButton;
 
