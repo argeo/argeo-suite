@@ -70,3 +70,34 @@ Button.argeo-suite-leadPane {
 	color:#00294b;
 	background-color:white;
 }
+
+
+
+.argeo-suite-mainTab {
+	background-color:#ddd;
+	border:1px solid #bbb;
+}
+
+Button.argeo-suite-mainTab {
+	border:none;
+	background-color:#ddd;
+}
+
+.argeo-suite-mainTab:hover {
+	background-color:#eee;
+}
+
+Button.argeo-suite-mainTab:hover {
+	cursor:pointer;
+	background-color:#eee;
+}
+
+.argeo-suite-mainTabSelected {
+	font:bold 14px sans-serif;
+	color:white;
+	background-color:#00294b;
+}
+
+Button.argeo-suite-mainTabSelected {
+	border:none;
+}
