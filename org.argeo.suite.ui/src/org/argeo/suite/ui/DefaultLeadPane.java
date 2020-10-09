@@ -1,6 +1,5 @@
 package org.argeo.suite.ui;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.jcr.Node;
@@ -14,19 +13,15 @@ import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsIcon;
 import org.argeo.cms.ui.util.CmsUiUtils;
-import org.argeo.eclipse.ui.Selected;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventAdmin;
 
 /** Side pane listing various perspectives. */
 public class DefaultLeadPane implements CmsUiProvider {
 	private final static Log log = LogFactory.getLog(DefaultLeadPane.class);
-	private EventAdmin eventAdmin;
 
 	@Override
 	public Control createUi(Composite parent, Node node) throws RepositoryException {
@@ -40,8 +35,8 @@ public class DefaultLeadPane implements CmsUiProvider {
 
 		Button dashboardB = createButton(parent, SuiteMsg.dashboard.name(), SuiteMsg.dashboard, SuiteIcon.dashboard);
 		if (!cmsView.isAnonymous()) {
-			createButton(parent, SuiteMsg.documents.name(), SuiteMsg.documents, SuiteIcon.documents);
-			createButton(parent, SuiteMsg.people.name(), SuiteMsg.people, SuiteIcon.people);
+//			createButton(parent, SuiteMsg.documents.name(), SuiteMsg.documents, SuiteIcon.documents);
+//			createButton(parent, SuiteMsg.people.name(), SuiteMsg.people, SuiteIcon.people);
 			createButton(parent, SuiteMsg.locations.name(), SuiteMsg.locations, SuiteIcon.location);
 		}
 		return dashboardB;
@@ -53,16 +48,11 @@ public class DefaultLeadPane implements CmsUiProvider {
 		CmsUiUtils.style(button, SuiteStyle.leadPane);
 		button.setToolTipText(msg.lead());
 		button.setImage(icon.getBigIcon(theme));
-		CmsUiUtils.sendEventOnSelect(button, SuiteEvent.switchLayer.topic(), SuiteEvent.LAYER_PARAM, layer);
+		CmsUiUtils.sendEventOnSelect(button, SuiteEvent.switchLayer.topic(), SuiteEvent.LAYER, layer);
 		return button;
 	}
 
 	public void init(Map<String, String> properties) {
 
 	}
-
-	public void setEventAdmin(EventAdmin eventAdmin) {
-		this.eventAdmin = eventAdmin;
-	}
-
 }

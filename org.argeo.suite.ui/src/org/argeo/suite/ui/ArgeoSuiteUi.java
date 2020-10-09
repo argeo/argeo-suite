@@ -1,7 +1,5 @@
 package org.argeo.suite.ui;
 
-import static org.argeo.suite.ui.SuiteIcon.dashboard;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,21 +8,18 @@ import javax.jcr.Session;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.cms.ui.widgets.TabbedArea;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CTabFolder;
-import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 
 /** The {@link CmsView} for the work ergonomics of Argeo Suite. */
 public class ArgeoSuiteUi extends Composite {
 	private static final long serialVersionUID = 6207018859086689108L;
 
+	public final static String DASHBOARD_LAYER = "dashboard";
 	private Composite header;
 	private Composite belowHeader;
 	private Composite leadPane;
@@ -35,7 +30,7 @@ public class ArgeoSuiteUi extends Composite {
 	private Session session;
 
 	private Map<String, WorkLayer> layers = new HashMap<>();
-	private String currentLayer = "dashboard";
+	private String currentLayer = DASHBOARD_LAYER;
 
 	public ArgeoSuiteUi(Composite parent, int style) {
 		super(parent, style);
@@ -48,28 +43,39 @@ public class ArgeoSuiteUi extends Composite {
 
 		belowHeader = new Composite(this, SWT.NONE);
 		belowHeader.setLayoutData(CmsUiUtils.fillAll());
-		belowHeader.setLayout(CmsUiUtils.noSpaceGridLayout(2));
-
-		if (SWT.RIGHT_TO_LEFT == (style & SWT.RIGHT_TO_LEFT)) {// arabic, hebrew, etc.
-			dynamicArea = new Composite(belowHeader, SWT.NONE);
-			leadPane = new Composite(belowHeader, SWT.NONE);
-		} else {
-			leadPane = new Composite(belowHeader, SWT.NONE);
-			dynamicArea = new Composite(belowHeader, SWT.NONE);
-		}
-		leadPane.setLayoutData(CmsUiUtils.fillHeight());
-		CmsUiUtils.style(leadPane, SuiteStyle.leadPane);
-		dynamicArea.setLayoutData(CmsUiUtils.fillAll());
-
-		dynamicArea.setLayout(new FormLayout());
-
-		layers.put("dashboard", new WorkLayer(dynamicArea, style));
-		layers.put("documents", new WorkLayer(dynamicArea, style));
-		layers.put("locations", new WorkLayer(dynamicArea, style));
-		layers.put("people", new WorkLayer(dynamicArea, style));
 	}
 
+	public void refreshBelowHeader(boolean initApp) {
+		CmsUiUtils.clear(belowHeader);
+		int style = getStyle();
+		if (initApp) {
+			belowHeader.setLayout(CmsUiUtils.noSpaceGridLayout(2));
+
+			if (SWT.RIGHT_TO_LEFT == (style & SWT.RIGHT_TO_LEFT)) {// arabic, hebrew, etc.
+				dynamicArea = new Composite(belowHeader, SWT.NONE);
+				leadPane = new Composite(belowHeader, SWT.NONE);
+			} else {
+				leadPane = new Composite(belowHeader, SWT.NONE);
+				dynamicArea = new Composite(belowHeader, SWT.NONE);
+			}
+			leadPane.setLayoutData(CmsUiUtils.fillHeight());
+			CmsUiUtils.style(leadPane, SuiteStyle.leadPane);
+			dynamicArea.setLayoutData(CmsUiUtils.fillAll());
+
+			dynamicArea.setLayout(new FormLayout());
+
+		} else {
+			belowHeader.setLayout(CmsUiUtils.noSpaceGridLayout());
+		}
+	}
+
+	/*
+	 * LAYERS
+	 */
+
 	Composite getCurrentLayer() {
+		if (currentLayer == null)
+			throw new IllegalStateException("No current layer");
 		return layers.get(currentLayer).getArea();
 	}
 
@@ -87,6 +93,11 @@ public class ArgeoSuiteUi extends Composite {
 		getDisplay().syncExec(() -> toShow.moveAbove(current));
 		currentLayer = layer;
 		return toShow;
+	}
+
+	void addLayer(String layer) {
+		WorkLayer workLayer = new WorkLayer(dynamicArea, getStyle());
+		layers.put(layer, workLayer);
 	}
 
 	/*
@@ -109,8 +120,8 @@ public class ArgeoSuiteUi extends Composite {
 		return layers.get(currentLayer).getEntryArea();
 	}
 
-	Composite getDefaultBody() {
-		return layers.get(currentLayer).getDefaultBody();
+	TabbedArea getTabbedArea() {
+		return layers.get(currentLayer).getTabbedArea();
 	}
 
 	Session getSession() {
@@ -125,9 +136,7 @@ public class ArgeoSuiteUi extends Composite {
 		private SashForm area;
 		private Composite entryArea;
 		private Composite editorArea;
-		private CTabFolder editorTabFolder;
-
-		private Composite defaultBody;
+		private TabbedArea tabbedArea;
 
 		WorkLayer(Composite parent, int style) {
 			area = new SashForm(parent, SWT.HORIZONTAL);
@@ -144,25 +153,28 @@ public class ArgeoSuiteUi extends Composite {
 			area.setWeights(weights);
 			editorArea.setLayout(new GridLayout());
 
-			editorTabFolder = new CTabFolder(editorArea, SWT.NONE);
-			editorTabFolder.setLayoutData(CmsUiUtils.fillAll());
+			tabbedArea = new TabbedArea(editorArea, SWT.NONE);
+			tabbedArea.setTabStyle(SuiteStyle.mainTab.toStyleClass());
+			tabbedArea.setTabSelectedStyle(SuiteStyle.mainTabSelected.toStyleClass());
+			tabbedArea.setCloseIcon(SuiteIcon.close.getSmallIcon(theme));
+			tabbedArea.setLayoutData(CmsUiUtils.fillAll());
 
 			// TODO make it dynamic
-			Composite buttons = new Composite(editorTabFolder, SWT.NONE);
-			buttons.setLayout(CmsUiUtils.noSpaceGridLayout());
-			ToolBar toolBar = new ToolBar(buttons, SWT.NONE);
-			toolBar.setLayoutData(new GridData(SWT.END, SWT.TOP, false, false));
-			ToolItem deleteItem = new ToolItem(toolBar, SWT.PUSH);
-			deleteItem.setImage(SuiteIcon.delete.getSmallIcon(theme));
-			deleteItem.setEnabled(false);
-			editorTabFolder.setTopRight(buttons);
-
-			CTabItem defaultTab = new CTabItem(editorTabFolder, SWT.NONE);
-			// defaultTab.setText("Home");
-			defaultTab.setImage(dashboard.getSmallIcon(theme));
-			defaultBody = new Composite(editorTabFolder, SWT.NONE);
-			defaultTab.setControl(defaultBody);
-			editorTabFolder.setSelection(defaultTab);
+//			Composite buttons = new Composite(editorTabFolder, SWT.NONE);
+//			buttons.setLayout(CmsUiUtils.noSpaceGridLayout());
+//			ToolBar toolBar = new ToolBar(buttons, SWT.NONE);
+//			toolBar.setLayoutData(new GridData(SWT.END, SWT.TOP, false, false));
+//			ToolItem deleteItem = new ToolItem(toolBar, SWT.PUSH);
+//			deleteItem.setImage(SuiteIcon.delete.getSmallIcon(theme));
+//			deleteItem.setEnabled(false);
+//			editorTabFolder.setTopRight(buttons);
+//
+//			CTabItem defaultTab = new CTabItem(editorTabFolder, SWT.NONE);
+//			// defaultTab.setText("Home");
+//			defaultTab.setImage(dashboard.getSmallIcon(theme));
+//			defaultBody = new Composite(editorTabFolder, SWT.NONE);
+//			defaultTab.setControl(defaultBody);
+//			editorTabFolder.setSelection(defaultTab);
 
 		}
 
@@ -174,14 +186,9 @@ public class ArgeoSuiteUi extends Composite {
 			return entryArea;
 		}
 
-		CTabFolder getEditorTabFolder() {
-			return editorTabFolder;
+		TabbedArea getTabbedArea() {
+			return tabbedArea;
 		}
-
-		Composite getDefaultBody() {
-			return defaultBody;
-		}
-
 	}
 
 }

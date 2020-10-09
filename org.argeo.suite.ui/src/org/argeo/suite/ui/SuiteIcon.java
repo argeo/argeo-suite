@@ -4,7 +4,7 @@ import org.argeo.cms.ui.util.CmsIcon;
 
 /** Icon names used by Argeo Suite. */
 public enum SuiteIcon implements CmsIcon {
-	add, save, search, delete, logout, dashboard,
+	add, save, close, search, delete, logout, dashboard,
 	// people
 	people, person, organisation,
 	// library

@@ -2,7 +2,6 @@ package org.argeo.suite.ui;
 
 import static org.argeo.eclipse.ui.EclipseUiUtils.notEmpty;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
@@ -15,23 +14,26 @@ import javax.jcr.observation.EventListener;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
 
+import org.argeo.api.NodeConstants;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
+import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.connect.ui.ConnectUiConstants;
 import org.argeo.connect.ui.util.BasicNodeListContentProvider;
 import org.argeo.connect.ui.widgets.DelayedText;
 import org.argeo.connect.util.XPathUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
-import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityTypes;
+import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
+import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -79,10 +81,11 @@ public class RecentItems implements CmsUiProvider {
 	}
 
 	public void init(Map<String, String> properties) {
-		entityType = properties.get(EntityNames.ENTITY_TYPE);
+		entityType = properties.get(NodeConstants.DATA_TYPE);
 	}
 
 	class SingleEntityViewer extends Composite {
+		private static final long serialVersionUID = -4712523256962131370L;
 		Text filterTxt;
 		TableViewer entityViewer;
 		Session session;
@@ -175,35 +178,75 @@ public class RecentItems implements CmsUiProvider {
 					| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL);
 			tableComposite.setLayoutData(gd);
 
-			TableViewer v = new TableViewer(tableComposite);
-			v.setLabelProvider(labelProvider);
+			TableViewer viewer = new TableViewer(tableComposite, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+			viewer.setLabelProvider(labelProvider);
 
-			TableColumn singleColumn = new TableColumn(v.getTable(), SWT.V_SCROLL);
+			TableColumn singleColumn = new TableColumn(viewer.getTable(), SWT.V_SCROLL);
 			TableColumnLayout tableColumnLayout = new TableColumnLayout();
 			tableColumnLayout.setColumnData(singleColumn, new ColumnWeightData(85));
 			tableComposite.setLayout(tableColumnLayout);
 
 			// Corresponding table & style
-			Table table = v.getTable();
+			Table table = viewer.getTable();
+//			Listener[] mouseDownListeners = table.getListeners(SWT.MouseDown);
+//			for (Listener listener :  table.getListeners(SWT.MouseDown))
+//				table.removeListener(SWT.MouseDown, listener);
+//			for (Listener listener :  table.getListeners(SWT.MouseUp))
+//				table.removeListener(SWT.MouseUp, listener);
+//			for (Listener listener :  table.getListeners(SWT.MouseDoubleClick))
+//				table.removeListener(SWT.MouseDoubleClick, listener);
+//			
+//			table.addMouseListener(new MouseListener() {
+//
+//				@Override
+//				public void mouseUp(MouseEvent e) {
+//					System.out.println("Mouse up: "+e);
+//				}
+//
+//				@Override
+//				public void mouseDown(MouseEvent e) {
+//					System.out.println("Mouse down: "+e);
+//				}
+//
+//				@Override
+//				public void mouseDoubleClick(MouseEvent e) {
+//					System.out.println("Mouse double: "+e);
+//
+//				}
+//			});
 			table.setLinesVisible(true);
 			table.setHeaderVisible(false);
 			CmsUiUtils.markup(table);
 			CmsUiUtils.setItemHeight(table, 26);
 
-			v.setContentProvider(new BasicNodeListContentProvider());
+			viewer.setContentProvider(new BasicNodeListContentProvider());
+			viewer.addDoubleClickListener(new IDoubleClickListener() {
+
+				@Override
+				public void doubleClick(DoubleClickEvent event) {
+					Node node = (Node) viewer.getStructuredSelection().getFirstElement();
+					if (node != null)
+						CmsView.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(), SuiteEvent.NODE_ID,
+								Jcr.getIdentifier(node));
+
+				}
+			});
 			// v.addDoubleClickListener(new
 			// JcrViewerDClickListener(systemWorkbenchService));
-			v.addSelectionChangedListener(new ISelectionChangedListener() {
+			viewer.addSelectionChangedListener(new ISelectionChangedListener() {
 				public void selectionChanged(SelectionChangedEvent event) {
-					IStructuredSelection selection = (IStructuredSelection) event.getSelection();
-					List<?> lst = selection.toList();
+//					IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+					Node node = (Node) viewer.getStructuredSelection().getFirstElement();
+					if (node != null)
+						CmsView.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.NODE_ID,
+								Jcr.getIdentifier(node));
 //				if (lst != null && !lst.isEmpty())
 //					selectionService.setSelection(selection.toList());
 //				else
 //					selectionService.setSelection(null);
 				}
 			});
-			return v;
+			return viewer;
 		}
 
 //	public void dispose() {
@@ -241,7 +284,7 @@ public class RecentItems implements CmsUiProvider {
 				if (notEmpty(xpathFilter))
 					xpathQueryStr += "[" + xpathFilter + "]";
 
-				long begin = System.currentTimeMillis();
+//				long begin = System.currentTimeMillis();
 				// session.refresh(false);
 				Query xpathQuery = XPathUtils.createQuery(session, xpathQueryStr);
 
@@ -261,6 +304,12 @@ public class RecentItems implements CmsUiProvider {
 		}
 
 		class SingleEntityLabelProvider extends ColumnLabelProvider {
+			private static final long serialVersionUID = -2209337675781795677L;
+
+			@Override
+			public String getText(Object element) {
+				return Jcr.getTitle((Node) element);
+			}
 
 		}
 	}

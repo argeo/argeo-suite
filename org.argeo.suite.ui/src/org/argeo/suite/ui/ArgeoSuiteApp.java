@@ -22,6 +22,11 @@ import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.dialogs.CmsFeedback;
+import org.argeo.cms.ui.util.CmsEvent;
+import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.entity.EntityNames;
+import org.argeo.entity.EntityTypes;
+import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -40,7 +45,7 @@ public class ArgeoSuiteApp extends AbstractCmsApp implements EventHandler {
 	public final static String DASHBOARD_PID = PID_PREFIX + "dashboard";
 	public final static String RECENT_ITEMS_PID = PID_PREFIX + "recentItems";
 
-	private final static String DEFAULT_UI_NAME = "work";
+	private final static String DEFAULT_UI_NAME = "app";
 	private final static String DEFAULT_THEME_ID = "org.argeo.suite.theme.default";
 
 	private SortedMap<RankingKey, CmsUiProvider> uiProviders = Collections.synchronizedSortedMap(new TreeMap<>());
@@ -100,54 +105,80 @@ public class ArgeoSuiteApp extends AbstractCmsApp implements EventHandler {
 	public void refreshUi(Composite parent, String state) {
 		try {
 			Node context = null;
-			ArgeoSuiteUi argeoSuiteUi = (ArgeoSuiteUi) parent;
-			refreshPart(findUiProvider(HEADER_PID, context), argeoSuiteUi.getHeader(), context);
+			ArgeoSuiteUi ui = (ArgeoSuiteUi) parent;
+			refreshPart(findUiProvider(HEADER_PID, context), ui.getHeader(), context);
 			CmsView cmsView = CmsView.getCmsView(parent);
 			if (cmsView.isAnonymous()) {
-				refreshPart(findUiProvider(LOGIN_SCREEN_PID, context), argeoSuiteUi.getDefaultBody(), context);
+				ui.refreshBelowHeader(false);
+				refreshPart(findUiProvider(LOGIN_SCREEN_PID, context), ui.getBelowHeader(), context);
 			} else {
 				try {
-					if (argeoSuiteUi.getSession() == null)
-						argeoSuiteUi.setSession(getRepository().login());
-					context = argeoSuiteUi.getSession().getRootNode();
+					if (ui.getSession() == null)
+						ui.setSession(getRepository().login());
+					context = ui.getSession().getRootNode();
 
 				} catch (RepositoryException e) {
 					e.printStackTrace();
 				}
-				refreshPart(findUiProvider(DASHBOARD_PID, context), argeoSuiteUi.getDefaultBody(), context);
+				ui.refreshBelowHeader(true);
+
+				ui.addLayer(ArgeoSuiteUi.DASHBOARD_LAYER);
+				ui.addLayer("documents");
+				ui.addLayer("locations");
+				ui.addLayer("people");
+				ui.switchToLayer(ArgeoSuiteUi.DASHBOARD_LAYER);
+
+				refreshPart(findUiProvider(DASHBOARD_PID, context), ui.getTabbedArea().getCurrent(), context);
+				refreshPart(findUiProvider(LEAD_PANE_PID, context), ui.getLeadPane(), context);
+				refreshPart(findUiProvider(RECENT_ITEMS_PID, context), ui.getEntryArea(), context);
 			}
-			refreshPart(findUiProvider(LEAD_PANE_PID, context), argeoSuiteUi.getLeadPane(), context);
-			refreshPart(findUiProvider(RECENT_ITEMS_PID, context), argeoSuiteUi.getEntryArea(), context);
-			argeoSuiteUi.layout(true, true);
+			ui.layout(true, true);
 		} catch (Exception e) {
 			CmsFeedback.show("Unexpected exception", e);
 		}
 	}
 
 	private void refreshPart(CmsUiProvider uiProvider, Composite part, Node context) {
-		for (Control child : part.getChildren())
-			child.dispose();
+		CmsUiUtils.clear(part);
 		uiProvider.createUiPart(part, context);
 	}
 
 	private CmsUiProvider findUiProvider(String pid, Node context) {
+		CmsUiProvider found = null;
 		if (pid != null) {
 			SortedMap<RankingKey, CmsUiProvider> subMap = uiProviders.subMap(RankingKey.minPid(pid),
 					RankingKey.maxPid(pid));
-			CmsUiProvider found = null;
 			providers: for (RankingKey key : subMap.keySet()) {
 				if (key.getPid() == null || !key.getPid().equals(pid))
 					break providers;
 				found = subMap.get(key);
-				log.debug(key);
 			}
-//			if (uiProviders.containsKey(pid))
-//				return uiProviders.get(pid);
+			if (found != null)
+				return found;
+		}
+
+		if (found == null && context != null) {
+			SortedMap<RankingKey, CmsUiProvider> subMap = null;
+			String dataType = null;
+			if (Jcr.isNodeType(context, EntityTypes.ENTITY_ENTITY)) {
+				dataType = Jcr.get(context, EntityNames.ENTITY_TYPE);
+				subMap = uiProviders.subMap(RankingKey.minDataType(dataType), RankingKey.maxDataType(dataType));
+			}
+			providers: for (RankingKey key : subMap.keySet()) {
+				if (key.getDataType() == null || !key.getDataType().equals(dataType))
+					break providers;
+				found = subMap.get(key);
+			}
+			if (found == null)
+				found = uiProviders.get(new RankingKey(null, null, null, dataType, null));
 			if (found != null)
 				return found;
 		}
 
 		// nothing
+		if (log.isWarnEnabled())
+			log.warn("No UI provider found for" + (pid != null ? " pid " + pid : "")
+					+ (context != null ? " " + context : ""));
 		return new CmsUiProvider() {
 
 			@Override
@@ -187,7 +218,8 @@ public class ArgeoSuiteApp extends AbstractCmsApp implements EventHandler {
 				session = getRepository().login(workspace);
 
 				Node node = session.getNode(path);
-				refreshEntityUi(node);
+
+				refreshEntityUi(null, node);
 			}
 		} catch (RepositoryException e) {
 			log.error("Cannot load state " + state, e);
@@ -197,8 +229,7 @@ public class ArgeoSuiteApp extends AbstractCmsApp implements EventHandler {
 		}
 	}
 
-	private void refreshEntityUi(Node node) {
-
+	private void refreshEntityUi(Composite parent, Node context) {
 	}
 
 	/*
@@ -211,9 +242,11 @@ public class ArgeoSuiteApp extends AbstractCmsApp implements EventHandler {
 //		if (servicePid == null) {
 //			log.error("No service pid found for " + uiProvider.getClass() + ", " + properties);
 //		} else {
-		uiProviders.put(partKey, uiProvider);
-		if (log.isDebugEnabled())
-			log.debug("Added UI provider " + partKey + " to CMS app.");
+		if (partKey.getPid() != null || partKey.getDataType() != null) {
+			uiProviders.put(partKey, uiProvider);
+			if (log.isDebugEnabled())
+				log.debug("Added UI provider " + partKey + " (" + uiProvider.getClass().getName() + ") to CMS app.");
+		}
 //		}
 
 	}
@@ -227,11 +260,28 @@ public class ArgeoSuiteApp extends AbstractCmsApp implements EventHandler {
 
 	@Override
 	public void handleEvent(Event event) {
-		if (event.getTopic().equals(SuiteEvent.switchLayer.topic())) {
-			String layer = get(event, SuiteEvent.LAYER_PARAM);
-			managedUis.get(get(event, CMS_VIEW_UID_PROPERTY)).switchToLayer(layer);
+
+		// Specific UI related events
+		ArgeoSuiteUi ui = getRelatedUi(event);
+		if (isTopic(event, SuiteEvent.refreshPart)) {
+			Node node = Jcr.getNodeById(ui.getSession(), get(event, SuiteEvent.NODE_ID));
+			ui.getTabbedArea().view(findUiProvider(DASHBOARD_PID, node), node);
+		} else if (isTopic(event, SuiteEvent.openNewPart)) {
+			Node node = Jcr.getNodeById(ui.getSession(), get(event, SuiteEvent.NODE_ID));
+			ui.getTabbedArea().open(findUiProvider(DASHBOARD_PID, node), node);
+		} else if (isTopic(event, SuiteEvent.switchLayer)) {
+			String layer = get(event, SuiteEvent.LAYER);
+			ui.switchToLayer(layer);
 		}
 
+	}
+
+	private ArgeoSuiteUi getRelatedUi(Event event) {
+		return managedUis.get(get(event, CMS_VIEW_UID_PROPERTY));
+	}
+
+	private static boolean isTopic(Event event, CmsEvent cmsEvent) {
+		return event.getTopic().equals(cmsEvent.topic());
 	}
 
 	private static String get(Event event, String key) {

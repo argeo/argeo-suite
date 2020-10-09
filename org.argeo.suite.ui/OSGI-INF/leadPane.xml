@@ -5,5 +5,4 @@
       <provide interface="org.argeo.cms.ui.CmsUiProvider"/>
    </service>
    <properties entry="config/leadPane.properties"/>
-   <reference bind="setEventAdmin" cardinality="1..1" interface="org.osgi.service.event.EventAdmin" name="EventAdmin" policy="static"/>
 </scr:component>
