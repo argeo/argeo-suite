@@ -1,0 +1,28 @@
+<ldap = 'http://www.argeo.org/ns/ldap'>
+<entity = 'http://www.argeo.org/ns/entity'>
+
+[entity:entity] > mix:title, mix:created, mix:lastModified, mix:referenceable
+mixin
+//- entity:uid (String) m // an implementation dependent UID for each entity
+//- entity:type (String) // the type of this entity
+
+[entity:definition] > entity:composite, mix:title, mix:created, mix:lastModified, mix:referenceable
+mixin
+
+[entity:part]
+mixin
+
+[entity:reference]
+mixin
+
+[entity:composite]
+mixin
+orderable
++ * (entity:part)
++ * (entity:reference)
++ * (entity:composite)
+
+// LDAP-LIKE ENTITIES
+// A real person
+[entity:person] > entity:entity
+mixin

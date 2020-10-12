@@ -13,10 +13,27 @@
 	<name>Suite E4 Platform RAP</name>
 	<packaging>jar</packaging>
 	<dependencies>
-		<!-- Default Assembly for supported minimal set of Argeo Suite Features -->
+		<!-- Entity Framework -->
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.suite.cms</artifactId>
+			<artifactId>org.argeo.entity.api</artifactId>
+			<version>2.1.16-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.entity.core</artifactId>
+			<version>2.1.16-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.entity.ui</artifactId>
+			<version>2.1.16-SNAPSHOT</version>
+		</dependency>
+
+		<!-- Argeo Suite -->
+		<dependency>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.suite.core</artifactId>
 			<version>2.1.16-SNAPSHOT</version>
 		</dependency>
 		<dependency>
@@ -29,23 +46,30 @@
 			<artifactId>org.argeo.suite.ui.rap</artifactId>
 			<version>2.1.16-SNAPSHOT</version>
 		</dependency>
+
+		<!-- Default Assembly for supported minimal set of Argeo Suite Features -->
+		<dependency>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.suite.cms</artifactId>
+			<version>2.1.16-SNAPSHOT</version>
+		</dependency>
 		<!-- <dependency> -->
 		<!-- <groupId>org.argeo.suite</groupId> -->
 		<!-- <artifactId>org.argeo.suite.web</artifactId> -->
 		<!-- <version>0.1.13-SNAPSHOT</version> -->
 		<!-- </dependency> -->
-		
+
 		<!-- Apps -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.argeo.suite.library</groupId> -->
-<!-- 			<artifactId>org.argeo.suite.docs</artifactId> -->
-<!-- 			<version>2.1.16-SNAPSHOT</version> -->
-<!-- 		</dependency> -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.argeo.suite.systems</groupId> -->
-<!-- 			<artifactId>org.argeo.suite.studio</artifactId> -->
-<!-- 			<version>2.1.16-SNAPSHOT</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.argeo.suite.library</groupId> -->
+		<!-- <artifactId>org.argeo.suite.docs</artifactId> -->
+		<!-- <version>2.1.16-SNAPSHOT</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.argeo.suite.systems</groupId> -->
+		<!-- <artifactId>org.argeo.suite.studio</artifactId> -->
+		<!-- <version>2.1.16-SNAPSHOT</version> -->
+		<!-- </dependency> -->
 
 		<!-- Base CMS distribution -->
 		<dependency>

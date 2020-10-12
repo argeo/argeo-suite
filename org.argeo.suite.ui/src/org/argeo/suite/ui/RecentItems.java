@@ -14,7 +14,6 @@ import javax.jcr.observation.EventListener;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
 
-import org.argeo.api.NodeConstants;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
@@ -24,6 +23,7 @@ import org.argeo.connect.ui.util.BasicNodeListContentProvider;
 import org.argeo.connect.ui.widgets.DelayedText;
 import org.argeo.connect.util.XPathUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
+import org.argeo.entity.EntityConstants;
 import org.argeo.entity.EntityTypes;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
@@ -45,7 +45,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
@@ -126,7 +125,7 @@ public class RecentItems implements CmsUiProvider {
 	}
 
 	public void init(Map<String, String> properties) {
-		entityType = properties.get(NodeConstants.DATA_TYPE);
+		entityType = properties.get(EntityConstants.TYPE);
 	}
 
 	class SingleEntityViewer {

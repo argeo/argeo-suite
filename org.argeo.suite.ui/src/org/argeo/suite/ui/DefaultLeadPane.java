@@ -5,8 +5,6 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.argeo.cms.Localized;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
@@ -23,7 +21,7 @@ import org.eclipse.swt.widgets.Label;
 
 /** Side pane listing various perspectives. */
 public class DefaultLeadPane implements CmsUiProvider {
-	private final static Log log = LogFactory.getLog(DefaultLeadPane.class);
+	// private final static Log log = LogFactory.getLog(DefaultLeadPane.class);
 
 	@Override
 	public Control createUi(Composite parent, Node node) throws RepositoryException {
@@ -50,8 +48,8 @@ public class DefaultLeadPane implements CmsUiProvider {
 		CmsUiUtils.style(button, SuiteStyle.leadPane);
 		button.setImage(icon.getBigIcon(theme));
 		button.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, false));
-		//button.setToolTipText(msg.lead());
-		Label lbl = new Label(parent,SWT.NONE);
+		// button.setToolTipText(msg.lead());
+		Label lbl = new Label(parent, SWT.NONE);
 		CmsUiUtils.style(lbl, SuiteStyle.leadPane);
 		lbl.setText(msg.lead());
 		lbl.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));

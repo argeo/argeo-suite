@@ -26,13 +26,19 @@
 		<git.rw />
 	</properties>
 	<modules>
-		<!-- Lightweight -->
-		<module>org.argeo.suite.cms</module>
+		<!-- Entity Framework -->
+		<module>org.argeo.entity.api</module>
+		<module>org.argeo.entity.core</module>
+		<module>org.argeo.entity.ui</module>
+
+		<!-- Argeo Suite -->
+		<module>org.argeo.suite.core</module>
 		<module>org.argeo.suite.ui</module>
 		<module>org.argeo.suite.ui.rap</module>
 		<module>org.argeo.suite.theme.default</module>
 
 		<!-- Eclipse 4 -->
+		<module>org.argeo.suite.cms</module>
 		<module>org.argeo.suite.e4</module>
 		<module>org.argeo.suite.e4.rap</module>
 		<module>org.argeo.suite.standard</module>

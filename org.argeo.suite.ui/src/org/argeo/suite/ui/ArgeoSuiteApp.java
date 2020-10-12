@@ -16,7 +16,6 @@ import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.api.RankingKey;
 import org.argeo.cms.ui.AbstractCmsApp;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
@@ -28,6 +27,7 @@ import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityTypes;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
+import org.argeo.suite.RankingKey;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
