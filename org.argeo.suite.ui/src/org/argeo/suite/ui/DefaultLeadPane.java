@@ -37,7 +37,7 @@ public class DefaultLeadPane implements CmsUiProvider {
 		if (!cmsView.isAnonymous()) {
 //			createButton(parent, SuiteMsg.documents.name(), SuiteMsg.documents, SuiteIcon.documents);
 //			createButton(parent, SuiteMsg.people.name(), SuiteMsg.people, SuiteIcon.people);
-			createButton(parent, SuiteMsg.locations.name(), SuiteMsg.locations, SuiteIcon.location);
+//			createButton(parent, SuiteMsg.locations.name(), SuiteMsg.locations, SuiteIcon.location);
 		}
 		return dashboardB;
 	}
