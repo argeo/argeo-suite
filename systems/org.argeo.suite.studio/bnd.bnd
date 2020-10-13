@@ -1,6 +1,0 @@
-Bundle-ActivationPolicy: lazy
-
-Import-Package:\
-org.osgi.service.http.whiteboard,\
-org.eclipse.swt,\
-*

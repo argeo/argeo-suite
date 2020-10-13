@@ -2,6 +2,7 @@ package org.argeo.suite.ui;
 
 import static org.argeo.eclipse.ui.EclipseUiUtils.notEmpty;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.jcr.Node;
@@ -18,15 +19,12 @@ import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsUiUtils;
-import org.argeo.connect.ui.ConnectUiConstants;
-import org.argeo.connect.ui.util.BasicNodeListContentProvider;
-import org.argeo.connect.ui.widgets.DelayedText;
-import org.argeo.connect.util.XPathUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.entity.EntityConstants;
 import org.argeo.entity.EntityTypes;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
+import org.argeo.suite.util.XPathUtils;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -34,8 +32,10 @@ import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -53,7 +53,9 @@ import org.eclipse.swt.widgets.ToolItem;
 
 /** List recent items. */
 public class RecentItems implements CmsUiProvider {
-//	private final static int SEARCH_TEXT_DELAY = 800;
+	private final static int SEARCH_TEXT_DELAY = 800;
+	private final static int SEARCH_DEFAULT_LIMIT = 100;
+
 	private CmsTheme theme;
 
 	private String entityType;
@@ -166,7 +168,7 @@ public class RecentItems implements CmsUiProvider {
 			// Use a delayed text: the query won't be done until the user stop
 			// typing for 800ms
 			int style = SWT.BORDER | SWT.SEARCH | SWT.ICON_CANCEL;
-			DelayedText delayedText = new DelayedText(parent, style, ConnectUiConstants.SEARCH_TEXT_DELAY);
+			DelayedText delayedText = new DelayedText(parent, style, SEARCH_TEXT_DELAY);
 			filterTxt = delayedText.getText();
 			filterTxt.setLayoutData(EclipseUiUtils.fillWidth());
 
@@ -301,7 +303,7 @@ public class RecentItems implements CmsUiProvider {
 				// session.refresh(false);
 				Query xpathQuery = XPathUtils.createQuery(session, xpathQueryStr);
 
-				xpathQuery.setLimit(ConnectUiConstants.SEARCH_DEFAULT_LIMIT);
+				xpathQuery.setLimit(SEARCH_DEFAULT_LIMIT);
 				QueryResult result = xpathQuery.execute();
 
 				NodeIterator nit = result.getNodes();
@@ -328,6 +330,26 @@ public class RecentItems implements CmsUiProvider {
 				return Jcr.getTitle((Node) element);
 			}
 
+		}
+
+		class BasicNodeListContentProvider implements IStructuredContentProvider {
+			private static final long serialVersionUID = 1L;
+			// keep a cache of the Nodes in the content provider to be able to
+			// manage long request
+			private List<Node> nodes;
+
+			public void dispose() {
+			}
+
+			/** Expects a list of nodes as a new input */
+			@SuppressWarnings("unchecked")
+			public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+				nodes = (List<Node>) newInput;
+			}
+
+			public Object[] getElements(Object arg0) {
+				return nodes.toArray();
+			}
 		}
 	}
 }

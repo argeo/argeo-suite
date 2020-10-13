@@ -1,2 +1,0 @@
-Bundle-SymbolicName: org.argeo.suite.standard;singleton:=true
-Bundle-ActivationPolicy: lazy

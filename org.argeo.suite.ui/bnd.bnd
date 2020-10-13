@@ -10,7 +10,6 @@ Import-Package:\
 org.argeo.api,\
 org.eclipse.swt,\
 org.osgi.framework,\
-org.argeo.connect.ui,\
 org.argeo.entity,\
 org.eclipse.core.commands.common,\
 *
