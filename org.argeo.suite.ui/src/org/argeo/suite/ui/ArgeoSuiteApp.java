@@ -80,6 +80,8 @@ public class ArgeoSuiteApp extends AbstractCmsApp implements EventHandler {
 	public Composite initUi(Composite parent) {
 		String uiName = parent.getData(UI_NAME_PROPERTY) != null ? parent.getData(UI_NAME_PROPERTY).toString() : null;
 		CmsView cmsView = CmsView.getCmsView(parent);
+		if (cmsView == null)
+			throw new IllegalStateException("No CMS view is registered.");
 		CmsTheme theme = getTheme(uiName);
 		if (theme != null)
 			CmsTheme.registerCmsTheme(parent.getShell(), theme);
@@ -266,9 +268,11 @@ public class ArgeoSuiteApp extends AbstractCmsApp implements EventHandler {
 		if (isTopic(event, SuiteEvent.refreshPart)) {
 			Node node = Jcr.getNodeById(ui.getSession(), get(event, SuiteEvent.NODE_ID));
 			ui.getTabbedArea().view(findUiProvider(DASHBOARD_PID, node), node);
+//			ui.layout(true, true);
 		} else if (isTopic(event, SuiteEvent.openNewPart)) {
 			Node node = Jcr.getNodeById(ui.getSession(), get(event, SuiteEvent.NODE_ID));
 			ui.getTabbedArea().open(findUiProvider(DASHBOARD_PID, node), node);
+//			ui.layout(true, true);
 		} else if (isTopic(event, SuiteEvent.switchLayer)) {
 			String layer = get(event, SuiteEvent.LAYER);
 			ui.switchToLayer(layer);
@@ -291,11 +295,4 @@ public class ArgeoSuiteApp extends AbstractCmsApp implements EventHandler {
 		return value.toString();
 
 	}
-
-//	public void setHeaderPart(CmsUiProvider headerPart) {
-//		this.headerPart = headerPart;
-//		if (log.isDebugEnabled())
-//			log.debug("Header set.");
-//	}
-
 }
