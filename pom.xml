@@ -36,6 +36,10 @@
 		<module>org.argeo.suite.ui.rap</module>
 		<module>org.argeo.suite.theme.default</module>
 
+		<!-- Functional areas -->
+		<module>knowledge</module>
+
+		<!-- Packaging -->
 		<module>dep</module>
 		<module>dist</module>
 		<module>lib</module>

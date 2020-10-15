@@ -1,0 +1,5 @@
+
+Service-Component:\
+OSGI-INF/odkFormListServlet.xml,\
+OSGI-INF/odkFormServlet.xml,\
+OSGI-INF/odkSubmissionServlet.xml

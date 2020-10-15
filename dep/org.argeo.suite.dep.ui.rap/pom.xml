@@ -51,6 +51,13 @@
 			<artifactId>org.argeo.suite.ui.rap</artifactId>
 			<version>2.1.16-SNAPSHOT</version>
 		</dependency>
+		
+		<!-- Argeo Knowledge -->
+		<dependency>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.support.odk</artifactId>
+			<version>2.1.16-SNAPSHOT</version>
+		</dependency>
 
 		<!-- Base CMS distribution -->
 		<dependency>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="ODK Form List Servlet">
+   <implementation class="org.argeo.support.odk.servlet.OdkFormListServlet"/>
+   <service>
+      <provide interface="javax.servlet.Servlet"/>
+   </service>
+   <property name="osgi.http.whiteboard.servlet.pattern" type="String" value="/api/odk/formList"/>
+   <reference bind="addForm" cardinality="0..n" interface="org.argeo.support.odk.OdkForm" name="OdkForm" policy="dynamic" unbind="removeForm"/>
+</scr:component>
