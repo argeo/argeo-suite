@@ -4,6 +4,7 @@
    <service>
       <provide interface="javax.servlet.Servlet"/>
    </service>
-   <property name="osgi.http.whiteboard.servlet.pattern" type="String" value="/api/odk/submission"/>
+   <property name="osgi.http.whiteboard.servlet.pattern" type="String" value="/submission"/>
+   <property name="osgi.http.whiteboard.context.select" type="String" value="(osgi.http.whiteboard.context.name=odkServletContext)"/>
    <property name="osgi.http.whiteboard.servlet.multipart.enabled" type="String" value="true"/>
 </scr:component>

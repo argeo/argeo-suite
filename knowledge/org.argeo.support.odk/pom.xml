@@ -15,7 +15,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.argeo.commons</groupId>
-			<artifactId>org.argeo.util</artifactId>
+			<artifactId>org.argeo.cms</artifactId>
 			<version>${version.argeo-commons}</version>
 		</dependency>
 	</dependencies>

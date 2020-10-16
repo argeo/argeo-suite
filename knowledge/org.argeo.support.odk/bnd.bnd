@@ -1,5 +1,9 @@
+Import-Package:\
+org.osgi.service.http.context,\
+*
 
 Service-Component:\
+OSGI-INF/odkServletContext.xml,\
 OSGI-INF/odkFormListServlet.xml,\
 OSGI-INF/odkFormServlet.xml,\
 OSGI-INF/odkSubmissionServlet.xml

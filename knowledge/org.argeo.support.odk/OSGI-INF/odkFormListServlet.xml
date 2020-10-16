@@ -4,6 +4,7 @@
    <service>
       <provide interface="javax.servlet.Servlet"/>
    </service>
-   <property name="osgi.http.whiteboard.servlet.pattern" type="String" value="/api/odk/formList"/>
+   <property name="osgi.http.whiteboard.servlet.pattern" type="String" value="/formList"/>
+   <property name="osgi.http.whiteboard.context.select" type="String" value="(osgi.http.whiteboard.context.name=odkServletContext)"/>
    <reference bind="addForm" cardinality="0..n" interface="org.argeo.support.odk.OdkForm" name="OdkForm" policy="dynamic" unbind="removeForm"/>
 </scr:component>
