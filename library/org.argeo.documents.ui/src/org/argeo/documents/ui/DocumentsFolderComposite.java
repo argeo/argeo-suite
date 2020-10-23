@@ -1,4 +1,4 @@
-package org.argeo.documents.composites;
+package org.argeo.documents.ui;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +18,6 @@ import org.apache.commons.logging.LogFactory;
 import org.argeo.cms.ui.fs.FileDrop;
 import org.argeo.cms.ui.fs.FsStyles;
 import org.argeo.cms.ui.util.CmsUiUtils;
-import org.argeo.documents.ui.DocumentsUiService;
 import org.argeo.eclipse.ui.ColumnDefinition;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.eclipse.ui.fs.FileIconNameLabelProvider;

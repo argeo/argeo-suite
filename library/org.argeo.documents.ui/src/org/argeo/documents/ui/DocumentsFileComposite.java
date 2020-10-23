@@ -1,4 +1,4 @@
-package org.argeo.documents.composites;
+package org.argeo.documents.ui;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -11,7 +11,6 @@ import javax.jcr.RepositoryException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.cms.ui.util.CmsUiUtils;
-import org.argeo.documents.ui.DocumentsUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.eclipse.ui.fs.FsUiUtils;
 import org.argeo.eclipse.ui.specific.UiContext;

@@ -1,4 +1,4 @@
-package org.argeo.documents.composites;
+package org.argeo.documents.ui;
 
 import static org.argeo.documents.ui.DocumentsUiService.ACTION_ID_BOOKMARK_FOLDER;
 import static org.argeo.documents.ui.DocumentsUiService.ACTION_ID_CREATE_FOLDER;
@@ -11,7 +11,6 @@ import static org.argeo.documents.ui.DocumentsUiService.ACTION_ID_UPLOAD_FILE;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.argeo.documents.ui.DocumentsUiService;
 import org.argeo.suite.ui.widgets.AbstractConnectContextMenu;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.graphics.Point;
