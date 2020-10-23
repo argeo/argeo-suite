@@ -5,14 +5,11 @@ import java.util.Map;
 
 import javax.jcr.Session;
 
-import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.widgets.TabbedArea;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FormLayout;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 /** The {@link CmsView} for the work ergonomics of Argeo Suite. */
@@ -25,8 +22,6 @@ public class ArgeoSuiteUi extends Composite {
 	private Composite leadPane;
 	private Composite dynamicArea;
 
-	private CmsTheme theme;
-
 	private Session session;
 
 	private Map<String, WorkLayer> layers = new HashMap<>();
@@ -34,7 +29,6 @@ public class ArgeoSuiteUi extends Composite {
 
 	public ArgeoSuiteUi(Composite parent, int style) {
 		super(parent, style);
-		theme = CmsTheme.getCmsTheme(parent);
 		this.setLayout(CmsUiUtils.noSpaceGridLayout());
 
 		header = new Composite(this, SWT.NONE);
@@ -132,65 +126,6 @@ public class ArgeoSuiteUi extends Composite {
 		this.session = session;
 	}
 
-	class WorkLayer {
-		private SashForm area;
-		private Composite entryArea;
-		private Composite editorArea;
-		private TabbedArea tabbedArea;
-
-		WorkLayer(Composite parent, int style) {
-			area = new SashForm(parent, SWT.HORIZONTAL);
-			area.setLayoutData(CmsUiUtils.coversAll());
-
-			if (SWT.RIGHT_TO_LEFT == (style & SWT.RIGHT_TO_LEFT)) {// arabic, hebrew, etc.
-				editorArea = new Composite(area, SWT.BORDER);
-				entryArea = new Composite(area, SWT.BORDER);
-			} else {
-				entryArea = new Composite(area, SWT.NONE);
-				editorArea = new Composite(area, SWT.NONE);
-			}
-			int[] weights = new int[] { 2000, 8000 };
-			area.setWeights(weights);
-//			editorArea.setLayout(CmsUiUtils.noSpaceGridLayout());
-			editorArea.setLayout(new GridLayout());
-
-			tabbedArea = new TabbedArea(editorArea, SWT.NONE);
-			tabbedArea.setBodyStyle(SuiteStyle.mainTabBody.toStyleClass());
-			tabbedArea.setTabStyle(SuiteStyle.mainTab.toStyleClass());
-			tabbedArea.setTabSelectedStyle(SuiteStyle.mainTabSelected.toStyleClass());
-			tabbedArea.setCloseIcon(SuiteIcon.close.getSmallIcon(theme));
-			tabbedArea.setLayoutData(CmsUiUtils.fillAll());
-
-			// TODO make it dynamic
-//			Composite buttons = new Composite(editorTabFolder, SWT.NONE);
-//			buttons.setLayout(CmsUiUtils.noSpaceGridLayout());
-//			ToolBar toolBar = new ToolBar(buttons, SWT.NONE);
-//			toolBar.setLayoutData(new GridData(SWT.END, SWT.TOP, false, false));
-//			ToolItem deleteItem = new ToolItem(toolBar, SWT.PUSH);
-//			deleteItem.setImage(SuiteIcon.delete.getSmallIcon(theme));
-//			deleteItem.setEnabled(false);
-//			editorTabFolder.setTopRight(buttons);
-//
-//			CTabItem defaultTab = new CTabItem(editorTabFolder, SWT.NONE);
-//			// defaultTab.setText("Home");
-//			defaultTab.setImage(dashboard.getSmallIcon(theme));
-//			defaultBody = new Composite(editorTabFolder, SWT.NONE);
-//			defaultTab.setControl(defaultBody);
-//			editorTabFolder.setSelection(defaultTab);
-
-		}
-
-		Composite getArea() {
-			return area;
-		}
-
-		Composite getEntryArea() {
-			return entryArea;
-		}
-
-		TabbedArea getTabbedArea() {
-			return tabbedArea;
-		}
-	}
+	
 
 }
