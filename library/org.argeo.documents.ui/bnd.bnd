@@ -1,0 +1,4 @@
+Import-Package:\
+org.eclipse.swt,\
+org.argeo.api,\
+*

@@ -37,6 +37,7 @@
 		<module>org.argeo.suite.theme.default</module>
 
 		<!-- Functional areas -->
+		<module>library</module>
 		<module>knowledge</module>
 
 		<!-- Packaging -->

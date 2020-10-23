@@ -24,6 +24,7 @@ import org.argeo.entity.EntityConstants;
 import org.argeo.entity.EntityTypes;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
+import org.argeo.suite.ui.widgets.DelayedText;
 import org.argeo.suite.util.XPathUtils;
 import org.eclipse.jface.layout.TableColumnLayout;
 import org.eclipse.jface.viewers.ColumnLabelProvider;

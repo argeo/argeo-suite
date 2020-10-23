@@ -7,10 +7,10 @@
 		<version>2.1.16-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>knowledge</artifactId>
-	<name>Argeo Knowledge Components</name>
+	<artifactId>library</artifactId>
+	<name>Argeo Library Components</name>
 	<packaging>pom</packaging>
 	<modules>
-		<module>org.argeo.support.odk</module>
+		<module>org.argeo.documents.ui</module>
 	</modules>
 </project>

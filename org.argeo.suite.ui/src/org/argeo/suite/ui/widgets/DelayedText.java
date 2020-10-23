@@ -1,4 +1,4 @@
-package org.argeo.suite.ui;
+package org.argeo.suite.ui.widgets;
 
 import java.util.Timer;
 import java.util.TimerTask;
