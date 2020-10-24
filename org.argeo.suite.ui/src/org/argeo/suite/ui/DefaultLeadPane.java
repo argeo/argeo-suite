@@ -5,6 +5,8 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.argeo.cms.Localized;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
@@ -21,7 +23,13 @@ import org.eclipse.swt.widgets.Label;
 
 /** Side pane listing various perspectives. */
 public class DefaultLeadPane implements CmsUiProvider {
-	// private final static Log log = LogFactory.getLog(DefaultLeadPane.class);
+	private final static Log log = LogFactory.getLog(DefaultLeadPane.class);
+
+	public static enum Property {
+		defaultLayers;
+	}
+
+	private String[] defaultLayers;
 
 	@Override
 	public Control createUi(Composite parent, Node node) throws RepositoryException {
@@ -33,13 +41,20 @@ public class DefaultLeadPane implements CmsUiProvider {
 		layout.marginRight = 10;
 		parent.setLayout(layout);
 
-		Button dashboardB = createButton(parent, SuiteMsg.dashboard.name(), SuiteMsg.dashboard, SuiteIcon.dashboard);
+		Button first = null;
+		for (String layerId : defaultLayers) {
+			Button b = createButton(parent, layerId, SuiteMsg.dashboard, SuiteIcon.dashboard);
+			if (first == null)
+				first = b;
+		}
+
+//		Button dashboardB = createButton(parent, SuiteMsg.dashboard.name(), SuiteMsg.dashboard, SuiteIcon.dashboard);
 		if (!cmsView.isAnonymous()) {
 //			createButton(parent, SuiteMsg.documents.name(), SuiteMsg.documents, SuiteIcon.documents);
 //			createButton(parent, SuiteMsg.people.name(), SuiteMsg.people, SuiteIcon.people);
 //			createButton(parent, SuiteMsg.locations.name(), SuiteMsg.locations, SuiteIcon.location);
 		}
-		return dashboardB;
+		return first;
 	}
 
 	protected Button createButton(Composite parent, String layer, Localized msg, CmsIcon icon) {
@@ -57,7 +72,11 @@ public class DefaultLeadPane implements CmsUiProvider {
 		return button;
 	}
 
-	public void init(Map<String, String> properties) {
-
+	public void init(Map<String, Object> properties) {
+		defaultLayers = (String[]) properties.get(Property.defaultLayers.toString());
+		if (defaultLayers == null)
+			throw new IllegalArgumentException("Default layers must be set.");
+		if (log.isDebugEnabled())
+			log.debug("Default layers: " + defaultLayers);
 	}
 }

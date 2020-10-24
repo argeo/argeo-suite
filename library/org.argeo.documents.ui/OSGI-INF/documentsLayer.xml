@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="Documents Layer">
+   <implementation class="org.argeo.suite.ui.DefaultEditionLayer"/>
+   <service>
+      <provide interface="org.argeo.suite.ui.SuiteLayer"/>
+   </service>
+   <reference bind="setEntryArea" cardinality="1..1" interface="org.argeo.cms.ui.CmsUiProvider" name="CmsUiProvider" policy="dynamic" target="(service.pid=argeo.documents.ui.entryArea)"/>
+   <properties entry="config/documentsLayer.properties"/>
+</scr:component>

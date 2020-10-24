@@ -1,4 +1,9 @@
+Service-Component:\
+OSGI-INF/entryArea.xml,\
+OSGI-INF/documentsLayer.xml
+
 Import-Package:\
 org.eclipse.swt,\
 org.argeo.api,\
+org.argeo.suite.ui,\
 *

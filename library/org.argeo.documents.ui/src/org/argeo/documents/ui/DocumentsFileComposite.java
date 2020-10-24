@@ -10,6 +10,7 @@ import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.argeo.cms.fs.CmsFsUtils;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.eclipse.ui.fs.FsUiUtils;
@@ -48,7 +49,7 @@ public class DocumentsFileComposite extends Composite {
 
 		rightPannelCmp = new Composite(form, SWT.NO_FOCUS);
 
-		Path path = DocumentsUtils.getPath(fsp, context);
+		Path path = CmsFsUtils.getPath(fsp, context);
 		setOverviewInput(path);
 		form.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		form.setWeights(new int[] { 55, 20 });
