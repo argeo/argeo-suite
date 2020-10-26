@@ -34,7 +34,7 @@ public class RankedObject<T> {
 		if (properties == null)
 			return 0l;
 		if (properties.containsKey(SERVICE_RANKING))
-			return ((Integer) properties.get(SERVICE_RANKING)).longValue();
+			return Long.valueOf(properties.get(SERVICE_RANKING).toString());
 //		else if (properties.containsKey(SERVICE_ID))
 //			return (Long) properties.get(SERVICE_ID);
 		else

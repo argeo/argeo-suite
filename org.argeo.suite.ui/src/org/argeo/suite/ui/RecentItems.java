@@ -20,7 +20,6 @@ import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
-import org.argeo.entity.EntityConstants;
 import org.argeo.entity.EntityTypes;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
@@ -56,6 +55,10 @@ import org.eclipse.swt.widgets.ToolItem;
 public class RecentItems implements CmsUiProvider {
 	private final static int SEARCH_TEXT_DELAY = 800;
 	private final static int SEARCH_DEFAULT_LIMIT = 100;
+
+	public static enum Property {
+		entityTypes;
+	}
 
 	private CmsTheme theme;
 
@@ -105,8 +108,8 @@ public class RecentItems implements CmsUiProvider {
 			public void doubleClick(DoubleClickEvent event) {
 				Node node = (Node) entityViewer.getViewer().getStructuredSelection().getFirstElement();
 				if (node != null)
-					CmsView.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(), SuiteEvent.NODE_ID,
-							Jcr.getIdentifier(node));
+					CmsView.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(),
+							SuiteEvent.eventProperties(node));
 
 			}
 		});
@@ -114,8 +117,8 @@ public class RecentItems implements CmsUiProvider {
 			public void selectionChanged(SelectionChangedEvent event) {
 				Node node = (Node) entityViewer.getViewer().getStructuredSelection().getFirstElement();
 				if (node != null) {
-					CmsView.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.NODE_ID,
-							Jcr.getIdentifier(node));
+					CmsView.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(),
+							SuiteEvent.eventProperties(node));
 					deleteItem.setEnabled(true);
 				} else {
 					deleteItem.setEnabled(false);
@@ -128,7 +131,8 @@ public class RecentItems implements CmsUiProvider {
 	}
 
 	public void init(Map<String, String> properties) {
-		entityType = properties.get(EntityConstants.TYPE);
+		// TODO manage multiple entities
+		entityType = properties.get(Property.entityTypes.name());
 	}
 
 	class SingleEntityViewer {
@@ -263,8 +267,8 @@ public class RecentItems implements CmsUiProvider {
 //			});
 			table.setLinesVisible(true);
 			table.setHeaderVisible(false);
-			CmsUiUtils.markup(table);
-			CmsUiUtils.setItemHeight(table, 26);
+			// CmsUiUtils.markup(table);
+			// CmsUiUtils.setItemHeight(table, 26);
 
 			viewer.setContentProvider(new BasicNodeListContentProvider());
 			return viewer;

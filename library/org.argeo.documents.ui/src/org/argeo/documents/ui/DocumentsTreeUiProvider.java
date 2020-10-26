@@ -3,13 +3,12 @@ package org.argeo.documents.ui;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.spi.FileSystemProvider;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 
+import org.argeo.api.NodeConstants;
 import org.argeo.api.NodeUtils;
 import org.argeo.cms.fs.CmsFsUtils;
 import org.argeo.cms.ui.CmsUiProvider;
@@ -34,9 +33,10 @@ public class DocumentsTreeUiProvider implements CmsUiProvider {
 		parent.setLayout(new GridLayout());
 		FsTreeViewer fsTreeViewer = new FsTreeViewer(parent, SWT.NONE);
 		fsTreeViewer.configureDefaultSingleColumnTable(500);
-		Node homeNode = NodeUtils.getUserHome(context.getSession());
-		Path homePath = CmsFsUtils.getPath(nodeFileSystemProvider, homeNode);
 		CmsView cmsView = CmsView.getCmsView(parent);
+		Node homeNode = NodeUtils.getUserHome(cmsView.doAs(() -> Jcr.login(repository, NodeConstants.HOME_WORKSPACE)));
+		parent.addDisposeListener((e1) -> Jcr.logout(homeNode));
+		Path homePath = CmsFsUtils.getPath(nodeFileSystemProvider, homeNode);
 		fsTreeViewer.addSelectionChangedListener((e) -> {
 			IStructuredSelection selection = (IStructuredSelection) fsTreeViewer.getSelection();
 			if (selection.isEmpty())
@@ -46,10 +46,7 @@ public class DocumentsTreeUiProvider implements CmsUiProvider {
 				if (Files.isDirectory(newSelected)) {
 					Node folderNode = cmsView.doAs(() -> CmsFsUtils.getNode(repository, newSelected));
 					parent.addDisposeListener((e1) -> Jcr.logout(folderNode));
-					Map<String, Object> properties = new HashMap<>();
-					properties.put(SuiteEvent.NODE_ID, Jcr.getIdentifier(folderNode));
-					properties.put(SuiteEvent.WORKSPACE, Jcr.getWorkspaceName(folderNode));
-					cmsView.sendEvent(SuiteEvent.refreshPart.topic(), properties);
+					cmsView.sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.eventProperties(folderNode));
 				}
 			}
 		});
@@ -62,10 +59,7 @@ public class DocumentsTreeUiProvider implements CmsUiProvider {
 				if (Files.isDirectory(newSelected)) {
 					Node folderNode = cmsView.doAs(() -> CmsFsUtils.getNode(repository, newSelected));
 					parent.addDisposeListener((e1) -> Jcr.logout(folderNode));
-					Map<String, Object> properties = new HashMap<>();
-					properties.put(SuiteEvent.NODE_ID, Jcr.getIdentifier(folderNode));
-					properties.put(SuiteEvent.WORKSPACE, Jcr.getWorkspaceName(folderNode));
-					cmsView.sendEvent(SuiteEvent.openNewPart.topic(), properties);
+					cmsView.sendEvent(SuiteEvent.openNewPart.topic(), SuiteEvent.eventProperties(folderNode));
 				}
 			}
 		});

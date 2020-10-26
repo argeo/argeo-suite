@@ -26,6 +26,8 @@ import org.argeo.cms.ui.dialogs.CmsFeedback;
 import org.argeo.cms.ui.util.CmsEvent;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.entity.EntityConstants;
+import org.argeo.entity.EntityNames;
+import org.argeo.entity.EntityTypes;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.suite.RankedObject;
@@ -43,7 +45,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	public final static String HEADER_PID = PID_PREFIX + "header";
 	public final static String LEAD_PANE_PID = PID_PREFIX + "leadPane";
 	public final static String LOGIN_SCREEN_PID = PID_PREFIX + "loginScreen";
-	public final static String DASHBOARD_LAYER_PID = PID_PREFIX + "dashboardLayer";
+	// public final static String DASHBOARD_LAYER_PID = PID_PREFIX +
+	// "dashboardLayer";
 	public final static String DASHBOARD_PID = PID_PREFIX + "dashboard";
 	public final static String RECENT_ITEMS_PID = PID_PREFIX + "recentItems";
 
@@ -137,7 +140,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 //				ui.addLayer("documents");
 //				ui.addLayer("locations");
 //				ui.addLayer("people");
-				ui.switchToLayer(DASHBOARD_LAYER_PID, context);
+				// ui.switchToLayer(DASHBOARD_LAYER_PID, context);
 
 //				refreshPart(findUiProvider(DASHBOARD_PID), ui.getTabbedArea().getCurrent(), context);
 				refreshPart(findUiProvider(LEAD_PANE_PID), ui.getLeadPane(), context);
@@ -162,6 +165,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	private CmsUiProvider findUiProvider(Node context) {
 		try {
+			// mixins
 			Set<String> types = new TreeSet<>();
 			for (NodeType nodeType : context.getMixinNodeTypes()) {
 				String typeName = nodeType.getName();
@@ -169,15 +173,26 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 					types.add(typeName);
 				}
 			}
-			NodeType nodeType = context.getPrimaryNodeType();
-			String typeName = nodeType.getName();
-			if (uiProvidersByType.containsKey(typeName)) {
-				types.add(typeName);
+			// primary node type
+			{
+				NodeType nodeType = context.getPrimaryNodeType();
+				String typeName = nodeType.getName();
+				if (uiProvidersByType.containsKey(typeName)) {
+					types.add(typeName);
+				}
 			}
+			// entity type
+			if (context.isNodeType(EntityTypes.ENTITY_ENTITY)) {
+				String typeName =context.getProperty(EntityNames.ENTITY_TYPE).getString();
+				if (uiProvidersByType.containsKey(typeName)) {
+					types.add(typeName);
+				}
+			}
+
 //			if (context.getPath().equals("/")) {// root node
 //				types.add("nt:folder");
 //			}
-			if (NodeUtils.isUserHome(context)) {// home node
+			if (NodeUtils.isUserHome(context) && uiProvidersByType.containsKey("nt:folder")) {// home node
 				types.add("nt:folder");
 			}
 
@@ -328,27 +343,28 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 		// Specific UI related events
 		SuiteUi ui = getRelatedUi(event);
-		String currentLayerId = ui.getCurrentLayerId();
-		SuiteLayer layer = layers.get(currentLayerId).get();
-		if (isTopic(event, SuiteEvent.refreshPart)) {
-			String nodeId = get(event, SuiteEvent.NODE_ID);
-			String workspace = get(event, SuiteEvent.WORKSPACE);
-			Node node = Jcr.getNodeById(ui.getSession(workspace), nodeId);
-			CmsUiProvider uiProvider = findUiProvider(node);
-			layer.view(uiProvider, ui.getCurrentWorkArea(), node);
-			// ui.getTabbedArea().view(findUiProvider(DASHBOARD_PID), node);
-//			ui.layout(true, true);
-		} else if (isTopic(event, SuiteEvent.openNewPart)) {
-			String nodeId = get(event, SuiteEvent.NODE_ID);
-			String workspace = get(event, SuiteEvent.WORKSPACE);
-			Node node = Jcr.getNodeById(ui.getSession(workspace), nodeId);
-			CmsUiProvider uiProvider = findUiProvider(node);
-			layer.open(uiProvider, ui.getCurrentWorkArea(), node);
-//			ui.getTabbedArea().open(findUiProvider(DASHBOARD_PID), node);
-//			ui.layout(true, true);
-		} else if (isTopic(event, SuiteEvent.switchLayer)) {
-			String layerId = get(event, SuiteEvent.LAYER);
-			ui.switchToLayer(layerId, null);
+		try {
+			String currentLayerId = ui.getCurrentLayerId();
+			SuiteLayer layer = currentLayerId != null ? layers.get(currentLayerId).get() : null;
+			if (isTopic(event, SuiteEvent.refreshPart)) {
+				String nodeId = get(event, SuiteEvent.NODE_ID);
+				String workspace = get(event, SuiteEvent.WORKSPACE);
+				Node node = Jcr.getNodeById(ui.getSession(workspace), nodeId);
+				CmsUiProvider uiProvider = findUiProvider(node);
+				layer.view(uiProvider, ui.getCurrentWorkArea(), node);
+			} else if (isTopic(event, SuiteEvent.openNewPart)) {
+				String nodeId = get(event, SuiteEvent.NODE_ID);
+				String workspace = get(event, SuiteEvent.WORKSPACE);
+				Node node = Jcr.getNodeById(ui.getSession(workspace), nodeId);
+				CmsUiProvider uiProvider = findUiProvider(node);
+				layer.open(uiProvider, ui.getCurrentWorkArea(), node);
+			} else if (isTopic(event, SuiteEvent.switchLayer)) {
+				String layerId = get(event, SuiteEvent.LAYER);
+				ui.switchToLayer(layerId, Jcr.getRootNode(ui.getSession(null)));
+			}
+		} catch (Exception e) {
+			log.error("Cannot handle event " + event, e);
+//			CmsView.getCmsView(ui).exception(e);
 		}
 
 	}
