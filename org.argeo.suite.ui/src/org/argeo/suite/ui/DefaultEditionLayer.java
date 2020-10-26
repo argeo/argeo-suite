@@ -27,16 +27,14 @@ public class DefaultEditionLayer implements SuiteLayer {
 	}
 
 	@Override
-	public void view(Composite workArea, Node context) {
+	public void view(CmsUiProvider uiProvider, Composite workArea, Node context) {
 		TabbedArea tabbedArea = ((DefaultEditionArea) workArea).getTabbedArea();
-		CmsUiProvider uiProvider = null;
 		tabbedArea.view(uiProvider, context);
 	}
 
 	@Override
-	public void open(Composite workArea, Node context) {
+	public void open(CmsUiProvider uiProvider, Composite workArea, Node context) {
 		TabbedArea tabbedArea = ((DefaultEditionArea) workArea).getTabbedArea();
-		CmsUiProvider uiProvider = null;
 		tabbedArea.open(uiProvider, context);
 	}
 

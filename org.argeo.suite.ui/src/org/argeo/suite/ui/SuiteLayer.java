@@ -7,9 +7,13 @@ import org.eclipse.swt.widgets.Composite;
 
 /** An UI layer for the main work area. */
 public interface SuiteLayer extends CmsUiProvider {
-	void view(Composite workArea, Node context);
+	static enum Property {
+		title,icon;
+	}
 
-	default void open(Composite workArea, Node context) {
-		view(workArea, context);
+	void view(CmsUiProvider uiProvider, Composite workArea, Node context);
+
+	default void open(CmsUiProvider uiProvider, Composite workArea, Node context) {
+		view(uiProvider, workArea, context);
 	}
 }

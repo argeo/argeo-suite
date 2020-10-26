@@ -1,6 +1,7 @@
 Service-Component:\
 OSGI-INF/entryArea.xml,\
-OSGI-INF/documentsLayer.xml
+OSGI-INF/documentsLayer.xml,\
+OSGI-INF/documentsFolder.xml
 
 Import-Package:\
 org.eclipse.swt,\

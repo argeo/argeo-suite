@@ -8,13 +8,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.nodetype.NodeType;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.argeo.api.NodeUtils;
 import org.argeo.cms.ui.AbstractCmsApp;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
@@ -22,6 +25,7 @@ import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.dialogs.CmsFeedback;
 import org.argeo.cms.ui.util.CmsEvent;
 import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.entity.EntityConstants;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.suite.RankedObject;
@@ -47,6 +51,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	private final static String DEFAULT_THEME_ID = "org.argeo.suite.theme.default";
 
 	private Map<String, RankedObject<CmsUiProvider>> uiProvidersByPid = Collections.synchronizedMap(new HashMap<>());
+	private Map<String, RankedObject<CmsUiProvider>> uiProvidersByType = Collections.synchronizedMap(new HashMap<>());
 	private Map<String, RankedObject<SuiteLayer>> layers = Collections.synchronizedSortedMap(new TreeMap<>());
 
 	// TODO make more optimal or via CmsSession/CmsView
@@ -154,6 +159,35 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			throw new IllegalArgumentException("No UI provider registered as " + pid);
 		return uiProvidersByPid.get(pid).get();
 	}
+
+	private CmsUiProvider findUiProvider(Node context) {
+		try {
+			Set<String> types = new TreeSet<>();
+			for (NodeType nodeType : context.getMixinNodeTypes()) {
+				String typeName = nodeType.getName();
+				if (uiProvidersByType.containsKey(typeName)) {
+					types.add(typeName);
+				}
+			}
+			NodeType nodeType = context.getPrimaryNodeType();
+			String typeName = nodeType.getName();
+			if (uiProvidersByType.containsKey(typeName)) {
+				types.add(typeName);
+			}
+//			if (context.getPath().equals("/")) {// root node
+//				types.add("nt:folder");
+//			}
+			if (NodeUtils.isUserHome(context)) {// home node
+				types.add("nt:folder");
+			}
+
+			if (types.size() == 0)
+				throw new IllegalArgumentException("No UI provider found for " + context);
+			return uiProvidersByType.get(types.iterator().next()).get();
+		} catch (RepositoryException e) {
+			throw new IllegalStateException(e);
+		}
+	}
 //	private CmsUiProvider findUiProvider(String pid, Node context) {
 //		CmsUiProvider found = null;
 //		if (pid != null) {
@@ -248,31 +282,14 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	 */
 
 	public void addUiProvider(CmsUiProvider uiProvider, Map<String, Object> properties) {
-//		RankingKey partKey = new RankingKey(properties);
-//		if (partKey.getPid() != null || partKey.getDataType() != null) {
-//			uiProvidersByPid.put(partKey, uiProvider);
-//			if (log.isDebugEnabled())
-//				log.debug("Added UI provider " + partKey + " (" + uiProvider.getClass().getName() + ") to CMS app.");
-//		}
-
 		if (properties.containsKey(Constants.SERVICE_PID)) {
 			String pid = (String) properties.get(Constants.SERVICE_PID);
 			RankedObject.putIfHigherRank(uiProvidersByPid, pid, uiProvider, properties);
-//			RankedObject<CmsUiProvider> rankedObject = new RankedObject<>(uiProvider, properties);
-//			if (!uiProvidersByPid.containsKey(pid)) {
-//				uiProvidersByPid.put(pid, rankedObject);
-//				if (log.isDebugEnabled())
-//					log.debug("Added UI provider " + pid + " as " + uiProvider.getClass().getName() + " with rank "
-//							+ rankedObject.getRank());
-//			} else {
-//				RankedObject<CmsUiProvider> current = uiProvidersByPid.get(pid);
-//				if (current.getRank() <= rankedObject.getRank()) {
-//					uiProvidersByPid.put(pid, rankedObject);
-//					if (log.isDebugEnabled())
-//						log.debug("Replaced UI provider " + pid + " by " + uiProvider.getClass().getName()
-//								+ " with rank " + rankedObject.getRank());
-//				}
-//			}
+		}
+		if (properties.containsKey(EntityConstants.TYPE)) {
+			// TODO manage String arrays as well
+			String type = (String) properties.get(EntityConstants.TYPE);
+			RankedObject.putIfHigherRank(uiProvidersByType, type, uiProvider, properties);
 		}
 	}
 
@@ -314,13 +331,19 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		String currentLayerId = ui.getCurrentLayerId();
 		SuiteLayer layer = layers.get(currentLayerId).get();
 		if (isTopic(event, SuiteEvent.refreshPart)) {
-			Node node = Jcr.getNodeById(ui.getSysSession(), get(event, SuiteEvent.NODE_ID));
-			layer.view(ui.getCurrentWorkArea(), node);
+			String nodeId = get(event, SuiteEvent.NODE_ID);
+			String workspace = get(event, SuiteEvent.WORKSPACE);
+			Node node = Jcr.getNodeById(ui.getSession(workspace), nodeId);
+			CmsUiProvider uiProvider = findUiProvider(node);
+			layer.view(uiProvider, ui.getCurrentWorkArea(), node);
 			// ui.getTabbedArea().view(findUiProvider(DASHBOARD_PID), node);
 //			ui.layout(true, true);
 		} else if (isTopic(event, SuiteEvent.openNewPart)) {
-			Node node = Jcr.getNodeById(ui.getSysSession(), get(event, SuiteEvent.NODE_ID));
-			layer.open(ui.getCurrentWorkArea(), node);
+			String nodeId = get(event, SuiteEvent.NODE_ID);
+			String workspace = get(event, SuiteEvent.WORKSPACE);
+			Node node = Jcr.getNodeById(ui.getSession(workspace), nodeId);
+			CmsUiProvider uiProvider = findUiProvider(node);
+			layer.open(uiProvider, ui.getCurrentWorkArea(), node);
 //			ui.getTabbedArea().open(findUiProvider(DASHBOARD_PID), node);
 //			ui.layout(true, true);
 		} else if (isTopic(event, SuiteEvent.switchLayer)) {

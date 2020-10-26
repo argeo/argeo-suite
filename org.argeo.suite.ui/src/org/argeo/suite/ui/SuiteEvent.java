@@ -8,6 +8,7 @@ public enum SuiteEvent implements CmsEvent {
 
 	public final static String LAYER = "layer";
 	public final static String NODE_ID = "nodeId";
+	public final static String WORKSPACE = "workspace";
 
 	public String getTopicBase() {
 		return "argeo/suite/ui";

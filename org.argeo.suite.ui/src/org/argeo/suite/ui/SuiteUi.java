@@ -172,4 +172,15 @@ class SuiteUi extends Composite {
 		return sysSession;
 	}
 
+	Session getSession(String workspaceName) {
+		if (workspaceName == null)
+			return sysSession;
+		if (NodeConstants.SYS_WORKSPACE.equals(workspaceName))
+			return sysSession;
+		else if (NodeConstants.HOME_WORKSPACE.equals(workspaceName))
+			return homeSession;
+		else
+			throw new IllegalArgumentException("Unknown workspace " + workspaceName);
+	}
+
 }

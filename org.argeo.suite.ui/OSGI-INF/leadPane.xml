@@ -8,4 +8,5 @@
    <property name="defaultLayers" type="String">argeo.suite.ui.dashboardLayer
 argeo.documents.ui.documentsLayer
    </property>
+   <reference bind="addLayer" cardinality="1..n" interface="org.argeo.suite.ui.SuiteLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
 </scr:component>
