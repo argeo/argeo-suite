@@ -4,7 +4,7 @@
 }
 
 .argeo-suite-headerTitle {
-	font: bold 18px sans-serif;
+	font: bold 14px sans-serif;
 	color: white;
 	background-color: #00294b;
 }
@@ -14,7 +14,7 @@
 }
 
 Label.argeo-suite-leadPane {
-	font: 14px sans-serif;
+	font: 11px sans-serif;
 	color: #888;
 	background-color: #eee;
 }
@@ -24,7 +24,7 @@ Button.argeo-suite-leadPane:hover {
 }
 
 .argeo-suite-recentItems {
-	font: bold 14px sans-serif;
+	font: bold 13px sans-serif;
 	color: white;
 	background-color: #00294b;
 	padding: 8px 16px;
@@ -32,11 +32,11 @@ Button.argeo-suite-leadPane:hover {
 
 .argeo-suite-titleContainer {
 	background-color: #00294b;
-	padding: 6px 8px 4px 8px;
 }
 
 .argeo-suite-titleLabel {
-	font: bold 14px sans-serif;
+	font: bold 13px sans-serif;
+	margin: 6px 8px 4px 8px;
 	color: white;
 	background-color: #00294b;
 }
@@ -44,12 +44,16 @@ Button.argeo-suite-leadPane:hover {
 .argeo-suite-subTitleLabel {
 	font: italic 14px sans-serif;
 	color: #777;
-	padding: 4px 8px;
+	margin: 4px 8px;
+}
+
+.argeo-suite-formLine{
+	padding: 4px 8px 4px 16px;
 }
 
 .argeo-suite-simpleLabel {
-	font: bold 14px sans-serif;
-	padding: 0 0 0 8px;
+	font: normal 11px sans-serif;
+	border:8px solid #eee;
 }
 
 .argeo-suite-simpleText {
@@ -57,7 +61,7 @@ Button.argeo-suite-leadPane:hover {
 }
 
 .argeo-suite-titleCell {
-	font: bold 14px sans-serif;
+	font: bold 11px sans-serif;
 	background-color: #ddd;
 }
 

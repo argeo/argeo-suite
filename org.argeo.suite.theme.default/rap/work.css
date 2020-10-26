@@ -82,7 +82,7 @@ Composite.argeo-suite-mainTabBody {
 
 .argeo-suite-mainTab {
 	background-color: #eee;
-	border: 1px solid #bbb;
+	border: 1px solid #888;
 }
 
 ToolItem.argeo-suite-mainTab {
@@ -90,8 +90,13 @@ ToolItem.argeo-suite-mainTab {
 	background-color: #eee;
 }
 
+ToolItem.argeo-suite-mainTab:hover {
+	border: 1px solid #fff;
+}
+
+
 Button.argeo-suite-mainTab {
-	border: none;
+	border: 1px solid #eee;
 	background-color: #eee;
 }
 
@@ -109,13 +114,32 @@ Button.argeo-suite-mainTab:hover {
 	color: white;
 	/*background-color: #00294b;*/
 	background-color: #5882b5;
-	border: 1px solid #00294b;
+	border:1px solid #888;
 }
 
 ToolItem.argeo-suite-mainTabSelected {
-	border: none;
+	border: 1px solid #5882b5;
+}
+
+ToolItem.argeo-suite-mainTabSelected:hover {
+	border: 1px solid white;
 }
 
 Button.argeo-suite-mainTabSelected {
 	border: none;
 }
+
+Sash {
+  border: 1px solid white;
+  background-image: none;
+  background-color: white;
+}
+
+Sash:hover {
+  border: 1px solid #5882b5;
+  background-color: #5882b5;
+}
+
+TreeItem{
+	background-color:#f00;
+} 
