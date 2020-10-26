@@ -141,5 +141,11 @@ Sash:hover {
 }
 
 TreeItem{
-	background-color:#f00;
-} 
+	background-color:#fff;
+}
+
+Tree-RowOverlay:selected {
+	color:#fff;
+	background-color:#5882b5;
+}
+
