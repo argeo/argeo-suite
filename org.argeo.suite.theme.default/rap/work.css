@@ -91,7 +91,7 @@ ToolItem.argeo-suite-mainTab {
 }
 
 ToolItem.argeo-suite-mainTab:hover {
-	border: 1px solid #fff;
+	background-color: #eee;
 }
 
 
@@ -118,11 +118,11 @@ Button.argeo-suite-mainTab:hover {
 }
 
 ToolItem.argeo-suite-mainTabSelected {
-	border: 1px solid #5882b5;
+	border: none;
 }
 
 ToolItem.argeo-suite-mainTabSelected:hover {
-	border: 1px solid white;
+	background-color: #5882b5;
 }
 
 Button.argeo-suite-mainTabSelected {
