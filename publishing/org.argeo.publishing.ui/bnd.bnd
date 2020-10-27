@@ -1,0 +1,10 @@
+Import-Package:\
+javax.jcr.nodetype,\
+org.argeo.api,\
+org.eclipse.swt,\
+org.eclipse.jface.viewers,\
+org.osgi.framework,\
+*
+
+Provide-Capability:\
+cms.datamodel; name=docbook; cnd=/org/argeo/docbook/ui/docbook.cnd; abstract=true

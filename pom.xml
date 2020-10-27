@@ -38,6 +38,7 @@
 
 		<!-- Functional areas -->
 		<module>library</module>
+		<module>publishing</module>
 		<module>knowledge</module>
 
 		<!-- Packaging -->
