@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.argeo.api.NodeUtils;
 import org.argeo.cms.ui.AbstractCmsApp;
 import org.argeo.cms.ui.CmsApp;
+import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.docbook.ui.DocBookTypes;
 import org.argeo.docbook.ui.DocumentPage;
 import org.argeo.jcr.Jcr;
@@ -31,6 +32,8 @@ public class PublishingApp extends AbstractCmsApp {
 
 	private String pid;
 	private String defaultThemeId;
+
+	private CmsUiProvider landingPage;
 
 	public void init(Map<String, String> properties) {
 		defaultThemeId = properties.get("defaultThemeId");
@@ -63,7 +66,13 @@ public class PublishingApp extends AbstractCmsApp {
 		} catch (RepositoryException e) {
 			throw new IllegalStateException(e);
 		}
-		Control page = new DocumentPage().createUiPart(parent, indexNode);
+
+		Control page;
+		if (landingPage != null) {
+			page = landingPage.createUiPart(parent, indexNode);
+		} else {
+			page = new DocumentPage().createUiPart(parent, indexNode);
+		}
 		return (Composite) page;
 	}
 
@@ -82,4 +91,9 @@ public class PublishingApp extends AbstractCmsApp {
 	protected String getThemeId(String uiName) {
 		return defaultThemeId;
 	}
+
+	public void setLandingPage(CmsUiProvider landingPage) {
+		this.landingPage = landingPage;
+	}
+
 }

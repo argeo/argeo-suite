@@ -13,8 +13,7 @@ import org.eclipse.swt.widgets.Composite;
 public class DocumentTextEditor extends AbstractDbkViewer {
 	private static final long serialVersionUID = 6049661610883342325L;
 
-	public DocumentTextEditor(Composite parent, int style, Node textNode, CmsEditable cmsEditable)
-			throws RepositoryException {
+	public DocumentTextEditor(Composite parent, int style, Node textNode, CmsEditable cmsEditable) {
 		super(new TextSection(parent, style, textNode), style, cmsEditable);
 		refresh();
 		getMainSection().setLayoutData(CmsUiUtils.fillWidth());
