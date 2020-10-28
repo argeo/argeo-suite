@@ -65,6 +65,11 @@
 			<artifactId>org.argeo.support.odk</artifactId>
 			<version>2.1.16-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.support.geonames</artifactId>
+			<version>2.1.16-SNAPSHOT</version>
+		</dependency>
 
 		<!-- Base CMS distribution -->
 		<dependency>

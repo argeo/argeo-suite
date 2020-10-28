@@ -12,5 +12,6 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>org.argeo.support.odk</module>
+		<module>org.argeo.support.geonames</module>
 	</modules>
 </project>
