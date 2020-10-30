@@ -20,6 +20,8 @@ public class ImportGeonamesAdmin {
 
 	/** Loads the data. */
 	public void parse(InputStream in) {
+		Map<String, Long> countryGeonameIds = new HashMap<>();
+		Map<String, Long> admin1GeonameIds = new HashMap<>();
 		CsvParser csvParser = new CsvParser() {
 
 			@Override
@@ -28,27 +30,24 @@ public class ImportGeonamesAdmin {
 					return;
 				GeonamesAdm geonamesAdm = new GeonamesAdm(tokens);
 				geonamesAdms.put(geonamesAdm.getGeonameId(), geonamesAdm);
-//				String featureName = tokens.get(7);
-//				String geonameId = tokens.get(0);
-//				String name = tokens.get(1);
-//				Double lat = Double.parseDouble(tokens.get(4));
-//				Double lng = Double.parseDouble(tokens.get(5));
-//				switch (featureName) {
-//				case "ADM1":
-//				case "ADM4":
-//					String adminCode1 = tokens.get(10);
-//					System.out.println(
-//							geonameId + " " + featureName + " " + lat + "," + lng + " " + adminCode1 + " " + name);
-//					break;
-//				default:
-//					break;
-//				}
-
+				if (geonamesAdm.getAdmLevel().equals("PCLI"))
+					countryGeonameIds.put(geonamesAdm.getCountryCode(), geonamesAdm.getGeonameId());
+				if (geonamesAdm.getAdmLevel().equals("ADM1"))
+					admin1GeonameIds.put(geonamesAdm.getAdminCode1(), geonamesAdm.getGeonameId());
 			}
 		};
 		csvParser.setSeparator('\t');
 		csvParser.setNoHeader(true);
 		csvParser.parse(in, StandardCharsets.UTF_8);
+
+		// fill upper levels
+		for (GeonamesAdm adm : geonamesAdms.values()) {
+			adm.getUpperLevelIds()[0] = countryGeonameIds.get(adm.getCountryCode());
+			if (adm.getLevel() > 0)
+				adm.getUpperLevelIds()[1] = admin1GeonameIds.get(adm.getAdminCode1());
+			adm.mapUpperLevels(geonamesAdms);
+		}
+
 	}
 
 	public Map<Long, GeonamesAdm> getGeonamesAdms() {
@@ -76,19 +75,19 @@ public class ImportGeonamesAdmin {
 	}
 
 	public static void main(String[] args) throws IOException {
-		String country = "allCountries";
-		// String country = "CI";
-		try (InputStream in = Files
-				.newInputStream(Paths.get(System.getProperty("user.home") + "/gis/data/geonames/" + country + ".txt"));
-				OutputStream out = Files.newOutputStream(
-						Paths.get(System.getProperty("user.home") + "/gis/data/geonames/" + country + "-adm.txt"))) {
-			ImportGeonamesAdmin.filterGeonamesAdm(in, out);
-		}
-//		try (InputStream in = Files.newInputStream(
-//				Paths.get(System.getProperty("user.home") + "/gis/data/geonames/" + country + "-adm.txt"))) {
-//			ImportGeonamesAdmin importGeonamesAdmin = new ImportGeonamesAdmin();
-//			importGeonamesAdmin.parse(in);
+//		String country = "allCountries";
+		String country = "CI";
+//		try (InputStream in = Files
+//				.newInputStream(Paths.get(System.getProperty("user.home") + "/gis/data/geonames/" + country + ".txt"));
+//				OutputStream out = Files.newOutputStream(
+//						Paths.get(System.getProperty("user.home") + "/gis/data/geonames/" + country + "-adm.txt"))) {
+//			ImportGeonamesAdmin.filterGeonamesAdm(in, out);
 //		}
+		try (InputStream in = Files.newInputStream(
+				Paths.get(System.getProperty("user.home") + "/gis/data/geonames/" + country + "-adm.txt"))) {
+			ImportGeonamesAdmin importGeonamesAdmin = new ImportGeonamesAdmin();
+			importGeonamesAdmin.parse(in);
+		}
 	}
 
 }
