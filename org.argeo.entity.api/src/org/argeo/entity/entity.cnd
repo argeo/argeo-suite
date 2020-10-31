@@ -1,28 +1,75 @@
 <ldap = 'http://www.argeo.org/ns/ldap'>
 <entity = 'http://www.argeo.org/ns/entity'>
 
-[entity:entity] > mix:title, mix:created, mix:lastModified, mix:referenceable
+// standard namespaces
+<xsd = "http://www.w3.org/2001/XMLSchema">
+<h = "http://www.w3.org/1999/xhtml">
+<xforms = "http://www.w3.org/2002/xforms">
+
+// see https://www.w3.org/2003/01/geo/
+<geo = 'http://www.w3.org/2003/01/geo/wgs84_pos#'>
+
+
+[entity:entity] > mix:created, mix:referenceable
 mixin
 //- entity:uid (String) m // an implementation dependent UID for each entity
 //- entity:type (String) // the type of this entity
 
-[entity:definition] > entity:composite, mix:title, mix:created, mix:lastModified, mix:referenceable
-mixin
+//
+// ENTITY DEFINITION
+//
+[entity:definition] > entity:composite, mix:created, mix:referenceable
+//- entity:type (String) multiple
 
 [entity:part]
-mixin
 
 [entity:reference]
-mixin
 
 [entity:composite]
-mixin
 orderable
-+ * (entity:part)
-+ * (entity:reference)
-+ * (entity:composite)
+//+ * (entity:part)
+//+ * (entity:reference)
+//+ * (entity:composite)
+
+//
+// TYPOLOGY
+//
+[entity:term]
+orderable
++ * (entity:term) *
+
+[entity:typology] > mix:referenceable, mix:created
+orderable
++ * (entity:term) *
+
+//
+// XML
+//
+[entity:xmlvalue] > mix:language
+- *
++ jcr:xmltext (entity:xmltext)
+
+[entity:xmltext]
+ - jcr:xmlcharacters (String) mandatory
+
+//
+// HTML
+//
+[h:head]
++ h:title (entity:xmlvalue)
++ h:base (entity:xmlvalue)
++ h:style (entity:xmlvalue) multiple
++ h:meta (entity:xmlvalue) multiple
++ h:link (entity:xmlvalue) multiple
++ h:script (entity:xmlvalue) multiple
+
+[h:html]
++ h:head (h:head)
++ h:body (nt:unstructured)
 
 // LDAP-LIKE ENTITIES
 // A real person
 [entity:person] > entity:entity
 mixin
+- ldap:sn (String)
+- ldap:givenName (String)

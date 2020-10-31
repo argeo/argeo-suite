@@ -32,8 +32,8 @@ public class JcrEntityDefinition implements EntityDefinition {
 			defaultEditoryId = properties.get(EntityConstants.DEFAULT_EDITORY_ID);
 			String definitionPath = EntityNames.ENTITY_DEFINITIONS_PATH + '/' + type;
 			if (!adminSession.itemExists(definitionPath)) {
-				Node entityDefinition = JcrUtils.mkdirs(adminSession, definitionPath);
-				entityDefinition.addMixin(EntityTypes.ENTITY_DEFINITION);
+				Node entityDefinition = JcrUtils.mkdirs(adminSession, definitionPath, EntityTypes.ENTITY_DEFINITION);
+//				entityDefinition.addMixin(EntityTypes.ENTITY_DEFINITION);
 				adminSession.save();
 			}
 			initJcr(adminSession);
