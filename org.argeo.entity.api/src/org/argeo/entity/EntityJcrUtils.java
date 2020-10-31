@@ -9,13 +9,13 @@ public class EntityJcrUtils {
 	 * The name of a node which will be serialized as XML text, as per section 7.3.1
 	 * of the JCR 2.0 specifications.
 	 */
-	public final static String JCR_XMLTEXT = "jcr:xmltext";
+	private final static String JCR_XMLTEXT = "jcr:xmltext";
 
 	/**
 	 * The name of a property which will be serialized as XML text, as per section
 	 * 7.3.1 of the JCR 2.0 specifications.
 	 */
-	public final static String JCR_XMLCHARACTERS = "jcr:xmlcharacters";
+	private final static String JCR_XMLCHARACTERS = "jcr:xmlcharacters";
 
 	/*
 	 * XML
