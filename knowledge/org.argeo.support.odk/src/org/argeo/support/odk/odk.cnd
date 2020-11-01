@@ -1,0 +1,39 @@
+<jr = "http://openrosa.org/javarosa">
+<orx = "http://openrosa.org/xforms">
+<orxList = "http://openrosa.org/xforms/xformsList">
+<orxManifest = "http://openrosa.org/xforms/xformsManifest">
+<odk = "http://www.opendatakit.org/xforms">
+
+[orxList:xform]
++ h:html (odk:html) = odk:html
+
+[odk:head]
++ h:title (jcrx:xmlvalue) = jcrx:xmlvalue
++ xforms:model (odk:model) = odk:model
+
+[odk:body] > xforms:ui
+
+
+[odk:html] > mix:referenceable
++ h:head (odk:head) = odk:head
++ h:body (odk:body) = odk:body
+
+[odk:model] > xforms:model
++ odk:setgeopoint (odk:setgeopoint) = odk:setgeopoint
++ xforms:itext (odk:itext) = odk:itext
+
+[odk:itext]
++ xforms:translation (odk:translation) = odk:translation *
+
+[odk:translation]
+- lang (STRING) m
+- default (STRING)
++ xforms:text (odk:text) = odk:text *
+
+[odk:text]
+- id (STRING) m
++ xforms:value (jcrx:xmlvalue) = jcrx:xmlvalue
+
+[odk:setgeopoint]
+- event (STRING)
+- ref (STRING)

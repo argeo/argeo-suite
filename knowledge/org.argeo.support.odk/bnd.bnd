@@ -1,9 +1,16 @@
-Import-Package:\
-org.osgi.service.http.context,\
-*
+Require-Capability:\
+cms.datamodel;filter:="(name=entity)",\
+cms.datamodel;filter:="(name=xforms)"
+
+Provide-Capability:\
+cms.datamodel; name=odk; cnd=/org/argeo/support/odk/odk.cnd
 
 Service-Component:\
 OSGI-INF/odkServletContext.xml,\
 OSGI-INF/odkFormListServlet.xml,\
 OSGI-INF/odkFormServlet.xml,\
 OSGI-INF/odkSubmissionServlet.xml
+
+Import-Package:\
+org.osgi.service.http.context,\
+*

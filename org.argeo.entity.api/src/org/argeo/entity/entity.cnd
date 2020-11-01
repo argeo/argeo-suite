@@ -1,14 +1,11 @@
-<ldap = 'http://www.argeo.org/ns/ldap'>
-<entity = 'http://www.argeo.org/ns/entity'>
-
-// standard namespaces
+// Standard namespaces
 <xsd = "http://www.w3.org/2001/XMLSchema">
 <h = "http://www.w3.org/1999/xhtml">
-<xforms = "http://www.w3.org/2002/xforms">
-
 // see https://www.w3.org/2003/01/geo/
-<geo = 'http://www.w3.org/2003/01/geo/wgs84_pos#'>
+//<geo = "http://www.w3.org/2003/01/geo/wgs84_pos#">
 
+<ldap = "http://www.argeo.org/ns/ldap">
+<entity = 'http://www.argeo.org/ns/entity'>
 
 [entity:entity] > mix:created, mix:referenceable
 mixin
@@ -43,29 +40,13 @@ orderable
 + * (entity:term) *
 
 //
-// XML
+// FORM
 //
-[entity:xmlvalue] > mix:language
-- *
-+ jcr:xmltext (entity:xmltext)
+[entity:form]
+mixin
 
-[entity:xmltext]
- - jcr:xmlcharacters (String) mandatory
-
-//
-// HTML
-//
-[h:head]
-+ h:title (entity:xmlvalue)
-+ h:base (entity:xmlvalue)
-+ h:style (entity:xmlvalue) multiple
-+ h:meta (entity:xmlvalue) multiple
-+ h:link (entity:xmlvalue) multiple
-+ h:script (entity:xmlvalue) multiple
-
-[h:html]
-+ h:head (h:head)
-+ h:body (nt:unstructured)
+[entity:formSet]
+mixin
 
 // LDAP-LIKE ENTITIES
 // A real person

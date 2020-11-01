@@ -7,11 +7,13 @@ public enum EntityType implements QualifiedName {
 	// entity
 	entity, definition,
 	// xml
-	xmlvalue,xmltext,
+	xmlvalue, xmltext,
 	// typology
-	typology, term
+	typology, term,
+	// form
+	form, formSet,
 	// ldap
-	, person;
+	person;
 
 	@Override
 	public String getPrefix() {

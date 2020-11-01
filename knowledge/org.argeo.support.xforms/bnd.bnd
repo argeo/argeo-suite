@@ -1,0 +1,5 @@
+Require-Capability:\
+cms.datamodel;filter:="(name=entity)"
+
+Provide-Capability:\
+cms.datamodel; name=xforms; cnd=/org/argeo/support/xforms/xforms.cnd

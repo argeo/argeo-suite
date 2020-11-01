@@ -1,4 +1,10 @@
+Service-Component:\
+OSGI-INF/maintenanceService.xml
 
 Import-Package:\
+javax.transaction,\
+org.osgi.service.useradmin,\
+javax.jcr.nodetype,\
 org.argeo.api,\
+org.argeo.entity,\
 *

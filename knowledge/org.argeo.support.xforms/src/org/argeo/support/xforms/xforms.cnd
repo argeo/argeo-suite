@@ -1,0 +1,37 @@
+<xforms = "http://www.w3.org/2002/xforms">
+
+[xforms:model]
++ xforms:instance (nt:base) = nt:unstructured *
++ xforms:bind (xforms:bind) = xforms:bind *
++ xforms:setvalue (xforms:setvalue) = xforms:setvalue *
+
+[xforms:bind]
+- * (STRING)
+
+[xforms:setvalue]
+- * (STRING)
+
+[xforms:select] > xforms:input
++ xforms:itemset (xforms:itemset) = xforms:itemset
+
+[xforms:itemset]
+- nodeset (STRING)
++ xforms:label (jcrx:xmlvalue) = jcrx:xmlvalue
++ xforms:value (jcrx:xmlvalue) = jcrx:xmlvalue
+
+[xforms:ui]
+- * (STRING)
++ xforms:label (jcrx:xmlvalue) = jcrx:xmlvalue *
++ xforms:hint (jcrx:xmlvalue) = jcrx:xmlvalue *
++ xforms:input (xforms:input) = xforms:input *
++ xforms:select (xforms:select) = xforms:select *
++ xforms:select1 (xforms:select) = xforms:select *
++ xforms:trigger (xforms:input) = xforms:input *
++ xforms:upload (xforms:input) = xforms:input *
++ xforms:group (xforms:ui) = xforms:ui *
++ xforms:repeat (xforms:ui) = xforms:ui *
+
+[xforms:input]
+- * (STRING)
++ xforms:label (jcrx:xmlvalue) = jcrx:xmlvalue
++ xforms:hint (jcrx:xmlvalue) = jcrx:xmlvalue *

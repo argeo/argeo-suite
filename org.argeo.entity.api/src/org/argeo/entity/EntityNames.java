@@ -6,6 +6,7 @@ import org.argeo.naming.LdapAttrs;
 public interface EntityNames {
 	final String ENTITY_DEFINITIONS_PATH = "/entity";
 	final String TYPOLOGIES_PATH = "/class";
+	final String FORM_BASE = "form";
 
 	/** Administrative units. */
 	final String ADM = "adm";
