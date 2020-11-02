@@ -31,13 +31,16 @@ orderable
 //
 // TYPOLOGY
 //
+[entity:typologies]
++ * (entity:terms) = entity:terms
+
 [entity:term]
 orderable
-+ * (entity:term) *
++ * (entity:term) = entity:term *
 
-[entity:typology] > mix:referenceable, mix:created
+[entity:terms] > mix:referenceable
 orderable
-+ * (entity:term) *
++ * (entity:term) = entity:term *
 
 //
 // FORM

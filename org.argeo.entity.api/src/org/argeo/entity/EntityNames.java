@@ -4,10 +4,12 @@ import org.argeo.naming.LdapAttrs;
 
 /** Constants used to name entity structures. */
 public interface EntityNames {
-	final String ENTITY_DEFINITIONS_PATH = "/entity";
-	final String TYPOLOGIES_PATH = "/class";
 	final String FORM_BASE = "form";
+	final String TERM_BASE = "term";
 
+	final String ENTITY_DEFINITIONS_PATH = "/entity";
+	@Deprecated
+	final String TYPOLOGIES_PATH = "/" + TERM_BASE;
 	/** Administrative units. */
 	final String ADM = "adm";
 

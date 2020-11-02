@@ -1,9 +1,11 @@
 <xforms = "http://www.w3.org/2002/xforms">
 
 [xforms:model]
-+ xforms:instance (nt:base) = nt:unstructured *
++ xforms:instance (xforms:instance) = xforms:instance *
 + xforms:bind (xforms:bind) = xforms:bind *
 + xforms:setvalue (xforms:setvalue) = xforms:setvalue *
+
+[xforms:instance] > nt:unstructured
 
 [xforms:bind]
 - * (STRING)

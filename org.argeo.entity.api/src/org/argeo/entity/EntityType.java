@@ -1,15 +1,13 @@
 package org.argeo.entity;
 
-import org.argeo.naming.QualifiedName;
+import org.argeo.jcr.QualifiedName;
 
 /** Types related to entities. */
 public enum EntityType implements QualifiedName {
 	// entity
 	entity, definition,
-	// xml
-	xmlvalue, xmltext,
 	// typology
-	typology, term,
+	typologies, terms, term,
 	// form
 	form, formSet,
 	// ldap
