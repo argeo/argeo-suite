@@ -7,35 +7,57 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.jcr.Repository;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
+import org.argeo.cms.auth.ServletAuthUtils;
+import org.argeo.jcr.Jcr;
 import org.argeo.support.odk.OdkForm;
 
 /** Retrieves a single form. */
 public class OdkFormServlet extends HttpServlet {
 	private static final long serialVersionUID = 7838305967987687370L;
 
+	private Repository repository;
 	private Map<String, OdkForm> odkForms = Collections.synchronizedMap(new HashMap<>());
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("text/xml; charset=utf-8");
 
-		String path = req.getServletPath();
-		String fileName = FilenameUtils.getName(path);
-		OdkForm form = odkForms.get(fileName);
-		if (form == null)
-			throw new IllegalArgumentException("No form named " + fileName + " was found");
+		Session session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), req);
 
-		byte[] buffer = new byte[1024];
-		try (InputStream in = form.openStream(); OutputStream out = resp.getOutputStream();) {
-			int bytesRead;
-			while ((bytesRead = in.read(buffer)) != -1)
-				out.write(buffer, 0, bytesRead);
+		String pathInfo = req.getPathInfo();
+
+		try {
+			if (session.nodeExists(pathInfo)) {
+				session.exportDocumentView(pathInfo + "/h:html", resp.getOutputStream(), true, false);
+			} else {
+
+				String fileName = FilenameUtils.getName(pathInfo);
+				OdkForm form = odkForms.get(fileName);
+				if (form == null)
+					throw new IllegalArgumentException("No form named " + fileName + " was found");
+
+				byte[] buffer = new byte[1024];
+				try (InputStream in = form.openStream(); OutputStream out = resp.getOutputStream();) {
+					int bytesRead;
+					while ((bytesRead = in.read(buffer)) != -1)
+						out.write(buffer, 0, bytesRead);
+				}
+			}
+		} catch (RepositoryException e) {
+			e.printStackTrace();
+			// TODO error message
+			resp.sendError(500);
+		} finally {
+			Jcr.logout(session);
 		}
 	}
 
@@ -45,6 +67,10 @@ public class OdkFormServlet extends HttpServlet {
 
 	public void removeForm(OdkForm odkForm) {
 		odkForms.remove(odkForm.getFileName());
+	}
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
 	}
 
 }

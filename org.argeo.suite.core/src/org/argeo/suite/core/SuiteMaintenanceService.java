@@ -18,7 +18,7 @@ public class SuiteMaintenanceService extends AbstractMaintenanceService {
 		boolean modified = false;
 		Node rootNode = adminSession.getRootNode();
 		if (!rootNode.hasNode(EntityNames.TERM_BASE)) {
-			rootNode.addNode(EntityNames.TERM_BASE, EntityType.typologies.qualified());
+			rootNode.addNode(EntityNames.TERM_BASE, EntityType.typologies.get());
 			modified = true;
 		}
 		if (modified)

@@ -13,5 +13,5 @@ OSGI-INF/odkSubmissionServlet.xml
 
 Import-Package:\
 org.osgi.service.http.context,\
-org.argeo.naming,\
+org.argeo.api,\
 *

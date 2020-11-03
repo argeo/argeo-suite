@@ -7,4 +7,5 @@
    <property name="osgi.http.whiteboard.servlet.pattern" type="String" value="/submission"/>
    <property name="osgi.http.whiteboard.context.select" type="String" value="(osgi.http.whiteboard.context.name=odkServletContext)"/>
    <property name="osgi.http.whiteboard.servlet.multipart.enabled" type="String" value="true"/>
+   <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="static" target="(cn=odk)"/>
 </scr:component>

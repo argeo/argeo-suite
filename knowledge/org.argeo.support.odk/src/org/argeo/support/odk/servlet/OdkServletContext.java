@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.argeo.cms.servlet.PrivateWwwAuthServletContext;
 
+/** OSK specific authentication (with additional headers).*/
 public class OdkServletContext extends PrivateWwwAuthServletContext {
 
 	@Override

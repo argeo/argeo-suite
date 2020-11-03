@@ -76,16 +76,16 @@ public class RankedObject<T> {
 		RankedObject<T> rankedObject = new RankedObject<>(object, properties);
 		if (!map.containsKey(key)) {
 			map.put(key, rankedObject);
-			if (log.isDebugEnabled())
-				log.debug(
+			if (log.isTraceEnabled())
+				log.trace(
 						"Added " + key + " as " + object.getClass().getName() + " with rank " + rankedObject.getRank());
 			return rankedObject;
 		} else {
 			RankedObject<T> current = map.get(key);
 			if (current.getRank() <= rankedObject.getRank()) {
 				map.put(key, rankedObject);
-				if (log.isDebugEnabled())
-					log.debug("Replaced " + key + " by " + object.getClass().getName() + " with rank "
+				if (log.isTraceEnabled())
+					log.trace("Replaced " + key + " by " + object.getClass().getName() + " with rank "
 							+ rankedObject.getRank());
 				return rankedObject;
 			} else {

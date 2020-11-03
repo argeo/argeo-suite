@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 
+import javax.jcr.Repository;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,8 @@ public class OdkSubmissionServlet extends HttpServlet {
 	private final static Log log = LogFactory.getLog(OdkSubmissionServlet.class);
 
 	private final static String XML_SUBMISSION_FILE = "xml_submission_file";
+
+	private Repository repository;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -58,4 +61,9 @@ public class OdkSubmissionServlet extends HttpServlet {
 				+ "<message>Form Received!</message>" + "</OpenRosaResponse>");
 
 	}
+	
+	public void setRepository(Repository repository) {
+		this.repository = repository;
+	}
+
 }

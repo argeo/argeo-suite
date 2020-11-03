@@ -4,7 +4,7 @@
 <orxManifest = "http://openrosa.org/xforms/xformsManifest">
 <odk = "http://www.opendatakit.org/xforms">
 
-[orxList:xform]
+[orxList:xform] > mix:created, mix:lastModified, jcrx:csum, entity:form
 + h:html (odk:html) = odk:html
 
 [odk:head]

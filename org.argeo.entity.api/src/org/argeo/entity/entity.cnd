@@ -15,12 +15,12 @@ mixin
 //
 // ENTITY DEFINITION
 //
-[entity:definition] > entity:composite, mix:created, mix:referenceable
+[entity:definition] > entity:composite, mix:created, mix:lastModified, mix:referenceable
 //- entity:type (String) multiple
 
-[entity:part]
+//[entity:part]
 
-[entity:reference]
+//[entity:reference]
 
 [entity:composite]
 orderable

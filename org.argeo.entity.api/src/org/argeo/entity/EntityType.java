@@ -1,9 +1,7 @@
 package org.argeo.entity;
 
-import org.argeo.jcr.QualifiedName;
-
 /** Types related to entities. */
-public enum EntityType implements QualifiedName {
+public enum EntityType implements JcrName {
 	// entity
 	entity, definition,
 	// typology
