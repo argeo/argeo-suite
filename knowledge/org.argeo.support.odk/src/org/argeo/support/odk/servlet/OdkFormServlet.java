@@ -16,9 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
-import org.argeo.cms.auth.ServletAuthUtils;
+import org.argeo.cms.servlet.ServletAuthUtils;
 import org.argeo.jcr.Jcr;
 import org.argeo.support.odk.OdkForm;
+import org.argeo.support.odk.OdkNames;
 
 /** Retrieves a single form. */
 public class OdkFormServlet extends HttpServlet {
@@ -35,9 +36,10 @@ public class OdkFormServlet extends HttpServlet {
 
 		String pathInfo = req.getPathInfo();
 
+		boolean oldApproach = false;
 		try {
-			if (session.nodeExists(pathInfo)) {
-				session.exportDocumentView(pathInfo + "/h:html", resp.getOutputStream(), true, false);
+			if (!oldApproach) {
+				session.exportDocumentView(pathInfo + "/" + OdkNames.H_HTML, resp.getOutputStream(), true, false);
 			} else {
 
 				String fileName = FilenameUtils.getName(pathInfo);

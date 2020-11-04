@@ -16,6 +16,8 @@ import javax.jcr.Property;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryResult;
 import javax.security.auth.Subject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -25,8 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.api.NodeConstants;
-import org.argeo.api.NodeUtils;
-import org.argeo.cms.auth.ServletAuthUtils;
+import org.argeo.cms.servlet.ServletAuthUtils;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
@@ -67,39 +68,39 @@ public class OdkFormListServlet extends HttpServlet {
 		Writer writer = resp.getWriter();
 		writer.append("<?xml version='1.0' encoding='UTF-8' ?>");
 		writer.append("<xforms xmlns=\"http://openrosa.org/xforms/xformsList\">");
-		boolean newApproach = true;
-		if (newApproach)
+		boolean oldApproach = false;
+		if (oldApproach) {
 			try {
 
-//			Query query;
-//			if (pathInfo == null) {
-////				query = session.getWorkspace().getQueryManager()
-////						.createQuery("SELECT * FROM [nt:unstructured]", Query.JCR_SQL2);
+				Query query;
+				if (pathInfo == null) {
 //				query = session.getWorkspace().getQueryManager()
-//						.createQuery("SELECT * FROM [" + OrxListType.xform.get() + "]", Query.JCR_SQL2);
-//			} else {
-//				query = session.getWorkspace().getQueryManager()
-//						.createQuery(
-//								"SELECT node FROM [" + OrxListType.xform.get()
-//										+ "] AS node WHERE ISDESCENDANTNODE (node, '" + pathInfo + "')",
-//								Query.JCR_SQL2);
-//			}
-//			QueryResult queryResult = query.execute();
-//
-//			NodeIterator nit = queryResult.getNodes();
-				log.debug(session.getUserID());
-				log.debug(session.getWorkspace().getName());
-				NodeIterator nit = session.getRootNode().getNodes();
-				while (nit.hasNext()) {
-					log.debug(nit.nextNode());
+//						.createQuery("SELECT * FROM [nt:unstructured]", Query.JCR_SQL2);
+					query = session.getWorkspace().getQueryManager()
+							.createQuery("SELECT * FROM [" + OrxListType.xform.get() + "]", Query.JCR_SQL2);
+				} else {
+					query = session.getWorkspace().getQueryManager()
+							.createQuery(
+									"SELECT node FROM [" + OrxListType.xform.get()
+											+ "] AS node WHERE ISDESCENDANTNODE (node, '" + pathInfo + "')",
+									Query.JCR_SQL2);
 				}
+				QueryResult queryResult = query.execute();
+
+				NodeIterator nit = queryResult.getNodes();
+//				log.debug(session.getUserID());
+//				log.debug(session.getWorkspace().getName());
+//				NodeIterator nit = session.getRootNode().getNodes();
+//				while (nit.hasNext()) {
+//					log.debug(nit.nextNode());
+//				}
 				while (nit.hasNext()) {
 					StringBuilder sb = new StringBuilder();
 					Node node = nit.nextNode();
 					if (node.isNodeType(OrxListType.xform.get())) {
 						sb.append("<xform>");
 						sb.append("<formID>" + node.getNode("h:html").getIdentifier() + "</formID>");
-						sb.append("<name>" + node.getProperty(Property.JCR_TITLE).getString() + "</name>");
+						sb.append("<name>" + Jcr.getTitle(node) + "</name>");
 						sb.append("<version>" + versionFormatter.format(JcrUtils.getModified(node)) + "</version>");
 						sb.append("<hash>md5:" + JcrxApi.getChecksum(node, JcrxApi.MD5) + "</hash>");
 						if (node.hasProperty(Property.JCR_DESCRIPTION))
@@ -132,8 +133,7 @@ public class OdkFormListServlet extends HttpServlet {
 				Jcr.logout(session);
 			}
 
-		boolean oldApproach = true;
-		if (oldApproach)
+		} else {
 			for (OdkForm form : odkForms) {
 				StringBuilder sb = new StringBuilder();
 				sb.append("<xform>");
@@ -151,6 +151,7 @@ public class OdkFormListServlet extends HttpServlet {
 					log.debug(str);
 				writer.append(str);
 			}
+		}
 		writer.append("</xforms>");
 	}
 
