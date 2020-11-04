@@ -69,7 +69,7 @@ public class OdkFormListServlet extends HttpServlet {
 		writer.append("<?xml version='1.0' encoding='UTF-8' ?>");
 		writer.append("<xforms xmlns=\"http://openrosa.org/xforms/xformsList\">");
 		boolean oldApproach = false;
-		if (oldApproach) {
+		if (!oldApproach) {
 			try {
 
 				Query query;
