@@ -59,10 +59,6 @@ public class OdkFormListServlet extends HttpServlet {
 
 		String pathInfo = req.getPathInfo();
 
-		Subject subject = Subject
-				.getSubject((AccessControlContext) req.getAttribute(AccessControlContext.class.getName()));
-		log.debug("SERVLET CONTEXT: " + subject);
-
 		Session session = ServletAuthUtils.doAs(() -> Jcr.login(repository, NodeConstants.SYS_WORKSPACE), req);
 //		session = NodeUtils.openDataAdminSession(repository, NodeConstants.SYS_WORKSPACE);
 		Writer writer = resp.getWriter();
