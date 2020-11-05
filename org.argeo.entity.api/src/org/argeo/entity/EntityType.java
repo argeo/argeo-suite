@@ -7,7 +7,7 @@ public enum EntityType implements JcrName {
 	// typology
 	typologies, terms, term,
 	// form
-	form, formSet,
+	form, formSet, formSubmission,
 	// ldap
 	person;
 

@@ -27,7 +27,7 @@ import org.argeo.cms.ui.util.CmsEvent;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.entity.EntityConstants;
 import org.argeo.entity.EntityNames;
-import org.argeo.entity.EntityTypes;
+import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.suite.RankedObject;
@@ -180,12 +180,19 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				if (uiProvidersByType.containsKey(typeName)) {
 					types.add(typeName);
 				}
+				for (NodeType mixin : nodeType.getDeclaredSupertypes()) {
+					if (uiProvidersByType.containsKey(mixin.getName())) {
+						types.add(mixin.getName());
+					}
+				}
 			}
 			// entity type
-			if (context.isNodeType(EntityTypes.ENTITY_ENTITY)) {
-				String typeName =context.getProperty(EntityNames.ENTITY_TYPE).getString();
-				if (uiProvidersByType.containsKey(typeName)) {
-					types.add(typeName);
+			if (context.isNodeType(EntityType.entity.get())) {
+				if (context.hasProperty(EntityNames.ENTITY_TYPE)) {
+					String typeName = context.getProperty(EntityNames.ENTITY_TYPE).getString();
+					if (uiProvidersByType.containsKey(typeName)) {
+						types.add(typeName);
+					}
 				}
 			}
 

@@ -20,7 +20,7 @@ import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
-import org.argeo.entity.EntityTypes;
+import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.suite.ui.widgets.DelayedText;
@@ -294,11 +294,17 @@ public class RecentItems implements CmsUiProvider {
 
 				// XPATH Query
 				String xpathQueryStr;
-				if (entityType != null)
-					xpathQueryStr = entityType.contains(":") ? "//element(*, " + entityType + ")"
-							: "//element(*, " + EntityTypes.ENTITY_ENTITY + ")[@entity:type='" + entityType + "']";
-				else
-					xpathQueryStr = "//element(*, " + EntityTypes.ENTITY_ENTITY + ")";
+				if (entityType != null) {
+					int indexColumn = entityType.indexOf(':');
+					if (indexColumn > 0) {// JCR node type
+						xpathQueryStr = "//element(*, " + entityType + ") order by @jcr:created descending";
+					} else {
+						xpathQueryStr = entityType.contains(":") ? "//element(*, " + entityType + ")"
+								: "//element(*, " + EntityType.entity.get() + ")[@entity:type='" + entityType + "']";
+					}
+				} else {
+					xpathQueryStr = "//element(*, " + EntityType.entity.get() + ")";
+				}
 //			String xpathQueryStr = "//element(*, " + ConnectTypes.CONNECT_ENTITY + ")";
 				String xpathFilter = XPathUtils.getFreeTextConstraint(filter);
 				if (notEmpty(xpathFilter))
