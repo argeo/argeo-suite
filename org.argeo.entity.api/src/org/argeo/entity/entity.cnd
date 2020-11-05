@@ -48,6 +48,9 @@ orderable
 [entity:form]
 mixin
 
+[entity:formSubmission]
+mixin
+
 [entity:formSet]
 mixin
 

@@ -41,7 +41,7 @@
 [orxList:xform] > mix:created, mix:lastModified, jcrx:csum, entity:form
 + h:html (odk:html) = odk:html
 
-[orx:submission] > mix:created
+[orx:submission] > mix:created, entity:formSubmission
 + xml_submission_file (nt:unstructured) = nt:unstructured
 + * (nt:file) *
 
