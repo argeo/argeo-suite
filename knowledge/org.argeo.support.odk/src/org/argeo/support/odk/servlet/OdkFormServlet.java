@@ -35,6 +35,8 @@ public class OdkFormServlet extends HttpServlet {
 		Session session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), req);
 
 		String pathInfo = req.getPathInfo();
+		if (pathInfo.startsWith("//"))
+			pathInfo = pathInfo.substring(1);
 
 		boolean oldApproach = false;
 		try {

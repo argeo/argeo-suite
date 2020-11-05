@@ -4,8 +4,6 @@
 <orxManifest = "http://openrosa.org/xforms/xformsManifest">
 <odk = "http://www.opendatakit.org/xforms">
 
-[orxList:xform] > mix:created, mix:lastModified, jcrx:csum, entity:form
-+ h:html (odk:html) = odk:html
 
 [odk:head]
 + h:title (jcrx:xmlvalue) = jcrx:xmlvalue
@@ -37,3 +35,14 @@
 [odk:setgeopoint]
 - event (STRING)
 - ref (STRING)
+
+// OpenRosa web API
+
+[orxList:xform] > mix:created, mix:lastModified, jcrx:csum, entity:form
++ h:html (odk:html) = odk:html
+
+[orx:submission] > mix:created
++ xml_submission_file (nt:unstructured) = nt:unstructured
++ * (nt:file) *
+
+

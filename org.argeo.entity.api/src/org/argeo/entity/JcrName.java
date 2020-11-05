@@ -1,7 +1,10 @@
 package org.argeo.entity;
 
+import java.util.function.Supplier;
+
 /** Can be applied to {@link Enum}s in order to generate prefixed names. */
-public interface JcrName {
+@FunctionalInterface
+public interface JcrName extends Supplier<String> {
 	String name();
 
 	default String getPrefix() {
@@ -12,6 +15,7 @@ public interface JcrName {
 		return null;
 	}
 
+	@Override
 	default String get() {
 		String prefix = getPrefix();
 		return prefix != null ? prefix + ":" + name() : name();

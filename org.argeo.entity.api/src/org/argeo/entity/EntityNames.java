@@ -5,6 +5,7 @@ import org.argeo.naming.LdapAttrs;
 /** Constants used to name entity structures. */
 public interface EntityNames {
 	final String FORM_BASE = "form";
+	final String SUBMISSIONS_BASE = "submissions";
 	final String TERM_BASE = "term";
 
 	final String ENTITY_DEFINITIONS_PATH = "/entity";

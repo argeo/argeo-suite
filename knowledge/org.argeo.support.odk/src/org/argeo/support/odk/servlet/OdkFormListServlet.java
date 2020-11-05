@@ -2,7 +2,6 @@ package org.argeo.support.odk.servlet;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.security.AccessControlContext;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
@@ -18,7 +17,6 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
-import javax.security.auth.Subject;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +31,7 @@ import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.jcr.JcrxApi;
 import org.argeo.support.odk.OdkForm;
+import org.argeo.support.odk.OdkNames;
 import org.argeo.support.odk.OrxListType;
 
 /** Lists available forms. */
@@ -95,9 +94,13 @@ public class OdkFormListServlet extends HttpServlet {
 					Node node = nit.nextNode();
 					if (node.isNodeType(OrxListType.xform.get())) {
 						sb.append("<xform>");
-						sb.append("<formID>" + node.getNode("h:html").getIdentifier() + "</formID>");
+						sb.append("<formID>"
+								+ node.getNode(OdkNames.H_HTML + "/h:head/xforms:model/xforms:instance/xforms:data")
+										.getProperty("id").getString()
+								+ "</formID>");
 						sb.append("<name>" + Jcr.getTitle(node) + "</name>");
 						sb.append("<version>" + versionFormatter.format(JcrUtils.getModified(node)) + "</version>");
+//						sb.append("<version>" + versionFormatter.format(JcrUtils.getModified(node)) + "</version>");
 						sb.append("<hash>md5:" + JcrxApi.getChecksum(node, JcrxApi.MD5) + "</hash>");
 						if (node.hasProperty(Property.JCR_DESCRIPTION))
 							sb.append("<name>" + node.getProperty(Property.JCR_DESCRIPTION).getString() + "</name>");
@@ -125,6 +128,7 @@ public class OdkFormListServlet extends HttpServlet {
 				e.printStackTrace();
 				// TODO error message
 				// resp.sendError(500);
+				resp.sendError(503);
 			} finally {
 				Jcr.logout(session);
 			}
