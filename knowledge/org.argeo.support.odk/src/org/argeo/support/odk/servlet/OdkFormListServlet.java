@@ -2,9 +2,6 @@ package org.argeo.support.odk.servlet;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,11 +25,10 @@ import org.argeo.api.NodeConstants;
 import org.argeo.cms.servlet.ServletAuthUtils;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
-import org.argeo.jcr.JcrUtils;
 import org.argeo.jcr.JcrxApi;
 import org.argeo.support.odk.OdkForm;
-import org.argeo.support.odk.OdkNames;
-import org.argeo.support.odk.OrxListType;
+import org.argeo.support.odk.OrxListName;
+import org.argeo.support.odk.OrxManifestName;
 
 /** Lists available forms. */
 public class OdkFormListServlet extends HttpServlet {
@@ -41,8 +37,8 @@ public class OdkFormListServlet extends HttpServlet {
 
 	private Set<OdkForm> odkForms = Collections.synchronizedSet(new HashSet<>());
 
-	private DateTimeFormatter versionFormatter = DateTimeFormatter.ofPattern("YYYY-MM-dd-HHmm")
-			.withZone(ZoneId.from(ZoneOffset.UTC));
+//	private DateTimeFormatter versionFormatter = DateTimeFormatter.ofPattern("YYYY-MM-dd-HHmm")
+//			.withZone(ZoneId.from(ZoneOffset.UTC));
 
 	private Repository repository;
 
@@ -72,11 +68,11 @@ public class OdkFormListServlet extends HttpServlet {
 //				query = session.getWorkspace().getQueryManager()
 //						.createQuery("SELECT * FROM [nt:unstructured]", Query.JCR_SQL2);
 					query = session.getWorkspace().getQueryManager()
-							.createQuery("SELECT * FROM [" + OrxListType.xform.get() + "]", Query.JCR_SQL2);
+							.createQuery("SELECT * FROM [" + OrxListName.xform.get() + "]", Query.JCR_SQL2);
 				} else {
 					query = session.getWorkspace().getQueryManager()
 							.createQuery(
-									"SELECT node FROM [" + OrxListType.xform.get()
+									"SELECT node FROM [" + OrxListName.xform.get()
 											+ "] AS node WHERE ISDESCENDANTNODE (node, '" + pathInfo + "')",
 									Query.JCR_SQL2);
 				}
@@ -92,21 +88,23 @@ public class OdkFormListServlet extends HttpServlet {
 				while (nit.hasNext()) {
 					StringBuilder sb = new StringBuilder();
 					Node node = nit.nextNode();
-					if (node.isNodeType(OrxListType.xform.get())) {
+					if (node.isNodeType(OrxListName.xform.get())) {
 						sb.append("<xform>");
-						sb.append("<formID>"
-								+ node.getNode(OdkNames.H_HTML + "/h:head/xforms:model/xforms:instance/xforms:data")
-										.getProperty("id").getString()
-								+ "</formID>");
+						sb.append("<formID>" + node.getProperty(OrxListName.formID.get()).getString() + "</formID>");
 						sb.append("<name>" + Jcr.getTitle(node) + "</name>");
-						sb.append("<version>" + versionFormatter.format(JcrUtils.getModified(node)) + "</version>");
-//						sb.append("<version>" + versionFormatter.format(JcrUtils.getModified(node)) + "</version>");
+						sb.append("<version>" + node.getProperty(OrxListName.version.get()).getString() + "</version>");
 						sb.append("<hash>md5:" + JcrxApi.getChecksum(node, JcrxApi.MD5) + "</hash>");
 						if (node.hasProperty(Property.JCR_DESCRIPTION))
 							sb.append("<name>" + node.getProperty(Property.JCR_DESCRIPTION).getString() + "</name>");
 						sb.append("<downloadUrl>" + protocol + "://" + serverName
 								+ (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort) + "/api/odk/form/"
 								+ node.getPath() + "</downloadUrl>");
+						if (node.hasNode(OrxManifestName.manifest.name())) {
+							sb.append("<manifestUrl>" + protocol + "://" + serverName
+									+ (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort)
+									+ "/api/odk/formManifest" + node.getNode(OrxManifestName.manifest.name()).getPath()
+									+ "</manifestUrl>");
+						}
 						sb.append("</xform>");
 					} else if (node.isNodeType(EntityType.formSet.get())) {
 						sb.append("<xforms-group>");

@@ -39,7 +39,15 @@
 // OpenRosa web API
 
 [orxList:xform] > mix:created, mix:lastModified, jcrx:csum, entity:form
+- orxList:formID (STRING)
+- orxList:version (STRING)
 + h:html (odk:html) = odk:html
++ manifest (orxManifest:manifest) = orxManifest:manifest
+
+[orxManifest:manifest]
++ * (orxManifest:mediaFile) = orxManifest:mediaFile
+
+[orxManifest:mediaFile] > nt:address, jcrx:csum
 
 [orx:submission] > mix:created, entity:formSubmission
 + xml_submission_file (nt:unstructured) = nt:unstructured

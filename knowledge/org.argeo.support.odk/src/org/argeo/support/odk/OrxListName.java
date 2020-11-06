@@ -3,8 +3,10 @@ package org.argeo.support.odk;
 import org.argeo.entity.JcrName;
 
 /** Types related to the http://openrosa.org/xforms/xformsList namespace. */
-public enum OrxListType implements JcrName {
-	xform;
+public enum OrxListName implements JcrName {
+	xform,
+	// names
+	formID, version;
 
 	@Override
 	public String getPrefix() {

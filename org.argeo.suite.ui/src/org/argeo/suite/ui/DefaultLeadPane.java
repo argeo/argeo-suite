@@ -1,5 +1,6 @@
 package org.argeo.suite.ui;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
@@ -100,7 +101,7 @@ public class DefaultLeadPane implements CmsUiProvider {
 		if (defaultLayers == null)
 			throw new IllegalArgumentException("Default layers must be set.");
 		if (log.isDebugEnabled())
-			log.debug("Default layers: " + defaultLayers);
+			log.debug("Default layers: " + Arrays.asList(defaultLayers));
 	}
 
 	public void addLayer(SuiteLayer layer, Map<String, Object> properties) {

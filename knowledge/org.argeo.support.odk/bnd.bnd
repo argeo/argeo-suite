@@ -9,7 +9,8 @@ Service-Component:\
 OSGI-INF/odkServletContext.xml,\
 OSGI-INF/odkFormListServlet.xml,\
 OSGI-INF/odkFormServlet.xml,\
-OSGI-INF/odkSubmissionServlet.xml
+OSGI-INF/odkSubmissionServlet.xml,\
+OSGI-INF/odkManifestServlet.xml
 
 Import-Package:\
 org.osgi.service.http.context,\
