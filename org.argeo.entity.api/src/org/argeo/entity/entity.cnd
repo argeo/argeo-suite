@@ -36,11 +36,13 @@ orderable
 
 [entity:term]
 orderable
-+ * (entity:term) = entity:term *
+- name (NAME) m
+- * (*)
++ term (entity:term) = entity:term *
 
 [entity:terms] > mix:referenceable
 orderable
-+ * (entity:term) = entity:term *
++ term (entity:term) = entity:term *
 
 //
 // FORM
@@ -51,7 +53,7 @@ mixin
 [entity:formSubmission]
 mixin
 
-[entity:formSet]
+[entity:formSet] > mix:title
 mixin
 
 // LDAP-LIKE ENTITIES
