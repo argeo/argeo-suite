@@ -11,7 +11,7 @@ public enum SuiteStyle implements CmsStyle {
 	// Lead pane
 	leadPane, leadPaneItem,
 	// Group composite
-	titleContainer, titleLabel, subTitleLabel,formLine,
+	titleContainer, titleLabel, subTitleLabel,formLine,formColumn,navigationBar,navigationTitle,navigationButton,
 	// Forms elements
 	simpleLabel, simpleText,
 	// table

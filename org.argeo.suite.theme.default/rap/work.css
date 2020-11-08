@@ -49,11 +49,12 @@ Button.argeo-suite-leadPane:hover {
 
 .argeo-suite-simpleLabel {
 	font: bold 14px sans-serif;
-	padding: 0 0 0 8px;
+	padding: 0px;
 }
 
 .argeo-suite-simpleText {
-	
+	font: 14px sans-serif;
+	padding: 0px;
 }
 
 .argeo-suite-titleCell {
@@ -156,4 +157,25 @@ TableItem{
 Table-RowOverlay:selected {
 	color:#fff;
 	background-color:#5882b5;
+}
+
+.argeo-suite-navigationBar{
+	background-color:#ddd;
+}
+
+.argeo-suite-navigationTitle{
+	background-color:#ddd;
+	font:bold 14px sans-serif;
+}
+
+.argeo-suite-navigationButton{
+	color:#777;
+	background-color:#ddd;
+	font:bold 14px sans-serif;
+}
+
+.argeo-suite-navigationButton:hover{
+	cursor:pointer;
+	color:#ddd;
+	background-color:#777;
 }
