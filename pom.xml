@@ -21,7 +21,7 @@
 		<version.argeo-commons>2.1.89-SNAPSHOT</version.argeo-commons>
 		<version.argeo-slc>2.1.17-SNAPSHOT</version.argeo-slc>
 
-		<argeo.rpm.stagingRepository>/srv/rpmfactory/argeo-osgi-2-gpl/el7</argeo.rpm.stagingRepository>
+		<argeo.rpm.stagingRepository>/srv/rpmfactory/argeo-osgi-2/argeo</argeo.rpm.stagingRepository>
 		<git.rw />
 	</properties>
 	<modules>
