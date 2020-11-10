@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
+import javax.jcr.Property;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -22,6 +23,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.cms.servlet.ServletAuthUtils;
 import org.argeo.entity.EntityNames;
+import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.support.odk.OrxType;
@@ -49,7 +51,7 @@ public class OdkSubmissionServlet extends HttpServlet {
 
 		try {
 			Node submissions = JcrUtils.mkdirs(session,
-					"/" + EntityNames.FORM_BASE + "/" + EntityNames.SUBMISSIONS_BASE);
+					"/" + EntityType.form.get() + "/" + EntityNames.SUBMISSIONS_BASE);
 			Node submission = submissions.addNode(submissionNameFormatter.format(Instant.now()),
 					OrxType.submission.get());
 			for (Part part : req.getParts()) {
@@ -61,25 +63,17 @@ public class OdkSubmissionServlet extends HttpServlet {
 					session.importXML(xml.getPath(), part.getInputStream(),
 							ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
 
-//					Part xmlSubmissionPart = req.getPart(XML_SUBMISSION_FILE);
-//					if (xmlSubmissionPart == null)
-//						throw new ServletException("No " + XML_SUBMISSION_FILE + " part");
-//				try (InputStream in = xmlSubmissionPart.getInputStream();) {
-//					// pretty print
-//					Transformer transformer = TransformerFactory.newInstance().newTransformer();
-//					transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-//					transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-//					StreamResult result = new StreamResult(new StringWriter());
-//					StreamSource source = new StreamSource(in);
-//					transformer.transform(source, result);
-//					String xmlString = result.getWriter().toString();
-//					System.out.println(xmlString);
-//				} catch (TransformerException e) {
-//					e.printStackTrace();
-//				}
-
 				} else {
-					JcrUtils.copyStreamAsFile(submission, part.getName(), part.getInputStream());
+					Node fileNode = JcrUtils.copyStreamAsFile(submission, part.getName(), part.getInputStream());
+					String contentType = part.getContentType();
+					if (contentType != null) {
+						fileNode.addMixin(NodeType.MIX_MIMETYPE);
+						fileNode.setProperty(Property.JCR_MIMETYPE, contentType);
+
+					}
+					if (part.getName().endsWith(".jpg") || part.getName().endsWith(".png")) {
+						// TODO meta data and thumbnails
+					}
 				}
 			}
 			session.save();

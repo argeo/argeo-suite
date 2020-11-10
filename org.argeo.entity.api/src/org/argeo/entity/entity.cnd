@@ -3,6 +3,7 @@
 <h = "http://www.w3.org/1999/xhtml">
 // see https://www.w3.org/2003/01/geo/
 //<geo = "http://www.w3.org/2003/01/geo/wgs84_pos#">
+<svg = "http://www.w3.org/2000/svg">
 
 <ldif = "http://www.argeo.org/ns/ldif">
 <entity = 'http://www.argeo.org/ns/entity'>
@@ -55,6 +56,17 @@ mixin
 
 [entity:formSet] > mix:title
 mixin
+
+//
+// GRAPHICS
+//
+[entity:box]
+mixin
+- svg:width (DOUBLE)
+- svg:height (DOUBLE)
+- svg:length (DOUBLE)
+- svg:unit (STRING)
+- svg:dur (DOUBLE)
 
 // LDAP-LIKE ENTITIES
 // A real person
