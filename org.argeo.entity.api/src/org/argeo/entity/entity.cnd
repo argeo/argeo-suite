@@ -5,7 +5,7 @@
 //<geo = "http://www.w3.org/2003/01/geo/wgs84_pos#">
 <svg = "http://www.w3.org/2000/svg">
 
-<ldif = "http://www.argeo.org/ns/ldif">
+<ldap = "http://www.argeo.org/ns/ldap">
 <entity = 'http://www.argeo.org/ns/entity'>
 
 [entity:entity] > mix:created, mix:referenceable
@@ -72,5 +72,5 @@ mixin
 // A real person
 [entity:person] > entity:entity
 mixin
-- ldif:sn (String)
-- ldif:givenName (String)
+- ldap:sn (String)
+- ldap:givenName (String)
