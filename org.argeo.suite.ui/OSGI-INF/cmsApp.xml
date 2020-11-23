@@ -10,4 +10,5 @@
    <reference bind="addTheme" cardinality="1..n" interface="org.argeo.cms.ui.CmsTheme" name="CmsTheme" policy="dynamic" unbind="removeTheme"/>
    <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="dynamic" target="(cn=ego)"/>
    <reference bind="addLayer" cardinality="1..n" interface="org.argeo.suite.ui.SuiteLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
+   <reference bind="setCmsUserManager" cardinality="1..1" interface="org.argeo.cms.CmsUserManager" name="CmsUserManager" policy="static"/>
 </scr:component>

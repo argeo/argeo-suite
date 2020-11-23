@@ -18,10 +18,12 @@ import javax.jcr.nodetype.NodeType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.api.NodeUtils;
+import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.ui.AbstractCmsApp;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
+import org.argeo.cms.ui.MvcProvider;
 import org.argeo.cms.ui.dialogs.CmsFeedback;
 import org.argeo.cms.ui.util.CmsEvent;
 import org.argeo.cms.ui.util.CmsUiUtils;
@@ -54,8 +56,12 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	private final static String DEFAULT_THEME_ID = "org.argeo.suite.theme.default";
 
 	private Map<String, RankedObject<CmsUiProvider>> uiProvidersByPid = Collections.synchronizedMap(new HashMap<>());
+//	private Map<String, RankedObject<MvcProvider<?, ?, ?>>> mvcProvidersByPid = Collections
+//			.synchronizedMap(new HashMap<>());
 	private Map<String, RankedObject<CmsUiProvider>> uiProvidersByType = Collections.synchronizedMap(new HashMap<>());
 	private Map<String, RankedObject<SuiteLayer>> layers = Collections.synchronizedSortedMap(new TreeMap<>());
+
+	private CmsUserManager cmsUserManager;
 
 	// TODO make more optimal or via CmsSession/CmsView
 	private Map<String, SuiteUi> managedUis = new HashMap<>();
@@ -327,6 +333,25 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	}
 
+//	public void addMvcProvider(MvcProvider<?, ?, ?> uiProvider, Map<String, Object> properties) {
+//		if (properties.containsKey(Constants.SERVICE_PID)) {
+//			String pid = (String) properties.get(Constants.SERVICE_PID);
+//			RankedObject.putIfHigherRank(mvcProvidersByPid, pid, uiProvider, properties);
+//		}
+//	}
+//
+//	public void removeMvcProvider(MvcProvider<?, ?, ?> uiProvider, Map<String, Object> properties) {
+//		if (properties.containsKey(Constants.SERVICE_PID)) {
+//			String pid = (String) properties.get(Constants.SERVICE_PID);
+//			if (mvcProvidersByPid.containsKey(pid)) {
+//				if (mvcProvidersByPid.get(pid).equals(new RankedObject<MvcProvider<?, ?, ?>>(uiProvider, properties))) {
+//					mvcProvidersByPid.remove(pid);
+//				}
+//			}
+//		}
+//
+//	}
+
 	public void addLayer(SuiteLayer layer, Map<String, Object> properties) {
 		if (properties.containsKey(Constants.SERVICE_PID)) {
 			String pid = (String) properties.get(Constants.SERVICE_PID);
@@ -343,6 +368,10 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				}
 			}
 		}
+	}
+
+	public void setCmsUserManager(CmsUserManager cmsUserManager) {
+		this.cmsUserManager = cmsUserManager;
 	}
 
 	@Override

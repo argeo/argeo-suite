@@ -11,7 +11,7 @@ public enum EntityType implements JcrName {
 	// graphics
 	box,
 	// ldap
-	person;
+	person, user;
 
 	@Override
 	public String getPrefix() {

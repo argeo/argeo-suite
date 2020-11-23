@@ -7,6 +7,7 @@ import javax.jcr.Node;
 
 import org.argeo.cms.ui.util.CmsEvent;
 import org.argeo.jcr.Jcr;
+import org.osgi.service.useradmin.User;
 
 /** Events specific to Argeo Suite. */
 public enum SuiteEvent implements CmsEvent {
@@ -14,6 +15,7 @@ public enum SuiteEvent implements CmsEvent {
 
 	public final static String LAYER = "layer";
 	public final static String NODE_ID = "nodeId";
+	public final static String USERNAME = "username";
 	public final static String WORKSPACE = "workspace";
 
 	public String getTopicBase() {
@@ -24,6 +26,12 @@ public enum SuiteEvent implements CmsEvent {
 		Map<String, Object> properties = new HashMap<>();
 		properties.put(NODE_ID, Jcr.getIdentifier(node));
 		properties.put(WORKSPACE, Jcr.getWorkspaceName(node));
+		return properties;
+	}
+
+	public static Map<String, Object> eventProperties(User user) {
+		Map<String, Object> properties = new HashMap<>();
+		properties.put(USERNAME, user.getName());
 		return properties;
 	}
 }

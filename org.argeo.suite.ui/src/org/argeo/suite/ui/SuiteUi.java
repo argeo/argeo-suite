@@ -106,10 +106,11 @@ class SuiteUi extends Composite {
 				context = userHome;
 		}
 		Composite toShow = getLayer(layer, context);
-		getDisplay().syncExec(() -> {
-			toShow.moveAbove(null);
-			dynamicArea.layout(true, true);
-		});
+		if (!isDisposed())
+			getDisplay().syncExec(() -> {
+				toShow.moveAbove(null);
+				dynamicArea.layout(true, true);
+			});
 		currentLayerId = layer;
 		return toShow;
 	}
