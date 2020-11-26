@@ -23,7 +23,6 @@ import org.argeo.cms.ui.AbstractCmsApp;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
-import org.argeo.cms.ui.MvcProvider;
 import org.argeo.cms.ui.dialogs.CmsFeedback;
 import org.argeo.cms.ui.util.CmsEvent;
 import org.argeo.cms.ui.util.CmsUiUtils;
@@ -141,16 +140,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 					SuiteLayer layer = layers.get(key).get();
 					ui.addLayer(key, layer);
 				}
-
-//				ui.addLayer(ArgeoSuiteUi.DASHBOARD_LAYER);
-//				ui.addLayer("documents");
-//				ui.addLayer("locations");
-//				ui.addLayer("people");
-				// ui.switchToLayer(DASHBOARD_LAYER_PID, context);
-
-//				refreshPart(findUiProvider(DASHBOARD_PID), ui.getTabbedArea().getCurrent(), context);
 				refreshPart(findUiProvider(LEAD_PANE_PID), ui.getLeadPane(), context);
-//				refreshPart(findUiProvider(RECENT_ITEMS_PID), ui.getEntryArea(), context);
 			}
 			ui.layout(true, true);
 		} catch (Exception e) {
@@ -216,50 +206,6 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			throw new IllegalStateException(e);
 		}
 	}
-//	private CmsUiProvider findUiProvider(String pid, Node context) {
-//		CmsUiProvider found = null;
-//		if (pid != null) {
-//			SortedMap<RankingKey, CmsUiProvider> subMap = uiProvidersByPid.subMap(RankingKey.minPid(pid),
-//					RankingKey.maxPid(pid));
-//			providers: for (RankingKey key : subMap.keySet()) {
-//				if (key.getPid() == null || !key.getPid().equals(pid))
-//					break providers;
-//				found = subMap.get(key);
-//			}
-//			if (found != null)
-//				return found;
-//		}
-//
-//		if (found == null && context != null) {
-//			SortedMap<RankingKey, CmsUiProvider> subMap = null;
-//			String dataType = null;
-//			if (Jcr.isNodeType(context, EntityTypes.ENTITY_ENTITY)) {
-//				dataType = Jcr.get(context, EntityNames.ENTITY_TYPE);
-//				subMap = uiProvidersByPid.subMap(RankingKey.minDataType(dataType), RankingKey.maxDataType(dataType));
-//			}
-//			providers: for (RankingKey key : subMap.keySet()) {
-//				if (key.getDataType() == null || !key.getDataType().equals(dataType))
-//					break providers;
-//				found = subMap.get(key);
-//			}
-//			if (found == null)
-//				found = uiProvidersByPid.get(new RankingKey(null, null, null, dataType, null));
-//			if (found != null)
-//				return found;
-//		}
-//
-//		// nothing
-//		if (log.isWarnEnabled())
-//			log.warn("No UI provider found for" + (pid != null ? " pid " + pid : "")
-//					+ (context != null ? " " + context : ""));
-//		return new CmsUiProvider() {
-//
-//			@Override
-//			public Control createUi(Composite parent, Node context) throws RepositoryException {
-//				return parent;
-//			}
-//		};
-//	}
 
 	@Override
 	public void setState(Composite parent, String state) {
@@ -288,11 +234,11 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 						path = "/";
 					}
 				}
-				session = getRepository().login(workspace);
+				session = cmsView.doAs(() -> Jcr.login(getRepository(), workspace));
 
 				Node node = session.getNode(path);
 
-				refreshEntityUi(null, node);
+				cmsView.sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.eventProperties(node));
 			}
 		} catch (RepositoryException e) {
 			log.error("Cannot load state " + state, e);
@@ -302,7 +248,61 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		}
 	}
 
-	private void refreshEntityUi(Composite parent, Node context) {
+	/*
+	 * Events management
+	 */
+
+	@Override
+	public void handleEvent(Event event) {
+
+		// Specific UI related events
+		SuiteUi ui = getRelatedUi(event);
+		try {
+			String currentLayerId = ui.getCurrentLayerId();
+			SuiteLayer layer = currentLayerId != null ? layers.get(currentLayerId).get() : null;
+			if (isTopic(event, SuiteEvent.refreshPart)) {
+				String nodePath = get(event, SuiteEvent.NODE_PATH);
+				String workspace = get(event, SuiteEvent.WORKSPACE);
+				Node node = Jcr.getNode(ui.getSession(workspace), nodePath);
+				CmsUiProvider uiProvider = findUiProvider(node);
+				layer.view(uiProvider, ui.getCurrentWorkArea(), node);
+				ui.getCmsView().stateChanged(nodeToState(node), Jcr.getTitle(node));
+			} else if (isTopic(event, SuiteEvent.openNewPart)) {
+				String nodePath = get(event, SuiteEvent.NODE_PATH);
+				String workspace = get(event, SuiteEvent.WORKSPACE);
+				Node node = Jcr.getNode(ui.getSession(workspace), nodePath);
+				CmsUiProvider uiProvider = findUiProvider(node);
+				layer.open(uiProvider, ui.getCurrentWorkArea(), node);
+				ui.getCmsView().stateChanged(nodeToState(node), Jcr.getTitle(node));
+			} else if (isTopic(event, SuiteEvent.switchLayer)) {
+				String layerId = get(event, SuiteEvent.LAYER);
+				ui.switchToLayer(layerId, Jcr.getRootNode(ui.getSession(null)));
+			}
+		} catch (Exception e) {
+			log.error("Cannot handle event " + event, e);
+//			CmsView.getCmsView(ui).exception(e);
+		}
+
+	}
+
+	private String nodeToState(Node node) {
+		return '/' + Jcr.getWorkspaceName(node) + Jcr.getPath(node);
+	}
+
+	private SuiteUi getRelatedUi(Event event) {
+		return managedUis.get(get(event, CMS_VIEW_UID_PROPERTY));
+	}
+
+	private static boolean isTopic(Event event, CmsEvent cmsEvent) {
+		return event.getTopic().equals(cmsEvent.topic());
+	}
+
+	private static String get(Event event, String key) {
+		Object value = event.getProperty(key);
+		if (value == null)
+			throw new IllegalArgumentException("Property " + key + " must be set");
+		return value.toString();
+
 	}
 
 	/*
@@ -374,50 +374,4 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		this.cmsUserManager = cmsUserManager;
 	}
 
-	@Override
-	public void handleEvent(Event event) {
-
-		// Specific UI related events
-		SuiteUi ui = getRelatedUi(event);
-		try {
-			String currentLayerId = ui.getCurrentLayerId();
-			SuiteLayer layer = currentLayerId != null ? layers.get(currentLayerId).get() : null;
-			if (isTopic(event, SuiteEvent.refreshPart)) {
-				String nodeId = get(event, SuiteEvent.NODE_ID);
-				String workspace = get(event, SuiteEvent.WORKSPACE);
-				Node node = Jcr.getNodeById(ui.getSession(workspace), nodeId);
-				CmsUiProvider uiProvider = findUiProvider(node);
-				layer.view(uiProvider, ui.getCurrentWorkArea(), node);
-			} else if (isTopic(event, SuiteEvent.openNewPart)) {
-				String nodeId = get(event, SuiteEvent.NODE_ID);
-				String workspace = get(event, SuiteEvent.WORKSPACE);
-				Node node = Jcr.getNodeById(ui.getSession(workspace), nodeId);
-				CmsUiProvider uiProvider = findUiProvider(node);
-				layer.open(uiProvider, ui.getCurrentWorkArea(), node);
-			} else if (isTopic(event, SuiteEvent.switchLayer)) {
-				String layerId = get(event, SuiteEvent.LAYER);
-				ui.switchToLayer(layerId, Jcr.getRootNode(ui.getSession(null)));
-			}
-		} catch (Exception e) {
-			log.error("Cannot handle event " + event, e);
-//			CmsView.getCmsView(ui).exception(e);
-		}
-
-	}
-
-	private SuiteUi getRelatedUi(Event event) {
-		return managedUis.get(get(event, CMS_VIEW_UID_PROPERTY));
-	}
-
-	private static boolean isTopic(Event event, CmsEvent cmsEvent) {
-		return event.getTopic().equals(cmsEvent.topic());
-	}
-
-	private static String get(Event event, String key) {
-		Object value = event.getProperty(key);
-		if (value == null)
-			throw new IllegalArgumentException("Property " + key + " must be set");
-		return value.toString();
-
-	}
 }

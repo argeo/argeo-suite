@@ -17,7 +17,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 
-/** The {@link CmsView} for the work ergonomics of Argeo Suite. */
+/** The view for the default ergonomics of Argeo Suite. */
 class SuiteUi extends Composite {
 	private static final long serialVersionUID = 6207018859086689108L;
 
@@ -184,4 +184,10 @@ class SuiteUi extends Composite {
 			throw new IllegalArgumentException("Unknown workspace " + workspaceName);
 	}
 
+	public CmsView getCmsView() {
+		return cmsView;
+	}
+
+	
+	
 }

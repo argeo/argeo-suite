@@ -14,7 +14,8 @@ public enum SuiteEvent implements CmsEvent {
 	openNewPart, refreshPart, switchLayer;
 
 	public final static String LAYER = "layer";
-	public final static String NODE_ID = "nodeId";
+//	public final static String NODE_ID = "nodeId";
+	public final static String NODE_PATH = "path";
 	public final static String USERNAME = "username";
 	public final static String WORKSPACE = "workspace";
 
@@ -24,7 +25,7 @@ public enum SuiteEvent implements CmsEvent {
 
 	public static Map<String, Object> eventProperties(Node node) {
 		Map<String, Object> properties = new HashMap<>();
-		properties.put(NODE_ID, Jcr.getIdentifier(node));
+		properties.put(NODE_PATH, Jcr.getPath(node));
 		properties.put(WORKSPACE, Jcr.getWorkspaceName(node));
 		return properties;
 	}
