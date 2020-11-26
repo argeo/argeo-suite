@@ -2,12 +2,11 @@ package org.argeo.suite;
 
 import java.util.Map;
 
-import org.argeo.api.NodeConstants;
-
 /**
  * Key used to classify and filter available components (typically provided by
  * OSGi services).
  */
+@Deprecated
 public class RankingKey implements Comparable<RankingKey> {
 	public final static String SERVICE_PID = "service.pid";
 	public final static String SERVICE_ID = "service.id";
