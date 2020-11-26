@@ -9,6 +9,8 @@ public enum SuiteIcon implements CmsIcon {
 	people, person, organisation,
 	// library
 	documents, document, folder,
+	// admin and settings
+	settings, user,
 	// misc
-	task, tag, location;
+	task, tag, location, inbox, map;
 }
