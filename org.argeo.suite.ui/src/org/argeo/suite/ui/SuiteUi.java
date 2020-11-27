@@ -8,6 +8,8 @@ import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.argeo.api.NodeConstants;
 import org.argeo.api.NodeUtils;
 import org.argeo.cms.ui.CmsView;
@@ -20,7 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 /** The view for the default ergonomics of Argeo Suite. */
 class SuiteUi extends Composite {
 	private static final long serialVersionUID = 6207018859086689108L;
-
+	private final static Log log = LogFactory.getLog(SuiteUi.class);
 	private Composite header;
 	private Composite belowHeader;
 	private Composite leadPane;
@@ -95,24 +97,38 @@ class SuiteUi extends Composite {
 		return workAreas.get(id);
 	}
 
-	Composite switchToLayer(String layer, Node context) {
+	Composite switchToLayer(String layerId, Node context) {
 		if (currentLayerId != null) {
 			Composite current = getCurrentWorkArea();
-			if (currentLayerId.equals(layer))
+			if (currentLayerId.equals(layerId))
 				return current;
 		}
 		if (context == null) {
 			if (!cmsView.isAnonymous())
 				context = userHome;
 		}
-		Composite toShow = getLayer(layer, context);
+		Composite toShow = getLayer(layerId, context);
+		currentLayerId = layerId;
 		if (!isDisposed())
 			getDisplay().syncExec(() -> {
-				toShow.moveAbove(null);
+				if (!toShow.isDisposed())
+					toShow.moveAbove(null);
+				else
+					log.warn("Cannot show work area because it is disposed.");
 				dynamicArea.layout(true, true);
 			});
-		currentLayerId = layer;
 		return toShow;
+	}
+
+	Composite switchToLayer(SuiteLayer layer, Node context) {
+		// TODO make it more robust
+		for (String layerId : layers.keySet()) {
+			SuiteLayer l = layers.get(layerId);
+			if (layer == l) {
+				return switchToLayer(layerId, context);
+			}
+		}
+		throw new IllegalArgumentException("Layer is not registered.");
 	}
 
 	void addLayer(String id, SuiteLayer layer) {
@@ -135,6 +151,14 @@ class SuiteUi extends Composite {
 		return workArea;
 	}
 
+	synchronized void logout() {
+		userHome = null;
+		Jcr.logout(sysSession);
+		Jcr.logout(homeSession);
+		currentLayerId = null;
+		workAreas.clear();
+	}
+
 	/*
 	 * GETTERS / SETTERS
 	 */
@@ -155,7 +179,7 @@ class SuiteUi extends Composite {
 //		return sysSession;
 //	}
 //
-	void initSessions(Repository repository) throws RepositoryException {
+	synchronized void initSessions(Repository repository) throws RepositoryException {
 		this.sysSession = repository.login();
 		this.homeSession = repository.login(NodeConstants.HOME_WORKSPACE);
 		userHome = NodeUtils.getUserHome(homeSession);
@@ -188,6 +212,4 @@ class SuiteUi extends Composite {
 		return cmsView;
 	}
 
-	
-	
 }

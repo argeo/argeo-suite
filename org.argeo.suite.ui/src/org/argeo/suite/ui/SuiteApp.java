@@ -5,6 +5,7 @@ import static org.argeo.cms.ui.CmsView.CMS_VIEW_UID_PROPERTY;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -32,6 +33,7 @@ import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.suite.RankedObject;
+import org.argeo.util.LangUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.osgi.framework.Constants;
@@ -46,8 +48,6 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	public final static String HEADER_PID = PID_PREFIX + "header";
 	public final static String LEAD_PANE_PID = PID_PREFIX + "leadPane";
 	public final static String LOGIN_SCREEN_PID = PID_PREFIX + "loginScreen";
-	// public final static String DASHBOARD_LAYER_PID = PID_PREFIX +
-	// "dashboardLayer";
 	public final static String DASHBOARD_PID = PID_PREFIX + "dashboard";
 	public final static String RECENT_ITEMS_PID = PID_PREFIX + "recentItems";
 
@@ -55,10 +55,9 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	private final static String DEFAULT_THEME_ID = "org.argeo.suite.theme.default";
 
 	private Map<String, RankedObject<CmsUiProvider>> uiProvidersByPid = Collections.synchronizedMap(new HashMap<>());
-//	private Map<String, RankedObject<MvcProvider<?, ?, ?>>> mvcProvidersByPid = Collections
-//			.synchronizedMap(new HashMap<>());
 	private Map<String, RankedObject<CmsUiProvider>> uiProvidersByType = Collections.synchronizedMap(new HashMap<>());
-	private Map<String, RankedObject<SuiteLayer>> layers = Collections.synchronizedSortedMap(new TreeMap<>());
+	private Map<String, RankedObject<SuiteLayer>> layersByPid = Collections.synchronizedSortedMap(new TreeMap<>());
+	private Map<String, RankedObject<SuiteLayer>> layersByType = Collections.synchronizedSortedMap(new TreeMap<>());
 
 	private CmsUserManager cmsUserManager;
 
@@ -123,6 +122,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			refreshPart(findUiProvider(HEADER_PID), ui.getHeader(), context);
 			CmsView cmsView = CmsView.getCmsView(parent);
 			if (cmsView.isAnonymous()) {
+				ui.logout();
 				ui.refreshBelowHeader(false);
 				refreshPart(findUiProvider(LOGIN_SCREEN_PID), ui.getBelowHeader(), context);
 			} else {
@@ -136,13 +136,14 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				}
 				ui.refreshBelowHeader(true);
 
-				for (String key : layers.keySet()) {
-					SuiteLayer layer = layers.get(key).get();
+				for (String key : layersByPid.keySet()) {
+					SuiteLayer layer = layersByPid.get(key).get();
 					ui.addLayer(key, layer);
 				}
 				refreshPart(findUiProvider(LEAD_PANE_PID), ui.getLeadPane(), context);
 			}
 			ui.layout(true, true);
+			setState(parent, state);
 		} catch (Exception e) {
 			CmsFeedback.show("Unexpected exception", e);
 		}
@@ -159,13 +160,13 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		return uiProvidersByPid.get(pid).get();
 	}
 
-	private CmsUiProvider findUiProvider(Node context) {
+	private <T> T findByType(Map<String, RankedObject<T>> byType, Node context) {
 		try {
 			// mixins
 			Set<String> types = new TreeSet<>();
 			for (NodeType nodeType : context.getMixinNodeTypes()) {
 				String typeName = nodeType.getName();
-				if (uiProvidersByType.containsKey(typeName)) {
+				if (byType.containsKey(typeName)) {
 					types.add(typeName);
 				}
 			}
@@ -173,11 +174,11 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			{
 				NodeType nodeType = context.getPrimaryNodeType();
 				String typeName = nodeType.getName();
-				if (uiProvidersByType.containsKey(typeName)) {
+				if (byType.containsKey(typeName)) {
 					types.add(typeName);
 				}
 				for (NodeType mixin : nodeType.getDeclaredSupertypes()) {
-					if (uiProvidersByType.containsKey(mixin.getName())) {
+					if (byType.containsKey(mixin.getName())) {
 						types.add(mixin.getName());
 					}
 				}
@@ -186,7 +187,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			if (context.isNodeType(EntityType.entity.get())) {
 				if (context.hasProperty(EntityNames.ENTITY_TYPE)) {
 					String typeName = context.getProperty(EntityNames.ENTITY_TYPE).getString();
-					if (uiProvidersByType.containsKey(typeName)) {
+					if (byType.containsKey(typeName)) {
 						types.add(typeName);
 					}
 				}
@@ -195,13 +196,16 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 //			if (context.getPath().equals("/")) {// root node
 //				types.add("nt:folder");
 //			}
-			if (NodeUtils.isUserHome(context) && uiProvidersByType.containsKey("nt:folder")) {// home node
+			if (NodeUtils.isUserHome(context) && byType.containsKey("nt:folder")) {// home node
 				types.add("nt:folder");
 			}
 
 			if (types.size() == 0)
-				throw new IllegalArgumentException("No UI provider found for " + context);
-			return uiProvidersByType.get(types.iterator().next()).get();
+				throw new IllegalArgumentException("No component found for " + context);
+			String type = types.iterator().next();
+			if (!byType.containsKey(type))
+				throw new IllegalArgumentException("No component found for " + context + " with type " + type);
+			return byType.get(type).get();
 		} catch (RepositoryException e) {
 			throw new IllegalStateException(e);
 		}
@@ -210,6 +214,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	@Override
 	public void setState(Composite parent, String state) {
 		CmsView cmsView = CmsView.getCmsView(parent);
+		if(cmsView.isAnonymous())
+			return;
 		// for the time being we systematically open a session, in order to make sure
 		// that home is initialised
 		Session session = null;
@@ -223,7 +229,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				} else {
 					int index = path.indexOf('/');
 					if (index == 0) {
-						log.error("Cannot interpret // " + state);
+						log.error("Cannot interpret " + state);
 						cmsView.navigateTo("~");
 						return;
 					} else if (index > 0) {
@@ -238,6 +244,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 				Node node = session.getNode(path);
 
+				cmsView.sendEvent(SuiteEvent.switchLayer.topic(), SuiteEvent.eventProperties(node));
 				cmsView.sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.eventProperties(node));
 			}
 		} catch (RepositoryException e) {
@@ -259,24 +266,34 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		SuiteUi ui = getRelatedUi(event);
 		try {
 			String currentLayerId = ui.getCurrentLayerId();
-			SuiteLayer layer = currentLayerId != null ? layers.get(currentLayerId).get() : null;
+			SuiteLayer currentLayer = currentLayerId != null ? layersByPid.get(currentLayerId).get() : null;
 			if (isTopic(event, SuiteEvent.refreshPart)) {
 				String nodePath = get(event, SuiteEvent.NODE_PATH);
 				String workspace = get(event, SuiteEvent.WORKSPACE);
 				Node node = Jcr.getNode(ui.getSession(workspace), nodePath);
-				CmsUiProvider uiProvider = findUiProvider(node);
-				layer.view(uiProvider, ui.getCurrentWorkArea(), node);
+				CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
+				currentLayer.view(uiProvider, ui.getCurrentWorkArea(), node);
 				ui.getCmsView().stateChanged(nodeToState(node), Jcr.getTitle(node));
 			} else if (isTopic(event, SuiteEvent.openNewPart)) {
 				String nodePath = get(event, SuiteEvent.NODE_PATH);
 				String workspace = get(event, SuiteEvent.WORKSPACE);
 				Node node = Jcr.getNode(ui.getSession(workspace), nodePath);
-				CmsUiProvider uiProvider = findUiProvider(node);
-				layer.open(uiProvider, ui.getCurrentWorkArea(), node);
+				CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
+				currentLayer.open(uiProvider, ui.getCurrentWorkArea(), node);
 				ui.getCmsView().stateChanged(nodeToState(node), Jcr.getTitle(node));
 			} else if (isTopic(event, SuiteEvent.switchLayer)) {
 				String layerId = get(event, SuiteEvent.LAYER);
-				ui.switchToLayer(layerId, Jcr.getRootNode(ui.getSession(null)));
+				if (layerId != null) {
+					ui.switchToLayer(layerId, Jcr.getRootNode(ui.getSession(null)));
+				} else {
+					String nodePath = get(event, SuiteEvent.NODE_PATH);
+					String workspace = get(event, SuiteEvent.WORKSPACE);
+					if (nodePath != null) {
+						Node node = Jcr.getNode(ui.getSession(workspace), nodePath);
+						SuiteLayer layer = findByType(layersByType, node);
+						ui.switchToLayer(layer, node);
+					}
+				}
 			}
 		} catch (Exception e) {
 			log.error("Cannot handle event " + event, e);
@@ -300,7 +317,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	private static String get(Event event, String key) {
 		Object value = event.getProperty(key);
 		if (value == null)
-			throw new IllegalArgumentException("Property " + key + " must be set");
+			return null;
+//			throw new IllegalArgumentException("Property " + key + " must be set");
 		return value.toString();
 
 	}
@@ -315,9 +333,9 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			RankedObject.putIfHigherRank(uiProvidersByPid, pid, uiProvider, properties);
 		}
 		if (properties.containsKey(EntityConstants.TYPE)) {
-			// TODO manage String arrays as well
-			String type = (String) properties.get(EntityConstants.TYPE);
-			RankedObject.putIfHigherRank(uiProvidersByType, type, uiProvider, properties);
+			List<String> types = LangUtils.toStringList(properties.get(EntityConstants.TYPE));
+			for (String type : types)
+				RankedObject.putIfHigherRank(uiProvidersByType, type, uiProvider, properties);
 		}
 	}
 
@@ -330,41 +348,46 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				}
 			}
 		}
-
+		if (properties.containsKey(EntityConstants.TYPE)) {
+			List<String> types = LangUtils.toStringList(properties.get(EntityConstants.TYPE));
+			for (String type : types) {
+				if (uiProvidersByType.containsKey(type)) {
+					if (uiProvidersByType.get(type).equals(new RankedObject<CmsUiProvider>(uiProvider, properties))) {
+						uiProvidersByType.remove(type);
+					}
+				}
+			}
+		}
 	}
-
-//	public void addMvcProvider(MvcProvider<?, ?, ?> uiProvider, Map<String, Object> properties) {
-//		if (properties.containsKey(Constants.SERVICE_PID)) {
-//			String pid = (String) properties.get(Constants.SERVICE_PID);
-//			RankedObject.putIfHigherRank(mvcProvidersByPid, pid, uiProvider, properties);
-//		}
-//	}
-//
-//	public void removeMvcProvider(MvcProvider<?, ?, ?> uiProvider, Map<String, Object> properties) {
-//		if (properties.containsKey(Constants.SERVICE_PID)) {
-//			String pid = (String) properties.get(Constants.SERVICE_PID);
-//			if (mvcProvidersByPid.containsKey(pid)) {
-//				if (mvcProvidersByPid.get(pid).equals(new RankedObject<MvcProvider<?, ?, ?>>(uiProvider, properties))) {
-//					mvcProvidersByPid.remove(pid);
-//				}
-//			}
-//		}
-//
-//	}
 
 	public void addLayer(SuiteLayer layer, Map<String, Object> properties) {
 		if (properties.containsKey(Constants.SERVICE_PID)) {
 			String pid = (String) properties.get(Constants.SERVICE_PID);
-			RankedObject.putIfHigherRank(layers, pid, layer, properties);
+			RankedObject.putIfHigherRank(layersByPid, pid, layer, properties);
+		}
+		if (properties.containsKey(EntityConstants.TYPE)) {
+			List<String> types = LangUtils.toStringList(properties.get(EntityConstants.TYPE));
+			for (String type : types)
+				RankedObject.putIfHigherRank(layersByType, type, layer, properties);
 		}
 	}
 
 	public void removeLayer(SuiteLayer layer, Map<String, Object> properties) {
 		if (properties.containsKey(Constants.SERVICE_PID)) {
 			String pid = (String) properties.get(Constants.SERVICE_PID);
-			if (layers.containsKey(pid)) {
-				if (layers.get(pid).equals(new RankedObject<SuiteLayer>(layer, properties))) {
-					layers.remove(pid);
+			if (layersByPid.containsKey(pid)) {
+				if (layersByPid.get(pid).equals(new RankedObject<SuiteLayer>(layer, properties))) {
+					layersByPid.remove(pid);
+				}
+			}
+		}
+		if (properties.containsKey(EntityConstants.TYPE)) {
+			List<String> types = LangUtils.toStringList(properties.get(EntityConstants.TYPE));
+			for (String type : types) {
+				if (layersByType.containsKey(type)) {
+					if (layersByType.get(type).equals(new RankedObject<CmsUiProvider>(layer, properties))) {
+						layersByType.remove(type);
+					}
 				}
 			}
 		}

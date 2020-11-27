@@ -20,6 +20,7 @@ import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
+import org.argeo.entity.EntityConstants;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
@@ -55,10 +56,6 @@ import org.eclipse.swt.widgets.ToolItem;
 public class RecentItems implements CmsUiProvider {
 	private final static int SEARCH_TEXT_DELAY = 800;
 	private final static int SEARCH_DEFAULT_LIMIT = 100;
-
-	public static enum Property {
-		entityTypes;
-	}
 
 	private CmsTheme theme;
 
@@ -132,7 +129,7 @@ public class RecentItems implements CmsUiProvider {
 
 	public void init(Map<String, String> properties) {
 		// TODO manage multiple entities
-		entityType = properties.get(Property.entityTypes.name());
+		entityType = properties.get(EntityConstants.TYPE);
 	}
 
 	class SingleEntityViewer {
