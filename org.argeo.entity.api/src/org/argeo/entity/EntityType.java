@@ -22,6 +22,10 @@ public enum EntityType implements JcrName {
 		return "entity";
 	}
 
+	public String basePath() {
+		return '/' + name();
+	}
+
 	@Override
 	public String getNamespace() {
 		return namespace();

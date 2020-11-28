@@ -11,7 +11,6 @@ import javax.jcr.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.api.NodeConstants;
-import org.argeo.api.NodeUtils;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.jcr.Jcr;
@@ -29,8 +28,8 @@ class SuiteUi extends Composite {
 	private Composite dynamicArea;
 
 	private Session sysSession;
-	private Session homeSession;
-	private Node userHome;
+//	private Session homeSession;
+	private Node userDir;
 
 	private Map<String, SuiteLayer> layers = new HashMap<>();
 	private Map<String, Composite> workAreas = new HashMap<>();
@@ -105,7 +104,7 @@ class SuiteUi extends Composite {
 		}
 		if (context == null) {
 			if (!cmsView.isAnonymous())
-				context = userHome;
+				context = userDir;
 		}
 		Composite toShow = getLayer(layerId, context);
 		currentLayerId = layerId;
@@ -152,9 +151,9 @@ class SuiteUi extends Composite {
 	}
 
 	synchronized void logout() {
-		userHome = null;
+		userDir = null;
 		Jcr.logout(sysSession);
-		Jcr.logout(homeSession);
+//		Jcr.logout(homeSession);
 		currentLayerId = null;
 		workAreas.clear();
 	}
@@ -179,18 +178,18 @@ class SuiteUi extends Composite {
 //		return sysSession;
 //	}
 //
-	synchronized void initSessions(Repository repository) throws RepositoryException {
+	synchronized void initSessions(Repository repository, String userDirPath) throws RepositoryException {
 		this.sysSession = repository.login();
-		this.homeSession = repository.login(NodeConstants.HOME_WORKSPACE);
-		userHome = NodeUtils.getUserHome(homeSession);
+//		this.homeSession = repository.login(NodeConstants.HOME_WORKSPACE);
+		userDir = sysSession.getNode(userDirPath);
 		addDisposeListener((e) -> {
 			Jcr.logout(sysSession);
-			Jcr.logout(homeSession);
+//			Jcr.logout(homeSession);
 		});
 	}
 
-	Node getUserHome() {
-		return userHome;
+	Node getUserDir() {
+		return userDir;
 	}
 
 	Session getSysSession() {
@@ -202,8 +201,8 @@ class SuiteUi extends Composite {
 			return sysSession;
 		if (NodeConstants.SYS_WORKSPACE.equals(workspaceName))
 			return sysSession;
-		else if (NodeConstants.HOME_WORKSPACE.equals(workspaceName))
-			return homeSession;
+//		else if (NodeConstants.HOME_WORKSPACE.equals(workspaceName))
+//			return homeSession;
 		else
 			throw new IllegalArgumentException("Unknown workspace " + workspaceName);
 	}

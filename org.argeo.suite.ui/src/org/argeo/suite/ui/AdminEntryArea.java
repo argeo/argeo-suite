@@ -5,6 +5,7 @@ import java.util.Set;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
+import org.argeo.api.NodeConstants;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
@@ -14,6 +15,7 @@ import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.naming.LdapAttrs;
+import org.argeo.suite.SuiteRole;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -105,9 +107,9 @@ public class AdminEntryArea implements CmsUiProvider {
 			public void doubleClick(DoubleClickEvent event) {
 				User user = (User) usersViewer.getStructuredSelection().getFirstElement();
 				if (user != null) {
-					Node userNode = getOrCreateUserNode(user, context);
+//					Node userNode = getOrCreateUserNode(user, context);
 					CmsView.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(),
-							SuiteEvent.eventProperties(userNode));
+							SuiteEvent.eventProperties(user));
 				}
 
 			}
@@ -116,9 +118,9 @@ public class AdminEntryArea implements CmsUiProvider {
 			public void selectionChanged(SelectionChangedEvent event) {
 				User user = (User) usersViewer.getStructuredSelection().getFirstElement();
 				if (user != null) {
-					Node userNode = getOrCreateUserNode(user, context);
+//					Node userNode = getOrCreateUserNode(user, context);
 					CmsView.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(),
-							SuiteEvent.eventProperties(userNode));
+							SuiteEvent.eventProperties(user));
 					deleteItem.setEnabled(true);
 				} else {
 					deleteItem.setEnabled(false);
@@ -132,11 +134,11 @@ public class AdminEntryArea implements CmsUiProvider {
 		return usersViewer.getTable();
 	}
 
-	private Node getOrCreateUserNode(User user, Node context) {
-		return JcrUtils.mkdirs(Jcr.getSession(context),
-				"/" + EntityType.user.name() + "/" + getUserProperty(user, LdapAttrs.uid.name()),
-				EntityType.user.get());
-	}
+//	private Node getOrCreateUserNode(User user, Node context) {
+//		return JcrUtils.mkdirs(Jcr.getSession(context),
+//				"/" + EntityType.user.name() + "/" + getUserProperty(user, LdapAttrs.uid.name()),
+//				EntityType.user.get());
+//	}
 
 	private String getUserProperty(Object element, String key) {
 		Object value = ((User) element).getProperties().get(key);
@@ -148,8 +150,7 @@ public class AdminEntryArea implements CmsUiProvider {
 		@Override
 		public Object[] getElements(Object inputElement) {
 			CmsUserManager cum = (CmsUserManager) inputElement;
-			String baseGroup = "cn=apaf-coworker,cn=groups,cn=accounts,dc=id,dc=argeo,dc=pro";
-			Set<User> users = cum.listUsersInGroup(baseGroup, null);
+			Set<User> users = cum.listUsersInGroup(SuiteRole.coworker.dn(), null);
 			return users.toArray();
 		}
 

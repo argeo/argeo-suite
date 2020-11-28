@@ -15,11 +15,14 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
+import javax.naming.InvalidNameException;
+import javax.naming.ldap.LdapName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.api.NodeUtils;
 import org.argeo.cms.CmsUserManager;
+import org.argeo.cms.auth.CmsSession;
 import org.argeo.cms.ui.AbstractCmsApp;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
@@ -31,14 +34,15 @@ import org.argeo.entity.EntityConstants;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
-import org.argeo.jcr.JcrUtils;
 import org.argeo.suite.RankedObject;
+import org.argeo.suite.SuiteUtils;
 import org.argeo.util.LangUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.osgi.framework.Constants;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
+import org.osgi.service.useradmin.User;
 
 /** The Argeo Suite App. */
 public class SuiteApp extends AbstractCmsApp implements EventHandler {
@@ -125,25 +129,32 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				ui.logout();
 				ui.refreshBelowHeader(false);
 				refreshPart(findUiProvider(LOGIN_SCREEN_PID), ui.getBelowHeader(), context);
+				ui.layout(true, true);
 			} else {
-				try {
-					if (ui.getUserHome() == null)
-						ui.initSessions(getRepository());
-					context = ui.getUserHome();
-
-				} catch (RepositoryException e) {
-					e.printStackTrace();
+				if (ui.getUserDir() == null) {
+					CmsSession cmsSession = cmsView.getCmsSession();
+					Session adminSession = null;
+					try {
+						adminSession = NodeUtils.openDataAdminSession(getRepository(), null);
+						Node userDir = SuiteUtils.getOrCreateSessionDir(adminSession, cmsSession);
+						ui.initSessions(getRepository(), userDir.getPath());
+					} finally {
+						Jcr.logout(adminSession);
+					}
 				}
-				ui.refreshBelowHeader(true);
+				context = stateToNode(ui, state);
+				if (context == null)
+					context = ui.getUserDir();
 
+				ui.refreshBelowHeader(true);
 				for (String key : layersByPid.keySet()) {
 					SuiteLayer layer = layersByPid.get(key).get();
 					ui.addLayer(key, layer);
 				}
 				refreshPart(findUiProvider(LEAD_PANE_PID), ui.getLeadPane(), context);
+				ui.layout(true, true);
+				setState(parent, state);
 			}
-			ui.layout(true, true);
-			setState(parent, state);
 		} catch (Exception e) {
 			CmsFeedback.show("Unexpected exception", e);
 		}
@@ -201,7 +212,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			}
 
 			if (types.size() == 0)
-				throw new IllegalArgumentException("No component found for " + context);
+				throw new IllegalArgumentException("No type found for " + context);
 			String type = types.iterator().next();
 			if (!byType.containsKey(type))
 				throw new IllegalArgumentException("No component found for " + context + " with type " + type);
@@ -213,46 +224,93 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	@Override
 	public void setState(Composite parent, String state) {
-		CmsView cmsView = CmsView.getCmsView(parent);
-		if(cmsView.isAnonymous())
+		if (state == null || !state.startsWith("/"))
 			return;
-		// for the time being we systematically open a session, in order to make sure
-		// that home is initialised
-		Session session = null;
-		try {
-			if (state != null && state.startsWith("/")) {
-				String path = state.substring(1);
-				String workspace;
-				if (path.equals("")) {
-					workspace = null;
-					path = "/";
-				} else {
-					int index = path.indexOf('/');
-					if (index == 0) {
-						log.error("Cannot interpret " + state);
-						cmsView.navigateTo("~");
-						return;
-					} else if (index > 0) {
-						workspace = path.substring(0, index);
-						path = path.substring(index);
-					} else {// index<0, assuming root node
-						workspace = path;
-						path = "/";
-					}
-				}
-				session = cmsView.doAs(() -> Jcr.login(getRepository(), workspace));
-
-				Node node = session.getNode(path);
-
-				cmsView.sendEvent(SuiteEvent.switchLayer.topic(), SuiteEvent.eventProperties(node));
-				cmsView.sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.eventProperties(node));
-			}
-		} catch (RepositoryException e) {
-			log.error("Cannot load state " + state, e);
-			cmsView.navigateTo("~");
-		} finally {
-			JcrUtils.logoutQuietly(session);
+		SuiteUi suiteUi = (SuiteUi) parent;
+		Node node = stateToNode(suiteUi, state);
+		if (node == null) {
+			suiteUi.getCmsView().navigateTo("~");
+		} else {
+			suiteUi.getCmsView().sendEvent(SuiteEvent.switchLayer.topic(), SuiteEvent.eventProperties(node));
+			suiteUi.getCmsView().sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.eventProperties(node));
 		}
+
+//		CmsView cmsView = CmsView.getCmsView(parent);
+//		if (cmsView.isAnonymous())
+//			return;
+//		Session session = null;
+//		try {
+//			if (state != null && state.startsWith("/")) {
+//				String path = state.substring(1);
+//				String workspace;
+//				if (path.equals("")) {
+//					workspace = null;
+//					path = "/";
+//				} else {
+//					int index = path.indexOf('/');
+//					if (index == 0) {
+//						log.error("Cannot interpret " + state);
+//						cmsView.navigateTo("~");
+//						return;
+//					} else if (index > 0) {
+//						workspace = path.substring(0, index);
+//						path = path.substring(index);
+//					} else {// index<0, assuming root node
+//						workspace = path;
+//						path = "/";
+//					}
+//				}
+//				session = cmsView.doAs(() -> Jcr.login(getRepository(), workspace));
+//
+//				Node node = session.getNode(path);
+//
+//				cmsView.sendEvent(SuiteEvent.switchLayer.topic(), SuiteEvent.eventProperties(node));
+//				cmsView.sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.eventProperties(node));
+//			}
+//		} catch (RepositoryException e) {
+//			log.error("Cannot load state " + state, e);
+//			cmsView.navigateTo("~");
+//		} finally {
+//			JcrUtils.logoutQuietly(session);
+//		}
+	}
+
+	private String nodeToState(Node node) {
+		return '/' + Jcr.getWorkspaceName(node) + Jcr.getPath(node);
+	}
+
+	private Node stateToNode(SuiteUi suiteUi, String state) {
+		if (suiteUi == null)
+			return null;
+		if (state == null)
+			return null;
+
+		String path = state.substring(1);
+		String workspace;
+		if (path.equals("")) {
+			workspace = null;
+			path = "/";
+		} else {
+			int index = path.indexOf('/');
+			if (index == 0) {
+				log.error("Cannot interpret " + state);
+//				cmsView.navigateTo("~");
+				return null;
+			} else if (index > 0) {
+				workspace = path.substring(0, index);
+				path = path.substring(index);
+			} else {// index<0, assuming root node
+				workspace = path;
+				path = "/";
+			}
+		}
+//		session = cmsView.doAs(() -> Jcr.login(getRepository(), workspace));
+
+		Session session = suiteUi.getSession(workspace);
+		if (session == null)
+			return null;
+		Node node = Jcr.getNode(session, path);
+		return node;
 	}
 
 	/*
@@ -268,16 +326,12 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			String currentLayerId = ui.getCurrentLayerId();
 			SuiteLayer currentLayer = currentLayerId != null ? layersByPid.get(currentLayerId).get() : null;
 			if (isTopic(event, SuiteEvent.refreshPart)) {
-				String nodePath = get(event, SuiteEvent.NODE_PATH);
-				String workspace = get(event, SuiteEvent.WORKSPACE);
-				Node node = Jcr.getNode(ui.getSession(workspace), nodePath);
+				Node node = getNode(ui, event);
 				CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
 				currentLayer.view(uiProvider, ui.getCurrentWorkArea(), node);
 				ui.getCmsView().stateChanged(nodeToState(node), Jcr.getTitle(node));
 			} else if (isTopic(event, SuiteEvent.openNewPart)) {
-				String nodePath = get(event, SuiteEvent.NODE_PATH);
-				String workspace = get(event, SuiteEvent.WORKSPACE);
-				Node node = Jcr.getNode(ui.getSession(workspace), nodePath);
+				Node node = getNode(ui, event);
 				CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
 				currentLayer.open(uiProvider, ui.getCurrentWorkArea(), node);
 				ui.getCmsView().stateChanged(nodeToState(node), Jcr.getTitle(node));
@@ -286,10 +340,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				if (layerId != null) {
 					ui.switchToLayer(layerId, Jcr.getRootNode(ui.getSession(null)));
 				} else {
-					String nodePath = get(event, SuiteEvent.NODE_PATH);
-					String workspace = get(event, SuiteEvent.WORKSPACE);
-					if (nodePath != null) {
-						Node node = Jcr.getNode(ui.getSession(workspace), nodePath);
+					Node node = getNode(ui, event);
+					if (node != null) {
 						SuiteLayer layer = findByType(layersByType, node);
 						ui.switchToLayer(layer, node);
 					}
@@ -302,8 +354,42 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	}
 
-	private String nodeToState(Node node) {
-		return '/' + Jcr.getWorkspaceName(node) + Jcr.getPath(node);
+	private Node getNode(SuiteUi ui, Event event) {
+		String nodePath = get(event, SuiteEvent.NODE_PATH);
+		String workspaceName = get(event, SuiteEvent.WORKSPACE);
+		Session session = ui.getSession(workspaceName);
+		Node node;
+		if (nodePath == null) {
+			// look for a user
+			String username = get(event, SuiteEvent.USERNAME);
+			if (username == null)
+				return null;
+			User user = cmsUserManager.getUser(username);
+			if (user == null)
+				return null;
+			LdapName userDn;
+			try {
+				userDn = new LdapName(user.getName());
+			} catch (InvalidNameException e) {
+				throw new IllegalArgumentException("Badly formatted username", e);
+			}
+			String userNodePath = SuiteUtils.getUserNodePath(userDn);
+			if (Jcr.itemExists(session, userNodePath))
+				node = Jcr.getNode(session, userNodePath);
+			else {
+				Session adminSession = null;
+				try {
+					adminSession = NodeUtils.openDataAdminSession(getRepository(), workspaceName);
+					SuiteUtils.getOrCreateUserNode(adminSession, userDn);
+				} finally {
+					Jcr.logout(adminSession);
+				}
+				node = Jcr.getNode(session, userNodePath);
+			}
+		} else {
+			node = Jcr.getNode(session, nodePath);
+		}
+		return node;
 	}
 
 	private SuiteUi getRelatedUi(Event event) {
