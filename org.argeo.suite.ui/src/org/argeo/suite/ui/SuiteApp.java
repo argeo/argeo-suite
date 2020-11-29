@@ -323,17 +323,21 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		// Specific UI related events
 		SuiteUi ui = getRelatedUi(event);
 		try {
-			String currentLayerId = ui.getCurrentLayerId();
-			SuiteLayer currentLayer = currentLayerId != null ? layersByPid.get(currentLayerId).get() : null;
+//			String currentLayerId = ui.getCurrentLayerId();
+//			SuiteLayer currentLayer = currentLayerId != null ? layersByPid.get(currentLayerId).get() : null;
 			if (isTopic(event, SuiteEvent.refreshPart)) {
 				Node node = getNode(ui, event);
 				CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
-				currentLayer.view(uiProvider, ui.getCurrentWorkArea(), node);
+				SuiteLayer layer = findByType(layersByType, node);
+				ui.switchToLayer(layer, node);
+				layer.view(uiProvider, ui.getCurrentWorkArea(), node);
 				ui.getCmsView().stateChanged(nodeToState(node), Jcr.getTitle(node));
 			} else if (isTopic(event, SuiteEvent.openNewPart)) {
 				Node node = getNode(ui, event);
 				CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
-				currentLayer.open(uiProvider, ui.getCurrentWorkArea(), node);
+				SuiteLayer layer = findByType(layersByType, node);
+				ui.switchToLayer(layer, node);
+				layer.open(uiProvider, ui.getCurrentWorkArea(), node);
 				ui.getCmsView().stateChanged(nodeToState(node), Jcr.getTitle(node));
 			} else if (isTopic(event, SuiteEvent.switchLayer)) {
 				String layerId = get(event, SuiteEvent.LAYER);

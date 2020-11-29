@@ -10,10 +10,7 @@ import javax.jcr.Session;
 import org.argeo.api.NodeUtils;
 import org.argeo.entity.EntityConstants;
 import org.argeo.entity.EntityDefinition;
-import org.argeo.entity.EntityNames;
-import org.argeo.entity.EntityTypes;
 import org.argeo.jcr.Jcr;
-import org.argeo.jcr.JcrUtils;
 import org.osgi.framework.BundleContext;
 
 /** An entity definition based on a JCR data structure. */
@@ -30,12 +27,12 @@ public class JcrEntityDefinition implements EntityDefinition {
 			if (type == null)
 				throw new IllegalArgumentException("Entity type property " + EntityConstants.TYPE + " must be set.");
 			defaultEditoryId = properties.get(EntityConstants.DEFAULT_EDITORY_ID);
-			String definitionPath = EntityNames.ENTITY_DEFINITIONS_PATH + '/' + type;
-			if (!adminSession.itemExists(definitionPath)) {
-				Node entityDefinition = JcrUtils.mkdirs(adminSession, definitionPath, EntityTypes.ENTITY_DEFINITION);
-//				entityDefinition.addMixin(EntityTypes.ENTITY_DEFINITION);
-				adminSession.save();
-			}
+//			String definitionPath = EntityNames.ENTITY_DEFINITIONS_PATH + '/' + type;
+//			if (!adminSession.itemExists(definitionPath)) {
+//				Node entityDefinition = JcrUtils.mkdirs(adminSession, definitionPath, EntityTypes.ENTITY_DEFINITION);
+////				entityDefinition.addMixin(EntityTypes.ENTITY_DEFINITION);
+//				adminSession.save();
+//			}
 			initJcr(adminSession);
 		} finally {
 			Jcr.logout(adminSession);

@@ -11,7 +11,7 @@ public interface EntityNames {
 	final String TERM = "term";
 	final String NAME = "name";
 
-	final String ENTITY_DEFINITIONS_PATH = "/entity";
+//	final String ENTITY_DEFINITIONS_PATH = "/entity";
 	@Deprecated
 	final String TYPOLOGIES_PATH = "/" + TERM;
 	/** Administrative units. */

@@ -10,21 +10,23 @@
 
 [entity:entity] > mix:created, mix:referenceable
 mixin
-//- entity:uid (String) m // an implementation dependent UID for each entity
-//- entity:type (String) // the type of this entity
+
+[entity:local] > entity:entity
+mixin
+- entity:type (String) m
 
 //
 // ENTITY DEFINITION
 //
-[entity:definition] > entity:composite, mix:created, mix:lastModified, mix:referenceable
+//[entity:definition] > entity:composite, mix:created, mix:lastModified, mix:referenceable
 //- entity:type (String) multiple
 
 //[entity:part]
 
 //[entity:reference]
 
-[entity:composite]
-orderable
+//[entity:composite]
+//orderable
 //+ * (entity:part)
 //+ * (entity:reference)
 //+ * (entity:composite)

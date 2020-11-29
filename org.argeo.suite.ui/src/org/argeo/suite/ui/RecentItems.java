@@ -20,7 +20,6 @@ import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
-import org.argeo.entity.EntityConstants;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
@@ -60,6 +59,10 @@ public class RecentItems implements CmsUiProvider {
 	private CmsTheme theme;
 
 	private String entityType;
+
+	static enum Property {
+		entityTypes;
+	}
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
@@ -129,7 +132,7 @@ public class RecentItems implements CmsUiProvider {
 
 	public void init(Map<String, String> properties) {
 		// TODO manage multiple entities
-		entityType = properties.get(EntityConstants.TYPE);
+		entityType = properties.get(Property.entityTypes.name());
 	}
 
 	class SingleEntityViewer {

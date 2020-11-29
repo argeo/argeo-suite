@@ -3,7 +3,7 @@ package org.argeo.entity;
 /** Types related to entities. */
 public enum EntityType implements JcrName {
 	// entity
-	entity, definition,
+	entity, local,
 	// typology
 	typologies, terms, term,
 	// form
