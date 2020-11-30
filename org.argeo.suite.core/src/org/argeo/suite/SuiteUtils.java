@@ -38,7 +38,7 @@ public class SuiteUtils {
 				JackrabbitSecurityUtils.denyPrivilege(adminSession, userNode.getPath(), SuiteRole.coworker.dn(),
 						Privilege.JCR_READ);
 				JcrUtils.addPrivilege(adminSession, userNode.getPath(), new X500Principal(userDn.toString()).getName(),
-						Privilege.JCR_ALL);
+						Privilege.JCR_READ);
 			} else {
 				userNode = usersBase.getNode(uid);
 			}

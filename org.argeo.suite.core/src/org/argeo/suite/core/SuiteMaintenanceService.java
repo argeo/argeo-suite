@@ -34,7 +34,7 @@ public class SuiteMaintenanceService extends AbstractMaintenanceService {
 	public void configurePrivileges(Session adminSession) throws RepositoryException {
 		JcrUtils.addPrivilege(adminSession, EntityType.user.basePath(), NodeConstants.ROLE_USER_ADMIN,
 				Privilege.JCR_ALL);
-		JcrUtils.addPrivilege(adminSession, "/", SuiteRole.coworker.dn(), Privilege.JCR_READ);
+		//JcrUtils.addPrivilege(adminSession, "/", SuiteRole.coworker.dn(), Privilege.JCR_READ);
 	}
 
 }

@@ -342,8 +342,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			} else if (isTopic(event, SuiteEvent.switchLayer)) {
 				String layerId = get(event, SuiteEvent.LAYER);
 				if (layerId != null) {
-					ui.switchToLayer(layerId, Jcr.getRootNode(ui.getSession(null)));
-					//ui.getCmsView().navigateTo("~");
+					ui.switchToLayer(layerId, ui.getUserDir());
+					// ui.getCmsView().navigateTo("~");
 				} else {
 					Node node = getNode(ui, event);
 					if (node != null) {
