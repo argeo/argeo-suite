@@ -136,7 +136,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 					Session adminSession = null;
 					try {
 						adminSession = NodeUtils.openDataAdminSession(getRepository(), null);
-						Node userDir = SuiteUtils.getOrCreateSessionDir(adminSession, cmsSession);
+						Node userDir = SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
 						ui.initSessions(getRepository(), userDir.getPath());
 					} finally {
 						Jcr.logout(adminSession);

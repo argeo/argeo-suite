@@ -12,6 +12,7 @@ import org.argeo.api.NodeConstants;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.maintenance.AbstractMaintenanceService;
+import org.argeo.suite.SuiteRole;
 
 /** Initialises an Argeo Suite backend. */
 public class SuiteMaintenanceService extends AbstractMaintenanceService {
@@ -33,6 +34,7 @@ public class SuiteMaintenanceService extends AbstractMaintenanceService {
 	public void configurePrivileges(Session adminSession) throws RepositoryException {
 		JcrUtils.addPrivilege(adminSession, EntityType.user.basePath(), NodeConstants.ROLE_USER_ADMIN,
 				Privilege.JCR_ALL);
+		JcrUtils.addPrivilege(adminSession, "/", SuiteRole.coworker.dn(), Privilege.JCR_READ);
 	}
 
 }

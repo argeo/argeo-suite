@@ -5,6 +5,8 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
@@ -21,12 +23,14 @@ import javax.servlet.http.Part;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.argeo.api.NodeUtils;
+import org.argeo.cms.auth.CmsSession;
 import org.argeo.cms.servlet.ServletAuthUtils;
-import org.argeo.entity.EntityNames;
-import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
+import org.argeo.suite.SuiteUtils;
 import org.argeo.support.odk.OrxType;
+import org.argeo.support.xforms.FormSubmissionListener;
 
 /** Receives a form submission. */
 public class OdkSubmissionServlet extends HttpServlet {
@@ -40,6 +44,8 @@ public class OdkSubmissionServlet extends HttpServlet {
 
 	private Repository repository;
 
+	private Set<FormSubmissionListener> submissionListeners = new HashSet<>();
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("text/xml; charset=utf-8");
@@ -50,9 +56,24 @@ public class OdkSubmissionServlet extends HttpServlet {
 		Session session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), req);
 
 		try {
-			Node submissions = JcrUtils.mkdirs(session,
-					"/" + EntityType.form.get() + "/" + EntityNames.SUBMISSIONS_BASE);
-			Node submission = submissions.addNode(submissionNameFormatter.format(Instant.now()),
+//			Node submissions = JcrUtils.mkdirs(session,
+//					"/" + EntityType.form.get() + "/" + EntityNames.SUBMISSIONS_BASE);
+			CmsSession cmsSession = ServletAuthUtils.getCmsSession(req);
+
+			ClassLoader currentContextCl = Thread.currentThread().getContextClassLoader();
+			Thread.currentThread().setContextClassLoader(ServletAuthUtils.class.getClassLoader());
+			Session adminSession = null;
+			try {
+				// TODO centralise at a deeper level
+				adminSession = NodeUtils.openDataAdminSession(repository, null);
+				SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
+			} finally {
+				Jcr.logout(adminSession);
+				Thread.currentThread().setContextClassLoader(currentContextCl);
+			}
+
+			Node cmsSessionNode = SuiteUtils.getCmsSessionNode(session, cmsSession);
+			Node submission = cmsSessionNode.addNode(submissionNameFormatter.format(Instant.now()),
 					OrxType.submission.get());
 			for (Part part : req.getParts()) {
 				if (log.isDebugEnabled())
@@ -77,6 +98,9 @@ public class OdkSubmissionServlet extends HttpServlet {
 				}
 			}
 			session.save();
+			for (FormSubmissionListener submissionListener : submissionListeners) {
+				submissionListener.formSubmissionReceived(submission);
+			}
 		} catch (RepositoryException e) {
 			e.printStackTrace();
 			resp.setStatus(503);
@@ -93,4 +117,11 @@ public class OdkSubmissionServlet extends HttpServlet {
 		this.repository = repository;
 	}
 
+	public synchronized void addSubmissionListener(FormSubmissionListener listener) {
+		submissionListeners.add(listener);
+	}
+
+	public synchronized void removeSubmissionListener(FormSubmissionListener listener) {
+		submissionListeners.remove(listener);
+	}
 }

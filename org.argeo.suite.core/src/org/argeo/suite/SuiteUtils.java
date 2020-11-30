@@ -6,9 +6,11 @@ import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.security.Privilege;
 import javax.naming.ldap.LdapName;
+import javax.security.auth.x500.X500Principal;
 
 import org.argeo.cms.auth.CmsSession;
 import org.argeo.entity.EntityType;
+import org.argeo.jackrabbit.security.JackrabbitSecurityUtils;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.naming.LdapAttrs;
@@ -33,6 +35,10 @@ public class SuiteUtils {
 				userNode.setProperty(LdapAttrs.distinguishedName.property(), userDn.toString());
 				userNode.setProperty(LdapAttrs.uid.property(), uid);
 				adminSession.save();
+				JackrabbitSecurityUtils.denyPrivilege(adminSession, userNode.getPath(), SuiteRole.coworker.dn(),
+						Privilege.JCR_READ);
+				JcrUtils.addPrivilege(adminSession, userNode.getPath(), new X500Principal(userDn.toString()).getName(),
+						Privilege.JCR_ALL);
 			} else {
 				userNode = usersBase.getNode(uid);
 			}
@@ -42,7 +48,15 @@ public class SuiteUtils {
 		}
 	}
 
-	public static Node getOrCreateSessionDir(Session adminSession, CmsSession cmsSession) {
+	public static Node getCmsSessionNode(Session session, CmsSession cmsSession) {
+		try {
+			return session.getNode(getUserNodePath(cmsSession.getUserDn()) + '/' + cmsSession.getUuid().toString());
+		} catch (RepositoryException e) {
+			throw new JcrException("Cannot get session dir for " + cmsSession, e);
+		}
+	}
+
+	public static Node getOrCreateCmsSessionNode(Session adminSession, CmsSession cmsSession) {
 		try {
 			LdapName userDn = cmsSession.getUserDn();
 //			String uid = userDn.get(userDn.size() - 1);
@@ -58,17 +72,17 @@ public class SuiteUtils {
 //				userNode = usersBase.getNode(uid);
 //			}
 			String cmsSessionUuid = cmsSession.getUuid().toString();
-			Node userDir;
+			Node cmsSessionNode;
 			if (!userNode.hasNode(cmsSessionUuid)) {
-				userDir = userNode.addNode(cmsSessionUuid, NodeType.NT_UNSTRUCTURED);
-				userDir.addMixin(NodeType.MIX_CREATED);
+				cmsSessionNode = userNode.addNode(cmsSessionUuid, NodeType.NT_UNSTRUCTURED);
+				cmsSessionNode.addMixin(NodeType.MIX_CREATED);
 				adminSession.save();
-				JcrUtils.addPrivilege(adminSession, userDir.getPath(), cmsSession.getUserDn().toString(),
+				JcrUtils.addPrivilege(adminSession, cmsSessionNode.getPath(), cmsSession.getUserRole(),
 						Privilege.JCR_ALL);
 			} else {
-				userDir = userNode.getNode(cmsSessionUuid);
+				cmsSessionNode = userNode.getNode(cmsSessionUuid);
 			}
-			return userDir;
+			return cmsSessionNode;
 		} catch (RepositoryException e) {
 			throw new JcrException("Cannot create session dir for " + cmsSession, e);
 		}
