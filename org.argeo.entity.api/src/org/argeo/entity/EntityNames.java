@@ -41,4 +41,8 @@ public interface EntityNames {
 	final String GEO_LAT = "geo:lat";
 	final String GEO_LONG = "geo:long";
 	final String GEO_ALT = "geo:alt";
+
+	// SVG
+	final String SVG_WIDTH = "svg:width";
+	final String SVG_HEIGHT = "svg:height";
 }

@@ -2,7 +2,7 @@
 <xsd = "http://www.w3.org/2001/XMLSchema">
 <h = "http://www.w3.org/1999/xhtml">
 // see https://www.w3.org/2003/01/geo/
-//<geo = "http://www.w3.org/2003/01/geo/wgs84_pos#">
+<geo = "http://www.w3.org/2003/01/geo/wgs84_pos#">
 <svg = "http://www.w3.org/2000/svg">
 
 <ldap = "http://www.argeo.org/ns/ldap">
@@ -82,4 +82,11 @@ mixin
 mixin
 - ldap:distinguishedName (String)
 - ldap:uid (String)
+
+// GEOGRAPHY
+[entity:geopoint]
+mixin
+- geo:long (DOUBLE)
+- geo:lat (DOUBLE)
+- geo:alt (DOUBLE)
 

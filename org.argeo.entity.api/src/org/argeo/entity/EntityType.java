@@ -10,6 +10,8 @@ public enum EntityType implements JcrName {
 	form, formSet, formSubmission,
 	// graphics
 	box,
+	// geography
+	geopoint,
 	// ldap
 	person, user;
 
