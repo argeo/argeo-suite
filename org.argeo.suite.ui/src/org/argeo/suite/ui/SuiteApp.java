@@ -172,6 +172,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	}
 
 	private <T> T findByType(Map<String, RankedObject<T>> byType, Node context) {
+		if (context == null)
+			throw new IllegalArgumentException("A node should be provided");
 		try {
 			// mixins
 			Set<String> types = new TreeSet<>();
@@ -234,45 +236,6 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			suiteUi.getCmsView().sendEvent(SuiteEvent.switchLayer.topic(), SuiteEvent.eventProperties(node));
 			suiteUi.getCmsView().sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.eventProperties(node));
 		}
-
-//		CmsView cmsView = CmsView.getCmsView(parent);
-//		if (cmsView.isAnonymous())
-//			return;
-//		Session session = null;
-//		try {
-//			if (state != null && state.startsWith("/")) {
-//				String path = state.substring(1);
-//				String workspace;
-//				if (path.equals("")) {
-//					workspace = null;
-//					path = "/";
-//				} else {
-//					int index = path.indexOf('/');
-//					if (index == 0) {
-//						log.error("Cannot interpret " + state);
-//						cmsView.navigateTo("~");
-//						return;
-//					} else if (index > 0) {
-//						workspace = path.substring(0, index);
-//						path = path.substring(index);
-//					} else {// index<0, assuming root node
-//						workspace = path;
-//						path = "/";
-//					}
-//				}
-//				session = cmsView.doAs(() -> Jcr.login(getRepository(), workspace));
-//
-//				Node node = session.getNode(path);
-//
-//				cmsView.sendEvent(SuiteEvent.switchLayer.topic(), SuiteEvent.eventProperties(node));
-//				cmsView.sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.eventProperties(node));
-//			}
-//		} catch (RepositoryException e) {
-//			log.error("Cannot load state " + state, e);
-//			cmsView.navigateTo("~");
-//		} finally {
-//			JcrUtils.logoutQuietly(session);
-//		}
 	}
 
 	private String nodeToState(Node node) {
@@ -304,8 +267,6 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				path = "/";
 			}
 		}
-//		session = cmsView.doAs(() -> Jcr.login(getRepository(), workspace));
-
 		Session session = suiteUi.getSession(workspace);
 		if (session == null)
 			return null;
@@ -327,6 +288,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 //			SuiteLayer currentLayer = currentLayerId != null ? layersByPid.get(currentLayerId).get() : null;
 			if (isTopic(event, SuiteEvent.refreshPart)) {
 				Node node = getNode(ui, event);
+				if (node == null)
+					return;
 				CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
 				SuiteLayer layer = findByType(layersByType, node);
 				ui.switchToLayer(layer, node);
@@ -334,6 +297,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				ui.getCmsView().stateChanged(nodeToState(node), Jcr.getTitle(node));
 			} else if (isTopic(event, SuiteEvent.openNewPart)) {
 				Node node = getNode(ui, event);
+				if (node == null)
+					return;
 				CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
 				SuiteLayer layer = findByType(layersByType, node);
 				ui.switchToLayer(layer, node);

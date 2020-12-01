@@ -10,7 +10,9 @@ import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.argeo.api.NodeConstants;
 import org.argeo.cms.Localized;
+import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
@@ -31,11 +33,12 @@ public class DefaultLeadPane implements CmsUiProvider {
 	private final static Log log = LogFactory.getLog(DefaultLeadPane.class);
 
 	public static enum Property {
-		defaultLayers;
+		defaultLayers, adminLayers;
 	}
 
 	private Map<String, RankedObject<SuiteLayer>> layers = Collections.synchronizedSortedMap(new TreeMap<>());
 	private String[] defaultLayers;
+	private String[] adminLayers;
 
 	@Override
 	public Control createUi(Composite parent, Node node) throws RepositoryException {
@@ -68,6 +71,30 @@ public class DefaultLeadPane implements CmsUiProvider {
 					first = b;
 			}
 		}
+
+		// TODO factorise
+		boolean isAdmin = cmsView.doAs(() -> CurrentUser.isInRole(NodeConstants.ROLE_USER_ADMIN));
+		if (isAdmin)
+			for (String layerId : adminLayers) {
+				if (layers.containsKey(layerId)) {
+					RankedObject<SuiteLayer> layerObj = layers.get(layerId);
+
+					// TODO deal with i10n
+					String titleStr = (String) layerObj.getProperties().get(SuiteLayer.Property.title.name());
+					Localized title = null;
+					if (titleStr != null)
+						title = new Localized.Untranslated(titleStr);
+
+					String iconName = (String) layerObj.getProperties().get(SuiteLayer.Property.icon.name());
+					SuiteIcon icon = null;
+					if (iconName != null)
+						icon = SuiteIcon.valueOf(iconName);
+
+					Button b = createButton(parent, layerId, title, icon);
+					if (first == null)
+						first = b;
+				}
+			}
 
 //		Button dashboardB = createButton(parent, SuiteMsg.dashboard.name(), SuiteMsg.dashboard, SuiteIcon.dashboard);
 		if (!cmsView.isAnonymous()) {
@@ -102,6 +129,9 @@ public class DefaultLeadPane implements CmsUiProvider {
 			throw new IllegalArgumentException("Default layers must be set.");
 		if (log.isDebugEnabled())
 			log.debug("Default layers: " + Arrays.asList(defaultLayers));
+		adminLayers = (String[]) properties.get(Property.adminLayers.toString());
+		if (log.isDebugEnabled() && adminLayers != null)
+			log.debug("Admin layers: " + Arrays.asList(adminLayers));
 	}
 
 	public void addLayer(SuiteLayer layer, Map<String, Object> properties) {
