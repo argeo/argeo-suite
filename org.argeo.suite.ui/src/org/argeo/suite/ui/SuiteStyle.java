@@ -13,7 +13,7 @@ public enum SuiteStyle implements CmsStyle {
 	// Group composite
 	titleContainer, titleLabel, subTitleLabel,formLine,formColumn,navigationBar,navigationTitle,navigationButton,
 	// Forms elements
-	simpleLabel, simpleText,
+	simpleLabel, simpleText, simpleInput,
 	// table
 	titleCell,
 	// tabbed area

@@ -59,6 +59,9 @@ Button.argeo-suite-leadPane:hover {
 .argeo-suite-simpleText {
 	
 }
+.argeo-suite-simpleInput {
+	padding:4px 8px 4px 8px;
+}
 
 .argeo-suite-titleCell {
 	font: bold 11px sans-serif;
