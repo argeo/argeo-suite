@@ -20,7 +20,7 @@ Label.argeo-suite-leadPane {
 }
 
 Button.argeo-suite-leadPane:hover {
-	cursor:pointer;
+	cursor: pointer;
 }
 
 .argeo-suite-recentItems {
@@ -47,17 +47,21 @@ Button.argeo-suite-leadPane:hover {
 	margin: 4px 8px;
 }
 
-.argeo-suite-formLine{
+.argeo-suite-formLine {
 	padding: 4px 8px 4px 16px;
 }
 
 .argeo-suite-simpleLabel {
 	font: normal 11px sans-serif;
-	border:8px solid #eee;
+	border: 8px solid #eee;
 }
 
 .argeo-suite-simpleText {
 	
+}
+
+.argeo-suite-simpleInput {
+	padding: 4px 8px 4px 8px;
 }
 
 .argeo-suite-titleCell {

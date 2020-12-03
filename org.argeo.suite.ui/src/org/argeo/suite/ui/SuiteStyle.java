@@ -11,13 +11,13 @@ public enum SuiteStyle implements CmsStyle {
 	// Lead pane
 	leadPane, leadPaneItem,
 	// Group composite
-	titleContainer, titleLabel, subTitleLabel,formLine,formColumn,navigationBar,navigationTitle,navigationButton,
+	titleContainer, titleLabel, subTitleLabel, formLine, formColumn, navigationBar, navigationTitle, navigationButton,
 	// Forms elements
-	simpleLabel, simpleText,
+	simpleLabel, simpleText, simpleInput,
 	// table
 	titleCell,
 	// tabbed area
-	mainTabBody,mainTabSelected, mainTab,
+	mainTabBody, mainTabSelected, mainTab,
 	// Buttons
 	inlineButton;
 
