@@ -5,17 +5,16 @@ import java.util.Set;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import org.argeo.api.NodeConstants;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
+import org.argeo.cms.ui.dialogs.CmsWizardDialog;
 import org.argeo.cms.ui.util.CmsUiUtils;
-import org.argeo.entity.EntityType;
-import org.argeo.jcr.Jcr;
-import org.argeo.jcr.JcrUtils;
+import org.argeo.eclipse.ui.Selected;
 import org.argeo.naming.LdapAttrs;
 import org.argeo.suite.SuiteRole;
+import org.argeo.suite.ui.dialogs.NewUserWizard;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -25,6 +24,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -125,6 +126,16 @@ public class AdminEntryArea implements CmsUiProvider {
 				} else {
 					deleteItem.setEnabled(false);
 				}
+			}
+		});
+
+		addItem.addSelectionListener((Selected) (e) -> {
+			//SuiteUtils.getOrCreateUserNode(adminSession, userDn);
+			Wizard wizard = new NewUserWizard(null);
+			CmsWizardDialog dialog = new CmsWizardDialog(parent.getShell(), wizard);
+			// WizardDialog dialog = new WizardDialog(shell, wizard);
+			if (dialog.open() == Window.OK) {
+				// TODO create
 			}
 		});
 

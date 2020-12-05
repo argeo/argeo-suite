@@ -226,8 +226,22 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	@Override
 	public void setState(Composite parent, String state) {
-		if (state == null || !state.startsWith("/"))
+		if (state == null)
 			return;
+		if (!state.startsWith("/")) {
+			if (parent instanceof SuiteUi) {
+				SuiteUi ui = (SuiteUi) parent;
+				String currentLayerId = ui.getCurrentLayerId();
+				if (state.equals(currentLayerId))
+					return; // does nothing
+				else {
+					Map<String, Object> properties = new HashMap<>();
+					properties.put(SuiteEvent.LAYER, state);
+					ui.getCmsView().sendEvent(SuiteEvent.switchLayer.topic(), properties);
+				}
+			}
+			return;
+		}
 		SuiteUi suiteUi = (SuiteUi) parent;
 		Node node = stateToNode(suiteUi, state);
 		if (node == null) {
@@ -245,7 +259,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	private Node stateToNode(SuiteUi suiteUi, String state) {
 		if (suiteUi == null)
 			return null;
-		if (state == null)
+		if (state == null || !state.startsWith("/"))
 			return null;
 
 		String path = state.substring(1);
@@ -293,7 +307,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
 				SuiteLayer layer = findByType(layersByType, node);
 				ui.switchToLayer(layer, node);
-				layer.view(uiProvider, ui.getCurrentWorkArea(), node);
+				ui.getCmsView().runAs(() -> layer.view(uiProvider, ui.getCurrentWorkArea(), node));
 				ui.getCmsView().stateChanged(nodeToState(node), Jcr.getTitle(node));
 			} else if (isTopic(event, SuiteEvent.openNewPart)) {
 				Node node = getNode(ui, event);
@@ -302,18 +316,19 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
 				SuiteLayer layer = findByType(layersByType, node);
 				ui.switchToLayer(layer, node);
-				layer.open(uiProvider, ui.getCurrentWorkArea(), node);
+				ui.getCmsView().runAs(() -> layer.open(uiProvider, ui.getCurrentWorkArea(), node));
 				ui.getCmsView().stateChanged(nodeToState(node), Jcr.getTitle(node));
 			} else if (isTopic(event, SuiteEvent.switchLayer)) {
 				String layerId = get(event, SuiteEvent.LAYER);
 				if (layerId != null) {
-					ui.switchToLayer(layerId, ui.getUserDir());
-					// ui.getCmsView().navigateTo("~");
+//					ui.switchToLayer(layerId, ui.getUserDir());
+					ui.getCmsView().runAs(() -> ui.switchToLayer(layerId, ui.getUserDir()));
+					ui.getCmsView().navigateTo(layerId);
 				} else {
 					Node node = getNode(ui, event);
 					if (node != null) {
 						SuiteLayer layer = findByType(layersByType, node);
-						ui.switchToLayer(layer, node);
+						ui.getCmsView().runAs(() -> ui.switchToLayer(layer, node));
 					}
 				}
 			}

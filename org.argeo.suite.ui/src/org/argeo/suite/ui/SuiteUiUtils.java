@@ -8,8 +8,10 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.argeo.api.NodeConstants;
+import org.argeo.cms.Localized;
 import org.argeo.cms.ui.dialogs.CmsWizardDialog;
 import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.JcrException;
@@ -56,7 +58,7 @@ public class SuiteUiUtils {
 	public static Label addFormLabel(Composite parent, String label) {
 		Label lbl = new Label(parent, SWT.WRAP);
 		lbl.setText(label);
-		lbl.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, true, true));
+		//lbl.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, true, true));
 		CmsUiUtils.style(lbl, SuiteStyle.simpleLabel);
 		return lbl;
 	}
@@ -89,7 +91,7 @@ public class SuiteUiUtils {
 	public static Text addFormLine(Composite parent, String label, String text) {
 		Composite lineComposite = new Composite(parent, SWT.NONE);
 		lineComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		lineComposite.setLayout(new GridLayout(2, true));
+		lineComposite.setLayout(new GridLayout(2, false));
 		CmsUiUtils.style(lineComposite, SuiteStyle.formLine);
 		addFormLabel(lineComposite, label);
 		Text txt = addFormTextField(lineComposite, text, null);
@@ -100,7 +102,7 @@ public class SuiteUiUtils {
 	public static Text addFormInput(Composite parent, String label, String placeholder) {
 		Composite lineComposite = new Composite(parent, SWT.NONE);
 		lineComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		lineComposite.setLayout(new GridLayout(2, true));
+		lineComposite.setLayout(new GridLayout(2, false));
 		CmsUiUtils.style(lineComposite, SuiteStyle.formLine);
 		addFormLabel(lineComposite, label);
 		Text txt = addFormInputField(lineComposite, placeholder);
@@ -136,6 +138,14 @@ public class SuiteUiUtils {
 		Text txt = addFormTextField(columnComposite, text, null);
 		txt.setLayoutData(CmsUiUtils.fillWidth());
 		return txt;
+	}
+
+	public static Label createBoldLabel(Composite parent, Localized localized) {
+		Label label = new Label(parent, SWT.LEAD);
+		label.setText(localized.lead());
+		label.setFont(EclipseUiUtils.getBoldFont(parent));
+		label.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, false, false));
+		return label;
 	}
 
 	public static Label addFormPicture(Composite parent, String label, Node fileNode) throws RepositoryException {
