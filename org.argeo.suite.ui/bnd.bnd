@@ -13,4 +13,6 @@ org.eclipse.swt,\
 org.osgi.framework,\
 org.argeo.entity,\
 org.eclipse.core.commands.common,\
+org.eclipse.jface.window,\
+org.argeo.eclipse.ui.dialogs,\
 *
