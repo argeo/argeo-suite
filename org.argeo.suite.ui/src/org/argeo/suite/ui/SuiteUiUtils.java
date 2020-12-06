@@ -13,6 +13,7 @@ import org.argeo.cms.ui.CmsEditable;
 import org.argeo.cms.ui.dialogs.CmsWizardDialog;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
+import org.argeo.eclipse.ui.dialogs.LightweightDialog;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
@@ -21,11 +22,16 @@ import org.argeo.jcr.JcrUtils;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -240,6 +246,52 @@ public class SuiteUiUtils {
 		img.setText(CmsUiUtils.img(fileNode, width.toString(), height.toString()));
 		if (parent.getLayout() instanceof GridLayout)
 			img.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
+		img.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseDown(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+				LightweightDialog dialog = new LightweightDialog(img.getShell()) {
+
+					@Override
+					protected Control createDialogArea(Composite parent) {
+						parent.setLayout(new GridLayout());
+						ScrolledComposite scroll = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+						scroll.setLayoutData(CmsUiUtils.fillAll());
+						scroll.setLayout(CmsUiUtils.noSpaceGridLayout());
+						scroll.setExpandHorizontal(true);
+						scroll.setExpandVertical(true);
+						//scroll.setAlwaysShowScrollBars(true);
+
+						Composite c = new Composite(scroll, SWT.NONE);
+						scroll.setContent(c);
+						c.setLayout(new GridLayout());
+						c.setLayoutData(CmsUiUtils.fillAll());
+						Label bigImg = new Label(c, SWT.NONE);
+						CmsUiUtils.markup(bigImg);
+						bigImg.setText(CmsUiUtils.img(fileNode, Jcr.get(content, EntityNames.SVG_WIDTH),
+								Jcr.get(content, EntityNames.SVG_HEIGHT)));
+						bigImg.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
+						return bigImg;
+					}
+
+					@Override
+					protected Point getInitialSize() {
+						Point shellSize = img.getShell().getSize();
+						return new Point(shellSize.x - 100, shellSize.y - 100);
+					}
+
+				};
+				dialog.open();
+			}
+		});
 		return img;
 	}
 
