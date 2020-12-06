@@ -228,7 +228,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	public void setState(Composite parent, String state) {
 		if (state == null)
 			return;
-		if (!state.startsWith("/")) {
+		if (!state.startsWith("/") && !state.equals("~")) {
 			if (parent instanceof SuiteUi) {
 				SuiteUi ui = (SuiteUi) parent;
 				String currentLayerId = ui.getCurrentLayerId();

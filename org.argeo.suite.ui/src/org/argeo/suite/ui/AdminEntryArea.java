@@ -59,7 +59,7 @@ public class AdminEntryArea implements CmsUiProvider {
 		});
 
 		TableViewerColumn givenNameCol = new TableViewerColumn(usersViewer, SWT.NONE);
-		givenNameCol.getColumn().setWidth(70);
+		givenNameCol.getColumn().setWidth(150);
 		givenNameCol.setLabelProvider(new ColumnLabelProvider() {
 
 			@Override
@@ -70,7 +70,7 @@ public class AdminEntryArea implements CmsUiProvider {
 		});
 
 		TableViewerColumn snCol = new TableViewerColumn(usersViewer, SWT.NONE);
-		snCol.getColumn().setWidth(70);
+		snCol.getColumn().setWidth(150);
 		snCol.setLabelProvider(new ColumnLabelProvider() {
 
 			@Override
@@ -81,7 +81,7 @@ public class AdminEntryArea implements CmsUiProvider {
 		});
 
 		TableViewerColumn mailCol = new TableViewerColumn(usersViewer, SWT.NONE);
-		mailCol.getColumn().setWidth(200);
+		mailCol.getColumn().setWidth(400);
 		mailCol.setLabelProvider(new ColumnLabelProvider() {
 
 			@Override
@@ -130,7 +130,7 @@ public class AdminEntryArea implements CmsUiProvider {
 		});
 
 		addItem.addSelectionListener((Selected) (e) -> {
-			//SuiteUtils.getOrCreateUserNode(adminSession, userDn);
+			// SuiteUtils.getOrCreateUserNode(adminSession, userDn);
 			Wizard wizard = new NewUserWizard(null);
 			CmsWizardDialog dialog = new CmsWizardDialog(parent.getShell(), wizard);
 			// WizardDialog dialog = new WizardDialog(shell, wizard);

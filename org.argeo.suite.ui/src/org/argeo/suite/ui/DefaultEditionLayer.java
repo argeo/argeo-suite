@@ -1,5 +1,9 @@
 package org.argeo.suite.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
@@ -7,6 +11,7 @@ import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.widgets.TabbedArea;
+import org.argeo.util.LangUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridLayout;
@@ -17,6 +22,7 @@ import org.eclipse.swt.widgets.Control;
 public class DefaultEditionLayer implements SuiteLayer {
 	private CmsUiProvider entryArea;
 	private CmsUiProvider workArea;
+	private List<String> weights = new ArrayList<>();
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
@@ -57,6 +63,10 @@ public class DefaultEditionLayer implements SuiteLayer {
 		tabbedArea.open(uiProvider, context);
 	}
 
+	public void init(Map<String, Object> properties) {
+		weights = LangUtils.toStringList(properties.get(Property.weights.name()));
+	}
+
 	public void setEntryArea(CmsUiProvider entryArea) {
 		this.entryArea = entryArea;
 	}
@@ -94,8 +104,17 @@ public class DefaultEditionLayer implements SuiteLayer {
 				entryArea = new Composite(this, SWT.NONE);
 				editorArea = new Composite(this, SWT.NONE);
 			}
-			int[] weights = new int[] { 3000, 7000 };
-			setWeights(weights);
+
+			if (weights.size() != 0) {
+				int[] actualWeight = new int[weights.size()];
+				for (int i = 0; i < weights.size(); i++) {
+					actualWeight[i] = Integer.parseInt(weights.get(i));
+					setWeights(actualWeight);
+				}
+			} else {
+				int[] actualWeights = new int[] { 3000, 7000 };
+				setWeights(actualWeights);
+			}
 			editorArea.setLayout(new GridLayout());
 
 			if (DefaultEditionLayer.this.workArea == null) {
