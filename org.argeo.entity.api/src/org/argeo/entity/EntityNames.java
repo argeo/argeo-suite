@@ -29,12 +29,16 @@ public interface EntityNames {
 	final String ENTITY_RELATED_TO = "entity:relatedTo";
 
 	// LDAP-LIKE ENTITIES
+	@Deprecated
 	final String DISPLAY_NAME = LdapAttrs.displayName.property();
 	// Persons
+	@Deprecated
 	final String GIVEN_NAME = LdapAttrs.givenName.property();
+	@Deprecated
 	final String SURNAME = LdapAttrs.sn.property();
+	@Deprecated
 	final String EMAIL = LdapAttrs.mail.property();
-
+	@Deprecated
 	final String OU = LdapAttrs.ou.property();
 
 	// WGS84

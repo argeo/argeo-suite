@@ -9,11 +9,13 @@ import javax.jcr.Session;
 
 import org.argeo.api.NodeConstants;
 import org.argeo.cms.Localized;
+import org.argeo.cms.ui.CmsEditable;
 import org.argeo.cms.ui.dialogs.CmsWizardDialog;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
+import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
 import org.eclipse.jface.window.Window;
@@ -58,13 +60,17 @@ public class SuiteUiUtils {
 	public static Label addFormLabel(Composite parent, String label) {
 		Label lbl = new Label(parent, SWT.WRAP);
 		lbl.setText(label);
-		//lbl.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, true, true));
+		// lbl.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, true, true));
 		CmsUiUtils.style(lbl, SuiteStyle.simpleLabel);
 		return lbl;
 	}
 
 	public static Text addFormTextField(Composite parent, String text, String message) {
-		Text txt = new Text(parent, SWT.WRAP);
+		return addFormTextField(parent, text, message, SWT.NONE);
+	}
+
+	public static Text addFormTextField(Composite parent, String text, String message, int style) {
+		Text txt = new Text(parent, style);
 		if (text != null)
 			txt.setText(text);
 		if (message != null)
@@ -95,6 +101,29 @@ public class SuiteUiUtils {
 		CmsUiUtils.style(lineComposite, SuiteStyle.formLine);
 		addFormLabel(lineComposite, label);
 		Text txt = addFormTextField(lineComposite, text, null);
+		txt.setEditable(false);
+		txt.setLayoutData(CmsUiUtils.fillWidth());
+		return txt;
+	}
+
+	public static Text addFormLine(Composite parent, String label, Node node, String property,
+			CmsEditable cmsEditable) {
+		Composite lineComposite = new Composite(parent, SWT.NONE);
+		lineComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		lineComposite.setLayout(new GridLayout(2, false));
+		CmsUiUtils.style(lineComposite, SuiteStyle.formLine);
+		addFormLabel(lineComposite, label);
+		String text = Jcr.get(node, property);
+//		int style = cmsEditable.isEditing() ? SWT.WRAP : SWT.WRAP;
+		Text txt = addFormTextField(lineComposite, text, null, SWT.WRAP);
+		if (cmsEditable != null && cmsEditable.isEditing()) {
+			txt.addModifyListener((e) -> {
+				Jcr.set(node, property, txt.getText());
+				Jcr.save(node);
+			});
+		} else {
+			txt.setEditable(false);
+		}
 		txt.setLayoutData(CmsUiUtils.fillWidth());
 		return txt;
 	}
@@ -131,11 +160,33 @@ public class SuiteUiUtils {
 
 	/** creates a single vertical-block composite for key:value display */
 	public static Text addFormColumn(Composite parent, String label, String text) {
-		Composite columnComposite = new Composite(parent, SWT.NONE);
-		columnComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		columnComposite.setLayout(new GridLayout(1, false));
-		addFormLabel(columnComposite, label);
-		Text txt = addFormTextField(columnComposite, text, null);
+//		Composite columnComposite = new Composite(parent, SWT.NONE);
+//		columnComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+//		columnComposite.setLayout(new GridLayout(1, false));
+		addFormLabel(parent, label);
+		Text txt = addFormTextField(parent, text, null);
+		txt.setEditable(false);
+		txt.setLayoutData(CmsUiUtils.fillWidth());
+		return txt;
+	}
+
+	public static Text addFormColumn(Composite parent, String label, Node node, String property,
+			CmsEditable cmsEditable) {
+//		Composite columnComposite = new Composite(parent, SWT.NONE);
+//		columnComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+//		columnComposite.setLayout(new GridLayout(1, false));
+		addFormLabel(parent, label);
+		String text = Jcr.get(node, property);
+//		int style = cmsEditable.isEditing() ? SWT.WRAP : SWT.WRAP;
+		Text txt = addFormTextField(parent, text, null, SWT.WRAP);
+		if (cmsEditable != null && cmsEditable.isEditing()) {
+			txt.addModifyListener((e) -> {
+				Jcr.set(node, property, txt.getText());
+				Jcr.save(node);
+			});
+		} else {
+			txt.setEditable(false);
+		}
 		txt.setLayoutData(CmsUiUtils.fillWidth());
 		return txt;
 	}
