@@ -18,14 +18,15 @@ public interface EntityNames {
 	final String ADM = "adm";
 
 	final String ENTITY_TYPE = "entity:type";
-	final String ENTITY_UID = "entity:uid";
-	final String ENTITY_NAME = "entity:name";
+	//final String ENTITY_UID = "entity:uid";
+	//final String ENTITY_NAME = "entity:name";
 
 	// GENERIC CONCEPTS
 	/** The language which is relevant. */
 	final String XML_LANG = "xml:lang";
 	/** The date which is relevant. */
 	final String ENTITY_DATE = "entity:date";
+	@Deprecated
 	final String ENTITY_RELATED_TO = "entity:relatedTo";
 
 	// LDAP-LIKE ENTITIES
