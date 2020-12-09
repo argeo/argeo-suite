@@ -226,7 +226,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	@Override
 	public void setState(Composite parent, String state) {
-		if (state == null)
+		if (state == null || state.equals("~"))
 			return;
 		if (!state.startsWith("/") && !state.equals("~")) {
 			if (parent instanceof SuiteUi) {
