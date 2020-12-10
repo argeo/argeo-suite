@@ -105,6 +105,8 @@ public class OdkSubmissionServlet extends HttpServlet {
 			e.printStackTrace();
 			resp.setStatus(503);
 			return;
+		} finally {
+			Jcr.logout(session);
 		}
 
 		resp.setStatus(201);
