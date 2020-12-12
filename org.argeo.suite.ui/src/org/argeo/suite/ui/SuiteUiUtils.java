@@ -244,8 +244,12 @@ public class SuiteUiUtils {
 		Label img = new Label(parent, SWT.NONE);
 		CmsUiUtils.markup(img);
 		img.setText(CmsUiUtils.img(fileNode, width.toString(), height.toString()));
-		if (parent.getLayout() instanceof GridLayout)
-			img.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
+		if (parent.getLayout() instanceof GridLayout) {
+			GridData gd = new GridData(SWT.CENTER, SWT.CENTER, false, false);
+			gd.widthHint = width.intValue();
+			gd.heightHint = height.intValue();
+			img.setLayoutData(gd);
+		}
 		img.addMouseListener(new MouseListener() {
 
 			@Override
@@ -268,7 +272,7 @@ public class SuiteUiUtils {
 						scroll.setLayout(CmsUiUtils.noSpaceGridLayout());
 						scroll.setExpandHorizontal(true);
 						scroll.setExpandVertical(true);
-						//scroll.setAlwaysShowScrollBars(true);
+						// scroll.setAlwaysShowScrollBars(true);
 
 						Composite c = new Composite(scroll, SWT.NONE);
 						scroll.setContent(c);

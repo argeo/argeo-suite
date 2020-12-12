@@ -94,3 +94,6 @@ mixin
 - geo:lat (DOUBLE)
 - geo:alt (DOUBLE)
 
+[entity:bearing]
+mixin
+- svg:direction (DOUBLE)

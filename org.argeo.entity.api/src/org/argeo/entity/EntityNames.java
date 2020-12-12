@@ -18,8 +18,8 @@ public interface EntityNames {
 	final String ADM = "adm";
 
 	final String ENTITY_TYPE = "entity:type";
-	//final String ENTITY_UID = "entity:uid";
-	//final String ENTITY_NAME = "entity:name";
+	// final String ENTITY_UID = "entity:uid";
+	// final String ENTITY_NAME = "entity:name";
 
 	// GENERIC CONCEPTS
 	/** The language which is relevant. */
@@ -50,4 +50,8 @@ public interface EntityNames {
 	// SVG
 	final String SVG_WIDTH = "svg:width";
 	final String SVG_HEIGHT = "svg:height";
+	final String SVG_LENGTH = "svg:length";
+	final String SVG_UNIT = "svg:unit";
+	final String SVG_DUR = "svg:dur";
+	final String SVG_DIRECTION = "svg:direction";
 }

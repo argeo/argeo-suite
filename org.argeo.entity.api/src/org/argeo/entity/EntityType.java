@@ -11,7 +11,7 @@ public enum EntityType implements JcrName {
 	// graphics
 	box,
 	// geography
-	geopoint,
+	geopoint, bearing,
 	// ldap
 	person, user;
 
