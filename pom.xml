@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.argeo.maven</groupId>
@@ -12,7 +10,7 @@
 	<packaging>pom</packaging>
 	<name>Argeo Suite</name>
 	<description />
-	<version>2.1.16-SNAPSHOT</version>
+	<version>2.1.16</version>
 	<properties>
 		<version.argeo-suite>2.1.16-SNAPSHOT</version.argeo-suite>
 		<!-- Dependencies -->
@@ -50,7 +48,7 @@
 		<connection>scm:git:http://git.argeo.org/gpl/argeo-suite.git</connection>
 		<url>http://git.argeo.org/?p=gpl/argeo-suite.git;a=summary</url>
 		<developerConnection>scm:git:https://code.argeo.org/git/gpl/argeo-suite.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>argeo-suite-2.1.16</tag>
 	</scm>
 	<organization>
 		<name>Argeo GmbH</name>
