@@ -74,6 +74,88 @@
 			<version>2.1.17-SNAPSHOT</version>
 		</dependency>
 
+		<!-- Additional Third Parties -->
+		<dependency>
+			<groupId>org.argeo.tp.javax</groupId>
+			<artifactId>javax.xml.bind</artifactId>
+		</dependency>
+		
+		<!-- PDFBox -->
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.pdfbox</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.pdfbox.fontbox</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.pdfbox.jempbox</artifactId>
+		</dependency>
+
+		<!-- POI requirements -->
+		<dependency>
+			<groupId>org.argeo.tp.apache.commons</groupId>
+			<artifactId>org.apache.commons.math3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache.commons</groupId>
+			<artifactId>org.apache.commons.collections4</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.xml.security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.xmlbeans</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.xalan</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.xalan.serializer</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.xml.resolver</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.xerces</artifactId>
+		</dependency>
+		
+		<!-- POI (MS office documents) -->
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.poi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.poi.ooxml</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.poi.ooxml.schemas</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.poi.scratchpad</artifactId>
+		</dependency>
+
+		<!-- Mail -->
+		<dependency>
+			<groupId>org.argeo.tp.javax</groupId>
+			<artifactId>javax.activation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.javax</groupId>
+			<artifactId>javax.mail</artifactId>
+		</dependency>
+
 		<!-- Base CMS distribution -->
 		<dependency>
 			<groupId>org.argeo.commons</groupId>
@@ -142,7 +224,67 @@
 									</mappings>
 									<requires>
 										<require>argeo-cms-ui-rap</require>
+										<require>argeo-suite-ui-rap-tp</require>
 									</requires>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>rpmbuild-tp</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>prepare-source-tp</id>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+								<configuration>
+									<descriptorRefs>
+										<descriptorRef>a2-source-tp</descriptorRef>
+									</descriptorRefs>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>rpm-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>rpm-tp</id>
+								<phase>package</phase>
+								<goals>
+									<goal>rpm</goal>
+								</goals>
+								<configuration>
+									<name>argeo-suite-ui-rap-tp</name>
+									<version>${version.argeo-tp}</version>
+									<release>${maven.build.timestamp}</release>
+									<mappings>
+										<mapping>
+											<directory>/usr/share/osgi</directory>
+											<username>root</username>
+											<groupname>root</groupname>
+											<filemode>644</filemode>
+											<directoryIncluded>true</directoryIncluded>
+											<sources>
+												<source>
+													<location>${project.build.directory}/${project.artifactId}-${project.version}-a2-source-tp</location>
+													<includes>
+														<include>**/*.jar</include>
+													</includes>
+												</source>
+											</sources>
+										</mapping>
+									</mappings>
 								</configuration>
 							</execution>
 						</executions>
