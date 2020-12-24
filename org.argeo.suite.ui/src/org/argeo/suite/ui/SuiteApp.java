@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -22,6 +23,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.api.NodeUtils;
 import org.argeo.cms.CmsUserManager;
+import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.auth.CmsSession;
 import org.argeo.cms.ui.AbstractCmsApp;
 import org.argeo.cms.ui.CmsTheme;
@@ -30,6 +32,7 @@ import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.dialogs.CmsFeedback;
 import org.argeo.cms.ui.util.CmsEvent;
 import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.eclipse.ui.specific.UiContext;
 import org.argeo.entity.EntityConstants;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
@@ -131,8 +134,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				refreshPart(findUiProvider(LOGIN_SCREEN_PID), ui.getBelowHeader(), context);
 				ui.layout(true, true);
 			} else {
+				CmsSession cmsSession = cmsView.getCmsSession();
 				if (ui.getUserDir() == null) {
-					CmsSession cmsSession = cmsView.getCmsSession();
 					Session adminSession = null;
 					try {
 						adminSession = NodeUtils.openDataAdminSession(getRepository(), null);
@@ -142,6 +145,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 						Jcr.logout(adminSession);
 					}
 				}
+				initLocale(cmsSession);
 				context = stateToNode(ui, state);
 				if (context == null)
 					context = ui.getUserDir();
@@ -158,6 +162,13 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		} catch (Exception e) {
 			CmsFeedback.show("Unexpected exception", e);
 		}
+	}
+
+	private void initLocale(CmsSession cmsSession) {
+		Locale locale = cmsSession.getLocale();
+		UiContext.setLocale(locale);
+		LocaleUtils.setThreadLocale(locale);
+
 	}
 
 	private void refreshPart(CmsUiProvider uiProvider, Composite part, Node context) {
