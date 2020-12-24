@@ -90,15 +90,16 @@ class SuiteUi extends Composite {
 
 	private Composite getLayer(String id, Node context) {
 		if (!layers.containsKey(id))
-			throw new IllegalArgumentException("No layer " + id + " is available.");
+			return null;
 		if (!workAreas.containsKey(id))
 			initLayer(id, layers.get(id), context);
 		return workAreas.get(id);
 	}
 
 	Composite switchToLayer(String layerId, Node context) {
+		Composite current = null;
 		if (currentLayerId != null) {
-			Composite current = getCurrentWorkArea();
+			current = getCurrentWorkArea();
 			if (currentLayerId.equals(layerId))
 				return current;
 		}
@@ -107,16 +108,20 @@ class SuiteUi extends Composite {
 				context = userDir;
 		}
 		Composite toShow = getLayer(layerId, context);
-		currentLayerId = layerId;
-		if (!isDisposed())
-			getDisplay().syncExec(() -> {
-				if (!toShow.isDisposed())
-					toShow.moveAbove(null);
-				else
-					log.warn("Cannot show work area because it is disposed.");
-				dynamicArea.layout(true, true);
-			});
-		return toShow;
+		if (toShow != null) {
+			currentLayerId = layerId;
+			if (!isDisposed())
+				getDisplay().syncExec(() -> {
+					if (!toShow.isDisposed())
+						toShow.moveAbove(null);
+					else
+						log.warn("Cannot show work area because it is disposed.");
+					dynamicArea.layout(true, true);
+				});
+			return toShow;
+		} else {
+			return current;
+		}
 	}
 
 	Composite switchToLayer(SuiteLayer layer, Node context) {
