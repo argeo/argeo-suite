@@ -7,20 +7,15 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.argeo.api.NodeConstants;
 import org.argeo.cms.Localized;
 import org.argeo.cms.ui.CmsEditable;
-import org.argeo.cms.ui.dialogs.CmsWizardDialog;
+import org.argeo.cms.ui.dialogs.LightweightDialog;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
-import org.argeo.eclipse.ui.dialogs.LightweightDialog;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
-import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
-import org.eclipse.jface.window.Window;
-import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.MouseEvent;
@@ -33,7 +28,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 /** UI utilities related to the APAF project. */
@@ -223,19 +217,35 @@ public class SuiteUiUtils {
 		Node content = fileNode.getNode(Node.JCR_CONTENT);
 		// TODO move it deeper in the middleware.
 		if (!content.isNodeType(EntityType.box.get())) {
-			try (InputStream in = JcrUtils.getFileAsStream(fileNode)) {
-				ImageData imageData = new ImageData(in);
-				content.addMixin(EntityType.box.get());
-				content.setProperty(EntityNames.SVG_WIDTH, imageData.width);
-				content.setProperty(EntityNames.SVG_HEIGHT, imageData.height);
-				content.getSession().save();
-			} catch (IOException e) {
-				throw new IllegalStateException(e);
+			if (content.getSession().hasPermission(content.getPath(), Session.ACTION_SET_PROPERTY)) {
+				try (InputStream in = JcrUtils.getFileAsStream(fileNode)) {
+					ImageData imageData = new ImageData(in);
+					content.addMixin(EntityType.box.get());
+					content.setProperty(EntityNames.SVG_WIDTH, imageData.width);
+					content.setProperty(EntityNames.SVG_HEIGHT, imageData.height);
+					content.getSession().save();
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		}
 
-		Long width = content.getProperty(EntityNames.SVG_WIDTH).getLong();
-		Long height = content.getProperty(EntityNames.SVG_HEIGHT).getLong();
+		// TODO optimise
+		Long width;
+		Long height;
+		if (content.isNodeType(EntityType.box.get())) {
+			width = content.getProperty(EntityNames.SVG_WIDTH).getLong();
+			height = content.getProperty(EntityNames.SVG_HEIGHT).getLong();
+		} else {
+			try (InputStream in = JcrUtils.getFileAsStream(fileNode)) {
+				ImageData imageData = new ImageData(in);
+				width = Long.valueOf(imageData.width);
+				height = Long.valueOf(imageData.height);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
+
 		if (maxWidth != null && width > maxWidth) {
 			Double ratio = maxWidth.doubleValue() / width.doubleValue();
 			width = maxWidth.longValue();
@@ -251,6 +261,7 @@ public class SuiteUiUtils {
 			img.setLayoutData(gd);
 		}
 		img.addMouseListener(new MouseListener() {
+			private static final long serialVersionUID = -1362242049325206168L;
 
 			@Override
 			public void mouseUp(MouseEvent e) {
@@ -299,39 +310,39 @@ public class SuiteUiUtils {
 		return img;
 	}
 
-	public static String createAndConfigureEntity(Shell shell, Session referenceSession, String mainMixin,
-			String... additionnalProps) {
-
-		Session tmpSession = null;
-		Session mainSession = null;
-		try {
-			// FIXME would not work if home is another physical workspace
-			tmpSession = referenceSession.getRepository().login(NodeConstants.HOME_WORKSPACE);
-			Node draftNode = null;
-			for (int i = 0; i < additionnalProps.length - 1; i += 2) {
-				draftNode.setProperty(additionnalProps[i], additionnalProps[i + 1]);
-			}
-			Wizard wizard = null;
-			CmsWizardDialog dialog = new CmsWizardDialog(shell, wizard);
-			// WizardDialog dialog = new WizardDialog(shell, wizard);
-			if (dialog.open() == Window.OK) {
-				String parentPath = null;// "/" + appService.getBaseRelPath(mainMixin);
-				// FIXME it should be possible to specify the workspace
-				mainSession = referenceSession.getRepository().login();
-				Node parent = mainSession.getNode(parentPath);
-				Node task = null;// appService.publishEntity(parent, mainMixin, draftNode);
-//				task = appService.saveEntity(task, false);
-				referenceSession.refresh(true);
-				return task.getPath();
-			}
-			return null;
-		} catch (RepositoryException e1) {
-			throw new JcrException(
-					"Unable to create " + mainMixin + " entity with session " + referenceSession.toString(), e1);
-		} finally {
-			JcrUtils.logoutQuietly(tmpSession);
-			JcrUtils.logoutQuietly(mainSession);
-		}
-	}
+//	public static String createAndConfigureEntity(Shell shell, Session referenceSession, String mainMixin,
+//			String... additionnalProps) {
+//
+//		Session tmpSession = null;
+//		Session mainSession = null;
+//		try {
+//			// FIXME would not work if home is another physical workspace
+//			tmpSession = referenceSession.getRepository().login(NodeConstants.HOME_WORKSPACE);
+//			Node draftNode = null;
+//			for (int i = 0; i < additionnalProps.length - 1; i += 2) {
+//				draftNode.setProperty(additionnalProps[i], additionnalProps[i + 1]);
+//			}
+//			Wizard wizard = null;
+//			CmsWizardDialog dialog = new CmsWizardDialog(shell, wizard);
+//			// WizardDialog dialog = new WizardDialog(shell, wizard);
+//			if (dialog.open() == Window.OK) {
+//				String parentPath = null;// "/" + appService.getBaseRelPath(mainMixin);
+//				// FIXME it should be possible to specify the workspace
+//				mainSession = referenceSession.getRepository().login();
+//				Node parent = mainSession.getNode(parentPath);
+//				Node task = null;// appService.publishEntity(parent, mainMixin, draftNode);
+////				task = appService.saveEntity(task, false);
+//				referenceSession.refresh(true);
+//				return task.getPath();
+//			}
+//			return null;
+//		} catch (RepositoryException e1) {
+//			throw new JcrException(
+//					"Unable to create " + mainMixin + " entity with session " + referenceSession.toString(), e1);
+//		} finally {
+//			JcrUtils.logoutQuietly(tmpSession);
+//			JcrUtils.logoutQuietly(mainSession);
+//		}
+//	}
 
 }
