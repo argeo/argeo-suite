@@ -141,4 +141,14 @@ public class DefaultLeadPane implements CmsUiProvider {
 		}
 	}
 
+	public void removeLayer(SuiteLayer layer, Map<String, Object> properties) {
+		if (properties.containsKey(Constants.SERVICE_PID)) {
+			String pid = (String) properties.get(Constants.SERVICE_PID);
+			if (layers.containsKey(pid)) {
+				if (layers.get(pid).equals(new RankedObject<SuiteLayer>(layer, properties))) {
+					layers.remove(pid);
+				}
+			}
+		}
+	}
 }
