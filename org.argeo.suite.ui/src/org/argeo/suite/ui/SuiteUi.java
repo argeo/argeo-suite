@@ -110,14 +110,18 @@ class SuiteUi extends Composite {
 		Composite toShow = getLayer(layerId, context);
 		if (toShow != null) {
 			currentLayerId = layerId;
-			if (!isDisposed())
-				getDisplay().syncExec(() -> {
-					if (!toShow.isDisposed())
-						toShow.moveAbove(null);
-					else
-						log.warn("Cannot show work area because it is disposed.");
-					dynamicArea.layout(true, true);
-				});
+			if (!isDisposed()) {
+//				getDisplay().syncExec(() -> {
+				if (!toShow.isDisposed()) {
+					toShow.moveAbove(null);
+				} else {
+					log.warn("Cannot show work area because it is disposed.");
+					toShow = initLayer(layerId, layers.get(layerId), context);
+					toShow.moveAbove(null);
+				}
+				dynamicArea.layout(true, true);
+//				});
+			}
 			return toShow;
 		} else {
 			return current;
