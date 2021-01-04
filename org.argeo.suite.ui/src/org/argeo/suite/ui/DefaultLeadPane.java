@@ -74,7 +74,7 @@ public class DefaultLeadPane implements CmsUiProvider {
 
 		// TODO factorise
 		boolean isAdmin = cmsView.doAs(() -> CurrentUser.isInRole(NodeConstants.ROLE_USER_ADMIN));
-		if (isAdmin)
+		if (isAdmin && adminLayers != null)
 			for (String layerId : adminLayers) {
 				if (layers.containsKey(layerId)) {
 					RankedObject<SuiteLayer> layerObj = layers.get(layerId);
