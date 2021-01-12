@@ -30,7 +30,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.suite.dep.e4.rap</artifactId>
+			<artifactId>org.argeo.suite.dep.ui.rap</artifactId>
 			<version>2.1.18-SNAPSHOT</version>
 			<scope>provided</scope>
 			<exclusions>
