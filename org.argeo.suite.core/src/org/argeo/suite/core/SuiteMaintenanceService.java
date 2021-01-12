@@ -12,7 +12,6 @@ import org.argeo.api.NodeConstants;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.maintenance.AbstractMaintenanceService;
-import org.argeo.suite.SuiteRole;
 
 /** Initialises an Argeo Suite backend. */
 public class SuiteMaintenanceService extends AbstractMaintenanceService {
