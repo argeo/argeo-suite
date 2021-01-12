@@ -1,3 +1,5 @@
+Bundle-ActivationPolicy: lazy
+
 Service-Component:\
 OSGI-INF/maintenanceService.xml
 
