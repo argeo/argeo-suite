@@ -43,6 +43,7 @@ class SuiteUi extends Composite {
 		this.setLayout(CmsUiUtils.noSpaceGridLayout());
 
 		header = new Composite(this, SWT.NONE);
+		header.setLayout(CmsUiUtils.noSpaceGridLayout());
 		CmsUiUtils.style(header, SuiteStyle.header);
 		header.setLayoutData(CmsUiUtils.fillWidth());
 
@@ -64,9 +65,10 @@ class SuiteUi extends Composite {
 				dynamicArea = new Composite(belowHeader, SWT.NONE);
 			}
 			leadPane.setLayoutData(CmsUiUtils.fillHeight());
+			leadPane.setLayout(CmsUiUtils.noSpaceGridLayout());
 			CmsUiUtils.style(leadPane, SuiteStyle.leadPane);
-			dynamicArea.setLayoutData(CmsUiUtils.fillAll());
 
+			dynamicArea.setLayoutData(CmsUiUtils.fillAll());
 			dynamicArea.setLayout(new FormLayout());
 
 		} else {

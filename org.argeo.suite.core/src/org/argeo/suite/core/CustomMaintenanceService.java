@@ -34,7 +34,7 @@ public abstract class CustomMaintenanceService extends AbstractMaintenanceServic
 		if (!typologies.isEmpty()) {
 			Node termsBase = JcrUtils.getOrAdd(customBaseNode, EntityType.terms.name(), EntityType.typologies.get());
 			for (String terms : typologies) {
-				loadTerms(customBaseNode, terms);
+				loadTerms(termsBase, terms);
 			}
 			termsBase.getSession().save();
 		}

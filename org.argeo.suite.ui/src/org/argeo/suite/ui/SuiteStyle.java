@@ -9,7 +9,7 @@ public enum SuiteStyle implements CmsStyle {
 	// Recent items
 	recentItems,
 	// Lead pane
-	leadPane, leadPaneItem,
+	leadPane, leadPaneItem, leadPaneSectionTitle, leadPaneSubSectionTitle,
 	// Group composite
 	titleContainer, titleLabel, subTitleLabel, formLine, formColumn, navigationBar, navigationTitle, navigationButton,
 	// Forms elements

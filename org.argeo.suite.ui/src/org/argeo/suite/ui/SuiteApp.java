@@ -51,15 +51,21 @@ import org.osgi.service.useradmin.User;
 public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	private final static Log log = LogFactory.getLog(SuiteApp.class);
 
-	public final static String PID_PREFIX = "argeo.suite.ui.";
-	public final static String HEADER_PID = PID_PREFIX + "header";
-	public final static String LEAD_PANE_PID = PID_PREFIX + "leadPane";
-	public final static String LOGIN_SCREEN_PID = PID_PREFIX + "loginScreen";
-	public final static String DASHBOARD_PID = PID_PREFIX + "dashboard";
-	public final static String RECENT_ITEMS_PID = PID_PREFIX + "recentItems";
+	public final static String PUBLIC_BASE_PATH_PROPERTY = "publicBasePath";
+	public final static String DEFAULT_UI_NAME_PROPERTY = "defaultUiName";
+	public final static String DEFAULT_THEME_ID_PROPERTY = "defaultThemeId";
 
-	private final static String DEFAULT_UI_NAME = "app";
-	private final static String DEFAULT_THEME_ID = "org.argeo.suite.theme.default";
+	private String publicBasePath = null;
+
+	private String pidPrefix;
+	private String headerPid;
+	private String leadPanePid;
+	private String loginScreenPid;
+//	private String DASHBOARD_PID = pidPrefix + "dashboard";
+//	private String RECENT_ITEMS_PID = pidPrefix + "recentItems";
+
+	private String defaultUiName = "app";
+	private String defaultThemeId = "org.argeo.suite.theme.default";
 
 	private Map<String, RankedObject<CmsUiProvider>> uiProvidersByPid = Collections.synchronizedMap(new HashMap<>());
 	private Map<String, RankedObject<CmsUiProvider>> uiProvidersByType = Collections.synchronizedMap(new HashMap<>());
@@ -73,12 +79,32 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 //	private CmsUiProvider headerPart = null;
 
-	public void init(Map<String, String> properties) {
+	public void init(Map<String, Object> properties) {
 		if (log.isDebugEnabled())
 			log.info("Argeo Suite App started");
+
+		if (properties.containsKey(DEFAULT_UI_NAME_PROPERTY))
+			defaultUiName = LangUtils.get(properties, DEFAULT_UI_NAME_PROPERTY);
+		if (properties.containsKey(DEFAULT_THEME_ID_PROPERTY))
+			defaultThemeId = LangUtils.get(properties, DEFAULT_THEME_ID_PROPERTY);
+		publicBasePath = LangUtils.get(properties, PUBLIC_BASE_PATH_PROPERTY);
+
+		if (properties.containsKey(Constants.SERVICE_PID)) {
+			String servicePid = properties.get(Constants.SERVICE_PID).toString();
+			if (servicePid.endsWith(".app")) {
+				pidPrefix = servicePid.substring(0, servicePid.length() - "app".length());
+			}
+		}
+
+		if (pidPrefix == null)
+			throw new IllegalArgumentException("PID prefix must be set.");
+
+		headerPid = pidPrefix + "header";
+		leadPanePid = pidPrefix + "leadPane";
+		loginScreenPid = pidPrefix + "loginScreen";
 	}
 
-	public void destroy(Map<String, String> properties) {
+	public void destroy(Map<String, Object> properties) {
 		for (SuiteUi ui : managedUis.values())
 			if (!ui.isDisposed())
 				ui.dispose();
@@ -90,7 +116,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	@Override
 	public Set<String> getUiNames() {
 		HashSet<String> uiNames = new HashSet<>();
-		uiNames.add(DEFAULT_UI_NAME);
+		uiNames.add(defaultUiName);
 		return uiNames;
 	}
 
@@ -117,8 +143,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	@Override
 	public String getThemeId(String uiName) {
-		// TODO make it configurable
-		return DEFAULT_THEME_ID;
+		return defaultThemeId;
 	}
 
 	@Override
@@ -126,23 +151,28 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		try {
 			Node context = null;
 			SuiteUi ui = (SuiteUi) parent;
-			refreshPart(findUiProvider(HEADER_PID), ui.getHeader(), context);
 			CmsView cmsView = CmsView.getCmsView(parent);
-			if (cmsView.isAnonymous()) {
+			if (cmsView.isAnonymous() && publicBasePath == null) {// internal app, must login
 				ui.logout();
+				refreshPart(findUiProvider(headerPid), ui.getHeader(), context);
 				ui.refreshBelowHeader(false);
-				refreshPart(findUiProvider(LOGIN_SCREEN_PID), ui.getBelowHeader(), context);
+				refreshPart(findUiProvider(loginScreenPid), ui.getBelowHeader(), context);
 				ui.layout(true, true);
 			} else {
 				CmsSession cmsSession = cmsView.getCmsSession();
 				if (ui.getUserDir() == null) {
-					Session adminSession = null;
-					try {
-						adminSession = NodeUtils.openDataAdminSession(getRepository(), null);
-						Node userDir = SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
-						ui.initSessions(getRepository(), userDir.getPath());
-					} finally {
-						Jcr.logout(adminSession);
+					if (cmsView.isAnonymous()) {
+						assert publicBasePath != null;
+						ui.initSessions(getRepository(), publicBasePath);
+					} else {
+						Session adminSession = null;
+						try {
+							adminSession = NodeUtils.openDataAdminSession(getRepository(), null);
+							Node userDir = SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
+							ui.initSessions(getRepository(), userDir.getPath());
+						} finally {
+							Jcr.logout(adminSession);
+						}
 					}
 				}
 				initLocale(cmsSession);
@@ -150,12 +180,13 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				if (context == null)
 					context = ui.getUserDir();
 
+				refreshPart(findUiProvider(headerPid), ui.getHeader(), context);
 				ui.refreshBelowHeader(true);
 				for (String key : layersByPid.keySet()) {
 					SuiteLayer layer = layersByPid.get(key).get();
 					ui.addLayer(key, layer);
 				}
-				refreshPart(findUiProvider(LEAD_PANE_PID), ui.getLeadPane(), context);
+				refreshPart(findUiProvider(leadPanePid), ui.getLeadPane(), context);
 				ui.layout(true, true);
 				setState(parent, state);
 			}
@@ -165,6 +196,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	}
 
 	private void initLocale(CmsSession cmsSession) {
+		if (cmsSession == null)
+			return;
 		Locale locale = cmsSession.getLocale();
 		UiContext.setLocale(locale);
 		LocaleUtils.setThreadLocale(locale);
@@ -308,6 +341,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 		// Specific UI related events
 		SuiteUi ui = getRelatedUi(event);
+		if (ui == null)
+			return;
 		try {
 //			String currentLayerId = ui.getCurrentLayerId();
 //			SuiteLayer currentLayer = currentLayerId != null ? layersByPid.get(currentLayerId).get() : null;

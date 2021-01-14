@@ -1,5 +1,7 @@
 Import-Package:\
 javax.jcr.nodetype,\
+org.osgi.service.event,\
+org.argeo.suite.ui,\
 org.argeo.api,\
 org.eclipse.swt,\
 org.eclipse.jface.viewers,\

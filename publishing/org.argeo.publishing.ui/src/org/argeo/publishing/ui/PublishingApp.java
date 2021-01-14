@@ -1,5 +1,8 @@
 package org.argeo.publishing.ui;
 
+import static org.argeo.suite.ui.SuiteApp.DEFAULT_THEME_ID_PROPERTY;
+import static org.argeo.suite.ui.SuiteApp.DEFAULT_UI_NAME_PROPERTY;
+
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -18,6 +21,7 @@ import org.argeo.docbook.ui.DocBookTypes;
 import org.argeo.docbook.ui.DocumentPage;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
+import org.argeo.util.LangUtils;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -32,12 +36,17 @@ public class PublishingApp extends AbstractCmsApp {
 
 	private String pid;
 	private String defaultThemeId;
+	private String defaultUiName = "";
 
 	private CmsUiProvider landingPage;
 
 	public void init(Map<String, String> properties) {
-		defaultThemeId = properties.get("defaultThemeId");
+		if (properties.containsKey(DEFAULT_UI_NAME_PROPERTY))
+			defaultUiName = LangUtils.get(properties, DEFAULT_UI_NAME_PROPERTY);
+		if (properties.containsKey(DEFAULT_THEME_ID_PROPERTY))
+			defaultThemeId = LangUtils.get(properties, DEFAULT_THEME_ID_PROPERTY);
 		pid = properties.get(Constants.SERVICE_PID);
+
 		if (log.isDebugEnabled())
 			log.info("Publishing App " + pid + " started");
 	}
@@ -51,7 +60,7 @@ public class PublishingApp extends AbstractCmsApp {
 	@Override
 	public Set<String> getUiNames() {
 		Set<String> uiNames = new HashSet<>();
-		uiNames.add("");
+		uiNames.add(defaultUiName);
 		return uiNames;
 	}
 
