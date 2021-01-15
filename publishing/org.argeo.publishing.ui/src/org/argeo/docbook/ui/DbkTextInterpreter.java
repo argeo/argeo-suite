@@ -5,8 +5,10 @@ import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 
-import org.argeo.cms.CmsException;
 import org.argeo.cms.text.TextInterpreter;
+import org.argeo.jcr.Jcr;
+import org.argeo.jcr.JcrException;
+import org.argeo.jcr.JcrxType;
 
 /** Based on HTML with a few Wiki-like shortcuts. */
 public class DbkTextInterpreter implements TextInterpreter {
@@ -20,13 +22,13 @@ public class DbkTextInterpreter implements TextInterpreter {
 					String raw = convertToStorage(node, content);
 					validateBeforeStoring(raw);
 					Node jcrText;
-					if (!node.hasNode(DocBookNames.JCR_XMLTEXT))
-						jcrText = node.addNode(DocBookNames.JCR_XMLTEXT, DocBookTypes.XMLTEXT);
+					if (!node.hasNode(Jcr.JCR_XMLTEXT))
+						jcrText = node.addNode(Jcr.JCR_XMLTEXT, JcrxType.JCRX_XMLTEXT);
 					else
-						jcrText = node.getNode(DocBookNames.JCR_XMLTEXT);
-					jcrText.setProperty(DocBookNames.JCR_XMLCHARACTERS, raw);
+						jcrText = node.getNode(Jcr.JCR_XMLTEXT);
+					jcrText.setProperty(Jcr.JCR_XMLCHARACTERS, raw);
 				} else {
-					throw new CmsException("Don't know how to interpret " + node);
+					throw new IllegalArgumentException("Don't know how to interpret " + node);
 				}
 			} else {// property
 				Property property = (Property) item;
@@ -34,7 +36,7 @@ public class DbkTextInterpreter implements TextInterpreter {
 			}
 			// item.getSession().save();
 		} catch (RepositoryException e) {
-			throw new CmsException("Cannot set content on " + item, e);
+			throw new JcrException("Cannot set content on " + item, e);
 		}
 	}
 
@@ -44,7 +46,7 @@ public class DbkTextInterpreter implements TextInterpreter {
 			String raw = raw(item);
 			return convertFromStorage(item, raw);
 		} catch (RepositoryException e) {
-			throw new CmsException("Cannot get " + item + " for edit", e);
+			throw new JcrException("Cannot get " + item + " for edit", e);
 		}
 	}
 
@@ -55,20 +57,20 @@ public class DbkTextInterpreter implements TextInterpreter {
 			if (item instanceof Node) {
 				Node node = (Node) item;
 				if (node.isNodeType(DocBookTypes.PARA)) {
-					Node jcrText = node.getNode(DocBookNames.JCR_XMLTEXT);
-					String txt = jcrText.getProperty(DocBookNames.JCR_XMLCHARACTERS).getString();
+					Node jcrText = node.getNode(Jcr.JCR_XMLTEXT);
+					String txt = jcrText.getProperty(Jcr.JCR_XMLCHARACTERS).getString();
 					// TODO make it more robust
 					txt = txt.replace("\n", "").replace("\t", "");
 					return txt;
 				} else {
-					throw new CmsException("Don't know how to interpret " + node);
+					throw new IllegalArgumentException("Don't know how to interpret " + node);
 				}
 			} else {// property
 				Property property = (Property) item;
 				return property.getString();
 			}
 		} catch (RepositoryException e) {
-			throw new CmsException("Cannot get " + item + " content", e);
+			throw new JcrException("Cannot get " + item + " content", e);
 		}
 	}
 
