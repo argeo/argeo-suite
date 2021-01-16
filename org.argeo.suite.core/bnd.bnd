@@ -1,6 +1,7 @@
 Bundle-ActivationPolicy: lazy
 
 Service-Component:\
+OSGI-INF/termsManager.xml,\
 OSGI-INF/maintenanceService.xml
 
 Import-Package:\

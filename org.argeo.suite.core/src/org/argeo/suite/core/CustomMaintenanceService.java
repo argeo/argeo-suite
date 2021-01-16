@@ -42,6 +42,9 @@ public abstract class CustomMaintenanceService extends AbstractMaintenanceServic
 
 	protected void loadTerms(Node termsBase, String name) throws IOException, RepositoryException {
 		try {
+			if (termsBase.hasNode(name))
+				return;
+
 			String termsLoadPath = getTypologiesLoadBase() + '/' + name + ".xml";
 			URL termsUrl = getClass().getClassLoader().getResource(termsLoadPath);
 			if (termsUrl == null)
