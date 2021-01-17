@@ -1,6 +1,5 @@
 package org.argeo.docbook.ui;
 
-import static javax.jcr.Property.JCR_TITLE;
 import static org.argeo.cms.ui.util.CmsUiUtils.fillWidth;
 
 import java.util.ArrayList;
@@ -11,7 +10,6 @@ import java.util.Observer;
 import javax.jcr.Item;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
@@ -97,14 +95,13 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			CmsUiUtils.clear(section);
 			Node node = section.getNode();
 			TextSection textSection = (TextSection) section;
-			if (node.hasProperty(Property.JCR_TITLE)) {
+			if (node.hasNode(DocBookTypes.TITLE)) {
 				if (section.getHeader() == null)
 					section.createHeader();
-				if (node.hasProperty(Property.JCR_TITLE)) {
-					SectionTitle title = newSectionTitle(textSection, node);
-					title.setLayoutData(CmsUiUtils.fillWidth());
-					updateContent(title);
-				}
+				Node titleNode = node.getNode(DocBookTypes.TITLE);
+				DocBookSectionTitle title = newSectionTitle(textSection, titleNode);
+				title.setLayoutData(CmsUiUtils.fillWidth());
+				updateContent(title);
 			}
 
 			for (NodeIterator ni = node.getNodes(DocBookNames.DBK_PARA); ni.hasNext();) {
@@ -125,15 +122,15 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 					((Control) sectionPart).setLayoutData(CmsUiUtils.fillWidth());
 			}
 
-			if (!flat)
-				for (NodeIterator ni = section.getNode().getNodes(DocBookNames.DBK_SECTION); ni.hasNext();) {
-					Node child = ni.nextNode();
-					if (child.isNodeType(DocBookTypes.SECTION)) {
-						TextSection newSection = new TextSection(section, SWT.NONE, child);
-						newSection.setLayoutData(CmsUiUtils.fillWidth());
-						refresh(newSection);
-					}
+//			if (!flat)
+			for (NodeIterator ni = section.getNode().getNodes(DocBookNames.DBK_SECTION); ni.hasNext();) {
+				Node child = ni.nextNode();
+				if (child.isNodeType(DocBookTypes.SECTION)) {
+					TextSection newSection = new TextSection(section, SWT.NONE, child);
+					newSection.setLayoutData(CmsUiUtils.fillWidth());
+					refresh(newSection);
 				}
+			}
 		} else {
 			for (Section s : section.getSubSections().values())
 				refresh(s);
@@ -175,21 +172,28 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		return img;
 	}
 
-	protected SectionTitle newSectionTitle(TextSection parent, Node node) throws RepositoryException {
-		SectionTitle title = new SectionTitle(parent.getHeader(), parent.getStyle(), node.getProperty(JCR_TITLE));
+	protected DocBookSectionTitle newSectionTitle(TextSection parent, Node titleNode) throws RepositoryException {
+		int style = parent.getStyle();
+		if (parent.isTitleReadOnly())
+			style = style | SWT.READ_ONLY;
+		DocBookSectionTitle title = new DocBookSectionTitle(parent.getHeader(), style, titleNode);
 		updateContent(title);
 		title.setMouseListener(getMouseListener());
 		return title;
 	}
 
-	protected SectionTitle prepareSectionTitle(Section newSection, String titleText) throws RepositoryException {
+	protected DocBookSectionTitle prepareSectionTitle(Section newSection, String titleText) throws RepositoryException {
 		Node sectionNode = newSection.getNode();
-		if (!sectionNode.hasProperty(JCR_TITLE))
-			sectionNode.setProperty(Property.JCR_TITLE, "");
-		getTextInterpreter().write(sectionNode.getProperty(Property.JCR_TITLE), titleText);
+		Node titleNode;
+		if (!sectionNode.hasNode(DocBookTypes.TITLE)) {
+			titleNode = sectionNode.addNode(DocBookTypes.TITLE, DocBookTypes.TITLE);
+		} else {
+			titleNode = sectionNode.getNode(DocBookTypes.TITLE);
+		}
+		getTextInterpreter().write(titleNode, titleText);
 		if (newSection.getHeader() == null)
 			newSection.createHeader();
-		SectionTitle sectionTitle = newSectionTitle((TextSection) newSection, sectionNode);
+		DocBookSectionTitle sectionTitle = newSectionTitle((TextSection) newSection, sectionNode);
 		return sectionTitle;
 	}
 
@@ -220,14 +224,14 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				EditableImage editableImage = (EditableImage) part;
 				imageManager.load(partNode, part.getControl(), editableImage.getPreferredImageSize());
 			}
-		} else if (part instanceof SectionTitle) {
-			SectionTitle title = (SectionTitle) part;
+		} else if (part instanceof DocBookSectionTitle) {
+			DocBookSectionTitle title = (DocBookSectionTitle) part;
 			title.setStyle(title.getSection().getTitleStyle());
 			// use control AFTER setting style
 			if (title == getEdited())
-				title.setText(textInterpreter.read(title.getProperty()));
+				title.setText(textInterpreter.read(title.getNode()));
 			else
-				title.setText(textInterpreter.raw(title.getProperty()));
+				title.setText(textInterpreter.raw(title.getNode()));
 		}
 	}
 
@@ -236,6 +240,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 	protected void save(EditablePart part) throws RepositoryException {
 		if (part instanceof EditableText) {
 			EditableText et = (EditableText) part;
+			if (!et.getEditable())
+				return;
 			String text = ((Text) et.getControl()).getText();
 
 			String[] lines = text.split("[\r\n]+");
@@ -267,11 +273,11 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 						currentParagraph = newParagraph;
 						currentParagraphN = newNode;
 					}
-					persistChanges(sectionNode);
 				}
 				// TODO or rather return the created paragarphs?
 				layout(toLayout.toArray(new Control[toLayout.size()]));
 			}
+			persistChanges(et.getNode());
 		}
 	}
 
@@ -383,8 +389,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 				Paragraph secondParagraph = paragraphSplitted(paragraph, secondNode);
 				edit(secondParagraph, 0);
-			} else if (getEdited() instanceof SectionTitle) {
-				SectionTitle sectionTitle = (SectionTitle) getEdited();
+			} else if (getEdited() instanceof DocBookSectionTitle) {
+				DocBookSectionTitle sectionTitle = (DocBookSectionTitle) getEdited();
 				Text text = (Text) sectionTitle.getControl();
 				String txt = text.getText();
 				int caretPosition = text.getCaretPosition();
@@ -394,7 +400,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				// paragraphNode.addMixin(CmsTypes.CMS_STYLED);
 
 				textInterpreter.write(paragraphNode, txt.substring(caretPosition));
-				textInterpreter.write(sectionNode.getProperty(Property.JCR_TITLE), txt.substring(0, caretPosition));
+				textInterpreter.write(sectionNode.getNode(DocBookTypes.TITLE), txt.substring(0, caretPosition));
 				sectionNode.orderBefore(p(paragraphNode.getIndex()), p(1));
 				persistChanges(sectionNode);
 
@@ -509,13 +515,13 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				Node sectionNode = section.getNode();
 				// main title
 				if (section == mainSection && section instanceof TextSection && paragraphNode.getIndex() == 1
-						&& !sectionNode.hasProperty(JCR_TITLE)) {
-					SectionTitle sectionTitle = prepareSectionTitle(section, txt);
+						&& !sectionNode.hasNode(DocBookTypes.TITLE)) {
+					DocBookSectionTitle sectionTitle = prepareSectionTitle(section, txt);
 					edit(sectionTitle, 0);
 					return;
 				}
 				Node newSectionNode = sectionNode.addNode(DocBookNames.DBK_SECTION, DocBookTypes.SECTION);
-				newSectionNode.addMixin(NodeType.MIX_TITLE);
+				// newSectionNode.addMixin(NodeType.MIX_TITLE);
 				sectionNode.orderBefore(h(newSectionNode.getIndex()), h(1));
 
 				int paragraphIndex = paragraphNode.getIndex();
@@ -529,9 +535,9 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 					if (sp instanceof Control)
 						((Control) sp).dispose();
 				}
-				// create property
-				newSectionNode.setProperty(Property.JCR_TITLE, "");
-				getTextInterpreter().write(newSectionNode.getProperty(Property.JCR_TITLE), txt);
+				// create title
+				Node titleNode = newSectionNode.addNode(DocBookTypes.TITLE, DocBookTypes.TITLE);
+				getTextInterpreter().write(titleNode, txt);
 
 				TextSection newSection = new TextSection(section, section.getStyle(), newSectionNode);
 				newSection.setLayoutData(CmsUiUtils.fillWidth());
@@ -545,8 +551,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				newSection.getParent().layout();
 				layout(newSection);
 				persistChanges(sectionNode);
-			} else if (getEdited() instanceof SectionTitle) {
-				SectionTitle sectionTitle = (SectionTitle) getEdited();
+			} else if (getEdited() instanceof DocBookSectionTitle) {
+				DocBookSectionTitle sectionTitle = (DocBookSectionTitle) getEdited();
 				Section section = sectionTitle.getSection();
 				Section parentSection = section.getParentSection();
 				if (parentSection == null)
@@ -602,7 +608,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				// newParagrapheNode.addMixin(CmsTypes.CMS_STYLED);
 				if (mergedHasSubSections)
 					mergedNode.orderBefore(p(newParagrapheNode.getIndex()), h(1));
-				String txt = getTextInterpreter().read(sectionNode.getProperty(Property.JCR_TITLE));
+				String txt = getTextInterpreter().read(sectionNode.getNode(DocBookTypes.TITLE));
 				getTextInterpreter().write(newParagrapheNode, txt);
 				// move
 				NodeIterator paragraphs = sectionNode.getNodes(DocBookNames.DBK_PARA);
@@ -650,7 +656,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		return newParagraph;
 	}
 
-	protected Paragraph sectionTitleSplitted(SectionTitle sectionTitle, Node newNode) throws RepositoryException {
+	protected Paragraph sectionTitleSplitted(DocBookSectionTitle sectionTitle, Node newNode)
+			throws RepositoryException {
 		updateContent(sectionTitle);
 		Paragraph newParagraph = newParagraph(sectionTitle.getSection(), newNode);
 		// we assume beforeFirst is not null since there was a sectionTitle

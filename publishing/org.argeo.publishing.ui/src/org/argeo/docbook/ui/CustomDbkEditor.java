@@ -13,12 +13,11 @@ import org.eclipse.swt.widgets.Composite;
 public class CustomDbkEditor extends AbstractDbkViewer {
 	private static final long serialVersionUID = 656302500183820802L;
 
-	protected CustomDbkEditor(Composite parent, int style, Node textNode, CmsEditable cmsEditable) {
+	public CustomDbkEditor(Composite parent, int style, Node textNode, CmsEditable cmsEditable) {
 		this(new Section(parent, style, textNode), style, cmsEditable);
 	}
 
-	protected CustomDbkEditor(Section parent, int style, CmsEditable cmsEditable) {
+	public CustomDbkEditor(Section parent, int style, CmsEditable cmsEditable) {
 		super(parent, style, cmsEditable);
 	}
-
 }

@@ -18,7 +18,7 @@ public class DbkTextInterpreter implements TextInterpreter {
 		try {
 			if (item instanceof Node) {
 				Node node = (Node) item;
-				if (node.isNodeType(DocBookTypes.PARA)) {
+				if (node.isNodeType(DocBookTypes.PARA)||node.isNodeType(DocBookTypes.TITLE)) {
 					String raw = convertToStorage(node, content);
 					validateBeforeStoring(raw);
 					Node jcrText;
@@ -56,7 +56,7 @@ public class DbkTextInterpreter implements TextInterpreter {
 			item.getSession().refresh(true);
 			if (item instanceof Node) {
 				Node node = (Node) item;
-				if (node.isNodeType(DocBookTypes.PARA)) {
+				if (node.isNodeType(DocBookTypes.PARA)||node.isNodeType(DocBookTypes.TITLE)) {
 					Node jcrText = node.getNode(Jcr.JCR_XMLTEXT);
 					String txt = jcrText.getProperty(Jcr.JCR_XMLCHARACTERS).getString();
 					// TODO make it more robust

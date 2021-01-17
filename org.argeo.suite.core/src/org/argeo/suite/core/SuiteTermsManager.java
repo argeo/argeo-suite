@@ -46,6 +46,8 @@ public class SuiteTermsManager implements TermsManager {
 		if (t == null) {
 			Node termsNode = Jcr.getNode(adminSession, "SELECT * FROM [{0}] WHERE NAME()=\"{1}\"",
 					EntityType.terms.get(), typology);
+			if (termsNode == null)
+				throw new IllegalArgumentException("Typology " + typology + " not found.");
 			t = loadTypology(termsNode);
 		}
 		return t;

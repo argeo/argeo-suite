@@ -255,6 +255,7 @@ orderable
  + dbk:orgname (dbk:orgname) = dbk:orgname *
  + dbk:subtitle (dbk:subtitle) = dbk:subtitle *
  + dbk:title (dbk:title) = dbk:title *
+ + * (nt:base) = nt:unstructured *
 
 [dbk:inlinemediaobject] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:alt (dbk:alt) = dbk:alt

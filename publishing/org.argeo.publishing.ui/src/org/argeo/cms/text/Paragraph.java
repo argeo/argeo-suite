@@ -9,6 +9,7 @@ import org.argeo.cms.ui.viewers.SectionPart;
 import org.argeo.cms.ui.widgets.EditableText;
 import org.argeo.cms.ui.widgets.TextStyles;
 
+/** An editable paragraph.*/
 public class Paragraph extends EditableText implements SectionPart {
 	private static final long serialVersionUID = 3746457776229542887L;
 
