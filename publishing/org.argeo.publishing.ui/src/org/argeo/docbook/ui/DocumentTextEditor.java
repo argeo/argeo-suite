@@ -1,7 +1,6 @@
 package org.argeo.docbook.ui;
 
 import javax.jcr.Node;
-import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 
 import org.argeo.cms.text.TextSection;
@@ -33,7 +32,7 @@ public class DocumentTextEditor extends AbstractDbkViewer {
 
 	@Override
 	protected Boolean isModelInitialized(Node textNode) throws RepositoryException {
-		return textNode.hasProperty(Property.JCR_TITLE) || textNode.hasNode(DocBookNames.DBK_PARA)
+		return textNode.hasNode(DocBookTypes.TITLE) || textNode.hasNode(DocBookNames.DBK_PARA)
 				|| (!isFlat() && textNode.hasNode(DocBookNames.DBK_SECTION));
 	}
 

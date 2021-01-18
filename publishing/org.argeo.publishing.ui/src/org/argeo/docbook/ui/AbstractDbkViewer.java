@@ -16,7 +16,6 @@ import javax.jcr.nodetype.NodeType;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.cms.CmsException;
 import org.argeo.cms.text.Paragraph;
 import org.argeo.cms.text.SectionTitle;
 import org.argeo.cms.text.TextInterpreter;
@@ -35,6 +34,7 @@ import org.argeo.cms.ui.widgets.EditableImage;
 import org.argeo.cms.ui.widgets.EditableText;
 import org.argeo.cms.ui.widgets.Img;
 import org.argeo.cms.ui.widgets.StyledControl;
+import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
 import org.eclipse.rap.fileupload.FileDetails;
 import org.eclipse.rap.fileupload.FileUploadEvent;
@@ -115,7 +115,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				} else {
 					sectionPart = newSectionPart(textSection, child);
 					if (sectionPart == null)
-						throw new CmsException("Unsupported node " + child);
+						throw new IllegalArgumentException("Unsupported node " + child);
 					// TODO list node types in exception
 				}
 				if (sectionPart instanceof Control)
@@ -135,7 +135,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			for (Section s : section.getSubSections().values())
 				refresh(s);
 		}
-		// section.layout();
+		// section.layout(true, true);
 	}
 
 	/** To be overridden in order to provide additional SectionPart types */
@@ -174,12 +174,24 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 	protected DocBookSectionTitle newSectionTitle(TextSection parent, Node titleNode) throws RepositoryException {
 		int style = parent.getStyle();
+		Composite titleParent = newSectionHeader(parent);
 		if (parent.isTitleReadOnly())
 			style = style | SWT.READ_ONLY;
-		DocBookSectionTitle title = new DocBookSectionTitle(parent.getHeader(), style, titleNode);
+		DocBookSectionTitle title = new DocBookSectionTitle(titleParent, style, titleNode);
 		updateContent(title);
 		title.setMouseListener(getMouseListener());
 		return title;
+	}
+
+	/**
+	 * To be overridden in order to provide additional processing at the section
+	 * level.
+	 * 
+	 * @return the parent to use for the {@link DocBookSectionTitle}, by default
+	 *         {@link Section#getHeader()}
+	 */
+	protected Composite newSectionHeader(TextSection section) {
+		return section.getHeader();
 	}
 
 	protected DocBookSectionTitle prepareSectionTitle(Section newSection, String titleText) throws RepositoryException {
@@ -274,7 +286,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 						currentParagraphN = newNode;
 					}
 				}
-				// TODO or rather return the created paragarphs?
+				// TODO or rather return the created paragraphs?
 				layout(toLayout.toArray(new Control[toLayout.size()]));
 			}
 			persistChanges(et.getNode());
@@ -287,7 +299,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		} else if (part instanceof PropertyPart) {
 			saveLine(((PropertyPart) part).getProperty(), line);
 		} else {
-			throw new CmsException("Unsupported part " + part);
+			throw new IllegalArgumentException("Unsupported part " + part);
 		}
 	}
 
@@ -325,7 +337,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			updateContent(paragraph);
 			layout(paragraph);
 		} catch (RepositoryException e1) {
-			throw new CmsException("Cannot set style " + style + " on " + paragraph, e1);
+			throw new JcrException("Cannot set style " + style + " on " + paragraph, e1);
 		}
 	}
 
@@ -340,7 +352,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				((Control) paragraph).dispose();
 			layout(section);
 		} catch (RepositoryException e1) {
-			throw new CmsException("Cannot delete " + paragraph, e1);
+			throw new JcrException("Cannot delete " + paragraph, e1);
 		}
 	}
 
@@ -409,7 +421,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				edit(paragraph, 0);
 			}
 		} catch (RepositoryException e) {
-			throw new CmsException("Cannot split " + getEdited(), e);
+			throw new JcrException("Cannot split " + getEdited(), e);
 		}
 	}
 
@@ -432,7 +444,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			Paragraph previousParagraph = paragraphMergedWithPrevious(paragraph, previousNode);
 			edit(previousParagraph, previousTxt.length());
 		} catch (RepositoryException e) {
-			throw new CmsException("Cannot stop editing", e);
+			throw new JcrException("Cannot stop editing", e);
 		}
 	}
 
@@ -461,7 +473,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			paragraphMergedWithNext(paragraph, removed);
 			edit(paragraph, txt.length());
 		} catch (RepositoryException e) {
-			throw new CmsException("Cannot stop editing", e);
+			throw new JcrException("Cannot stop editing", e);
 		}
 	}
 
@@ -497,7 +509,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				}
 			}
 		} catch (RepositoryException e) {
-			throw new CmsException("Cannot upload", e);
+			throw new JcrException("Cannot upload", e);
 		}
 	}
 
@@ -572,7 +584,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				persistChanges(previousSectionN);
 			}
 		} catch (RepositoryException e) {
-			throw new CmsException("Cannot deepen " + getEdited(), e);
+			throw new JcrException("Cannot deepen " + getEdited(), e);
 		}
 	}
 
@@ -641,7 +653,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				persistChanges(mergedNode);
 			}
 		} catch (RepositoryException e) {
-			throw new CmsException("Cannot undeepen " + getEdited(), e);
+			throw new JcrException("Cannot undeepen " + getEdited(), e);
 		}
 	}
 
@@ -824,7 +836,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		}
 
 		public void uploadFailed(FileUploadEvent event) {
-			throw new CmsException("Upload failed " + event, event.getException());
+			throw new RuntimeException("Upload failed " + event, event.getException());
 		}
 
 		public void uploadFinished(FileUploadEvent event) {

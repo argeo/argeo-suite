@@ -8,7 +8,10 @@ import org.argeo.cms.text.TextSection;
 import org.argeo.cms.ui.viewers.EditablePart;
 import org.argeo.cms.ui.viewers.NodePart;
 import org.argeo.cms.ui.widgets.EditableText;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 /** The title of a section, based on an XML text node. */
 public class DocBookSectionTitle extends EditableText implements EditablePart, NodePart {
@@ -29,5 +32,17 @@ public class DocBookSectionTitle extends EditableText implements EditablePart, N
 	public Node getItem() throws RepositoryException {
 		return getNode();
 	}
+
+//	@Override
+//	protected void setControlLayoutData(Control control) {
+//		super.setControlLayoutData(control);
+//		control.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, true, false));
+//	}
+//
+//	@Override
+//	protected void setContainerLayoutData(Composite composite) {
+//		super.setContainerLayoutData(composite);
+//		composite.setLayoutData(new GridData(SWT.LEAD, SWT.BOTTOM, true, false));
+//	}
 
 }
