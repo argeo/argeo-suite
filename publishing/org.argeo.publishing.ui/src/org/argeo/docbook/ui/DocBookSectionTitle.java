@@ -1,17 +1,13 @@
 package org.argeo.docbook.ui;
 
 import javax.jcr.Node;
-import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 
 import org.argeo.cms.text.TextSection;
 import org.argeo.cms.ui.viewers.EditablePart;
 import org.argeo.cms.ui.viewers.NodePart;
 import org.argeo.cms.ui.widgets.EditableText;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 
 /** The title of a section, based on an XML text node. */
 public class DocBookSectionTitle extends EditableText implements EditablePart, NodePart {

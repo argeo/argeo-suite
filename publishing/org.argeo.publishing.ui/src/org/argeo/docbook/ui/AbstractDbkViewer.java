@@ -4,6 +4,7 @@ import static org.argeo.cms.ui.util.CmsUiUtils.fillWidth;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Observer;
 
@@ -75,7 +76,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 		if (getCmsEditable().canEdit()) {
 			fileUploadListener = new FUL();
-			styledTools = new DbkContextMenu(this, parent.getDisplay());
+			styledTools = new DbkContextMenu(this, parent.getShell());
 		}
 		this.mainSection = parent;
 		initModelIfNeeded(mainSection.getNode());
@@ -332,10 +333,15 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 	void setParagraphStyle(Paragraph paragraph, String style) {
 		try {
 			Node paragraphNode = paragraph.getNode();
-			paragraphNode.setProperty(DocBookNames.DBK_ROLE, style);
+			if (style == null) {// default
+				if (paragraphNode.hasProperty(DocBookNames.DBK_ROLE))
+					paragraphNode.getProperty(DocBookNames.DBK_ROLE).remove();
+			} else {
+				paragraphNode.setProperty(DocBookNames.DBK_ROLE, style);
+			}
 			persistChanges(paragraphNode);
 			updateContent(paragraph);
-			layout(paragraph);
+			layoutPage();
 		} catch (RepositoryException e1) {
 			throw new JcrException("Cannot set style " + style + " on " + paragraph, e1);
 		}
@@ -818,8 +824,10 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 						edit(composite, source.toDisplay(point));
 				} else if (e.button == 3) {
 					EditablePart composite = findDataParent((Control) e.getSource());
-					if (styledTools != null)
-						styledTools.show(composite, new Point(e.x, e.y));
+					if (styledTools != null) {
+						List<String> styles = getAvailableStyles(composite);
+						styledTools.show(composite, new Point(e.x, e.y), styles);
+					}
 				}
 			}
 		}
@@ -827,6 +835,10 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		@Override
 		public void mouseUp(MouseEvent e) {
 		}
+	}
+
+	protected List<String> getAvailableStyles(EditablePart editablePart) {
+		return new ArrayList<>();
 	}
 
 	// FILE UPLOAD LISTENER
