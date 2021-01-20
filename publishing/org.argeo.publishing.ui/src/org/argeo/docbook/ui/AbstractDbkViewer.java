@@ -18,7 +18,6 @@ import javax.jcr.nodetype.NodeType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.cms.text.Paragraph;
-import org.argeo.cms.text.SectionTitle;
 import org.argeo.cms.text.TextInterpreter;
 import org.argeo.cms.text.TextSection;
 import org.argeo.cms.ui.CmsEditable;
@@ -35,6 +34,7 @@ import org.argeo.cms.ui.widgets.EditableImage;
 import org.argeo.cms.ui.widgets.EditableText;
 import org.argeo.cms.ui.widgets.Img;
 import org.argeo.cms.ui.widgets.StyledControl;
+import org.argeo.entity.EntityType;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
 import org.eclipse.rap.fileupload.FileDetails;
@@ -71,7 +71,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 	protected AbstractDbkViewer(Section parent, int style, CmsEditable cmsEditable) {
 		super(parent, style, cmsEditable);
 		CmsView cmsView = CmsView.getCmsView(parent);
-		imageManager = cmsView.getImageManager();
+//		imageManager = cmsView.getImageManager();
+		imageManager = new DbkImageManager();
 		flat = SWT.FLAT == (style & SWT.FLAT);
 
 		if (getCmsEditable().canEdit()) {
@@ -105,21 +106,24 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				updateContent(title);
 			}
 
-			for (NodeIterator ni = node.getNodes(DocBookNames.DBK_PARA); ni.hasNext();) {
+			for (NodeIterator ni = node.getNodes(); ni.hasNext();) {
 				Node child = ni.nextNode();
-				final SectionPart sectionPart;
-				if (child.isNodeType(DocBookTypes.IMAGEDATA) || child.isNodeType(NodeType.NT_FILE)) {
-					// FIXME adapt to DocBook
-					sectionPart = newImg(textSection, child);
+				SectionPart sectionPart = null;
+				if (child.isNodeType(DocBookTypes.MEDIAOBJECT)) {
+					if (child.hasNode(DocBookTypes.IMAGEOBJECT)) {
+						Node imageNode = child.getNode(DocBookTypes.IMAGEOBJECT).getNode(DocBookTypes.INFO)
+								.getNode(EntityType.box.get());
+						sectionPart = newImg(textSection, imageNode);
+					}
 				} else if (child.isNodeType(DocBookTypes.PARA)) {
 					sectionPart = newParagraph(textSection, child);
 				} else {
 					sectionPart = newSectionPart(textSection, child);
-					if (sectionPart == null)
-						throw new IllegalArgumentException("Unsupported node " + child);
+//					if (sectionPart == null)
+//						throw new IllegalArgumentException("Unsupported node " + child);
 					// TODO list node types in exception
 				}
-				if (sectionPart instanceof Control)
+				if (sectionPart != null && sectionPart instanceof Control)
 					((Control) sectionPart).setLayoutData(CmsUiUtils.fillWidth());
 			}
 
@@ -153,24 +157,28 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		return paragraph;
 	}
 
-	protected Img newImg(TextSection parent, Node node) throws RepositoryException {
-		Img img = new Img(parent, parent.getStyle(), node) {
-			private static final long serialVersionUID = 1297900641952417540L;
+	protected Img newImg(TextSection parent, Node node) {
+		try {
+			Img img = new Img(parent, parent.getStyle(), node, imageManager) {
+				private static final long serialVersionUID = 1297900641952417540L;
 
-			@Override
-			protected void setContainerLayoutData(Composite composite) {
-				composite.setLayoutData(CmsUiUtils.grabWidth(SWT.CENTER, SWT.DEFAULT));
-			}
+				@Override
+				protected void setContainerLayoutData(Composite composite) {
+					composite.setLayoutData(CmsUiUtils.grabWidth(SWT.CENTER, SWT.DEFAULT));
+				}
 
-			@Override
-			protected void setControlLayoutData(Control control) {
-				control.setLayoutData(CmsUiUtils.grabWidth(SWT.CENTER, SWT.DEFAULT));
-			}
-		};
-		img.setLayoutData(CmsUiUtils.grabWidth(SWT.CENTER, SWT.DEFAULT));
-		updateContent(img);
-		img.setMouseListener(getMouseListener());
-		return img;
+				@Override
+				protected void setControlLayoutData(Control control) {
+					control.setLayoutData(CmsUiUtils.grabWidth(SWT.CENTER, SWT.DEFAULT));
+				}
+			};
+			img.setLayoutData(CmsUiUtils.grabWidth(SWT.CENTER, SWT.DEFAULT));
+			updateContent(img);
+			img.setMouseListener(getMouseListener());
+			return img;
+		} catch (RepositoryException e) {
+			throw new JcrException("Cannot add new image " + node, e);
+		}
 	}
 
 	protected DocBookSectionTitle newSectionTitle(TextSection parent, Node titleNode) throws RepositoryException {
@@ -347,18 +355,43 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		}
 	}
 
-	void deletePart(SectionPart paragraph) {
+	void insertPart(Section section, Node node) {
 		try {
-			Node paragraphNode = paragraph.getNode();
-			Section section = paragraph.getSection();
-			Session session = paragraphNode.getSession();
-			paragraphNode.remove();
+			refresh(section);
+			layoutPage();
+		} catch (RepositoryException e) {
+			throw new JcrException("Cannot insert part " + node + " in section " + section.getNode(), e);
+		}
+	}
+
+	void deletePart(SectionPart sectionPart) {
+		try {
+			Node node = sectionPart.getNode();
+			Session session = node.getSession();
+			if (sectionPart instanceof Img) {
+				// FIXME make it more robust
+				node = node.getParent().getParent().getParent();
+			}
+			node.remove();
 			session.save();
-			if (paragraph instanceof Control)
-				((Control) paragraph).dispose();
-			layout(section);
+			if (sectionPart instanceof Control)
+				((Control) sectionPart).dispose();
+			layoutPage();
 		} catch (RepositoryException e1) {
-			throw new JcrException("Cannot delete " + paragraph, e1);
+			throw new JcrException("Cannot delete " + sectionPart, e1);
+		}
+	}
+
+	void deleteSection(Section section) {
+		try {
+			Node node = section.getNode();
+			Session session = node.getSession();
+			node.remove();
+			session.save();
+			section.dispose();
+			layoutPage();
+		} catch (RepositoryException e1) {
+			throw new JcrException("Cannot delete " + section, e1);
 		}
 	}
 
@@ -511,7 +544,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 					if (getEdited() == part)
 						return;
 					edit(part, null);
-					layout(part.getControl());
+					layoutPage();
 				}
 			}
 		} catch (RepositoryException e) {
@@ -601,8 +634,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		try {
 			if (getEdited() instanceof Paragraph) {
 				upload(getEdited());
-			} else if (getEdited() instanceof SectionTitle) {
-				SectionTitle sectionTitle = (SectionTitle) getEdited();
+			} else if (getEdited() instanceof DocBookSectionTitle) {
+				DocBookSectionTitle sectionTitle = (DocBookSectionTitle) getEdited();
 				Section section = sectionTitle.getSection();
 				Node sectionNode = section.getNode();
 				Section parentSection = section.getParentSection();
@@ -741,9 +774,13 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		try {
 			// Common
 			if (ke.keyCode == SWT.ESC) {
-				cancelEdit();
+//				cancelEdit();
+				saveEdit();
 			} else if (ke.character == '\r') {
 				splitEdit();
+			} else if (ke.character == 'z') {
+				if (ctrlPressed)
+					cancelEdit();
 			} else if (ke.character == 'S') {
 				if (ctrlPressed)
 					saveEdit();
@@ -800,29 +837,28 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		public void mouseDoubleClick(MouseEvent e) {
 			if (e.button == 1) {
 				Control source = (Control) e.getSource();
-				if (getCmsEditable().canEdit()) {
-					if (getCmsEditable().isEditing() && !(getEdited() instanceof Img)) {
-						if (source == mainSection)
-							return;
-						EditablePart part = findDataParent(source);
-						upload(part);
-					} else {
-						getCmsEditable().startEditing();
+				EditablePart composite = findDataParent(source);
+				Point point = new Point(e.x, e.y);
+				if (composite instanceof Img) {
+					if (getCmsEditable().canEdit()) {
+						if (getCmsEditable().isEditing() && !(getEdited() instanceof Img)) {
+							if (source == mainSection)
+								return;
+							EditablePart part = findDataParent(source);
+							upload(part);
+						} else {
+							getCmsEditable().startEditing();
+						}
 					}
-				}
+				} else
+					edit(composite, source.toDisplay(point));
 			}
 		}
 
 		@Override
 		public void mouseDown(MouseEvent e) {
 			if (getCmsEditable().isEditing()) {
-				if (e.button == 1) {
-					Control source = (Control) e.getSource();
-					EditablePart composite = findDataParent(source);
-					Point point = new Point(e.x, e.y);
-					if (!(composite instanceof Img))
-						edit(composite, source.toDisplay(point));
-				} else if (e.button == 3) {
+				if (e.button == 3) {
 					EditablePart composite = findDataParent((Control) e.getSource());
 					if (styledTools != null) {
 						List<String> styles = getAvailableStyles(composite);

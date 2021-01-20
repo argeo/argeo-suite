@@ -20,6 +20,7 @@ public class DocBookSectionTitle extends EditableText implements EditablePart, N
 		section = (TextSection) TextSection.findSection(this);
 	}
 
+//	@Override
 	public TextSection getSection() {
 		return section;
 	}
@@ -28,6 +29,11 @@ public class DocBookSectionTitle extends EditableText implements EditablePart, N
 	public Node getItem() throws RepositoryException {
 		return getNode();
 	}
+
+//	@Override
+//	public String getPartId() {
+//		return getNodeId();
+//	}
 
 //	@Override
 //	protected void setControlLayoutData(Control control) {

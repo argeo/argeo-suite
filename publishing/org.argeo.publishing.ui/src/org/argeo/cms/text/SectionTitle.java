@@ -9,6 +9,7 @@ import org.argeo.cms.ui.widgets.EditableText;
 import org.eclipse.swt.widgets.Composite;
 
 /** The title of a section. */
+@Deprecated
 public class SectionTitle extends EditableText implements EditablePart,
 		PropertyPart {
 	private static final long serialVersionUID = -1787983154946583171L;

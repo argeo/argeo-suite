@@ -3,12 +3,15 @@ package org.argeo.cms.text;
 import javax.jcr.Node;
 
 import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.cms.ui.viewers.EditablePart;
 import org.argeo.cms.ui.viewers.Section;
 import org.argeo.cms.ui.widgets.TextStyles;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
-public class TextSection extends Section implements CmsNames {
+/** An editable section. */
+public class TextSection extends Section {
 	private static final long serialVersionUID = -8625209546243220689L;
 	private String defaultTextStyle = TextStyles.TEXT_DEFAULT;
 	private String titleStyle;
@@ -28,7 +31,7 @@ public class TextSection extends Section implements CmsNames {
 	private TextSection(Composite parent, Section parentSection, int style, Node node) {
 		super(parent, parentSection, style, node);
 		flat = SWT.FLAT == (style & SWT.FLAT);
-		//CmsUiUtils.style(this, TextStyles.TEXT_SECTION);
+		// CmsUiUtils.style(this, TextStyles.TEXT_SECTION);
 	}
 
 	public String getDefaultTextStyle() {
@@ -61,6 +64,5 @@ public class TextSection extends Section implements CmsNames {
 
 	public void setTitleReadOnly(boolean titleReadOnly) {
 		this.titleReadOnly = titleReadOnly;
-	}
-
+	}	
 }

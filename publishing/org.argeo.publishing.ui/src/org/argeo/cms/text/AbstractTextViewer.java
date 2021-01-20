@@ -50,6 +50,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 /** Base class for text viewers and editors. */
+@Deprecated
 public abstract class AbstractTextViewer extends AbstractPageViewer implements
 		CmsNames, KeyListener, Observer {
 	private static final long serialVersionUID = -2401274679492339668L;

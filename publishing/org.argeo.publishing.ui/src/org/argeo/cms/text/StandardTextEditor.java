@@ -12,6 +12,7 @@ import org.argeo.cms.ui.viewers.Section;
 import org.eclipse.swt.widgets.Composite;
 
 /** Text editor where sections and subsections can be managed by the user. */
+@Deprecated
 public class StandardTextEditor extends AbstractTextViewer {
 	private static final long serialVersionUID = 6049661610883342325L;
 

@@ -13,6 +13,7 @@ import org.eclipse.swt.widgets.Composite;
  * Manages hardcoded sections as an arbitrary hierarchy under the main section,
  * which contains no text and no title.
  */
+@Deprecated
 public class CustomTextEditor extends AbstractTextViewer {
 	private static final long serialVersionUID = 5277789504209413500L;
 

@@ -3,11 +3,23 @@ package org.argeo.docbook.ui;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jcr.Node;
+
 import org.argeo.cms.text.Paragraph;
+import org.argeo.cms.text.TextSection;
+import org.argeo.cms.ui.CmsEditable;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.EditablePart;
+import org.argeo.cms.ui.viewers.NodePart;
+import org.argeo.cms.ui.viewers.Section;
+import org.argeo.cms.ui.viewers.SectionPart;
 import org.argeo.cms.ui.widgets.EditableText;
+import org.argeo.cms.ui.widgets.Img;
 import org.argeo.cms.ui.widgets.TextStyles;
+import org.argeo.docbook.DbkMsg;
+import org.argeo.docbook.DbkUtils;
+import org.argeo.eclipse.ui.MouseDown;
+import org.argeo.jcr.Jcr;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
@@ -22,20 +34,11 @@ import org.eclipse.swt.widgets.Shell;
 
 /** Dialog to edit a text part. */
 class DbkContextMenu implements TextStyles {
-//	private final static String[] DEFAULT_TEXT_STYLES = { TextStyles.TEXT_DEFAULT, TextStyles.TEXT_PRE,
-//			TextStyles.TEXT_QUOTE };
-
 	private final AbstractDbkViewer textViewer;
-
-//	private List<StyleButton> styleButtons = new ArrayList<DbkContextMenu.StyleButton>();
-//
-//	private Label deleteButton, publishButton, editButton;
-
-	private EditablePart currentTextPart;
 
 	private Shell shell;
 
-	public DbkContextMenu(AbstractDbkViewer textViewer, Shell parentShell) {
+	DbkContextMenu(AbstractDbkViewer textViewer, Shell parentShell) {
 //		shell = new Shell(display, SWT.NO_TRIM | SWT.BORDER | SWT.ON_TOP);
 		shell = new Shell(parentShell, SWT.BORDER);
 //		super(display, SWT.NO_TRIM | SWT.BORDER | SWT.ON_TOP);
@@ -46,68 +49,110 @@ class DbkContextMenu implements TextStyles {
 		shell.addShellListener(new ToolsShellListener());
 	}
 
-	public void show(EditablePart source, Point location, List<String> availableStyles) {
+	void show(EditablePart editablePart, Point location, List<String> availableStyles) {
 		if (shell.isVisible())
 			shell.setVisible(false);
 		CmsUiUtils.clear(shell);
+		Composite parent = shell;
+		CmsEditable cmsEditable = textViewer.getCmsEditable();
+//		if (availableStyles.isEmpty())
+//			return;
 
-		if (availableStyles.isEmpty())
-			return;
+		if (editablePart instanceof Paragraph) {
+			Paragraph paragraph = (Paragraph) editablePart;
+			deletePartB(parent, DbkMsg.deleteParagraph.lead(), paragraph);
+			insertMediaB(parent, DbkMsg.insertMedia.lead(), paragraph);
 
-		StyledToolMouseListener stml = new StyledToolMouseListener();
+		} else if (editablePart instanceof Img) {
+			Img img = (Img) editablePart;
+			deletePartB(parent, DbkMsg.deleteMedia.lead(), img);
+			insertMediaB(parent, DbkMsg.insertMedia.lead(), img);
+
+		} else if (editablePart instanceof DocBookSectionTitle) {
+			DocBookSectionTitle sectionTitle = (DocBookSectionTitle) editablePart;
+			TextSection section = sectionTitle.getSection();
+			if (!section.isTitleReadOnly()) {
+				Label deleteB = new Label(shell, SWT.NONE);
+				deleteB.setText(DbkMsg.deleteSection.lead());
+				deleteB.addMouseListener((MouseDown) (e) -> {
+					textViewer.deleteSection(section);
+					hide();
+				});
+			}
+			insertMediaB(parent, DbkMsg.insertMedia.lead(), sectionTitle.getSection(), sectionTitle);
+		}
+
+		StyledToolMouseListener stml = new StyledToolMouseListener(editablePart);
 		List<StyleButton> styleButtons = new ArrayList<DbkContextMenu.StyleButton>();
-		if (textViewer.getCmsEditable().isEditing()) {
+		if (cmsEditable.isEditing()) {
 			for (String style : availableStyles) {
 				StyleButton styleButton = new StyleButton(shell, SWT.WRAP);
 				if (!"".equals(style))
 					styleButton.setStyle(style);
 				else
 					styleButton.setStyle(null);
-//				if (!"".equals(style))
-//					styleButton.getLabel().setData(RWT.CUSTOM_VARIANT, style);
-//				styleButton.getLabel().setData(RWT.MARKUP_ENABLED, true);
 				styleButton.setMouseListener(stml);
 				styleButtons.add(styleButton);
 			}
-
-//			// Delete
-//			deleteButton = new Label(shell, SWT.NONE);
-//			deleteButton.setText("Delete");
-//			deleteButton.addMouseListener(stml);
-//
-//			// Publish
-//			publishButton = new Label(shell, SWT.NONE);
-//			publishButton.setText("Publish");
-//			publishButton.addMouseListener(stml);
-		} else if (textViewer.getCmsEditable().canEdit()) {
+		} else if (cmsEditable.canEdit()) {
 			// Edit
-			Label editButton = new Label(shell, SWT.NONE);
-			editButton.setText("Edit");
-			editButton.addMouseListener(stml);
+//			Label editButton = new Label(shell, SWT.NONE);
+//			editButton.setText("Edit");
+//			editButton.addMouseListener(stml);
 		}
 
-		this.currentTextPart = source;
-
-		if (currentTextPart instanceof Paragraph) {
+		if (editablePart instanceof Paragraph) {
 			final int size = 32;
-			String text = textViewer.getRawParagraphText((Paragraph) currentTextPart);
+			String text = textViewer.getRawParagraphText((Paragraph) editablePart);
 			String textToShow = text.length() > size ? text.substring(0, size - 3) + "..." : text;
 			for (StyleButton styleButton : styleButtons) {
 				styleButton.setText((styleButton.style == null ? "default" : styleButton.style) + " : " + textToShow);
 			}
 		}
+
 		shell.pack();
 		shell.layout();
-		if (source instanceof Control) {
+		if (editablePart instanceof Control) {
 			int height = shell.getSize().y;
 			int parentShellHeight = shell.getShell().getSize().y;
 			if ((location.y + height) < parentShellHeight) {
-				shell.setLocation(((Control) source).toDisplay(location.x, location.y));
+				shell.setLocation(((Control) editablePart).toDisplay(location.x, location.y));
 			} else {
-				shell.setLocation(((Control) source).toDisplay(location.x, location.y - parentShellHeight));
+				shell.setLocation(((Control) editablePart).toDisplay(location.x, location.y - parentShellHeight));
 			}
 		}
-		shell.open();
+
+		if (shell.getChildren().length != 0)
+			shell.open();
+	}
+
+	void hide() {
+		shell.setVisible(false);
+	}
+
+	protected void insertMediaB(Composite parent, String msg, SectionPart sectionPart) {
+		insertMediaB(parent, msg, sectionPart.getSection(), sectionPart);
+	}
+
+	protected void insertMediaB(Composite parent, String msg, Section section, NodePart nodePart) {
+		Label insertMediaB = new Label(parent, SWT.NONE);
+		insertMediaB.setText(DbkMsg.insertMedia.lead());
+		insertMediaB.addMouseListener((MouseDown) (e) -> {
+			Node newNode = DbkUtils.insertImageAfter(nodePart.getNode());
+			Jcr.save(newNode);
+			textViewer.insertPart(section, newNode);
+			hide();
+		});
+
+	}
+
+	protected void deletePartB(Composite parent, String msg, SectionPart sectionPart) {
+		Label deleteB = new Label(shell, SWT.NONE);
+		deleteB.setText(msg);
+		deleteB.addMouseListener((MouseDown) (e) -> {
+			textViewer.deletePart(sectionPart);
+			hide();
+		});
 	}
 
 	class StyleButton extends EditableText {
@@ -141,23 +186,20 @@ class DbkContextMenu implements TextStyles {
 
 	class StyledToolMouseListener extends MouseAdapter {
 		private static final long serialVersionUID = 8516297091549329043L;
+		private EditablePart editablePart;
+
+		public StyledToolMouseListener(EditablePart editablePart) {
+			super();
+			this.editablePart = editablePart;
+		}
 
 		@Override
 		public void mouseDown(MouseEvent e) {
-//			Object eventSource = e.getSource();
-////			if (eventSource instanceof StyleButton) {
 			// TODO make it more robust.
 			Label sb = (Label) e.getSource();
 			Object style = sb.getData(RWT.CUSTOM_VARIANT);
-			textViewer.setParagraphStyle((Paragraph) currentTextPart, style == null ? null : style.toString());
-//			}
-//			} else if (eventSource == deleteButton) {
-//				textViewer.deletePart((SectionPart) currentTextPart);
-//			} else if (eventSource == editButton) {
-//				textViewer.getCmsEditable().startEditing();
-//			} else if (eventSource == publishButton) {
-//				textViewer.getCmsEditable().stopEditing();
-			shell.setVisible(false);
+			textViewer.setParagraphStyle((Paragraph) editablePart, style == null ? null : style.toString());
+			hide();
 		}
 	}
 
@@ -166,7 +208,7 @@ class DbkContextMenu implements TextStyles {
 
 		@Override
 		public void shellDeactivated(ShellEvent e) {
-			shell.setVisible(false);
+			hide();
 		}
 
 	}
