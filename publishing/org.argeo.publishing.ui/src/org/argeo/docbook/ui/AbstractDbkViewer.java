@@ -238,9 +238,9 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			if (part instanceof EditableText) {
 				EditableText paragraph = (EditableText) part;
 				if (paragraph == getEdited())
-					paragraph.setText(textInterpreter.read(partNode));
-				else
 					paragraph.setText(textInterpreter.raw(partNode));
+				else
+					paragraph.setText(textInterpreter.readSimpleHtml(partNode));
 			} else if (part instanceof EditableImage) {
 				EditableImage editableImage = (EditableImage) part;
 				imageManager.load(partNode, part.getControl(), editableImage.getPreferredImageSize());
@@ -265,7 +265,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				return;
 			String text = ((Text) et.getControl()).getText();
 
-			String[] lines = text.split("[\r\n]+");
+			// String[] lines = text.split("[\r\n]+");
+			String[] lines = { text };
 			assert lines.length != 0;
 			saveLine(part, lines[0]);
 			if (lines.length > 1) {
@@ -777,7 +778,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 //				cancelEdit();
 				saveEdit();
 			} else if (ke.character == '\r') {
-				splitEdit();
+				if (!shiftPressed)
+					splitEdit();
 			} else if (ke.character == 'z') {
 				if (ctrlPressed)
 					cancelEdit();

@@ -8,8 +8,7 @@ import javax.jcr.RepositoryException;
  * specific formatting and integration.
  */
 class TextInterpreterImpl extends IdentityTextInterpreter {
-	private MarkupValidatorCopy markupValidator = MarkupValidatorCopy
-			.getInstance();
+	private MarkupValidatorCopy markupValidator = MarkupValidatorCopy.getInstance();
 
 	@Override
 	protected void validateBeforeStoring(String raw) {
@@ -17,14 +16,12 @@ class TextInterpreterImpl extends IdentityTextInterpreter {
 	}
 
 	@Override
-	protected String convertToStorage(Item item, String content)
-			throws RepositoryException {
+	protected String convertToStorage(Item item, String content) throws RepositoryException {
 		return super.convertToStorage(item, content);
 	}
 
 	@Override
-	protected String convertFromStorage(Item item, String content)
-			throws RepositoryException {
+	protected String convertFromStorage(Item item, String content) throws RepositoryException {
 		return super.convertFromStorage(item, content);
 	}
 

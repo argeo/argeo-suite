@@ -20,8 +20,7 @@ public class IdentityTextInterpreter implements TextInterpreter, CmsNames {
 					validateBeforeStoring(raw);
 					node.setProperty(CMS_CONTENT, raw);
 				} else {
-					throw new CmsException("Don't know how to interpret "
-							+ node);
+					throw new CmsException("Don't know how to interpret " + node);
 				}
 			} else {// property
 				Property property = (Property) item;
@@ -31,6 +30,11 @@ public class IdentityTextInterpreter implements TextInterpreter, CmsNames {
 		} catch (RepositoryException e) {
 			throw new CmsException("Cannot set content on " + item, e);
 		}
+	}
+
+	@Override
+	public String readSimpleHtml(Item item) {
+		return raw(item);
 	}
 
 	@Override
@@ -58,8 +62,7 @@ public class IdentityTextInterpreter implements TextInterpreter, CmsNames {
 
 					return node.getProperty(CMS_CONTENT).getString();
 				} else {
-					throw new CmsException("Don't know how to interpret "
-							+ node);
+					throw new CmsException("Don't know how to interpret " + node);
 				}
 			} else {// property
 				Property property = (Property) item;
@@ -79,15 +82,13 @@ public class IdentityTextInterpreter implements TextInterpreter, CmsNames {
 	}
 
 	/** To be overridden, in order to support additional formatting. */
-	protected String convertToStorage(Item item, String content)
-			throws RepositoryException {
+	protected String convertToStorage(Item item, String content) throws RepositoryException {
 		return content;
 
 	}
 
 	/** To be overridden, in order to support additional formatting. */
-	protected String convertFromStorage(Item item, String content)
-			throws RepositoryException {
+	protected String convertFromStorage(Item item, String content) throws RepositoryException {
 		return content;
 	}
 }

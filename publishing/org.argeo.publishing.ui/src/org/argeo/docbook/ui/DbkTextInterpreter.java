@@ -1,10 +1,15 @@
 package org.argeo.docbook.ui;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.List;
+
 import javax.jcr.Item;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 
+import org.apache.commons.io.IOUtils;
 import org.argeo.cms.text.TextInterpreter;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
@@ -18,7 +23,7 @@ public class DbkTextInterpreter implements TextInterpreter {
 		try {
 			if (item instanceof Node) {
 				Node node = (Node) item;
-				if (node.isNodeType(DocBookTypes.PARA)||node.isNodeType(DocBookTypes.TITLE)) {
+				if (node.isNodeType(DocBookTypes.PARA) || node.isNodeType(DocBookTypes.TITLE)) {
 					String raw = convertToStorage(node, content);
 					validateBeforeStoring(raw);
 					Node jcrText;
@@ -56,11 +61,12 @@ public class DbkTextInterpreter implements TextInterpreter {
 			item.getSession().refresh(true);
 			if (item instanceof Node) {
 				Node node = (Node) item;
-				if (node.isNodeType(DocBookTypes.PARA)||node.isNodeType(DocBookTypes.TITLE)) {
+				if (node.isNodeType(DocBookTypes.PARA) || node.isNodeType(DocBookTypes.TITLE)) {
 					Node jcrText = node.getNode(Jcr.JCR_XMLTEXT);
 					String txt = jcrText.getProperty(Jcr.JCR_XMLCHARACTERS).getString();
 					// TODO make it more robust
-					txt = txt.replace("\n", "").replace("\t", "");
+					// txt = txt.replace("\n", "").replace("\t", "");
+					txt = txt.replace("\t", "  ");
 					return txt;
 				} else {
 					throw new IllegalArgumentException("Don't know how to interpret " + node);
@@ -72,6 +78,39 @@ public class DbkTextInterpreter implements TextInterpreter {
 		} catch (RepositoryException e) {
 			throw new JcrException("Cannot get " + item + " content", e);
 		}
+	}
+
+	final static int BR_LENGTH = "<br/>".length();
+
+	public String readSimpleHtml(Item item) {
+		String raw = raw(item);
+//		raw = "<span style='text-align:justify'>" + raw + "</span>";
+		if (raw.length() == 0)
+			return raw;
+		try (StringReader reader = new StringReader(raw)) {
+			List<String> lines = IOUtils.readLines(reader);
+			if (lines.size() == 1)
+				return lines.get(0);
+			StringBuilder sb = new StringBuilder(raw.length() + lines.size() * BR_LENGTH);
+			for (int i = 0; i < lines.size(); i++) {
+				if (i != 0)
+					sb.append("<br/>");
+				sb.append(lines.get(i));
+			}
+			return sb.toString();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+//		String[] lines = raw.split("[\r\n]+");
+//		if (lines.length == 1)
+//			return lines[0];
+//		StringBuilder sb = new StringBuilder(raw.length() + lines.length * BR_LENGTH);
+//		for (int i = 0; i < lines.length; i++) {
+//			if (i != 0)
+//				sb.append("<br/>");
+//			sb.append(lines[i]);
+//		}
+//		return sb.toString();
 	}
 
 	// EXTENSIBILITY
