@@ -15,7 +15,6 @@ import org.argeo.cms.ui.viewers.Section;
 import org.argeo.cms.ui.viewers.SectionPart;
 import org.argeo.cms.ui.widgets.EditableText;
 import org.argeo.cms.ui.widgets.Img;
-import org.argeo.cms.ui.widgets.TextStyles;
 import org.argeo.docbook.DbkMsg;
 import org.argeo.docbook.DbkUtils;
 import org.argeo.eclipse.ui.MouseDown;
@@ -33,7 +32,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 /** Dialog to edit a text part. */
-class DbkContextMenu implements TextStyles {
+class DbkContextMenu {
 	private final AbstractDbkViewer textViewer;
 
 	private Shell shell;
