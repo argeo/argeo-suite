@@ -8,9 +8,9 @@ import org.argeo.cms.ui.forms.FormStyle;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.EditablePart;
 import org.argeo.cms.ui.widgets.ContextOverlay;
-import org.argeo.cms.ui.widgets.StyledControl;
 import org.argeo.eclipse.ui.MouseDoubleClick;
 import org.argeo.eclipse.ui.MouseDown;
+import org.argeo.eclipse.ui.Selected;
 import org.argeo.entity.TermsManager;
 import org.argeo.jcr.Jcr;
 import org.eclipse.swt.SWT;
@@ -21,24 +21,41 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.ToolBar;
+import org.eclipse.swt.widgets.ToolItem;
 
 /** {@link EditablePart} for terms. */
-public class TermsEditablePart extends StyledControl implements EditablePart {
+public class SingleTermPart extends AbstractTermsPart {
 	private static final long serialVersionUID = -4961135649177920808L;
-	private TermsManager termsManager;
-	private String typology;
 
-	public TermsEditablePart(Composite parent, int style, Item item, TermsManager termsManager, String typology) {
-		super(parent, style, item);
-		this.termsManager = termsManager;
-		this.typology = typology;
+	public SingleTermPart(Composite parent, int style, Item item, TermsManager termsManager, String typology) {
+		super(parent, style, item, termsManager, typology);
 	}
 
 	@Override
 	protected Control createControl(Composite box, String style) {
 		if (isEditing()) {
-			Text txt = new Text(box, SWT.SINGLE | SWT.BORDER);
+			Composite block = new Composite(box, SWT.NONE);
+			block.setLayout(CmsUiUtils.noSpaceGridLayout(3));
+
+			createHighlight(block);
+
+			Text txt = new Text(block, SWT.SINGLE | SWT.BORDER);
 			CmsUiUtils.style(txt, style == null ? FormStyle.propertyText.style() : style);
+
+			ToolBar toolBar = new ToolBar(block, SWT.HORIZONTAL);
+			ToolItem deleteItem = new ToolItem(toolBar, SWT.PUSH);
+			styleDelete(deleteItem);
+			deleteItem.addSelectionListener((Selected) (e) -> {
+				Jcr.set(getNode(), typology, null);
+				Jcr.save(getNode());
+				stopEditing();
+			});
+			ToolItem cancelItem = new ToolItem(toolBar, SWT.PUSH);
+			styleCancel(cancelItem);
+			cancelItem.addSelectionListener((Selected) (e) -> {
+				stopEditing();
+			});
 
 			ContextOverlay contextOverlay = new ContextOverlay(txt, SWT.NONE) {
 				private static final long serialVersionUID = -7980078594405384874L;
@@ -72,31 +89,35 @@ public class TermsEditablePart extends StyledControl implements EditablePart {
 						refresh(contextOverlay, null, txt);
 				}
 			});
-			layout(new Control[] { txt });
+			layout(new Control[] { block });
 			getDisplay().asyncExec(() -> txt.setFocus());
-			return txt;
+			return block;
 		} else {
-			Label lbl = new Label(box, SWT.SINGLE);
-		//	lbl.setEditable(false);
+			Composite block = new Composite(box, SWT.NONE);
+			block.setLayout(CmsUiUtils.noSpaceGridLayout(2));
 			String currentValue = Jcr.get(getNode(), typology);
 			if (currentValue != null) {
+				Label lbl = new Label(block, SWT.SINGLE);
 				String display = getTermLabel(currentValue);
 				lbl.setText(display);
-			} else
-				lbl.setText("[" + typology + "]");
-			CmsUiUtils.style(lbl, style == null ? FormStyle.propertyText.style() : style);
+				CmsUiUtils.style(lbl, style == null ? FormStyle.propertyText.style() : style);
 
-			lbl.addMouseListener((MouseDoubleClick) (e) -> {
-				startEditing();
-			});
-			return lbl;
+				lbl.addMouseListener((MouseDoubleClick) (e) -> {
+					startEditing();
+				});
+			} else {
+				ToolBar toolBar = new ToolBar(block, SWT.HORIZONTAL);
+				ToolItem addItem = new ToolItem(toolBar, SWT.FLAT);
+				styleAdd(addItem);
+				addItem.addSelectionListener((Selected) (e) -> {
+					startEditing();
+				});
+			}
+			return block;
 		}
 	}
 
-	protected String getTermLabel(String name) {
-		return name;
-	}
-
+	@Override
 	protected void refresh(ContextOverlay contextArea, String filter, Text txt) {
 		CmsUiUtils.clear(contextArea);
 		List<String> terms = termsManager.listAllTerms(typology);
@@ -106,12 +127,14 @@ public class TermsEditablePart extends StyledControl implements EditablePart {
 				continue terms;
 			Label termL = new Label(contextArea, SWT.WRAP);
 			termL.setText(display);
-			termL.addMouseListener((MouseDown) (e) -> {
-				Jcr.set(getNode(), typology, term);
-				Jcr.save(getNode());
-				contextArea.hide();
-				stopEditing();
-			});
+			processTermListLabel(term, termL);
+			if (isTermSelectable(term))
+				termL.addMouseListener((MouseDown) (e) -> {
+					Jcr.set(getNode(), typology, term);
+					Jcr.save(getNode());
+					contextArea.hide();
+					stopEditing();
+				});
 		}
 		contextArea.show();
 		// txt.setFocus();
