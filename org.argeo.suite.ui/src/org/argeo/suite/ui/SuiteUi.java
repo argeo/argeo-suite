@@ -156,6 +156,7 @@ class SuiteUi extends Composite {
 
 	protected Composite initLayer(String id, SuiteLayer layer, Node context) {
 		Composite workArea = cmsView.doAs(() -> (Composite) layer.createUiPart(dynamicArea, context));
+		CmsUiUtils.style(workArea, SuiteStyle.workArea);
 		workArea.setLayoutData(CmsUiUtils.coverAll());
 		workAreas.put(id, workArea);
 		return workArea;

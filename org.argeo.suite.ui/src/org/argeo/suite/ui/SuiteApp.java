@@ -129,7 +129,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		CmsTheme theme = getTheme(uiName);
 		if (theme != null)
 			CmsTheme.registerCmsTheme(parent.getShell(), theme);
-		SuiteUi argeoSuiteUi = new SuiteUi(parent, SWT.NONE);
+		SuiteUi argeoSuiteUi = new SuiteUi(parent, SWT.INHERIT_DEFAULT);
 		String uid = cmsView.getUid();
 		managedUis.put(uid, argeoSuiteUi);
 		argeoSuiteUi.addDisposeListener((e) -> {

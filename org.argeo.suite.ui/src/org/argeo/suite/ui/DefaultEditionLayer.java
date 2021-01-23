@@ -23,6 +23,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 	private CmsUiProvider entryArea;
 	private CmsUiProvider workArea;
 	private List<String> weights = new ArrayList<>();
+	private boolean startMaximized = false;
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
@@ -65,6 +66,8 @@ public class DefaultEditionLayer implements SuiteLayer {
 
 	public void init(Map<String, Object> properties) {
 		weights = LangUtils.toStringList(properties.get(Property.weights.name()));
+		startMaximized = properties.containsKey(Property.startMaximized.name())
+				&& "true".equals(properties.get(Property.startMaximized.name()));
 	}
 
 	public void setEntryArea(CmsUiProvider entryArea) {
@@ -77,9 +80,9 @@ public class DefaultEditionLayer implements SuiteLayer {
 
 	TabbedArea createTabbedArea(Composite parent, CmsTheme theme) {
 		TabbedArea tabbedArea = new TabbedArea(parent, SWT.NONE);
-		tabbedArea.setBodyStyle(SuiteStyle.mainTabBody.toStyleClass());
-		tabbedArea.setTabStyle(SuiteStyle.mainTab.toStyleClass());
-		tabbedArea.setTabSelectedStyle(SuiteStyle.mainTabSelected.toStyleClass());
+		tabbedArea.setBodyStyle(SuiteStyle.mainTabBody.style());
+		tabbedArea.setTabStyle(SuiteStyle.mainTab.style());
+		tabbedArea.setTabSelectedStyle(SuiteStyle.mainTabSelected.style());
 		tabbedArea.setCloseIcon(SuiteIcon.close.getSmallIcon(theme));
 		tabbedArea.setLayoutData(CmsUiUtils.fillAll());
 		return tabbedArea;
@@ -109,17 +112,20 @@ public class DefaultEditionLayer implements SuiteLayer {
 				int[] actualWeight = new int[weights.size()];
 				for (int i = 0; i < weights.size(); i++) {
 					actualWeight[i] = Integer.parseInt(weights.get(i));
-					setWeights(actualWeight);
 				}
+				setWeights(actualWeight);
 			} else {
 				int[] actualWeights = new int[] { 3000, 7000 };
 				setWeights(actualWeights);
 			}
+			if (startMaximized)
+				setMaximizedControl(editorArea);
 			editorArea.setLayout(new GridLayout());
 
 			if (DefaultEditionLayer.this.workArea == null) {
 				tabbedArea = createTabbedArea(editorArea, theme);
 			}
+
 		}
 
 		Composite getEntryArea() {

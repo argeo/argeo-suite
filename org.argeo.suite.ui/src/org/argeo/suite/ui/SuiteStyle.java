@@ -16,6 +16,8 @@ public enum SuiteStyle implements CmsStyle {
 	simpleLabel, simpleText, simpleInput,
 	// table
 	titleCell,
+	// layers
+	workArea,
 	// tabbed area
 	mainTabBody, mainTabSelected, mainTab,
 	// Buttons
