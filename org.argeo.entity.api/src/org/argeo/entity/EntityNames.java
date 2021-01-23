@@ -29,6 +29,10 @@ public interface EntityNames {
 	@Deprecated
 	final String ENTITY_RELATED_TO = "entity:relatedTo";
 
+	// DEFAULT FOLDER NAMES
+	final String MEDIA = "media";
+	final String FILES = "files";
+
 	// LDAP-LIKE ENTITIES
 	@Deprecated
 	final String DISPLAY_NAME = LdapAttrs.displayName.property();

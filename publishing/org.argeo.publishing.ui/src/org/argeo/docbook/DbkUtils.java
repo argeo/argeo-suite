@@ -69,6 +69,12 @@ public class DbkUtils {
 
 	public static Node insertImageAfter(Node sibling) {
 		try {
+
+			// FIXME make it more robust
+			if (DocBookTypes.IMAGEDATA.equals(sibling.getName())) {
+				sibling = sibling.getParent().getParent();
+			}
+
 			Node parent = sibling.getParent();
 			Node mediaNode = parent.addNode(DocBookTypes.MEDIAOBJECT, DocBookTypes.MEDIAOBJECT);
 			// TODO optimise?
@@ -78,12 +84,18 @@ public class DbkUtils {
 					mediaNode.getName() + "[" + mediaNode.getIndex() + "]");
 
 			Node imageNode = mediaNode.addNode(DocBookTypes.IMAGEOBJECT, DocBookTypes.IMAGEOBJECT);
-			Node infoNode = imageNode.addNode(DocBookTypes.INFO, DocBookTypes.INFO);
-			Node imageDataNode = JcrUtils.copyBytesAsFile(infoNode, EntityType.box.get(), new byte[0]);
-			imageDataNode.addMixin(EntityType.box.get());
-			imageDataNode.setProperty(EntityNames.SVG_WIDTH, 0);
-			imageDataNode.setProperty(EntityNames.SVG_LENGTH, 0);
-			imageDataNode.addMixin(NodeType.MIX_MIMETYPE);
+			Node imageDataNode = imageNode.addNode(DocBookTypes.IMAGEDATA, DocBookTypes.IMAGEDATA);
+//			Node infoNode = imageNode.addNode(DocBookTypes.INFO, DocBookTypes.INFO);
+//			Node fileNode = JcrUtils.copyBytesAsFile(mediaFolder, EntityType.box.get(), new byte[0]);
+//			fileNode.addMixin(EntityType.box.get());
+//			fileNode.setProperty(EntityNames.SVG_WIDTH, 0);
+//			fileNode.setProperty(EntityNames.SVG_LENGTH, 0);
+//			fileNode.addMixin(NodeType.MIX_MIMETYPE);
+//
+//			// we assume this is a folder next to the main DocBook document
+//			// TODO make it more robust and generic
+//			String fileRef = mediaNode.getName();
+//			imageDataNode.setProperty(DocBookNames.DBK_FILEREF, fileRef);
 			return imageDataNode;
 		} catch (RepositoryException e) {
 			throw new JcrException("Cannot insert empty image after " + sibling, e);

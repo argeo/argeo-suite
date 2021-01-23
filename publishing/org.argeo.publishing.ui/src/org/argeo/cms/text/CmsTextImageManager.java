@@ -33,7 +33,9 @@ public class CmsTextImageManager extends DefaultImageManager {
 	}
 
 	@Override
-	protected void processNewImageFile(Node fileNode, ImageData id) throws RepositoryException, IOException {
+	protected void processNewImageFile(Node context,
+			Node fileNode, ImageData id)
+			throws RepositoryException, IOException {
 		fileNode.addMixin(CmsTypes.CMS_IMAGE);
 		fileNode.setProperty(CmsNames.CMS_IMAGE_WIDTH, id.width);
 		fileNode.setProperty(CmsNames.CMS_IMAGE_HEIGHT, id.height);

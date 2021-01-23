@@ -21,8 +21,6 @@ import org.argeo.cms.text.Paragraph;
 import org.argeo.cms.text.TextInterpreter;
 import org.argeo.cms.text.TextSection;
 import org.argeo.cms.ui.CmsEditable;
-import org.argeo.cms.ui.CmsImageManager;
-import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.AbstractPageViewer;
 import org.argeo.cms.ui.viewers.EditablePart;
@@ -30,11 +28,9 @@ import org.argeo.cms.ui.viewers.NodePart;
 import org.argeo.cms.ui.viewers.PropertyPart;
 import org.argeo.cms.ui.viewers.Section;
 import org.argeo.cms.ui.viewers.SectionPart;
-import org.argeo.cms.ui.widgets.EditableImage;
 import org.argeo.cms.ui.widgets.EditableText;
-import org.argeo.cms.ui.widgets.Img;
 import org.argeo.cms.ui.widgets.StyledControl;
-import org.argeo.entity.EntityType;
+import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
 import org.eclipse.rap.fileupload.FileDetails;
@@ -61,7 +57,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 	private final Section mainSection;
 
 	private TextInterpreter textInterpreter = new DbkTextInterpreter();
-	private CmsImageManager imageManager;
+	private DbkImageManager imageManager;
 
 	private FileUploadListener fileUploadListener;
 	private DbkContextMenu styledTools;
@@ -70,9 +66,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 	protected AbstractDbkViewer(Section parent, int style, CmsEditable cmsEditable) {
 		super(parent, style, cmsEditable);
-		CmsView cmsView = CmsView.getCmsView(parent);
+//		CmsView cmsView = CmsView.getCmsView(parent);
 //		imageManager = cmsView.getImageManager();
-		imageManager = new DbkImageManager();
 		flat = SWT.FLAT == (style & SWT.FLAT);
 
 		if (getCmsEditable().canEdit()) {
@@ -80,6 +75,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			styledTools = new DbkContextMenu(this, parent.getShell());
 		}
 		this.mainSection = parent;
+		Node baseFolder = Jcr.getParent(mainSection.getNode());
+		imageManager = new DbkImageManager(baseFolder);
 		initModelIfNeeded(mainSection.getNode());
 		// layout(this.mainSection);
 	}
@@ -111,9 +108,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				SectionPart sectionPart = null;
 				if (child.isNodeType(DocBookTypes.MEDIAOBJECT)) {
 					if (child.hasNode(DocBookTypes.IMAGEOBJECT)) {
-						Node imageNode = child.getNode(DocBookTypes.IMAGEOBJECT).getNode(DocBookTypes.INFO)
-								.getNode(EntityType.box.get());
-						sectionPart = newImg(textSection, imageNode);
+						Node imageDataNode = child.getNode(DocBookTypes.IMAGEOBJECT).getNode(DocBookTypes.IMAGEDATA);
+						sectionPart = newImg(textSection, imageDataNode);
 					}
 				} else if (child.isNodeType(DocBookTypes.PARA)) {
 					sectionPart = newParagraph(textSection, child);
@@ -157,21 +153,9 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		return paragraph;
 	}
 
-	protected Img newImg(TextSection parent, Node node) {
+	protected DbkImg newImg(TextSection parent, Node node) {
 		try {
-			Img img = new Img(parent, parent.getStyle(), node, imageManager) {
-				private static final long serialVersionUID = 1297900641952417540L;
-
-				@Override
-				protected void setContainerLayoutData(Composite composite) {
-					composite.setLayoutData(CmsUiUtils.grabWidth(SWT.CENTER, SWT.DEFAULT));
-				}
-
-				@Override
-				protected void setControlLayoutData(Control control) {
-					control.setLayoutData(CmsUiUtils.grabWidth(SWT.CENTER, SWT.DEFAULT));
-				}
-			};
+			DbkImg img = new DbkImg(parent, parent.getStyle(), node, imageManager);
 			img.setLayoutData(CmsUiUtils.grabWidth(SWT.CENTER, SWT.DEFAULT));
 			updateContent(img);
 			img.setMouseListener(getMouseListener());
@@ -241,8 +225,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 					paragraph.setText(textInterpreter.raw(partNode));
 				else
 					paragraph.setText(textInterpreter.readSimpleHtml(partNode));
-			} else if (part instanceof EditableImage) {
-				EditableImage editableImage = (EditableImage) part;
+			} else if (part instanceof DbkImg) {
+				DbkImg editableImage = (DbkImg) part;
 				imageManager.load(partNode, part.getControl(), editableImage.getPreferredImageSize());
 			}
 		} else if (part instanceof DocBookSectionTitle) {
@@ -333,8 +317,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 					"ALT+ARROW_RIGHT", "ALT+ARROW_UP", "ALT+ARROW_DOWN", "RETURN", "CTRL+RETURN", "ENTER", "DELETE" });
 			text.setData(RWT.CANCEL_KEYS, new String[] { "RETURN", "ALT+ARROW_LEFT", "ALT+ARROW_RIGHT" });
 			text.addKeyListener(this);
-		} else if (part instanceof Img) {
-			((Img) part).setFileUploadListener(fileUploadListener);
+		} else if (part instanceof DbkImg) {
+			((DbkImg) part).setFileUploadListener(fileUploadListener);
 		}
 	}
 
@@ -369,9 +353,11 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		try {
 			Node node = sectionPart.getNode();
 			Session session = node.getSession();
-			if (sectionPart instanceof Img) {
+			if (sectionPart instanceof DbkImg) {
 				// FIXME make it more robust
-				node = node.getParent().getParent().getParent();
+				node = node.getParent().getParent();
+				if (!DocBookNames.DBK_MEDIAOBJECT.equals(node.getName()))
+					throw new IllegalArgumentException("Node " + node + " is not a media object.");
 			}
 			node.remove();
 			session.save();
@@ -538,10 +524,10 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 					// sectionNode.orderBefore(p(partNode.getIndex()),
 					// p(newNode.getIndex()));
 					persistChanges(sectionNode);
-					Img img = newImg((TextSection) section, newNode);
+					DbkImg img = newImg((TextSection) section, newNode);
 					edit(img, null);
 					layout(img.getControl());
-				} else if (part instanceof Img) {
+				} else if (part instanceof DbkImg) {
 					if (getEdited() == part)
 						return;
 					edit(part, null);
@@ -841,9 +827,9 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				Control source = (Control) e.getSource();
 				EditablePart composite = findDataParent(source);
 				Point point = new Point(e.x, e.y);
-				if (composite instanceof Img) {
+				if (composite instanceof DbkImg) {
 					if (getCmsEditable().canEdit()) {
-						if (getCmsEditable().isEditing() && !(getEdited() instanceof Img)) {
+						if (getCmsEditable().isEditing() && !(getEdited() instanceof DbkImg)) {
 							if (source == mainSection)
 								return;
 							EditablePart part = findDataParent(source);
