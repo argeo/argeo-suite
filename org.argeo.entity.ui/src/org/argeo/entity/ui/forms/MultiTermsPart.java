@@ -57,8 +57,10 @@ public class MultiTermsPart extends AbstractTermsPart {
 					ToolItem deleteItem = new ToolItem(toolBar, SWT.FLAT);
 					styleDelete(deleteItem);
 					deleteItem.addSelectionListener((Selected) (e) -> {
+						// we retrieve them again here because they may have changed
+						List<String> curr = Jcr.getMultiple(getNode(), typology);
 						List<String> newValue = new ArrayList<>();
-						for (String v : currentValue) {
+						for (String v : curr) {
 							if (!v.equals(value))
 								newValue.add(v);
 						}
@@ -155,8 +157,9 @@ public class MultiTermsPart extends AbstractTermsPart {
 			if (isTermSelectable(term))
 				termL.addMouseListener((MouseDown) (e) -> {
 					List<String> newValue = new ArrayList<>();
+					List<String> curr = Jcr.getMultiple(getNode(), typology);
 					if (currentValue != null)
-						newValue.addAll(currentValue);
+						newValue.addAll(curr);
 					newValue.add(term);
 					Jcr.set(getNode(), typology, newValue);
 					Jcr.save(getNode());
