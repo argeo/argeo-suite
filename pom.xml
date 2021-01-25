@@ -23,17 +23,7 @@
 		<git.rw />
 	</properties>
 	<modules>
-		<!-- Entity Framework -->
-		<module>org.argeo.entity.api</module>
-		<module>org.argeo.entity.core</module>
-		<module>org.argeo.entity.ui</module>
-
-		<!-- Argeo Suite -->
-		<module>org.argeo.suite.core</module>
-		<module>org.argeo.suite.ui</module>
-		<module>org.argeo.suite.ui.rap</module>
-		<module>org.argeo.suite.theme.default</module>
-
+		<module>core</module>
 		<!-- Functional areas -->
 		<module>library</module>
 		<module>publishing</module>
