@@ -9,7 +9,7 @@ mixin
 
 [argeodbk:linkingAttributes]
 mixin
- - dbk:linkend (String)
+ - linkend (String)
  - xlink:actuate (String)
  - xlink:arcrole (String)
  - xlink:href (String)
@@ -69,8 +69,8 @@ mixin
  + dbk:annotation (dbk:annotation) = dbk:annotation *
  + dbk:remark (dbk:remark) = dbk:remark *
  + dbk:subtitle (dbk:subtitle) = dbk:subtitle *
- - dbk:label (String)
- - dbk:status (String)
+ - label (String)
+ - status (String)
 
 [argeodbk:bibliographyInlines]
 mixin
@@ -86,23 +86,23 @@ mixin
 [argeodbk:base]
 abstract
 orderable
- - dbk:annotations (String)
- - dbk:arch (String)
- - dbk:audience (String)
- - dbk:condition (String)
- - dbk:conformance (String)
- - dbk:dir (String)
- - dbk:os (String)
- - dbk:remap (String)
- - dbk:revision (String)
- - dbk:revisionflag (String)
- - dbk:role (String)
- - dbk:security (String)
- - dbk:userlevel (String)
- - dbk:vendor (String)
- - dbk:version (String)
- - dbk:wordsize (String)
- - dbk:xreflabel (String)
+ - annotations (String)
+ - arch (String)
+ - audience (String)
+ - condition (String)
+ - conformance (String)
+ - dir (String)
+ - os (String)
+ - remap (String)
+ - revision (String)
+ - revisionflag (String)
+ - role (String)
+ - security (String)
+ - userlevel (String)
+ - vendor (String)
+ - version (String)
+ - wordsize (String)
+ - xreflabel (String)
 
 [dbk:alt] > argeodbk:base
  + dbk:inlinemediaobject (dbk:inlinemediaobject) = dbk:inlinemediaobject *
@@ -115,19 +115,19 @@ orderable
  + dbk:annotation (dbk:annotation) = dbk:annotation *
  + dbk:mediaobject (dbk:mediaobject) = dbk:mediaobject *
  + dbk:remark (dbk:remark) = dbk:remark *
- - dbk:annotates (String) 
+ - annotates (String) 
 
 [dbk:article] > argeodbk:abstractSection, argeodbk:base, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:listElements, argeodbk:paragraphElements, argeodbk:publishingElements, argeodbk:techDocElements, argeodbk:titled
  + dbk:anchor (dbk:anchor) = dbk:anchor *
  + dbk:mediaobject (dbk:mediaobject) = dbk:mediaobject *
  + dbk:section (dbk:section) = dbk:section *
- - dbk:class (String) 
+ - class (String) 
 
 [dbk:audiodata] > argeodbk:base
  + dbk:info (dbk:info) = dbk:info
- - dbk:entityref (String) 
- - dbk:fileref (String) 
- - dbk:format (String) 
+ - entityref (String) 
+ - fileref (String) 
+ - format (String) 
 
 [dbk:audioobject] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:audiodata (dbk:audiodata) = dbk:audiodata
@@ -140,18 +140,18 @@ orderable
  + dbk:personname (dbk:personname) = dbk:personname
 
 [dbk:biblioref] > argeodbk:base, argeodbk:linkingAttributes
- - dbk:begin (String) 
- - dbk:end (String) 
- - dbk:endterm (Reference) 
- - dbk:units (String) 
- - dbk:xrefstyle (String) 
+ - begin (String) 
+ - end (String) 
+ - endterm (Reference) 
+ - units (String) 
+ - xrefstyle (String) 
 
 [dbk:book] > argeodbk:base, argeodbk:linkingAttributes, argeodbk:titled
  + dbk:article (dbk:article) = dbk:article *
  + dbk:chapter (dbk:chapter) = dbk:chapter *
  + dbk:subtitle (dbk:subtitle) = dbk:subtitle *
- - dbk:label (String) 
- - dbk:status (String) 
+ - label (String) 
+ - status (String) 
 
 [dbk:caption] > argeodbk:base, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:listElements, argeodbk:paragraphElements, argeodbk:publishingElements, argeodbk:techDocElements
  + dbk:anchor (dbk:anchor) = dbk:anchor *
@@ -159,20 +159,20 @@ orderable
  + dbk:mediaobject (dbk:mediaobject) = dbk:mediaobject *
  + dbk:remark (dbk:remark) = dbk:remark *
  + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
- - dbk:class (String) 
- - dbk:lang (String) 
- - dbk:onclick (String) 
- - dbk:ondblclick (String) 
- - dbk:onkeydown (String) 
- - dbk:onkeypress (String) 
- - dbk:onkeyup (String) 
- - dbk:onmousedown (String) 
- - dbk:onmousemove (String) 
- - dbk:onmouseout (String) 
- - dbk:onmouseover (String) 
- - dbk:onmouseup (String) 
- - dbk:style (String) 
- - dbk:title (String) 
+ - class (String) 
+ - lang (String) 
+ - onclick (String) 
+ - ondblclick (String) 
+ - onkeydown (String) 
+ - onkeypress (String) 
+ - onkeyup (String) 
+ - onmousedown (String) 
+ - onmousemove (String) 
+ - onmouseout (String) 
+ - onmouseover (String) 
+ - onmouseup (String) 
+ - style (String) 
+ - title (String) 
 
 [dbk:chapter] > argeodbk:abstractSection, argeodbk:base, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:listElements, argeodbk:paragraphElements, argeodbk:publishingElements, argeodbk:techDocElements, argeodbk:titled
  + dbk:anchor (dbk:anchor) = dbk:anchor *
@@ -180,14 +180,14 @@ orderable
  + dbk:section (dbk:section) = dbk:section *
 
 [dbk:colspec] > argeodbk:base, argeodbk:linkingAttributes
- - dbk:align (String) 
- - dbk:char (String) 
- - dbk:charoff (String) 
- - dbk:colname (String) 
- - dbk:colnum (String) 
- - dbk:colsep (String) 
- - dbk:colwidth (String) 
- - dbk:rowsep (String) 
+ - align (String) 
+ - char (String) 
+ - charoff (String) 
+ - colname (String) 
+ - colnum (String) 
+ - colsep (String) 
+ - colwidth (String) 
+ - rowsep (String) 
 
 [dbk:editor] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:orgdiv (dbk:orgdiv) = dbk:orgdiv *
@@ -199,49 +199,49 @@ orderable
 
 [dbk:entry] > argeodbk:base, argeodbk:bibliographyInlines, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:listElements, argeodbk:markupInlines, argeodbk:paragraphElements, argeodbk:publishingElements, argeodbk:publishingInlines, argeodbk:techDocElements, argeodbk:techDocInlines, argeodbk:ubiquitousInlines
  + dbk:mediaobject (dbk:mediaobject) = dbk:mediaobject *
- - dbk:align (String) 
- - dbk:char (String) 
- - dbk:charoff (String) 
- - dbk:colname (String) 
- - dbk:colsep (String) 
- - dbk:morerows (String) 
- - dbk:nameend (String) 
- - dbk:namest (String) 
- - dbk:rotate (String) 
- - dbk:rowsep (String) 
- - dbk:spanname (String) 
- - dbk:valign (String) 
+ - align (String) 
+ - char (String) 
+ - charoff (String) 
+ - colname (String) 
+ - colsep (String) 
+ - morerows (String) 
+ - nameend (String) 
+ - namest (String) 
+ - rotate (String) 
+ - rowsep (String) 
+ - spanname (String) 
+ - valign (String) 
 
 [dbk:entrytbl] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:colspec (dbk:colspec) = dbk:colspec *
  + dbk:spanspec (dbk:spanspec) = dbk:spanspec *
  + dbk:tbody (dbk:tbody) = dbk:tbody
  + dbk:thead (dbk:thead) = dbk:thead
- - dbk:align (String) 
- - dbk:char (String) 
- - dbk:charoff (String) 
- - dbk:colname (String) 
- - dbk:cols (String) 
- - dbk:colsep (String) 
- - dbk:nameend (String) 
- - dbk:namest (String) 
- - dbk:rowsep (String) 
- - dbk:spanname (String) 
- - dbk:tgroupstyle (String) 
+ - align (String) 
+ - char (String) 
+ - charoff (String) 
+ - colname (String) 
+ - cols (String) 
+ - colsep (String) 
+ - nameend (String) 
+ - namest (String) 
+ - rowsep (String) 
+ - spanname (String) 
+ - tgroupstyle (String) 
 
 [dbk:imagedata] > argeodbk:base
  + dbk:info (dbk:info) = dbk:info
- - dbk:align (String) 
- - dbk:contentdepth (String) 
- - dbk:contentwidth (String) 
- - dbk:depth (String) 
- - dbk:entityref (String) 
- - dbk:fileref (String) 
- - dbk:format (String) 
- - dbk:scale (String) 
- - dbk:scalefit (String) 
- - dbk:valign (String) 
- - dbk:width (String) 
+ - align (String) 
+ - contentdepth (String) 
+ - contentwidth (String) 
+ - depth (String) 
+ - entityref (String) 
+ - fileref (String) 
+ - format (String) 
+ - scale (String) 
+ - scalefit (String) 
+ - valign (String) 
+ - width (String) 
 
 [dbk:imageobject] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:imagedata (dbk:imagedata) = dbk:imagedata
@@ -271,19 +271,19 @@ orderable
  + dbk:listitem (dbk:listitem) = dbk:listitem *
  + dbk:mediaobject (dbk:mediaobject) = dbk:mediaobject *
  + dbk:remark (dbk:remark) = dbk:remark *
- - dbk:mark (String) 
- - dbk:spacing (String) 
+ - mark (String) 
+ - spacing (String) 
 
 [dbk:link] > argeodbk:base, argeodbk:bibliographyInlines, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:markupInlines, argeodbk:publishingInlines, argeodbk:techDocInlines, argeodbk:ubiquitousInlines
- - dbk:endterm (Reference) 
- - dbk:xrefstyle (String) 
+ - endterm (Reference) 
+ - xrefstyle (String) 
 
 [dbk:listitem] > argeodbk:base, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:listElements, argeodbk:paragraphElements, argeodbk:publishingElements, argeodbk:techDocElements
  + dbk:anchor (dbk:anchor) = dbk:anchor *
  + dbk:annotation (dbk:annotation) = dbk:annotation *
  + dbk:mediaobject (dbk:mediaobject) = dbk:mediaobject *
  + dbk:remark (dbk:remark) = dbk:remark *
- - dbk:override (String) 
+ - override (String) 
 
 [dbk:mediaobject] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:alt (dbk:alt) = dbk:alt
@@ -295,11 +295,11 @@ orderable
  + dbk:videoobject (dbk:videoobject) = dbk:videoobject *
 
 [dbk:olink] > argeodbk:base, argeodbk:bibliographyInlines, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:markupInlines, argeodbk:publishingInlines, argeodbk:techDocInlines, argeodbk:ubiquitousInlines
- - dbk:localinfo (String) 
- - dbk:targetdoc (String) 
- - dbk:targetptr (String) 
- - dbk:type (String) 
- - dbk:xrefstyle (String) 
+ - localinfo (String) 
+ - targetdoc (String) 
+ - targetptr (String) 
+ - type (String) 
+ - xrefstyle (String) 
 
 [dbk:orderedlist] > argeodbk:base, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:listElements, argeodbk:paragraphElements, argeodbk:publishingElements, argeodbk:techDocElements, argeodbk:titled
  + dbk:anchor (dbk:anchor) = dbk:anchor *
@@ -307,17 +307,17 @@ orderable
  + dbk:listitem (dbk:listitem) = dbk:listitem *
  + dbk:mediaobject (dbk:mediaobject) = dbk:mediaobject *
  + dbk:remark (dbk:remark) = dbk:remark *
- - dbk:continuation (String) 
- - dbk:inheritnum (String) 
- - dbk:numeration (String) 
- - dbk:spacing (String) 
- - dbk:startingnumber (String) 
+ - continuation (String) 
+ - inheritnum (String) 
+ - numeration (String) 
+ - spacing (String) 
+ - startingnumber (String) 
 
 [dbk:orgdiv] > argeodbk:base, argeodbk:bibliographyInlines, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:markupInlines, argeodbk:publishingInlines, argeodbk:techDocInlines, argeodbk:ubiquitousInlines
 
 [dbk:orgname] > argeodbk:base, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:ubiquitousInlines
- - dbk:class (String) 
- - dbk:otherclass (String) 
+ - class (String) 
+ - otherclass (String) 
 
 [dbk:para] > argeodbk:base, argeodbk:bibliographyInlines, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:listElements, argeodbk:markupInlines, argeodbk:publishingElements, argeodbk:publishingInlines, argeodbk:techDocElements, argeodbk:techDocInlines, argeodbk:ubiquitousInlines
  + dbk:info (dbk:info) = dbk:info *
@@ -333,13 +333,13 @@ orderable
 [dbk:remark] > argeodbk:base, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:ubiquitousInlines
 
 [dbk:replaceable] > argeodbk:base, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:ubiquitousInlines
- - dbk:class (String) 
+ - class (String) 
 
 [dbk:row] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:entry (dbk:entry) = dbk:entry *
  + dbk:entrytbl (dbk:entrytbl) = dbk:entrytbl *
- - dbk:rowsep (String) 
- - dbk:valign (String) 
+ - rowsep (String) 
+ - valign (String) 
 
 [dbk:section] > argeodbk:abstractSection, argeodbk:base, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:listElements, argeodbk:paragraphElements, argeodbk:publishingElements, argeodbk:techDocElements, argeodbk:titled
  + dbk:anchor (dbk:anchor) = dbk:anchor *
@@ -350,22 +350,22 @@ orderable
  + dbk:book (dbk:book) = dbk:book *
  + dbk:set (dbk:set) = dbk:set *
  + dbk:subtitle (dbk:subtitle) = dbk:subtitle *
- - dbk:label (String) 
- - dbk:status (String) 
+ - label (String) 
+ - status (String) 
 
 [dbk:simplelist] > argeodbk:base, argeodbk:linkingAttributes
- - dbk:columns (String) 
- - dbk:type (String) 
+ - columns (String) 
+ - type (String) 
 
 [dbk:spanspec] > argeodbk:base, argeodbk:linkingAttributes
- - dbk:align (String) 
- - dbk:char (String) 
- - dbk:charoff (String) 
- - dbk:colsep (String) 
- - dbk:nameend (String) 
- - dbk:namest (String) 
- - dbk:rowsep (String) 
- - dbk:spanname (String) 
+ - align (String) 
+ - char (String) 
+ - charoff (String) 
+ - colsep (String) 
+ - nameend (String) 
+ - namest (String) 
+ - rowsep (String) 
+ - spanname (String) 
 
 [dbk:subscript] > argeodbk:base, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:ubiquitousInlines
 
@@ -381,58 +381,58 @@ orderable
  + dbk:tfoot (dbk:tfoot) = dbk:tfoot
  + dbk:tgroup (dbk:tgroup) = dbk:tgroup *
  + dbk:thead (dbk:thead) = dbk:thead
- - dbk:border (String) 
- - dbk:cellpadding (String) 
- - dbk:cellspacing (String) 
- - dbk:class (String) 
- - dbk:colsep (String) 
- - dbk:floatstyle (String) 
- - dbk:frame (String) 
- - dbk:label (String) 
- - dbk:lang (String) 
- - dbk:onclick (String) 
- - dbk:ondblclick (String) 
- - dbk:onkeydown (String) 
- - dbk:onkeypress (String) 
- - dbk:onkeyup (String) 
- - dbk:onmousedown (String) 
- - dbk:onmousemove (String) 
- - dbk:onmouseout (String) 
- - dbk:onmouseover (String) 
- - dbk:onmouseup (String) 
- - dbk:orient (String) 
- - dbk:pgwide (String) 
- - dbk:rowheader (String) 
- - dbk:rowsep (String) 
- - dbk:rules (String) 
- - dbk:shortentry (String) 
- - dbk:style (String) 
- - dbk:summary (String) 
- - dbk:tabstyle (String) 
- - dbk:title (String) 
- - dbk:tocentry (String) 
- - dbk:width (String) 
+ - border (String) 
+ - cellpadding (String) 
+ - cellspacing (String) 
+ - class (String) 
+ - colsep (String) 
+ - floatstyle (String) 
+ - frame (String) 
+ - label (String) 
+ - lang (String) 
+ - onclick (String) 
+ - ondblclick (String) 
+ - onkeydown (String) 
+ - onkeypress (String) 
+ - onkeyup (String) 
+ - onmousedown (String) 
+ - onmousemove (String) 
+ - onmouseout (String) 
+ - onmouseover (String) 
+ - onmouseup (String) 
+ - orient (String) 
+ - pgwide (String) 
+ - rowheader (String) 
+ - rowsep (String) 
+ - rules (String) 
+ - shortentry (String) 
+ - style (String) 
+ - summary (String) 
+ - tabstyle (String) 
+ - title (String) 
+ - tocentry (String) 
+ - width (String) 
 
 [dbk:tbody] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:row (dbk:row) = dbk:row *
- - dbk:align (String) 
- - dbk:char (String) 
- - dbk:charoff (String) 
- - dbk:class (String) 
- - dbk:lang (String) 
- - dbk:onclick (String) 
- - dbk:ondblclick (String) 
- - dbk:onkeydown (String) 
- - dbk:onkeypress (String) 
- - dbk:onkeyup (String) 
- - dbk:onmousedown (String) 
- - dbk:onmousemove (String) 
- - dbk:onmouseout (String) 
- - dbk:onmouseover (String) 
- - dbk:onmouseup (String) 
- - dbk:style (String) 
- - dbk:title (String) 
- - dbk:valign (String) 
+ - align (String) 
+ - char (String) 
+ - charoff (String) 
+ - class (String) 
+ - lang (String) 
+ - onclick (String) 
+ - ondblclick (String) 
+ - onkeydown (String) 
+ - onkeypress (String) 
+ - onkeyup (String) 
+ - onmousedown (String) 
+ - onmousemove (String) 
+ - onmouseout (String) 
+ - onmouseover (String) 
+ - onmouseup (String) 
+ - style (String) 
+ - title (String) 
+ - valign (String) 
 
 [dbk:textobject] > argeodbk:base, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:listElements, argeodbk:paragraphElements, argeodbk:publishingElements, argeodbk:techDocElements
  + dbk:anchor (dbk:anchor) = dbk:anchor *
@@ -445,24 +445,24 @@ orderable
 [dbk:tfoot] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:colspec (dbk:colspec) = dbk:colspec *
  + dbk:row (dbk:row) = dbk:row *
- - dbk:align (String) 
- - dbk:char (String) 
- - dbk:charoff (String) 
- - dbk:class (String) 
- - dbk:lang (String) 
- - dbk:onclick (String) 
- - dbk:ondblclick (String) 
- - dbk:onkeydown (String) 
- - dbk:onkeypress (String) 
- - dbk:onkeyup (String) 
- - dbk:onmousedown (String) 
- - dbk:onmousemove (String) 
- - dbk:onmouseout (String) 
- - dbk:onmouseover (String) 
- - dbk:onmouseup (String) 
- - dbk:style (String) 
- - dbk:title (String) 
- - dbk:valign (String) 
+ - align (String) 
+ - char (String) 
+ - charoff (String) 
+ - class (String) 
+ - lang (String) 
+ - onclick (String) 
+ - ondblclick (String) 
+ - onkeydown (String) 
+ - onkeypress (String) 
+ - onkeyup (String) 
+ - onmousedown (String) 
+ - onmousemove (String) 
+ - onmouseout (String) 
+ - onmouseover (String) 
+ - onmouseup (String) 
+ - style (String) 
+ - title (String) 
+ - valign (String) 
 
 [dbk:tgroup] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:colspec (dbk:colspec) = dbk:colspec *
@@ -470,58 +470,58 @@ orderable
  + dbk:tbody (dbk:tbody) = dbk:tbody
  + dbk:tfoot (dbk:tfoot) = dbk:tfoot
  + dbk:thead (dbk:thead) = dbk:thead
- - dbk:align (String) 
- - dbk:char (String) 
- - dbk:charoff (String) 
- - dbk:cols (String) 
- - dbk:colsep (String) 
- - dbk:rowsep (String) 
- - dbk:tgroupstyle (String) 
+ - align (String) 
+ - char (String) 
+ - charoff (String) 
+ - cols (String) 
+ - colsep (String) 
+ - rowsep (String) 
+ - tgroupstyle (String) 
 
 [dbk:thead] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:colspec (dbk:colspec) = dbk:colspec *
  + dbk:row (dbk:row) = dbk:row *
- - dbk:align (String) 
- - dbk:char (String) 
- - dbk:charoff (String) 
- - dbk:class (String) 
- - dbk:lang (String) 
- - dbk:onclick (String) 
- - dbk:ondblclick (String) 
- - dbk:onkeydown (String) 
- - dbk:onkeypress (String) 
- - dbk:onkeyup (String) 
- - dbk:onmousedown (String) 
- - dbk:onmousemove (String) 
- - dbk:onmouseout (String) 
- - dbk:onmouseover (String) 
- - dbk:onmouseup (String) 
- - dbk:style (String) 
- - dbk:title (String) 
- - dbk:valign (String) 
+ - align (String) 
+ - char (String) 
+ - charoff (String) 
+ - class (String) 
+ - lang (String) 
+ - onclick (String) 
+ - ondblclick (String) 
+ - onkeydown (String) 
+ - onkeypress (String) 
+ - onkeyup (String) 
+ - onmousedown (String) 
+ - onmousemove (String) 
+ - onmouseout (String) 
+ - onmouseover (String) 
+ - onmouseup (String) 
+ - style (String) 
+ - title (String) 
+ - valign (String) 
 
 [dbk:title] > argeodbk:base, argeodbk:bibliographyInlines, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:markupInlines, argeodbk:publishingInlines, argeodbk:techDocInlines, argeodbk:ubiquitousInlines
 
 [dbk:videodata] > argeodbk:base
  + dbk:info (dbk:info) = dbk:info
- - dbk:align (String) 
- - dbk:contentdepth (String) 
- - dbk:contentwidth (String) 
- - dbk:depth (String) 
- - dbk:entityref (String) 
- - dbk:fileref (String) 
- - dbk:format (String) 
- - dbk:scale (String) 
- - dbk:scalefit (String) 
- - dbk:valign (String) 
- - dbk:width (String) 
+ - align (String) 
+ - contentdepth (String) 
+ - contentwidth (String) 
+ - depth (String) 
+ - entityref (String) 
+ - fileref (String) 
+ - format (String) 
+ - scale (String) 
+ - scalefit (String) 
+ - valign (String) 
+ - width (String) 
 
 [dbk:videoobject] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:info (dbk:info) = dbk:info
  + dbk:videodata (dbk:videodata) = dbk:videodata
 
 [dbk:xref] > argeodbk:base, argeodbk:linkingAttributes
- - dbk:endterm (Reference) 
- - dbk:xrefstyle (String) 
+ - endterm (Reference) 
+ - xrefstyle (String) 
 
 
