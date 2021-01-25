@@ -1,5 +1,9 @@
 package org.argeo.docbook.ui;
 
+import static org.argeo.docbook.DbkUtils.isDbk;
+import static org.argeo.docbook.DocBookType.para;
+import static org.argeo.docbook.DocBookType.title;
+
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.List;
@@ -23,7 +27,7 @@ public class DbkTextInterpreter implements TextInterpreter {
 		try {
 			if (item instanceof Node) {
 				Node node = (Node) item;
-				if (node.isNodeType(DocBookTypes.PARA) || node.isNodeType(DocBookTypes.TITLE)) {
+				if (isDbk(node, para) || isDbk(node, title)) {
 					String raw = convertToStorage(node, content);
 					validateBeforeStoring(raw);
 					Node jcrText;
@@ -61,7 +65,7 @@ public class DbkTextInterpreter implements TextInterpreter {
 			item.getSession().refresh(true);
 			if (item instanceof Node) {
 				Node node = (Node) item;
-				if (node.isNodeType(DocBookTypes.PARA) || node.isNodeType(DocBookTypes.TITLE)) {
+				if (isDbk(node, para) || isDbk(node, title)) {
 					Node jcrText = node.getNode(Jcr.JCR_XMLTEXT);
 					String txt = jcrText.getProperty(Jcr.JCR_XMLCHARACTERS).getString();
 					// TODO make it more robust

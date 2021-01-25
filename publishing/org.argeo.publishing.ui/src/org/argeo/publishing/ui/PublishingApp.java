@@ -17,7 +17,7 @@ import org.argeo.api.NodeUtils;
 import org.argeo.cms.ui.AbstractCmsApp;
 import org.argeo.cms.ui.CmsApp;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.docbook.ui.DocBookTypes;
+import org.argeo.docbook.DocBookType;
 import org.argeo.docbook.ui.DocumentPage;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
@@ -70,7 +70,7 @@ public class PublishingApp extends AbstractCmsApp {
 		parent.setLayout(new GridLayout());
 		Node indexNode;
 		try {
-			indexNode = JcrUtils.getOrAdd(Jcr.getRootNode(adminSession), DocumentPage.WWW, DocBookTypes.ARTICLE);
+			indexNode = JcrUtils.getOrAdd(Jcr.getRootNode(adminSession), DocumentPage.WWW, DocBookType.article.get());
 			adminSession.save();
 		} catch (RepositoryException e) {
 			throw new IllegalStateException(e);

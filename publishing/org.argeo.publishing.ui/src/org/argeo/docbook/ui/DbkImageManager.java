@@ -20,6 +20,9 @@ import javax.jcr.nodetype.NodeType;
 import org.argeo.cms.ui.CmsImageManager;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.util.DefaultImageManager;
+import org.argeo.docbook.DbkUtils;
+import org.argeo.docbook.DocBookNames;
+import org.argeo.docbook.DocBookType;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.JcrException;
@@ -38,7 +41,7 @@ public class DbkImageManager extends DefaultImageManager {
 	@Override
 	public Binary getImageBinary(Node node) throws RepositoryException {
 		Node fileNode = null;
-		if (node.getName().equals(DocBookTypes.IMAGEDATA)) {
+		if (DbkUtils.isDbk(node, DocBookType.imagedata)) {
 			fileNode = getFileNode(node);
 		}
 		if (node.isNodeType(NT_FILE)) {

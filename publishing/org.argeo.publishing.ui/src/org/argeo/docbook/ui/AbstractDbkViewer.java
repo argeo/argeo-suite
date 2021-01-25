@@ -1,7 +1,14 @@
 package org.argeo.docbook.ui;
 
 import static org.argeo.cms.ui.util.CmsUiUtils.fillWidth;
+import static org.argeo.docbook.DbkUtils.addDbk;
+import static org.argeo.docbook.DbkUtils.isDbk;
+import static org.argeo.docbook.DocBookType.para;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -13,7 +20,6 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.nodetype.NodeType;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -30,6 +36,9 @@ import org.argeo.cms.ui.viewers.Section;
 import org.argeo.cms.ui.viewers.SectionPart;
 import org.argeo.cms.ui.widgets.EditableText;
 import org.argeo.cms.ui.widgets.StyledControl;
+import org.argeo.docbook.DbkUtils;
+import org.argeo.docbook.DocBookNames;
+import org.argeo.docbook.DocBookType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
@@ -94,10 +103,10 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			CmsUiUtils.clear(section);
 			Node node = section.getNode();
 			TextSection textSection = (TextSection) section;
-			if (node.hasNode(DocBookTypes.TITLE)) {
+			if (node.hasNode(DocBookType.title.get())) {
 				if (section.getHeader() == null)
 					section.createHeader();
-				Node titleNode = node.getNode(DocBookTypes.TITLE);
+				Node titleNode = node.getNode(DocBookType.title.get());
 				DocBookSectionTitle title = newSectionTitle(textSection, titleNode);
 				title.setLayoutData(CmsUiUtils.fillWidth());
 				updateContent(title);
@@ -106,12 +115,13 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			for (NodeIterator ni = node.getNodes(); ni.hasNext();) {
 				Node child = ni.nextNode();
 				SectionPart sectionPart = null;
-				if (child.isNodeType(DocBookTypes.MEDIAOBJECT)) {
-					if (child.hasNode(DocBookTypes.IMAGEOBJECT)) {
-						Node imageDataNode = child.getNode(DocBookTypes.IMAGEOBJECT).getNode(DocBookTypes.IMAGEDATA);
+				if (isDbk(child, DocBookType.mediaobject)) {
+					if (child.hasNode(DocBookType.imageobject.get())) {
+						Node imageDataNode = child.getNode(DocBookType.imageobject.get())
+								.getNode(DocBookType.imagedata.get());
 						sectionPart = newImg(textSection, imageDataNode);
 					}
-				} else if (child.isNodeType(DocBookTypes.PARA)) {
+				} else if (isDbk(child, para)) {
 					sectionPart = newParagraph(textSection, child);
 				} else {
 					sectionPart = newSectionPart(textSection, child);
@@ -124,9 +134,9 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			}
 
 //			if (!flat)
-			for (NodeIterator ni = section.getNode().getNodes(DocBookNames.DBK_SECTION); ni.hasNext();) {
+			for (NodeIterator ni = section.getNode().getNodes(DocBookType.section.get()); ni.hasNext();) {
 				Node child = ni.nextNode();
-				if (child.isNodeType(DocBookTypes.SECTION)) {
+				if (isDbk(child, DocBookType.section)) {
 					TextSection newSection = new TextSection(section, SWT.NONE, child);
 					newSection.setLayoutData(CmsUiUtils.fillWidth());
 					refresh(newSection);
@@ -189,12 +199,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 	protected DocBookSectionTitle prepareSectionTitle(Section newSection, String titleText) throws RepositoryException {
 		Node sectionNode = newSection.getNode();
-		Node titleNode;
-		if (!sectionNode.hasNode(DocBookTypes.TITLE)) {
-			titleNode = sectionNode.addNode(DocBookTypes.TITLE, DocBookTypes.TITLE);
-		} else {
-			titleNode = sectionNode.getNode(DocBookTypes.TITLE);
-		}
+		Node titleNode = DbkUtils.getOrAddDbk(sectionNode, DocBookType.title);
 		getTextInterpreter().write(titleNode, titleText);
 		if (newSection.getHeader() == null)
 			newSection.createHeader();
@@ -210,7 +215,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			if (part instanceof StyledControl && (sectionPart.getSection() instanceof TextSection)) {
 				TextSection section = (TextSection) sectionPart.getSection();
 				StyledControl styledControl = (StyledControl) part;
-				if (partNode.isNodeType(DocBookTypes.PARA)) {
+				if (isDbk(partNode, para)) {
 					String style = partNode.hasProperty(DocBookNames.DBK_ROLE)
 							? partNode.getProperty(DocBookNames.DBK_ROLE).getString()
 							: section.getDefaultTextStyle();
@@ -261,7 +266,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 					Node sectionNode = section.getNode();
 					Node currentParagraphN = currentParagraph.getNode();
 					for (int i = 1; i < lines.length; i++) {
-						Node newNode = sectionNode.addNode(DocBookNames.DBK_PARA, DocBookTypes.PARA);
+						Node newNode = addDbk(sectionNode, para);
 						// newNode.addMixin(CmsTypes.CMS_STYLED);
 						saveLine(newNode, lines[i]);
 						// second node was create as last, if it is not the next
@@ -356,7 +361,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			if (sectionPart instanceof DbkImg) {
 				// FIXME make it more robust
 				node = node.getParent().getParent();
-				if (!DocBookNames.DBK_MEDIAOBJECT.equals(node.getName()))
+				if (!isDbk(node, DocBookType.mediaobject))
 					throw new IllegalArgumentException("Node " + node + " is not a media object.");
 			}
 			node.remove();
@@ -402,7 +407,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 				// FIXME set content the DocBook way
 				// firstNode.setProperty(CMS_CONTENT, first);
-				Node secondNode = sectionNode.addNode(DocBookNames.DBK_PARA, DocBookTypes.PARA);
+				Node secondNode = addDbk(sectionNode, para);
 				// secondNode.addMixin(CmsTypes.CMS_STYLED);
 
 				// second node was create as last, if it is not the next one, it
@@ -434,11 +439,11 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				int caretPosition = text.getCaretPosition();
 				Section section = sectionTitle.getSection();
 				Node sectionNode = section.getNode();
-				Node paragraphNode = sectionNode.addNode(DocBookNames.DBK_PARA, DocBookTypes.PARA);
+				Node paragraphNode = addDbk(sectionNode, para);
 				// paragraphNode.addMixin(CmsTypes.CMS_STYLED);
 
 				textInterpreter.write(paragraphNode, txt.substring(caretPosition));
-				textInterpreter.write(sectionNode.getNode(DocBookTypes.TITLE), txt.substring(0, caretPosition));
+				textInterpreter.write(sectionNode.getNode(DocBookType.title.get()), txt.substring(0, caretPosition));
 				sectionNode.orderBefore(p(paragraphNode.getIndex()), p(1));
 				persistChanges(sectionNode);
 
@@ -482,7 +487,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			String txt = text.getText();
 			Node paragraphNode = paragraph.getNode();
 			Node sectionNode = paragraphNode.getParent();
-			NodeIterator paragraphNodes = sectionNode.getNodes(DocBookNames.DBK_PARA);
+			NodeIterator paragraphNodes = sectionNode.getNodes(DocBookType.para.get());
 			long size = paragraphNodes.getSize();
 			if (paragraphNode.getIndex() == size)
 				return;// do nothing
@@ -514,19 +519,19 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 				if (part instanceof Paragraph) {
 					// FIXME adapt to DocBook
-					Node newNode = sectionNode.addNode(DocBookNames.DBK_MEDIAOBJECT, NodeType.NT_FILE);
-					newNode.addNode(Node.JCR_CONTENT, NodeType.NT_RESOURCE);
-					JcrUtils.copyBytesAsFile(sectionNode, p(newNode.getIndex()), new byte[0]);
-					if (partIndex < newNode.getIndex() - 1) {
-						// was not last
-						sectionNode.orderBefore(p(newNode.getIndex()), p(partIndex - 1));
-					}
-					// sectionNode.orderBefore(p(partNode.getIndex()),
-					// p(newNode.getIndex()));
-					persistChanges(sectionNode);
-					DbkImg img = newImg((TextSection) section, newNode);
-					edit(img, null);
-					layout(img.getControl());
+//					Node newNode = sectionNode.addNode(DocBookNames.DBK_MEDIAOBJECT, NodeType.NT_FILE);
+//					newNode.addNode(Node.JCR_CONTENT, NodeType.NT_RESOURCE);
+//					JcrUtils.copyBytesAsFile(sectionNode, p(newNode.getIndex()), new byte[0]);
+//					if (partIndex < newNode.getIndex() - 1) {
+//						// was not last
+//						sectionNode.orderBefore(p(newNode.getIndex()), p(partIndex - 1));
+//					}
+//					// sectionNode.orderBefore(p(partNode.getIndex()),
+//					// p(newNode.getIndex()));
+//					persistChanges(sectionNode);
+//					DbkImg img = newImg((TextSection) section, newNode);
+//					edit(img, null);
+//					layout(img.getControl());
 				} else if (part instanceof DbkImg) {
 					if (getEdited() == part)
 						return;
@@ -553,12 +558,12 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				Node sectionNode = section.getNode();
 				// main title
 				if (section == mainSection && section instanceof TextSection && paragraphNode.getIndex() == 1
-						&& !sectionNode.hasNode(DocBookTypes.TITLE)) {
+						&& !sectionNode.hasNode(DocBookType.title.get())) {
 					DocBookSectionTitle sectionTitle = prepareSectionTitle(section, txt);
 					edit(sectionTitle, 0);
 					return;
 				}
-				Node newSectionNode = sectionNode.addNode(DocBookNames.DBK_SECTION, DocBookTypes.SECTION);
+				Node newSectionNode = addDbk(sectionNode, DocBookType.section);
 				// newSectionNode.addMixin(NodeType.MIX_TITLE);
 				sectionNode.orderBefore(h(newSectionNode.getIndex()), h(1));
 
@@ -568,13 +573,14 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				while (sectionNode.hasNode(p(paragraphIndex + 1))) {
 					Node parag = sectionNode.getNode(p(paragraphIndex + 1));
 					sectionNode.getSession().move(sectionPath + '/' + p(paragraphIndex + 1),
-							newSectionPath + '/' + DocBookNames.DBK_PARA);
+							newSectionPath + '/' + DocBookType.para.get());
 					SectionPart sp = section.getSectionPart(parag.getIdentifier());
 					if (sp instanceof Control)
 						((Control) sp).dispose();
 				}
 				// create title
-				Node titleNode = newSectionNode.addNode(DocBookTypes.TITLE, DocBookTypes.TITLE);
+				Node titleNode = DbkUtils.addDbk(newSectionNode, DocBookType.title);
+				// newSectionNode.addNode(DocBookType.TITLE, DocBookType.TITLE);
 				getTextInterpreter().write(titleNode, txt);
 
 				TextSection newSection = new TextSection(section, section.getStyle(), newSectionNode);
@@ -600,7 +606,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				if (sectionN.getIndex() == 1)
 					return;// cannot deepen first section
 				Node previousSectionN = parentSectionN.getNode(h(sectionN.getIndex() - 1));
-				NodeIterator subSections = previousSectionN.getNodes(DocBookNames.DBK_SECTION);
+				NodeIterator subSections = previousSectionN.getNodes(DocBookType.section.get());
 				int subsectionsCount = (int) subSections.getSize();
 				previousSectionN.getSession().move(sectionN.getPath(),
 						previousSectionN.getPath() + "/" + h(subsectionsCount + 1));
@@ -639,23 +645,23 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 					mergedSection = lst.get(sectionNode.getIndex() - 1);
 				}
 				Node mergedNode = mergedSection.getNode();
-				boolean mergedHasSubSections = mergedNode.hasNode(DocBookNames.DBK_SECTION);
+				boolean mergedHasSubSections = mergedNode.hasNode(DocBookType.section.get());
 
 				// title as paragraph
-				Node newParagrapheNode = mergedNode.addNode(DocBookNames.DBK_PARA, DocBookTypes.PARA);
+				Node newParagrapheNode = addDbk(mergedNode, para);
 				// newParagrapheNode.addMixin(CmsTypes.CMS_STYLED);
 				if (mergedHasSubSections)
 					mergedNode.orderBefore(p(newParagrapheNode.getIndex()), h(1));
-				String txt = getTextInterpreter().read(sectionNode.getNode(DocBookTypes.TITLE));
+				String txt = getTextInterpreter().read(sectionNode.getNode(DocBookType.title.get()));
 				getTextInterpreter().write(newParagrapheNode, txt);
 				// move
-				NodeIterator paragraphs = sectionNode.getNodes(DocBookNames.DBK_PARA);
+				NodeIterator paragraphs = sectionNode.getNodes(para.get());
 				while (paragraphs.hasNext()) {
 					Node p = paragraphs.nextNode();
 					SectionPart sp = section.getSectionPart(p.getIdentifier());
 					if (sp instanceof Control)
 						((Control) sp).dispose();
-					mergedNode.getSession().move(p.getPath(), mergedNode.getPath() + '/' + DocBookNames.DBK_PARA);
+					mergedNode.getSession().move(p.getPath(), mergedNode.getPath() + '/' + para.get());
 					if (mergedHasSubSections)
 						mergedNode.orderBefore(p(p.getIndex()), h(1));
 				}
@@ -665,7 +671,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				while (subsections.hasNext()) {
 					Section subsection = subsections.next();
 					Node s = subsection.getNode();
-					mergedNode.getSession().move(s.getPath(), mergedNode.getPath() + '/' + DocBookNames.DBK_SECTION);
+					mergedNode.getSession().move(s.getPath(), mergedNode.getPath() + '/' + DocBookType.section.get());
 					subsection.dispose();
 				}
 
@@ -723,13 +729,13 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 	// UTILITIES
 	protected String p(Integer index) {
 		StringBuilder sb = new StringBuilder(6);
-		sb.append(DocBookNames.DBK_PARA).append('[').append(index).append(']');
+		sb.append(para.get()).append('[').append(index).append(']');
 		return sb.toString();
 	}
 
 	protected String h(Integer index) {
 		StringBuilder sb = new StringBuilder(5);
-		sb.append(DocBookNames.DBK_SECTION).append('[').append(index).append(']');
+		sb.append(DocBookType.section.get()).append('[').append(index).append(']');
 		return sb.toString();
 	}
 
@@ -863,6 +869,29 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 	protected List<String> getAvailableStyles(EditablePart editablePart) {
 		return new ArrayList<>();
+	}
+
+	public void export(Path directory, String fileName) {
+		Path filePath = directory.resolve(fileName);
+		try {
+			Files.createDirectories(directory);
+			try (OutputStream out = Files.newOutputStream(filePath)) {
+				exportXml(out);
+			}
+			if (log.isDebugEnabled())
+				log.debug("DocBook " + getMainSection().getNode() + " exported to " + filePath.toAbsolutePath());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	public void exportXml(OutputStream out) throws IOException {
+		Node node = getMainSection().getNode();
+		try {
+			node.getSession().exportDocumentView(node.getPath(), out, false, false);
+		} catch (RepositoryException e) {
+			throw new JcrException("Cannot export " + node + " to XML", e);
+		}
 	}
 
 	// FILE UPLOAD LISTENER

@@ -1,39 +1,60 @@
 package org.argeo.docbook;
 
+import static org.argeo.docbook.DocBookType.para;
+
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
-import javax.jcr.nodetype.NodeType;
 
-import org.argeo.docbook.ui.DocBookNames;
-import org.argeo.docbook.ui.DocBookTypes;
-import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
-import org.argeo.jcr.JcrUtils;
 import org.argeo.jcr.JcrxApi;
 
 /** Utilities around DocBook. */
 public class DbkUtils {
+	/** Get or add a DocBook element. */
+	public static Node getOrAddDbk(Node parent, DocBookType child) {
+		try {
+			if (!parent.hasNode(child.get())) {
+				return addDbk(parent, child);
+			} else {
+				return parent.getNode(child.get());
+			}
+		} catch (RepositoryException e) {
+			throw new JcrException("Cannot get or add element " + child.get() + " to " + parent, e);
+		}
+	}
+
+	/** Add a DocBook element to this node. */
+	public static Node addDbk(Node parent, DocBookType child) {
+		try {
+			Node node = parent.addNode(child.get(), child.get());
+			return node;
+		} catch (RepositoryException e) {
+			throw new JcrException("Cannot add element " + child.get() + " to " + parent, e);
+		}
+	}
+
+	/** Whether this DocBook element is of this type. */
+	public static boolean isDbk(Node node, DocBookType type) {
+		return Jcr.getName(node).equals(type.get());
+	}
+
 	public static String getTitle(Node node) {
-		return JcrxApi.getXmlValue(node, DocBookTypes.TITLE);
+		return JcrxApi.getXmlValue(node, DocBookType.title.get());
 	}
 
 	public static void setTitle(Node node, String txt) {
-		try {
-			Node titleNode = JcrUtils.getOrAdd(node, DocBookTypes.TITLE, DocBookTypes.TITLE);
-			JcrxApi.setXmlValue(node, titleNode, txt);
-		} catch (RepositoryException e) {
-			throw new JcrException("Cannot add empty paragraph to " + node, e);
-		}
+		Node titleNode = getOrAddDbk(node, DocBookType.title);
+		JcrxApi.setXmlValue(node, titleNode, txt);
 	}
 
 	public static Node getMetadata(Node infoContainer) {
 		try {
-			if (!infoContainer.hasNode(DocBookTypes.INFO))
+			if (!infoContainer.hasNode(DocBookType.info.get()))
 				return null;
-			Node info = infoContainer.getNode(DocBookTypes.INFO);
+			Node info = infoContainer.getNode(DocBookType.info.get());
 			if (!info.hasNode(EntityType.local.get()))
 				return null;
 			return info.getNode(EntityType.local.get());
@@ -58,33 +79,29 @@ public class DbkUtils {
 	}
 
 	public static Node addParagraph(Node node, String txt) {
-		try {
-			Node para = node.addNode(DocBookTypes.PARA, DocBookTypes.PARA);
-			JcrxApi.setXmlValue(node, para, txt);
-			return para;
-		} catch (RepositoryException e) {
-			throw new JcrException("Cannot add empty paragraph to " + node, e);
-		}
+		Node p = addDbk(node, para);
+		JcrxApi.setXmlValue(node, p, txt);
+		return p;
 	}
 
 	public static Node insertImageAfter(Node sibling) {
 		try {
 
 			// FIXME make it more robust
-			if (DocBookTypes.IMAGEDATA.equals(sibling.getName())) {
+			if (DocBookType.imagedata.get().equals(sibling.getName())) {
 				sibling = sibling.getParent().getParent();
 			}
 
 			Node parent = sibling.getParent();
-			Node mediaNode = parent.addNode(DocBookTypes.MEDIAOBJECT, DocBookTypes.MEDIAOBJECT);
+			Node mediaNode = addDbk(parent, DocBookType.mediaobject);
 			// TODO optimise?
 			parent.orderBefore(mediaNode.getName() + "[" + mediaNode.getIndex() + "]",
 					sibling.getName() + "[" + sibling.getIndex() + "]");
 			parent.orderBefore(sibling.getName() + "[" + sibling.getIndex() + "]",
 					mediaNode.getName() + "[" + mediaNode.getIndex() + "]");
 
-			Node imageNode = mediaNode.addNode(DocBookTypes.IMAGEOBJECT, DocBookTypes.IMAGEOBJECT);
-			Node imageDataNode = imageNode.addNode(DocBookTypes.IMAGEDATA, DocBookTypes.IMAGEDATA);
+			Node imageNode = addDbk(mediaNode, DocBookType.imageobject);
+			Node imageDataNode = addDbk(imageNode, DocBookType.imagedata);
 //			Node infoNode = imageNode.addNode(DocBookTypes.INFO, DocBookTypes.INFO);
 //			Node fileNode = JcrUtils.copyBytesAsFile(mediaFolder, EntityType.box.get(), new byte[0]);
 //			fileNode.addMixin(EntityType.box.get());

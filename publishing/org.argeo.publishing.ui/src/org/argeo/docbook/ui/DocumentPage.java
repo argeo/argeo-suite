@@ -13,6 +13,7 @@ import org.argeo.cms.ui.util.CmsLink;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.JcrVersionCmsEditable;
 import org.argeo.cms.ui.widgets.ScrolledPage;
+import org.argeo.docbook.DocBookType;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -32,7 +33,7 @@ public class DocumentPage implements CmsUiProvider {
 		GridData textGd = CmsUiUtils.fillAll();
 		page.setLayoutData(textGd);
 
-		if (context.isNodeType(DocBookTypes.ARTICLE)) {
+		if (context.isNodeType(DocBookType.article.get())) {
 			CmsEditable cmsEditable = new JcrVersionCmsEditable(context);
 			if (cmsEditable.canEdit())
 				new TextEditorHeader(cmsEditable, parent, SWT.NONE).setLayoutData(CmsUiUtils.fillWidth());
@@ -52,7 +53,7 @@ public class DocumentPage implements CmsUiProvider {
 				}
 				for (NodeIterator ni = context.getNodes(); ni.hasNext();) {
 					Node textNode = ni.nextNode();
-					if (textNode.isNodeType(DocBookTypes.ARTICLE) && !textNode.getName().equals(WWW))
+					if (textNode.isNodeType(DocBookType.article.get()) && !textNode.getName().equals(WWW))
 						new CmsLink(textNode.getName(), textNode.getPath()).createUi(parent, textNode);
 				}
 			}

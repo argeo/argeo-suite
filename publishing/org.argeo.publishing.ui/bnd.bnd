@@ -9,7 +9,7 @@ org.osgi.framework,\
 *
 
 Provide-Capability:\
-cms.datamodel; name=docbook; cnd=/org/argeo/docbook/ui/docbook.cnd; abstract=true
+cms.datamodel; name=docbook; cnd=/org/argeo/docbook/docbook.cnd; abstract=true
 
 Service-Component:\
 OSGI-INF/fontsServlet.xml

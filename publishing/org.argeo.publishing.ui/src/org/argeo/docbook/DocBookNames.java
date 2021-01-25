@@ -1,12 +1,12 @@
-package org.argeo.docbook.ui;
+package org.argeo.docbook;
 
 public interface DocBookNames {
 	// ELEMENTS
-	public final static String DBK_ARTICLE = "dbk:article";
-	public final static String DBK_PARA = "dbk:para";
-	public final static String DBK_TITLE = "dbk:title";
-	public final static String DBK_SECTION = "dbk:section";
-	public final static String DBK_MEDIAOBJECT = "dbk:mediaobject";
+//	public final static String DBK_ARTICLE = "dbk:article";
+//	public final static String DBK_PARA = "dbk:para";
+//	public final static String DBK_TITLE = "dbk:title";
+//	public final static String DBK_SECTION = "dbk:section";
+//	public final static String DBK_MEDIAOBJECT = "dbk:mediaobject";
 
 	// ATTRIBUTES
 //	public final static String JCR_XMLTEXT = "jcr:xmltext";
