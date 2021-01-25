@@ -7,10 +7,7 @@ import org.argeo.cms.text.TextSection;
 import org.argeo.cms.ui.CmsEditable;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.docbook.DbkUtils;
-import org.argeo.docbook.DocBookNames;
-import org.argeo.docbook.DocBookType;
-import org.argeo.jcr.Jcr;
-import org.argeo.jcr.JcrxType;
+import org.argeo.docbook.DbkType;
 import org.eclipse.swt.widgets.Composite;
 
 /** Text editor where sections and subsections can be managed by the user. */
@@ -34,8 +31,8 @@ public class DocumentTextEditor extends AbstractDbkViewer {
 
 	@Override
 	protected Boolean isModelInitialized(Node textNode) throws RepositoryException {
-		return textNode.hasNode(DocBookType.title.get()) || textNode.hasNode(DocBookType.para.get())
-				|| (!isFlat() && textNode.hasNode(DocBookType.section.get()));
+		return textNode.hasNode(DbkType.title.get()) || textNode.hasNode(DbkType.para.get())
+				|| (!isFlat() && textNode.hasNode(DbkType.section.get()));
 	}
 
 }

@@ -2,8 +2,8 @@ package org.argeo.docbook;
 
 import org.argeo.entity.JcrName;
 
-/** Types related to DocBook. */
-public enum DocBookType implements JcrName {
+/** Supported DocBook elements */
+public enum DbkType implements JcrName {
 	book, article, section,
 	//
 	info, title, para,

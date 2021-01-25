@@ -21,8 +21,8 @@ import org.argeo.cms.ui.CmsImageManager;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.util.DefaultImageManager;
 import org.argeo.docbook.DbkUtils;
-import org.argeo.docbook.DocBookNames;
-import org.argeo.docbook.DocBookType;
+import org.argeo.docbook.DbkAttr;
+import org.argeo.docbook.DbkType;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.JcrException;
@@ -41,7 +41,7 @@ public class DbkImageManager extends DefaultImageManager {
 	@Override
 	public Binary getImageBinary(Node node) throws RepositoryException {
 		Node fileNode = null;
-		if (DbkUtils.isDbk(node, DocBookType.imagedata)) {
+		if (DbkUtils.isDbk(node, DbkType.imagedata)) {
 			fileNode = getFileNode(node);
 		}
 		if (node.isNodeType(NT_FILE)) {
@@ -88,15 +88,15 @@ public class DbkImageManager extends DefaultImageManager {
 		updateSize(fileNode, id);
 		String filePath = fileNode.getPath();
 		String relPath = filePath.substring(baseFolder.getPath().length() + 1);
-		context.setProperty(DocBookNames.DBK_FILEREF, relPath);
+		context.setProperty(DbkAttr.fileref.name(), relPath);
 	}
 
 	@Override
 	public String getImageUrl(Node imageDataNode) throws RepositoryException {
 		// TODO factorise
 		String fileref = null;
-		if (imageDataNode.hasProperty(DocBookNames.DBK_FILEREF))
-			fileref = imageDataNode.getProperty(DocBookNames.DBK_FILEREF).getString();
+		if (imageDataNode.hasProperty(DbkAttr.fileref.name()))
+			fileref = imageDataNode.getProperty(DbkAttr.fileref.name()).getString();
 		if (fileref == null)
 			return null;
 		URI fileUri;
@@ -116,8 +116,8 @@ public class DbkImageManager extends DefaultImageManager {
 	protected Node getFileNode(Node imageDataNode) throws RepositoryException {
 		// FIXME make URL use case more robust
 		String fileref = null;
-		if (imageDataNode.hasProperty(DocBookNames.DBK_FILEREF))
-			fileref = imageDataNode.getProperty(DocBookNames.DBK_FILEREF).getString();
+		if (imageDataNode.hasProperty(DbkAttr.fileref.name()))
+			fileref = imageDataNode.getProperty(DbkAttr.fileref.name()).getString();
 		if (fileref == null)
 			return null;
 		Node fileNode;

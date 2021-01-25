@@ -1,8 +1,8 @@
 package org.argeo.docbook.ui;
 
 import static org.argeo.docbook.DbkUtils.isDbk;
-import static org.argeo.docbook.DocBookType.para;
-import static org.argeo.docbook.DocBookType.title;
+import static org.argeo.docbook.DbkType.para;
+import static org.argeo.docbook.DbkType.title;
 
 import java.io.IOException;
 import java.io.StringReader;

@@ -1,6 +1,6 @@
 package org.argeo.docbook;
 
-import static org.argeo.docbook.DocBookType.para;
+import static org.argeo.docbook.DbkType.para;
 
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
@@ -14,7 +14,7 @@ import org.argeo.jcr.JcrxApi;
 /** Utilities around DocBook. */
 public class DbkUtils {
 	/** Get or add a DocBook element. */
-	public static Node getOrAddDbk(Node parent, DocBookType child) {
+	public static Node getOrAddDbk(Node parent, DbkType child) {
 		try {
 			if (!parent.hasNode(child.get())) {
 				return addDbk(parent, child);
@@ -27,7 +27,7 @@ public class DbkUtils {
 	}
 
 	/** Add a DocBook element to this node. */
-	public static Node addDbk(Node parent, DocBookType child) {
+	public static Node addDbk(Node parent, DbkType child) {
 		try {
 			Node node = parent.addNode(child.get(), child.get());
 			return node;
@@ -37,24 +37,24 @@ public class DbkUtils {
 	}
 
 	/** Whether this DocBook element is of this type. */
-	public static boolean isDbk(Node node, DocBookType type) {
+	public static boolean isDbk(Node node, DbkType type) {
 		return Jcr.getName(node).equals(type.get());
 	}
 
 	public static String getTitle(Node node) {
-		return JcrxApi.getXmlValue(node, DocBookType.title.get());
+		return JcrxApi.getXmlValue(node, DbkType.title.get());
 	}
 
 	public static void setTitle(Node node, String txt) {
-		Node titleNode = getOrAddDbk(node, DocBookType.title);
+		Node titleNode = getOrAddDbk(node, DbkType.title);
 		JcrxApi.setXmlValue(node, titleNode, txt);
 	}
 
 	public static Node getMetadata(Node infoContainer) {
 		try {
-			if (!infoContainer.hasNode(DocBookType.info.get()))
+			if (!infoContainer.hasNode(DbkType.info.get()))
 				return null;
-			Node info = infoContainer.getNode(DocBookType.info.get());
+			Node info = infoContainer.getNode(DbkType.info.get());
 			if (!info.hasNode(EntityType.local.get()))
 				return null;
 			return info.getNode(EntityType.local.get());
@@ -68,7 +68,7 @@ public class DbkUtils {
 			NodeIterator baseSections = parent.getNodes();
 			while (baseSections.hasNext()) {
 				Node n = baseSections.nextNode();
-				String r = Jcr.get(n, DocBookNames.DBK_ROLE);
+				String r = Jcr.get(n, DbkAttr.role.name());
 				if (r != null && r.equals(role))
 					return n;
 			}
@@ -88,20 +88,20 @@ public class DbkUtils {
 		try {
 
 			// FIXME make it more robust
-			if (DocBookType.imagedata.get().equals(sibling.getName())) {
+			if (DbkType.imagedata.get().equals(sibling.getName())) {
 				sibling = sibling.getParent().getParent();
 			}
 
 			Node parent = sibling.getParent();
-			Node mediaNode = addDbk(parent, DocBookType.mediaobject);
+			Node mediaNode = addDbk(parent, DbkType.mediaobject);
 			// TODO optimise?
 			parent.orderBefore(mediaNode.getName() + "[" + mediaNode.getIndex() + "]",
 					sibling.getName() + "[" + sibling.getIndex() + "]");
 			parent.orderBefore(sibling.getName() + "[" + sibling.getIndex() + "]",
 					mediaNode.getName() + "[" + mediaNode.getIndex() + "]");
 
-			Node imageNode = addDbk(mediaNode, DocBookType.imageobject);
-			Node imageDataNode = addDbk(imageNode, DocBookType.imagedata);
+			Node imageNode = addDbk(mediaNode, DbkType.imageobject);
+			Node imageDataNode = addDbk(imageNode, DbkType.imagedata);
 //			Node infoNode = imageNode.addNode(DocBookTypes.INFO, DocBookTypes.INFO);
 //			Node fileNode = JcrUtils.copyBytesAsFile(mediaFolder, EntityType.box.get(), new byte[0]);
 //			fileNode.addMixin(EntityType.box.get());
