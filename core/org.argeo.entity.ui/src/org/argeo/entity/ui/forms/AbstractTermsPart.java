@@ -36,6 +36,8 @@ public abstract class AbstractTermsPart extends StyledControl implements Editabl
 	public AbstractTermsPart(Composite parent, int style, Item item, TermsManager termsManager,
 			String typology) {
 		super(parent, style, item);
+		if(item==null)
+			throw new IllegalArgumentException("Item cannot be null");
 		this.termsManager = termsManager;
 		this.typology = typology;
 		this.theme = CmsTheme.getCmsTheme(parent);
