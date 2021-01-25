@@ -5,10 +5,6 @@ import static org.argeo.docbook.DbkType.para;
 import static org.argeo.docbook.DbkUtils.addDbk;
 import static org.argeo.docbook.DbkUtils.isDbk;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -54,8 +50,10 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 /** Base class for text viewers and editors. */
@@ -315,7 +313,18 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				if (caretPosition instanceof Integer)
 					text.setSelection((Integer) caretPosition);
 				else if (caretPosition instanceof Point) {
-					// TODO find a way to position the caret at the right place
+//					layout(text);
+//					// TODO find a way to position the caret at the right place
+//					Point clickLocation = (Point) caretPosition;
+//					Point withinText = text.toControl(clickLocation);
+//					Rectangle bounds = text.getBounds();
+//					int width = bounds.width;
+//					int height = bounds.height;
+//					int textLength = text.getText().length();
+//					float area = width * height;
+//					float proportion = withinText.y * width + withinText.x;
+//					int pos = (int) (textLength * (proportion / area));
+//					text.setSelection(pos);
 				}
 			text.setData(RWT.ACTIVE_KEYS, new String[] { "BACKSPACE", "ESC", "TAB", "SHIFT+TAB", "ALT+ARROW_LEFT",
 					"ALT+ARROW_RIGHT", "ALT+ARROW_UP", "ALT+ARROW_DOWN", "RETURN", "CTRL+RETURN", "ENTER", "DELETE" });
@@ -843,8 +852,22 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 							getCmsEditable().startEditing();
 						}
 					}
-				} else
+				} else if (source instanceof Label) {
+					Label lbl = (Label) source;
+					Rectangle bounds = lbl.getBounds();
+					float width = bounds.width;
+					float height = bounds.height;
+					float textLength = lbl.getText().length();
+					float area = width * height;
+					float charArea = area/textLength;
+					float lines = textLength/width;
+					float proportion = point.y * width + point.x;
+					int pos = (int) (textLength * (proportion / area));
+					// TODO refine it
+					edit(composite, (Integer) pos);
+				} else {
 					edit(composite, source.toDisplay(point));
+				}
 			}
 		}
 
@@ -868,29 +891,6 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 	protected List<String> getAvailableStyles(EditablePart editablePart) {
 		return new ArrayList<>();
-	}
-
-	public void export(Path directory, String fileName) {
-		Path filePath = directory.resolve(fileName);
-		try {
-			Files.createDirectories(directory);
-			try (OutputStream out = Files.newOutputStream(filePath)) {
-				exportXml(out);
-			}
-			if (log.isDebugEnabled())
-				log.debug("DocBook " + getMainSection().getNode() + " exported to " + filePath.toAbsolutePath());
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public void exportXml(OutputStream out) throws IOException {
-		Node node = getMainSection().getNode();
-		try {
-			node.getSession().exportDocumentView(node.getPath(), out, false, false);
-		} catch (RepositoryException e) {
-			throw new JcrException("Cannot export " + node + " to XML", e);
-		}
 	}
 
 	// FILE UPLOAD LISTENER

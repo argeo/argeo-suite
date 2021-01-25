@@ -2,17 +2,27 @@ package org.argeo.docbook;
 
 import static org.argeo.docbook.DbkType.para;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
+import org.argeo.jcr.JcrUtils;
 import org.argeo.jcr.JcrxApi;
 
 /** Utilities around DocBook. */
 public class DbkUtils {
+	private final static Log log = LogFactory.getLog(DbkUtils.class);
+
 	/** Get or add a DocBook element. */
 	public static Node getOrAddDbk(Node parent, DbkType child) {
 		try {
@@ -119,7 +129,35 @@ public class DbkUtils {
 		}
 	}
 
+	public static void exportXml(Node node, OutputStream out) throws IOException {
+		try {
+			node.getSession().exportDocumentView(node.getPath(), out, false, false);
+		} catch (RepositoryException e) {
+			throw new JcrException("Cannot export " + node + " to XML", e);
+		}
+	}
+
+	public static void exportToFs(Node baseNode, DbkType type, Path directory) {
+		String fileName = Jcr.getName(baseNode) + ".dbk.xml";
+		Path filePath = directory.resolve(fileName);
+		Node docBookNode = Jcr.getNode(baseNode, type.get());
+		if (docBookNode == null)
+			throw new IllegalArgumentException("No " + type.get() + " under " + baseNode);
+		try {
+			Files.createDirectories(directory);
+			try (OutputStream out = Files.newOutputStream(filePath)) {
+				exportXml(docBookNode, out);
+			}
+			JcrUtils.copyFilesToFs(baseNode, directory, true);
+			if (log.isDebugEnabled())
+				log.debug("DocBook " + baseNode + " exported to " + filePath.toAbsolutePath());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
 	/** Singleton. */
 	private DbkUtils() {
 	}
+
 }
