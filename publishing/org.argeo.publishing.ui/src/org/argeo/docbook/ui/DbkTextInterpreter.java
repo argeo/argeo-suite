@@ -88,6 +88,22 @@ public class DbkTextInterpreter implements TextInterpreter {
 
 	public String readSimpleHtml(Item item) {
 		String raw = raw(item);
+		// FIXME the saved data should be corrected instead.
+		if (raw.indexOf('&') >= 0) {
+			raw = raw.replace("&", "&amp;");
+		}
+		if (raw.indexOf('<') >= 0) {
+			raw = raw.replace("<", "&lt;");
+		}
+		if (raw.indexOf('>') >= 0) {
+			raw = raw.replace(">", "&gt;");
+		}
+		if (raw.indexOf('\"') >= 0) {
+			raw = raw.replace("\"", "&quot;");
+		}
+		if (raw.indexOf('\'') >= 0) {
+			raw = raw.replace("\'", "&apos;");
+		}
 //		raw = "<span style='text-align:justify'>" + raw + "</span>";
 		if (raw.length() == 0)
 			return raw;
