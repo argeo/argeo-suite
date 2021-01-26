@@ -50,10 +50,24 @@
 			<version>2.1.18-SNAPSHOT</version>
 		</dependency>
 		
+		<!-- Argeo People -->
+		<dependency>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.people.ui</artifactId>
+			<version>2.1.18-SNAPSHOT</version>
+		</dependency>
+
 		<!-- Argeo Library -->
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.documents.ui</artifactId>
+			<version>2.1.18-SNAPSHOT</version>
+		</dependency>
+
+		<!-- Argeo Environment -->
+		<dependency>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.geo.ui</artifactId>
 			<version>2.1.18-SNAPSHOT</version>
 		</dependency>
 

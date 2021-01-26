@@ -1,4 +1,4 @@
-package org.argeo.suite.ui;
+package org.argeo.people.ui;
 
 import java.util.Set;
 
@@ -14,6 +14,8 @@ import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.Selected;
 import org.argeo.naming.LdapAttrs;
 import org.argeo.suite.SuiteRole;
+import org.argeo.suite.ui.SuiteEvent;
+import org.argeo.suite.ui.SuiteIcon;
 import org.argeo.suite.ui.dialogs.NewUserWizard;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -36,7 +38,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.osgi.service.useradmin.User;
 
 /** Entry to the admin area. */
-public class AdminEntryArea implements CmsUiProvider {
+public class SuiteUsersEntryArea implements CmsUiProvider {
 
 	private CmsUserManager cmsUserManager;
 

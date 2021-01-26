@@ -25,7 +25,9 @@
 	<modules>
 		<module>core</module>
 		<!-- Functional areas -->
+		<module>people</module>
 		<module>library</module>
+		<module>environment</module>
 		<module>publishing</module>
 		<module>knowledge</module>
 

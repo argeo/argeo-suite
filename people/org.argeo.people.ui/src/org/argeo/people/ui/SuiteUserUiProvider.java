@@ -1,4 +1,4 @@
-package org.argeo.suite.ui;
+package org.argeo.people.ui;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,6 +12,8 @@ import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.Section;
 import org.argeo.naming.LdapAttrs;
+import org.argeo.suite.ui.SuiteMsg;
+import org.argeo.suite.ui.SuiteUiUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
