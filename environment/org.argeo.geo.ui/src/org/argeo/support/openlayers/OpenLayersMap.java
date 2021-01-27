@@ -106,7 +106,7 @@ public class OpenLayersMap extends Composite {
 		StringBuffer sb = new StringBuffer("new ol.source.Vector({ features: [");
 		for (int i = 0; i < geoPoints.size(); i++) {
 			Node node = geoPoints.get(i);
-			if (node.isNodeType(EntityType.geopoint.get()) && !node.isCheckedOut()) {
+			if (node.isNodeType(EntityType.geopoint.get())) {
 				if (first)
 					first = false;
 				else
