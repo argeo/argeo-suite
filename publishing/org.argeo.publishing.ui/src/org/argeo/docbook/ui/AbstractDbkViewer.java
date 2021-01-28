@@ -157,6 +157,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		updateContent(paragraph);
 		paragraph.setLayoutData(fillWidth());
 		paragraph.setMouseListener(getMouseListener());
+		paragraph.setFocusListener(getFocusListener());
 		return paragraph;
 	}
 
@@ -166,6 +167,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			img.setLayoutData(CmsUiUtils.grabWidth(SWT.CENTER, SWT.DEFAULT));
 			updateContent(img);
 			img.setMouseListener(getMouseListener());
+			img.setFocusListener(getFocusListener());
 			return img;
 		} catch (RepositoryException e) {
 			throw new JcrException("Cannot add new image " + node, e);
@@ -180,6 +182,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		DocBookSectionTitle title = new DocBookSectionTitle(titleParent, style, titleNode);
 		updateContent(title);
 		title.setMouseListener(getMouseListener());
+		title.setFocusListener(getFocusListener());
 		return title;
 	}
 
