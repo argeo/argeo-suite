@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.argeo.suite</groupId>
@@ -49,7 +51,7 @@
 			<artifactId>org.argeo.suite.ui.rap</artifactId>
 			<version>2.1.18-SNAPSHOT</version>
 		</dependency>
-		
+
 		<!-- Argeo People -->
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
@@ -100,7 +102,21 @@
 			<groupId>org.argeo.tp.javax</groupId>
 			<artifactId>javax.xml.bind</artifactId>
 		</dependency>
-		
+
+		<!-- Jackson JSON processor -->
+		<dependency>
+			<groupId>org.argeo.tp.jackson</groupId>
+			<artifactId>com.fasterxml.jackson.core.jackson-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.jackson</groupId>
+			<artifactId>com.fasterxml.jackson.core.jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.jackson</groupId>
+			<artifactId>com.fasterxml.jackson.core.jackson-annotations</artifactId>
+		</dependency>
+
 		<!-- PDFBox -->
 		<dependency>
 			<groupId>org.argeo.tp.apache</groupId>
@@ -148,7 +164,7 @@
 			<groupId>org.argeo.tp.apache</groupId>
 			<artifactId>org.apache.xerces</artifactId>
 		</dependency>
-		
+
 		<!-- POI (MS office documents) -->
 		<dependency>
 			<groupId>org.argeo.tp.apache</groupId>
@@ -186,10 +202,10 @@
 		</dependency>
 
 		<!-- Argeo TP Extras -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.argeo.tp.payment</groupId> -->
-<!-- 			<artifactId>com.stripe</artifactId> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.argeo.tp.payment</groupId> -->
+		<!-- <artifactId>com.stripe</artifactId> -->
+		<!-- </dependency> -->
 
 	</dependencies>
 	<profiles>
