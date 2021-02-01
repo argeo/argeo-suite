@@ -137,7 +137,6 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			if (log.isDebugEnabled())
 				log.debug("Suite UI " + uid + " has been disposed.");
 		});
-		refreshUi(argeoSuiteUi, null);
 		return argeoSuiteUi;
 	}
 
