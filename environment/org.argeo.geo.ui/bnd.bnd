@@ -1,6 +1,7 @@
 Import-Package:\
 javax.jcr.nodetype,\
 org.osgi.service.event,\
+com.fasterxml.jackson.core,\
 org.argeo.suite.ui,\
 org.argeo.api,\
 org.eclipse.swt,\
