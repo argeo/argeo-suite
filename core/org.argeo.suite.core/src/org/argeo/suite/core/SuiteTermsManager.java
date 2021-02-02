@@ -14,6 +14,7 @@ import org.argeo.api.NodeConstants;
 import org.argeo.api.NodeUtils;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
+import org.argeo.entity.Term;
 import org.argeo.entity.TermsManager;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
@@ -32,16 +33,22 @@ public class SuiteTermsManager implements TermsManager {
 	}
 
 	@Override
-	public List<String> listAllTerms(String typology) {
-		List<String> res = new ArrayList<>();
+	public List<Term> listAllTerms(String typology) {
+		List<Term> res = new ArrayList<>();
 		SuiteTypology t = getTypology(typology);
 		for (SuiteTerm term : t.getAllTerms()) {
-			res.add(term.getId());
+			res.add(term);
 		}
 		return res;
 	}
 
-	SuiteTypology getTypology(String typology) {
+	@Override
+	public SuiteTerm getTerm(String termId) {
+		return terms.get(termId);
+	}
+
+	@Override
+	public SuiteTypology getTypology(String typology) {
 		SuiteTypology t = typologies.get(typology);
 		if (t == null) {
 			Node termsNode = Jcr.getNode(adminSession, "SELECT * FROM [{0}] WHERE NAME()=\"{1}\"",

@@ -2,12 +2,15 @@ package org.argeo.entity.ui.forms;
 
 import javax.jcr.Item;
 
+import org.argeo.cms.Localized;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.util.CmsIcon;
 import org.argeo.cms.ui.viewers.EditablePart;
 import org.argeo.cms.ui.widgets.ContextOverlay;
 import org.argeo.cms.ui.widgets.StyledControl;
+import org.argeo.entity.Term;
 import org.argeo.entity.TermsManager;
+import org.argeo.entity.Typology;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
@@ -20,7 +23,7 @@ import org.eclipse.swt.widgets.ToolItem;
 public abstract class AbstractTermsPart extends StyledControl implements EditablePart {
 	private static final long serialVersionUID = -5497097995341927710L;
 	protected final TermsManager termsManager;
-	protected final String typology;
+	protected final Typology typology;
 
 	protected final boolean editable;
 
@@ -33,13 +36,12 @@ public abstract class AbstractTermsPart extends StyledControl implements Editabl
 
 	protected final CmsTheme theme;
 
-	public AbstractTermsPart(Composite parent, int style, Item item, TermsManager termsManager,
-			String typology) {
+	public AbstractTermsPart(Composite parent, int style, Item item, TermsManager termsManager, String typology) {
 		super(parent, style, item);
-		if(item==null)
+		if (item == null)
 			throw new IllegalArgumentException("Item cannot be null");
 		this.termsManager = termsManager;
-		this.typology = typology;
+		this.typology = termsManager.getTypology(typology);
 		this.theme = CmsTheme.getCmsTheme(parent);
 		editable = !(SWT.READ_ONLY == (style & SWT.READ_ONLY));
 		highlightColor = parent.getDisplay().getSystemColor(SWT.COLOR_GRAY);
@@ -55,17 +57,21 @@ public abstract class AbstractTermsPart extends StyledControl implements Editabl
 
 	}
 
-	protected String getTermLabel(String name) {
-		return name;
+	protected String getTermLabel(Term term) {
+		if (term instanceof Localized)
+			return ((Localized) term).lead();
+		else
+			return term.getName();
+
 	}
 
 	protected abstract void refresh(ContextOverlay contextArea, String filter, Text txt);
 
-	protected boolean isTermSelectable(String term) {
+	protected boolean isTermSelectable(Term term) {
 		return true;
 	}
 
-	protected void processTermListLabel(String term, Label label) {
+	protected void processTermListLabel(Term term, Label label) {
 
 	}
 

@@ -11,6 +11,7 @@ import org.argeo.cms.ui.widgets.ContextOverlay;
 import org.argeo.eclipse.ui.MouseDoubleClick;
 import org.argeo.eclipse.ui.MouseDown;
 import org.argeo.eclipse.ui.Selected;
+import org.argeo.entity.Term;
 import org.argeo.entity.TermsManager;
 import org.argeo.jcr.Jcr;
 import org.eclipse.swt.SWT;
@@ -47,8 +48,7 @@ public class SingleTermPart extends AbstractTermsPart {
 			ToolItem deleteItem = new ToolItem(toolBar, SWT.PUSH);
 			styleDelete(deleteItem);
 			deleteItem.addSelectionListener((Selected) (e) -> {
-				Jcr.set(getNode(), typology, null);
-				Jcr.save(getNode());
+				setValue(null);
 				stopEditing();
 			});
 			ToolItem cancelItem = new ToolItem(toolBar, SWT.PUSH);
@@ -95,7 +95,7 @@ public class SingleTermPart extends AbstractTermsPart {
 		} else {
 			Composite block = new Composite(box, SWT.NONE);
 			block.setLayout(CmsUiUtils.noSpaceGridLayout(2));
-			String currentValue = Jcr.get(getNode(), typology);
+			Term currentValue = getValue();
 			if (currentValue != null) {
 				Label lbl = new Label(block, SWT.SINGLE);
 				String display = getTermLabel(currentValue);
@@ -120,8 +120,8 @@ public class SingleTermPart extends AbstractTermsPart {
 	@Override
 	protected void refresh(ContextOverlay contextArea, String filter, Text txt) {
 		CmsUiUtils.clear(contextArea);
-		List<String> terms = termsManager.listAllTerms(typology);
-		terms: for (String term : terms) {
+		List<? extends Term> terms = termsManager.listAllTerms(typology.getId());
+		terms: for (Term term : terms) {
 			String display = getTermLabel(term);
 			if (filter != null && !display.toLowerCase().contains(filter))
 				continue terms;
@@ -130,8 +130,7 @@ public class SingleTermPart extends AbstractTermsPart {
 			processTermListLabel(term, termL);
 			if (isTermSelectable(term))
 				termL.addMouseListener((MouseDown) (e) -> {
-					Jcr.set(getNode(), typology, term);
-					Jcr.save(getNode());
+					setValue(term);
 					contextArea.hide();
 					stopEditing();
 				});
@@ -140,4 +139,17 @@ public class SingleTermPart extends AbstractTermsPart {
 		// txt.setFocus();
 	}
 
+	protected Term getValue() {
+		String property = typology.getId();
+		String id = Jcr.get(getNode(), property);
+		Term term = termsManager.getTerm(id);
+
+		return term;
+	}
+
+	protected void setValue(Term value) {
+		String property = typology.getId();
+		Jcr.set(getNode(), property, value != null ? value.getId() : null);
+		Jcr.save(getNode());
+	}
 }

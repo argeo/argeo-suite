@@ -5,10 +5,12 @@ import java.util.List;
 
 import javax.jcr.Node;
 
+import org.argeo.entity.Term;
+import org.argeo.entity.Typology;
 import org.argeo.jcr.Jcr;
 
 /** A typology. Helper to optimise {@link SuiteTermsManager} implementation. */
-class SuiteTypology {
+class SuiteTypology implements Typology {
 	private final String name;
 	private final Node node;
 	private boolean isFlat = true;
@@ -18,6 +20,11 @@ class SuiteTypology {
 	public SuiteTypology(Node node) {
 		this.node = node;
 		this.name = Jcr.getName(this.node);
+	}
+
+	@Override
+	public String getId() {
+		return name;
 	}
 
 	public String getName() {
@@ -33,10 +40,12 @@ class SuiteTypology {
 			isFlat = false;
 	}
 
+	@Override
 	public boolean isFlat() {
 		return isFlat;
 	}
 
+	@Override
 	public List<SuiteTerm> getSubTerms() {
 		return subTerms;
 	}

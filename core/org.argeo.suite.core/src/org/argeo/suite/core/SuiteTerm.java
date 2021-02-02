@@ -3,10 +3,12 @@ package org.argeo.suite.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.argeo.entity.Term;
+
 /**
  * A single term. Helper to optimise {@link SuiteTermsManager} implementation.
  */
-class SuiteTerm {
+class SuiteTerm implements Term {
 	private final String name;
 	private final String relativePath;
 	private final SuiteTypology typology;
@@ -21,13 +23,19 @@ class SuiteTerm {
 		this.relativePath = relativePath;
 		int index = relativePath.lastIndexOf('/');
 		if (index > 0) {
-			this.name = relativePath.substring(index);
+			this.name = relativePath.substring(index + 1);
 		} else {
 			this.name = relativePath;
 		}
 		id = typology.getName() + '/' + relativePath;
 	}
 
+	@Override
+	public String getId() {
+		return id;
+	}
+
+	@Override
 	public String getName() {
 		return name;
 	}
@@ -36,19 +44,18 @@ class SuiteTerm {
 		return relativePath;
 	}
 
-	SuiteTypology getTypology() {
+	@Override
+	public SuiteTypology getTypology() {
 		return typology;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	List<SuiteTerm> getSubTerms() {
+	@Override
+	public List<SuiteTerm> getSubTerms() {
 		return subTerms;
 	}
 
-	SuiteTerm getParentTerm() {
+	@Override
+	public SuiteTerm getParentTerm() {
 		return parentTerm;
 	}
 

@@ -12,6 +12,7 @@ import org.argeo.cms.ui.widgets.ContextOverlay;
 import org.argeo.eclipse.ui.MouseDoubleClick;
 import org.argeo.eclipse.ui.MouseDown;
 import org.argeo.eclipse.ui.Selected;
+import org.argeo.entity.Term;
 import org.argeo.entity.TermsManager;
 import org.argeo.jcr.Jcr;
 import org.eclipse.swt.SWT;
@@ -39,9 +40,9 @@ public class MultiTermsPart extends AbstractTermsPart {
 		Composite placeholder = new Composite(box, SWT.NONE);
 		RowLayout rl = new RowLayout(SWT.HORIZONTAL | SWT.WRAP);
 		placeholder.setLayout(rl);
-		List<String> currentValue = Jcr.getMultiple(getNode(), typology);
+		List<Term> currentValue = getValue();
 		if (currentValue != null && !currentValue.isEmpty())
-			for (String value : currentValue) {
+			for (Term value : currentValue) {
 				Composite block = new Composite(placeholder, SWT.NONE);
 				block.setLayout(CmsUiUtils.noSpaceGridLayout(3));
 				Label lbl = new Label(block, SWT.SINGLE);
@@ -58,14 +59,13 @@ public class MultiTermsPart extends AbstractTermsPart {
 					styleDelete(deleteItem);
 					deleteItem.addSelectionListener((Selected) (e) -> {
 						// we retrieve them again here because they may have changed
-						List<String> curr = Jcr.getMultiple(getNode(), typology);
-						List<String> newValue = new ArrayList<>();
-						for (String v : curr) {
+						List<Term> curr = getValue();
+						List<Term> newValue = new ArrayList<>();
+						for (Term v : curr) {
 							if (!v.equals(value))
 								newValue.add(v);
 						}
-						Jcr.set(getNode(), typology, newValue);
-						Jcr.save(getNode());
+						setValue(newValue);
 						block.dispose();
 						layout(true, true);
 					});
@@ -143,9 +143,9 @@ public class MultiTermsPart extends AbstractTermsPart {
 	@Override
 	protected void refresh(ContextOverlay contextArea, String filter, Text txt) {
 		CmsUiUtils.clear(contextArea);
-		List<String> terms = termsManager.listAllTerms(typology);
-		List<String> currentValue = Jcr.getMultiple(getNode(), typology);
-		terms: for (String term : terms) {
+		List<? extends Term> terms = termsManager.listAllTerms(typology.getId());
+		List<Term> currentValue = getValue();
+		terms: for (Term term : terms) {
 			if (currentValue != null && currentValue.contains(term))
 				continue terms;
 			String display = getTermLabel(term);
@@ -156,18 +156,39 @@ public class MultiTermsPart extends AbstractTermsPart {
 			processTermListLabel(term, termL);
 			if (isTermSelectable(term))
 				termL.addMouseListener((MouseDown) (e) -> {
-					List<String> newValue = new ArrayList<>();
-					List<String> curr = Jcr.getMultiple(getNode(), typology);
+					List<Term> newValue = new ArrayList<>();
+					List<Term> curr = getValue();
 					if (currentValue != null)
 						newValue.addAll(curr);
 					newValue.add(term);
-					Jcr.set(getNode(), typology, newValue);
-					Jcr.save(getNode());
+					setValue(newValue);
 					contextArea.hide();
 					stopEditing();
 				});
 		}
 		contextArea.show();
+	}
+
+	protected List<Term> getValue() {
+		String property = typology.getId();
+		List<String> curr = Jcr.getMultiple(getNode(), property);
+		List<Term> res = new ArrayList<>();
+		if (curr != null)
+			for (String str : curr) {
+				Term term = termsManager.getTerm(str);
+				res.add(term);
+			}
+		return res;
+	}
+
+	protected void setValue(List<Term> value) {
+		String property = typology.getId();
+		List<String> ids = new ArrayList<>();
+		for (Term term : value) {
+			ids.add(term.getId());
+		}
+		Jcr.set(getNode(), property, ids);
+		Jcr.save(getNode());
 	}
 
 }
