@@ -97,11 +97,6 @@ public class DbkUtils {
 	public static Node insertImageAfter(Node sibling) {
 		try {
 
-			// FIXME make it more robust
-			if (DbkType.imagedata.get().equals(sibling.getName())) {
-				sibling = sibling.getParent().getParent();
-			}
-
 			Node parent = sibling.getParent();
 			Node mediaNode = addDbk(parent, DbkType.mediaobject);
 			// TODO optimise?
@@ -123,7 +118,7 @@ public class DbkUtils {
 //			// TODO make it more robust and generic
 //			String fileRef = mediaNode.getName();
 //			imageDataNode.setProperty(DocBookNames.DBK_FILEREF, fileRef);
-			return imageDataNode;
+			return mediaNode;
 		} catch (RepositoryException e) {
 			throw new JcrException("Cannot insert empty image after " + sibling, e);
 		}

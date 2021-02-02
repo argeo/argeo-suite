@@ -8,7 +8,7 @@ public enum DbkMsg implements Localized {
 	//
 	section, deleteSection,
 	//
-	media, deleteMedia, insertMedia,
+	media, deleteMedia, insertMedia, insertParagraph,
 	//
 	;
 }

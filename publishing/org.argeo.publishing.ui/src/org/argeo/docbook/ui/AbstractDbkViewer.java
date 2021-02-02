@@ -114,10 +114,11 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				Node child = ni.nextNode();
 				SectionPart sectionPart = null;
 				if (isDbk(child, DbkType.mediaobject)) {
-					if (child.hasNode(DbkType.imageobject.get())) {
-						Node imageDataNode = child.getNode(DbkType.imageobject.get()).getNode(DbkType.imagedata.get());
-						sectionPart = newImg(textSection, imageDataNode);
-					}
+					sectionPart = newImg(textSection, child);
+//					if (child.hasNode(DbkType.imageobject.get())) {
+//						Node imageDataNode = child.getNode(DbkType.imageobject.get()).getNode(DbkType.imagedata.get());
+//						sectionPart = newImg(textSection, imageDataNode);
+//					}
 				} else if (isDbk(child, para)) {
 					sectionPart = newParagraph(textSection, child);
 				} else {
@@ -356,13 +357,40 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		}
 	}
 
-	void insertPart(Section section, Node node) {
+	SectionPart insertPart(Section section, Node node) {
 		try {
 			refresh(section);
 			layoutPage();
+			for (Control control : section.getChildren()) {
+				if (control instanceof SectionPart) {
+					SectionPart sectionPart = (SectionPart) control;
+					Node partNode = sectionPart.getNode();
+					if (partNode.getPath().equals(node.getPath()))
+						return sectionPart;
+				}
+			}
+			throw new IllegalStateException("New section part " + node + "not found");
 		} catch (RepositoryException e) {
 			throw new JcrException("Cannot insert part " + node + " in section " + section.getNode(), e);
 		}
+	}
+
+	void addParagraph(SectionPart partBefore, String txt) {
+		Section section = partBefore.getSection();
+		SectionPart nextSectionPart = section.nextSectionPart(partBefore);
+		Node newNode = addDbk(section.getNode(), para);
+		textInterpreter.write(newNode, txt != null ? txt : "");
+		if (nextSectionPart != null) {
+			try {
+				Node nextNode = nextSectionPart.getNode();
+				section.getNode().orderBefore(Jcr.getIndexedName(newNode), Jcr.getIndexedName(nextNode));
+			} catch (RepositoryException e) {
+				throw new JcrException("Cannot order " + newNode + " before " + nextSectionPart.getNode(), e);
+			}
+		}
+		Jcr.save(newNode);
+		Paragraph paragraph = (Paragraph) insertPart(partBefore.getSection(), newNode);
+		edit(paragraph, 0);
 	}
 
 	void deletePart(SectionPart sectionPart) {
@@ -370,8 +398,6 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			Node node = sectionPart.getNode();
 			Session session = node.getSession();
 			if (sectionPart instanceof DbkImg) {
-				// FIXME make it more robust
-				node = node.getParent().getParent();
 				if (!isDbk(node, DbkType.mediaobject))
 					throw new IllegalArgumentException("Node " + node + " is not a media object.");
 			}
@@ -862,8 +888,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 					float height = bounds.height;
 					float textLength = lbl.getText().length();
 					float area = width * height;
-					float charArea = area/textLength;
-					float lines = textLength/width;
+					float charArea = area / textLength;
+					float lines = textLength / width;
 					float proportion = point.y * width + point.x;
 					int pos = (int) (textLength * (proportion / area));
 					// TODO refine it

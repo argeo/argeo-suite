@@ -66,6 +66,7 @@ class DbkContextMenu {
 			Img img = (Img) editablePart;
 			deletePartB(parent, DbkMsg.deleteMedia.lead(), img);
 			insertMediaB(parent, DbkMsg.insertMedia.lead(), img);
+			insertParagraphB(parent, DbkMsg.insertParagraph.lead(), img);
 
 		} else if (editablePart instanceof DocBookSectionTitle) {
 			DocBookSectionTitle sectionTitle = (DocBookSectionTitle) editablePart;
@@ -143,6 +144,15 @@ class DbkContextMenu {
 			hide();
 		});
 
+	}
+
+	protected void insertParagraphB(Composite parent, String msg, SectionPart sectionPart) {
+		Label insertMediaB = new Label(parent, SWT.NONE);
+		insertMediaB.setText(msg);
+		insertMediaB.addMouseListener((MouseDown) (e) -> {
+			textViewer.addParagraph(sectionPart, null);
+			hide();
+		});
 	}
 
 	protected void deletePartB(Composite parent, String msg, SectionPart sectionPart) {

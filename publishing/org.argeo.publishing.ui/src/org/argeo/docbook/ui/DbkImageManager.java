@@ -38,11 +38,21 @@ public class DbkImageManager extends DefaultImageManager {
 		this.baseFolder = baseFolder;
 	}
 
+	Node getImageDataNode(Node mediaObjectNode) throws RepositoryException {
+		if (mediaObjectNode.hasNode(DbkType.imageobject.get())) {
+			Node imageDataNode = mediaObjectNode.getNode(DbkType.imageobject.get()).getNode(DbkType.imagedata.get());
+			return imageDataNode;
+		} else {
+			throw new IllegalStateException("No image data found for " + mediaObjectNode);
+		}
+	}
+
 	@Override
 	public Binary getImageBinary(Node node) throws RepositoryException {
 		Node fileNode = null;
-		if (DbkUtils.isDbk(node, DbkType.imagedata)) {
-			fileNode = getFileNode(node);
+		if (DbkUtils.isDbk(node, DbkType.mediaobject)) {
+			Node imageDataNode = getImageDataNode(node);
+			fileNode = getFileNode(imageDataNode);
 		}
 		if (node.isNodeType(NT_FILE)) {
 			fileNode = node;
@@ -54,7 +64,8 @@ public class DbkImageManager extends DefaultImageManager {
 		}
 	}
 
-	public Point getImageSize(Node imageDataNode) throws RepositoryException {
+	public Point getImageSize(Node mediaObjectNode) throws RepositoryException {
+		Node imageDataNode = getImageDataNode(mediaObjectNode);
 		Node fileNode = getFileNode(imageDataNode);
 		if (fileNode == null)
 			return new Point(0, 0);
@@ -83,16 +94,18 @@ public class DbkImageManager extends DefaultImageManager {
 	}
 
 	@Override
-	protected void processNewImageFile(Node context, Node fileNode, ImageData id)
+	protected void processNewImageFile(Node mediaObjectNode, Node fileNode, ImageData id)
 			throws RepositoryException, IOException {
+		Node imageDataNode = getImageDataNode(mediaObjectNode);
 		updateSize(fileNode, id);
 		String filePath = fileNode.getPath();
 		String relPath = filePath.substring(baseFolder.getPath().length() + 1);
-		context.setProperty(DbkAttr.fileref.name(), relPath);
+		imageDataNode.setProperty(DbkAttr.fileref.name(), relPath);
 	}
 
 	@Override
-	public String getImageUrl(Node imageDataNode) throws RepositoryException {
+	public String getImageUrl(Node mediaObjectNode) throws RepositoryException {
+		Node imageDataNode = getImageDataNode(mediaObjectNode);
 		// TODO factorise
 		String fileref = null;
 		if (imageDataNode.hasProperty(DbkAttr.fileref.name()))
