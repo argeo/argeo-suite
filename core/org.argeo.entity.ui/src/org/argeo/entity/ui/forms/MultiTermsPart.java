@@ -18,6 +18,7 @@ import org.argeo.jcr.Jcr;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -38,7 +39,8 @@ public class MultiTermsPart extends AbstractTermsPart {
 	@Override
 	protected Control createControl(Composite box, String style) {
 		Composite placeholder = new Composite(box, SWT.NONE);
-		RowLayout rl = new RowLayout(SWT.HORIZONTAL | SWT.WRAP);
+		RowLayout rl = new RowLayout(SWT.HORIZONTAL);
+		rl.wrap = true;
 		placeholder.setLayout(rl);
 		List<Term> currentValue = getValue();
 		if (currentValue != null && !currentValue.isEmpty())
