@@ -51,6 +51,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -70,6 +71,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 	private DbkContextMenu styledTools;
 
 	private final boolean flat;
+
+	private Integer maxMediaWidth = null;
 
 	protected AbstractDbkViewer(Section parent, int style, CmsEditable cmsEditable) {
 		super(parent, style, cmsEditable);
@@ -165,7 +168,15 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 	protected DbkImg newImg(TextSection parent, Node node) {
 		try {
 			DbkImg img = new DbkImg(parent, parent.getStyle(), node, imageManager);
-			img.setLayoutData(CmsUiUtils.grabWidth(SWT.CENTER, SWT.DEFAULT));
+			GridData imgGd;
+			if (maxMediaWidth != null) {
+				imgGd = new GridData(SWT.CENTER, SWT.FILL, false, false);
+				imgGd.widthHint = maxMediaWidth;
+				img.setPreferredSize(new Point(maxMediaWidth, 0));
+			} else {
+				imgGd = CmsUiUtils.grabWidth(SWT.CENTER, SWT.DEFAULT);
+			}
+			img.setLayoutData(imgGd);
 			updateContent(img);
 			img.setMouseListener(getMouseListener());
 			img.setFocusListener(getFocusListener());
@@ -920,6 +931,10 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 	protected List<String> getAvailableStyles(EditablePart editablePart) {
 		return new ArrayList<>();
+	}
+
+	public void setMaxMediaWidth(Integer maxMediaWidth) {
+		this.maxMediaWidth = maxMediaWidth;
 	}
 
 	// FILE UPLOAD LISTENER
