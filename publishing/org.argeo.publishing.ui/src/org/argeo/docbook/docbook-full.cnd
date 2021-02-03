@@ -1,7 +1,7 @@
 <dbk = 'http://docbook.org/ns/docbook'>
 <argeodbk = 'http://www.argeo.org/ns/argeodbk'>
 <xlink = 'http://www.w3.org/1999/xlink'>
-<xs = 'http://www.w3.org/2001/XMLSchema'>
+//<xs = 'http://www.w3.org/2001/XMLSchema'>
 
 [argeodbk:titled]
 mixin
@@ -2990,9 +2990,9 @@ orderable
 
 [dbk:year] > argeodbk:base, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:ubiquitousInlines
 
-[xs:anyType] > nt:base
- + * (nt:base) 
- + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
- - * (undefined) 
+//[xs:anyType] > nt:base
+// + * (nt:base) 
+// + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
+// - * (undefined) 
 
 
