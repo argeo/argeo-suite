@@ -24,7 +24,7 @@ mixin
 mixin
  + dbk:phrase (dbk:phrase) = dbk:phrase *
  + dbk:replaceable (dbk:replaceable) = dbk:replaceable *
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
 
 [argeodbk:markupInlines]
 mixin
@@ -286,7 +286,7 @@ orderable
 
 [dbk:alt] > argeodbk:base
  + dbk:inlinemediaobject (dbk:inlinemediaobject) = dbk:inlinemediaobject *
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
 
 [dbk:anchor] > argeodbk:base
 
@@ -572,7 +572,7 @@ orderable
  + dbk:title (dbk:title) = dbk:title *
  + dbk:titleabbrev (dbk:titleabbrev) = dbk:titleabbrev *
  + dbk:volumenum (dbk:volumenum) = dbk:volumenum *
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
 
 [dbk:bibliomset] > argeodbk:base, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:publishingInlines, argeodbk:ubiquitousInlines
  + dbk:abstract (dbk:abstract) = dbk:abstract *
@@ -763,7 +763,7 @@ orderable
  + dbk:remark (dbk:remark) = dbk:remark *
  + dbk:revhistory (dbk:revhistory) = dbk:revhistory *
  + dbk:screenshot (dbk:screenshot) = dbk:screenshot *
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
  - dbk:class (String) 
  - dbk:lang (String) 
  - dbk:onclick (String) 
@@ -1001,7 +1001,7 @@ orderable
  + dbk:systemitem (dbk:systemitem) = dbk:systemitem *
  + dbk:termdef (dbk:termdef) = dbk:termdef *
  + dbk:userinput (dbk:userinput) = dbk:userinput *
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
 
 [dbk:confdates] > argeodbk:base, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:ubiquitousInlines
 
@@ -1088,7 +1088,7 @@ orderable
  - dbk:class (String) 
 
 [dbk:date] > argeodbk:base, argeodbk:linkingAttributes
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
 
 [dbk:dedication] > argeodbk:base, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:listElements, argeodbk:paragraphElements, argeodbk:publishingElements, argeodbk:techDocElements, argeodbk:titled
  + dbk:anchor (dbk:anchor) = dbk:anchor *
@@ -1267,7 +1267,7 @@ orderable
  + dbk:superscript (dbk:superscript) = dbk:superscript *
  + dbk:trademark (dbk:trademark) = dbk:trademark *
  + dbk:xref (dbk:xref) = dbk:xref *
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
 
 [dbk:formalpara] > argeodbk:base, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:titled
  + dbk:para (dbk:para) = dbk:para
@@ -1535,6 +1535,7 @@ orderable
  + dbk:title (dbk:title) = dbk:title *
  + dbk:titleabbrev (dbk:titleabbrev) = dbk:titleabbrev *
  + dbk:volumenum (dbk:volumenum) = dbk:volumenum *
+ + * (nt:base) = nt:unstructured *
 
 [dbk:informalequation] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:alt (dbk:alt) = dbk:alt
@@ -1663,7 +1664,7 @@ orderable
 [dbk:keysym] > argeodbk:base, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:ubiquitousInlines
 
 [dbk:keyword] > argeodbk:base, argeodbk:linkingAttributes
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
 
 [dbk:keywordset] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:keyword (dbk:keyword) = dbk:keyword *
@@ -1680,7 +1681,7 @@ orderable
  + dbk:screenshot (dbk:screenshot) = dbk:screenshot *
 
 [dbk:lhs] > argeodbk:base, argeodbk:linkingAttributes
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
 
 [dbk:lineage] > argeodbk:base, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:ubiquitousInlines
 
@@ -1824,7 +1825,7 @@ orderable
  + dbk:screenshot (dbk:screenshot) = dbk:screenshot *
 
 [dbk:nonterminal] > argeodbk:base, argeodbk:linkingAttributes
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
  - dbk:def (String) 
 
 [dbk:note] > argeodbk:base, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:listElements, argeodbk:paragraphElements, argeodbk:publishingElements, argeodbk:techDocElements, argeodbk:titled
@@ -2060,7 +2061,7 @@ orderable
 [dbk:property] > argeodbk:base, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:ubiquitousInlines
 
 [dbk:pubdate] > argeodbk:base, argeodbk:linkingAttributes
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
 
 [dbk:publisher] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:address (dbk:address) = dbk:address *
@@ -2109,7 +2110,7 @@ orderable
 
 [dbk:refclass] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:application (dbk:application) = dbk:application *
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
 
 [dbk:refdescriptor] > argeodbk:base, argeodbk:bibliographyInlines, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:markupInlines, argeodbk:publishingInlines, argeodbk:techDocInlines, argeodbk:ubiquitousInlines
 
@@ -2255,7 +2256,7 @@ orderable
  + dbk:lineannotation (dbk:lineannotation) = dbk:lineannotation *
  + dbk:nonterminal (dbk:nonterminal) = dbk:nonterminal *
  + dbk:sbr (dbk:sbr) = dbk:sbr *
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
 
 [dbk:row] > argeodbk:base, argeodbk:linkingAttributes
  + dbk:entry (dbk:entry) = dbk:entry *
@@ -2473,7 +2474,7 @@ orderable
  - dbk:scheme (String) 
 
 [dbk:subjectterm] > argeodbk:base, argeodbk:linkingAttributes
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
 
 [dbk:subscript] > argeodbk:base, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:ubiquitousInlines
 
@@ -2495,7 +2496,7 @@ orderable
  + dbk:group (dbk:group) = dbk:group *
 
 [dbk:synopfragmentref] > argeodbk:base, argeodbk:linkingAttributes
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
 
 [dbk:synopsis] > argeodbk:base, argeodbk:bibliographyInlines, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:markupInlines, argeodbk:publishingInlines, argeodbk:techDocInlines, argeodbk:ubiquitousInlines
  + dbk:co (dbk:co) = dbk:co *
@@ -2928,7 +2929,7 @@ orderable
  + dbk:systemitem (dbk:systemitem) = dbk:systemitem *
  + dbk:termdef (dbk:termdef) = dbk:termdef *
  + dbk:userinput (dbk:userinput) = dbk:userinput *
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
 
 [dbk:varargs] > argeodbk:base, argeodbk:linkingAttributes
 
@@ -2983,9 +2984,6 @@ orderable
 
 [dbk:wordasword] > argeodbk:base, argeodbk:freeText, argeodbk:indexingInlines, argeodbk:linkingAttributes, argeodbk:ubiquitousInlines
 
-[dbk:xmltext] > nt:base
- - jcr:xmlcharacters (String) 
-
 [dbk:xref] > argeodbk:base, argeodbk:linkingAttributes
  - dbk:endterm (Reference) 
  - dbk:xrefstyle (String) 
@@ -2994,7 +2992,7 @@ orderable
 
 [xs:anyType] > nt:base
  + * (nt:base) 
- + jcr:xmltext (dbk:xmltext) = dbk:xmltext *
+ + jcr:xmltext (jcrx:xmltext) = jcrx:xmltext *
  - * (undefined) 
 
 
