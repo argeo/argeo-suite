@@ -105,6 +105,18 @@
 				<enabled>false</enabled>
 			</snapshots>
 		</repository>
+		<repository>
+			<id>argeo-unstable</id>
+			<url>http://forge.argeo.org/data/java/argeo-2.3/</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>never</updatePolicy>
+				<checksumPolicy>warn</checksumPolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
 	</repositories>
 	<reporting>
 		<plugins>
@@ -174,6 +186,11 @@
 		</plugins>
 	</reporting>
 	<distributionManagement>
+		<repository>
+			<id>staging</id>
+			<url>dav:https://forge.argeo.org/data/java/argeo-2.3</url>
+			<uniqueVersion>false</uniqueVersion>
+		</repository>
 		<site>
 			<id>staging</id>
 			<url>file:///srv/docfactory/argeo-2.1/site/argeo-suite/</url>
