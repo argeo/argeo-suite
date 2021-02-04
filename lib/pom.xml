@@ -17,7 +17,7 @@
 		<version.argeo-tp-extras>2.1.13</version.argeo-tp-extras>
 		<version.argeo-commons>2.3.0</version.argeo-commons>
 
-		<argeo.rpm.stagingRepository>/srv/rpmfactory/testing/argeo</argeo.rpm.stagingRepository>
+		<argeo.rpm.stagingRepository>/srv/rpmfactory/unstable/argeo</argeo.rpm.stagingRepository>
 		<git.rw />
 	</properties>
 	<dependencies>
