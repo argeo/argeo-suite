@@ -159,4 +159,8 @@
 			</plugin>
 		</plugins>
 	</reporting>
+
+  <scm>
+    <tag>v2.x</tag>
+  </scm>
 </project>

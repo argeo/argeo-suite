@@ -38,7 +38,7 @@
 		<connection>scm:git:http://git.argeo.org/gpl/argeo-suite.git</connection>
 		<url>http://git.argeo.org/?p=gpl/argeo-suite.git;a=summary</url>
 		<developerConnection>scm:git:https://code.argeo.org/git/gpl/argeo-suite.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>v2.x</tag>
 	</scm>
 	<organization>
 		<name>Argeo GmbH</name>
