@@ -174,6 +174,11 @@
 		</plugins>
 	</reporting>
 	<distributionManagement>
+		<repository>
+			<id>staging</id>
+			<url>dav:https://forge.argeo.org/data/java/argeo-2.1</url>
+			<uniqueVersion>false</uniqueVersion>
+		</repository>
 		<site>
 			<id>staging</id>
 			<url>file:///srv/docfactory/argeo-2.1/site/argeo-suite/</url>
