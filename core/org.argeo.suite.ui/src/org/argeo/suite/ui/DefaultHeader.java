@@ -23,6 +23,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 
@@ -37,26 +39,6 @@ public class DefaultHeader implements CmsUiProvider, ManagedService {
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
 		CmsView cmsView = CmsView.getCmsView(parent);
 		CmsTheme theme = CmsTheme.getCmsTheme(parent);
-
-		String titleStr = (String) properties.get(TITLE_PROPERTY);
-		if (titleStr != null) {
-			if (titleStr.startsWith("%")) {
-				title = new Localized() {
-
-					@Override
-					public String name() {
-						return titleStr;
-					}
-
-					@Override
-					public ClassLoader getL10nClassLoader() {
-						return getClass().getClassLoader();
-					}
-				};
-			} else {
-				title = new Localized.Untranslated(titleStr);
-			}
-		}
 
 		parent.setLayout(CmsUiUtils.noSpaceGridLayout(new GridLayout(3, true)));
 
@@ -109,14 +91,43 @@ public class DefaultHeader implements CmsUiProvider, ManagedService {
 		return lbl;
 	}
 
-	public void init(Map<String, String> properties) {
+	public void init(BundleContext bundleContext, Map<String, String> properties) {
 		this.properties = new TreeMap<>(properties);
+		String titleStr = (String) properties.get(TITLE_PROPERTY);
+		if (titleStr != null) {
+			if (titleStr.startsWith("%")) {
+				title = new Localized() {
+
+					@Override
+					public String name() {
+						return titleStr;
+					}
+
+					@Override
+					public ClassLoader getL10nClassLoader() {
+						return bundleContext != null
+								? bundleContext.getBundle().adapt(BundleWiring.class).getClassLoader()
+								: getClass().getClassLoader();
+					}
+				};
+			} else {
+				title = new Localized.Untranslated(titleStr);
+			}
+		}
+	}
+
+	public void destroy() {
+
 	}
 
 	@Override
 	public void updated(Dictionary<String, ?> properties) throws ConfigurationException {
 		if (properties != null)
 			this.properties.putAll(LangUtils.dictToStringMap(properties));
+	}
+
+	public Localized getTitle() {
+		return title;
 	}
 
 }

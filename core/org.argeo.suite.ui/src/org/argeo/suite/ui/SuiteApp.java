@@ -54,6 +54,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	public final static String PUBLIC_BASE_PATH_PROPERTY = "publicBasePath";
 	public final static String DEFAULT_UI_NAME_PROPERTY = "defaultUiName";
 	public final static String DEFAULT_THEME_ID_PROPERTY = "defaultThemeId";
+	private final static String LOGIN = "login";
 
 	private String publicBasePath = null;
 
@@ -61,9 +62,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	private String headerPid;
 	private String leadPanePid;
 	private String loginScreenPid;
-	
+
 	private String defaultLayerPid = "argeo.suite.ui.dashboardLayer";
-//	private String RECENT_ITEMS_PID = pidPrefix + "recentItems";
 
 	private String defaultUiName = "app";
 	private String defaultThemeId = "org.argeo.suite.theme.default";
@@ -77,9 +77,6 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	// TODO make more optimal or via CmsSession/CmsView
 	private Map<String, SuiteUi> managedUis = new HashMap<>();
-
-//	private Localized defaultTitle;
-////	private CmsUiProvider headerPart = null;
 
 	public void init(Map<String, Object> properties) {
 		if (log.isDebugEnabled())
@@ -154,15 +151,19 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			SuiteUi ui = (SuiteUi) parent;
 			CmsView cmsView = CmsView.getCmsView(parent);
 			CmsUiProvider headerUiProvider = findUiProvider(headerPid);
-//			if (headerUiProvider instanceof Localized) {
-//				defaultTitle = (Localized) headerUiProvider;
-//			}
+			Localized appTitle = null;
+			if (headerUiProvider instanceof DefaultHeader) {
+				appTitle = ((DefaultHeader) headerUiProvider).getTitle();
+			}
+			ui.setTitle(appTitle);
+
 			if (cmsView.isAnonymous() && publicBasePath == null) {// internal app, must login
 				ui.logout();
 				refreshPart(headerUiProvider, ui.getHeader(), context);
 				ui.refreshBelowHeader(false);
 				refreshPart(findUiProvider(loginScreenPid), ui.getBelowHeader(), context);
 				ui.layout(true, true);
+				setState(ui, LOGIN);
 			} else {
 				CmsSession cmsSession = cmsView.getCmsSession();
 				if (ui.getUserDir() == null) {
@@ -281,11 +282,18 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	@Override
 	public void setState(Composite parent, String state) {
-		if (state == null || state.equals("~"))
+		if (state == null)
 			return;
-		if (!state.startsWith("/") && !state.equals("~")) {
+		if (!state.startsWith("/")) {
 			if (parent instanceof SuiteUi) {
 				SuiteUi ui = (SuiteUi) parent;
+				if (LOGIN.equals(state) || state.equals("~")) {
+					String appTitle = "";
+					if (ui.getTitle() != null)
+						appTitle = ui.getTitle().lead();
+					ui.getCmsView().stateChanged(state, appTitle);
+					return;
+				}
 				String currentLayerId = ui.getCurrentLayerId();
 				if (state.equals(currentLayerId))
 					return; // does nothing
@@ -355,6 +363,10 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		if (ui == null)
 			return;
 		try {
+			String appTitle = "";
+			if (ui.getTitle() != null)
+				appTitle = ui.getTitle().lead() + " - ";
+
 //			String currentLayerId = ui.getCurrentLayerId();
 //			SuiteLayer currentLayer = currentLayerId != null ? layersByPid.get(currentLayerId).get() : null;
 			if (SuiteUiUtils.isTopic(event, SuiteEvent.refreshPart)) {
@@ -365,7 +377,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				SuiteLayer layer = findByType(layersByType, node);
 				ui.switchToLayer(layer, node);
 				ui.getCmsView().runAs(() -> layer.view(uiProvider, ui.getCurrentWorkArea(), node));
-				ui.getCmsView().stateChanged(nodeToState(node), Jcr.getTitle(node));
+				ui.getCmsView().stateChanged(nodeToState(node), appTitle + Jcr.getTitle(node));
 			} else if (SuiteUiUtils.isTopic(event, SuiteEvent.openNewPart)) {
 				Node node = getNode(ui, event);
 				if (node == null)
@@ -374,7 +386,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				SuiteLayer layer = findByType(layersByType, node);
 				ui.switchToLayer(layer, node);
 				ui.getCmsView().runAs(() -> layer.open(uiProvider, ui.getCurrentWorkArea(), node));
-				ui.getCmsView().stateChanged(nodeToState(node), Jcr.getTitle(node));
+				ui.getCmsView().stateChanged(nodeToState(node), appTitle + Jcr.getTitle(node));
 			} else if (SuiteUiUtils.isTopic(event, SuiteEvent.switchLayer)) {
 				String layerId = get(event, SuiteEvent.LAYER);
 				if (layerId != null) {
@@ -385,7 +397,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 					String title = null;
 					if (layerTitle != null)
 						title = layerTitle.lead();
-					ui.getCmsView().stateChanged(layerId, title);
+					ui.getCmsView().stateChanged(layerId, appTitle + title);
 				} else {
 					Node node = getNode(ui, event);
 					if (node != null) {
