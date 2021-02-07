@@ -10,7 +10,7 @@ import javax.jcr.RepositoryException;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.util.CmsUiUtils;
-import org.argeo.cms.ui.widgets.TabbedArea;
+import org.argeo.suite.ui.widgets.TabbedArea;
 import org.argeo.util.LangUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;

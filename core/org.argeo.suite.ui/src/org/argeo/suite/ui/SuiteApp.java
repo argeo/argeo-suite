@@ -30,7 +30,6 @@ import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.dialogs.CmsFeedback;
-import org.argeo.cms.ui.util.CmsEvent;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.specific.UiContext;
 import org.argeo.entity.EntityConstants;
@@ -345,7 +344,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		try {
 //			String currentLayerId = ui.getCurrentLayerId();
 //			SuiteLayer currentLayer = currentLayerId != null ? layersByPid.get(currentLayerId).get() : null;
-			if (isTopic(event, SuiteEvent.refreshPart)) {
+			if (SuiteUiUtils.isTopic(event, SuiteEvent.refreshPart)) {
 				Node node = getNode(ui, event);
 				if (node == null)
 					return;
@@ -354,7 +353,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				ui.switchToLayer(layer, node);
 				ui.getCmsView().runAs(() -> layer.view(uiProvider, ui.getCurrentWorkArea(), node));
 				ui.getCmsView().stateChanged(nodeToState(node), Jcr.getTitle(node));
-			} else if (isTopic(event, SuiteEvent.openNewPart)) {
+			} else if (SuiteUiUtils.isTopic(event, SuiteEvent.openNewPart)) {
 				Node node = getNode(ui, event);
 				if (node == null)
 					return;
@@ -363,7 +362,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				ui.switchToLayer(layer, node);
 				ui.getCmsView().runAs(() -> layer.open(uiProvider, ui.getCurrentWorkArea(), node));
 				ui.getCmsView().stateChanged(nodeToState(node), Jcr.getTitle(node));
-			} else if (isTopic(event, SuiteEvent.switchLayer)) {
+			} else if (SuiteUiUtils.isTopic(event, SuiteEvent.switchLayer)) {
 				String layerId = get(event, SuiteEvent.LAYER);
 				if (layerId != null) {
 //					ui.switchToLayer(layerId, ui.getUserDir());
@@ -426,11 +425,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		return managedUis.get(get(event, CMS_VIEW_UID_PROPERTY));
 	}
 
-	private static boolean isTopic(Event event, CmsEvent cmsEvent) {
-		return event.getTopic().equals(cmsEvent.topic());
-	}
-
-	private static String get(Event event, String key) {
+	public static String get(Event event, String key) {
 		Object value = event.getProperty(key);
 		if (value == null)
 			return null;
