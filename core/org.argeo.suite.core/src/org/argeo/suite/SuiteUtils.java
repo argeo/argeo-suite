@@ -1,5 +1,8 @@
 package org.argeo.suite;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -94,6 +97,26 @@ public class SuiteUtils {
 	/** Singleton. */
 	private SuiteUtils() {
 
+	}
+
+	public static Set<String> extractRoles(String[] semiColArr) {
+		Set<String> res = new HashSet<>();
+		// TODO factorize and make it more robust
+		final String rolesPrefix = "roles:=\"";
+		// first one is layer id
+		for (int i = 1; i < semiColArr.length; i++) {
+			if (semiColArr[i].startsWith(rolesPrefix)) {
+				String rolesStr = semiColArr[i].substring(rolesPrefix.length());
+				// remove last "
+				rolesStr = rolesStr.substring(0, rolesStr.lastIndexOf('\"'));
+				// TODO support AND (&) as well
+				String[] roles = rolesStr.split("\\|");// OR (|)
+				for (String role : roles) {
+					res.add(role.trim());
+				}
+			}
+		}
+		return res;
 	}
 
 }

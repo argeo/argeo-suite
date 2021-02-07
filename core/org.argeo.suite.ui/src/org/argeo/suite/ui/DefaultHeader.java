@@ -26,6 +26,7 @@ import org.eclipse.swt.widgets.Label;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 
+/** HEader of a standard Argeo Suite applicaiton. */
 public class DefaultHeader implements CmsUiProvider, ManagedService {
 	public final static String TITLE_PROPERTY = "argeo.suite.ui.header.title";
 	private Map<String, String> properties;
