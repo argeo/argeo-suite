@@ -9,6 +9,7 @@ OSGI-INF/dashboardLayer.xml
 
 Import-Package:\
 org.argeo.api,\
+org.argeo.cms.ui.widgets,\
 org.eclipse.swt,\
 org.osgi.framework,\
 org.argeo.entity,\
