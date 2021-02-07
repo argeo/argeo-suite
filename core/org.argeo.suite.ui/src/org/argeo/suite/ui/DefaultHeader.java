@@ -7,7 +7,7 @@ import java.util.TreeMap;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import org.argeo.cms.LocaleUtils;
+import org.argeo.cms.Localized;
 import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
@@ -23,13 +23,17 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedService;
 
-/** HEader of a standard Argeo Suite applicaiton. */
+/** HEader of a standard Argeo Suite application. */
 public class DefaultHeader implements CmsUiProvider, ManagedService {
 	public final static String TITLE_PROPERTY = "argeo.suite.ui.header.title";
 	private Map<String, String> properties;
+
+	private Localized title = null;
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
@@ -44,9 +48,11 @@ public class DefaultHeader implements CmsUiProvider, ManagedService {
 		lead.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, true, false));
 		lead.setLayout(new GridLayout());
 		Label lbl = new Label(lead, SWT.NONE);
-		String title = properties.get(TITLE_PROPERTY);
-		lbl.setText(LocaleUtils.isLocaleKey(title) ? LocaleUtils.local(title, getClass().getClassLoader()).toString()
-				: title);
+//		String title = properties.get(TITLE_PROPERTY);
+//		// TODO expose the localized
+//		lbl.setText(LocaleUtils.isLocaleKey(title) ? LocaleUtils.local(title, getClass().getClassLoader()).toString()
+//				: title);
+		lbl.setText(title.lead());
 		CmsUiUtils.style(lbl, SuiteStyle.headerTitle);
 		lbl.setLayoutData(CmsUiUtils.fillWidth());
 
@@ -85,14 +91,43 @@ public class DefaultHeader implements CmsUiProvider, ManagedService {
 		return lbl;
 	}
 
-	public void init(Map<String, String> properties) {
+	public void init(BundleContext bundleContext, Map<String, String> properties) {
 		this.properties = new TreeMap<>(properties);
+		String titleStr = (String) properties.get(TITLE_PROPERTY);
+		if (titleStr != null) {
+			if (titleStr.startsWith("%")) {
+				title = new Localized() {
+
+					@Override
+					public String name() {
+						return titleStr;
+					}
+
+					@Override
+					public ClassLoader getL10nClassLoader() {
+						return bundleContext != null
+								? bundleContext.getBundle().adapt(BundleWiring.class).getClassLoader()
+								: getClass().getClassLoader();
+					}
+				};
+			} else {
+				title = new Localized.Untranslated(titleStr);
+			}
+		}
+	}
+
+	public void destroy() {
+
 	}
 
 	@Override
 	public void updated(Dictionary<String, ?> properties) throws ConfigurationException {
 		if (properties != null)
 			this.properties.putAll(LangUtils.dictToStringMap(properties));
+	}
+
+	public Localized getTitle() {
+		return title;
 	}
 
 }

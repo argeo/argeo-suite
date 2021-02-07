@@ -2,6 +2,7 @@ package org.argeo.suite.ui;
 
 import javax.jcr.Node;
 
+import org.argeo.cms.Localized;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.eclipse.swt.widgets.Composite;
 
@@ -15,5 +16,9 @@ public interface SuiteLayer extends CmsUiProvider {
 
 	default void open(CmsUiProvider uiProvider, Composite workArea, Node context) {
 		view(uiProvider, workArea, context);
+	}
+
+	default Localized getTitle() {
+		return null;
 	}
 }

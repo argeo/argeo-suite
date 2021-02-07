@@ -11,6 +11,7 @@ import javax.jcr.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.api.NodeConstants;
+import org.argeo.cms.Localized;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.jcr.Jcr;
@@ -22,6 +23,8 @@ import org.eclipse.swt.widgets.Composite;
 class SuiteUi extends Composite {
 	private static final long serialVersionUID = 6207018859086689108L;
 	private final static Log log = LogFactory.getLog(SuiteUi.class);
+
+	private Localized title;
 	private Composite header;
 	private Composite belowHeader;
 	private Composite leadPane;
@@ -221,6 +224,14 @@ class SuiteUi extends Composite {
 
 	public CmsView getCmsView() {
 		return cmsView;
+	}
+
+	public Localized getTitle() {
+		return title;
+	}
+
+	public void setTitle(Localized title) {
+		this.title = title;
 	}
 
 }

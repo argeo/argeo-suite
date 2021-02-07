@@ -12,6 +12,7 @@ import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.ui.CmsEditable;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.dialogs.LightweightDialog;
+import org.argeo.cms.ui.util.CmsEvent;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.entity.EntityNames;
@@ -32,6 +33,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.osgi.service.event.Event;
 
 /** UI utilities related to the APAF project. */
 public class SuiteUiUtils {
@@ -316,6 +318,10 @@ public class SuiteUiUtils {
 	public static boolean isCoworker(CmsView cmsView) {
 		boolean coworker = cmsView.doAs(() -> CurrentUser.isInRole(SuiteRole.coworker.dn()));
 		return coworker;
+	}
+
+	public static boolean isTopic(Event event, CmsEvent cmsEvent) {
+		return event.getTopic().equals(cmsEvent.topic());
 	}
 
 //	public static String createAndConfigureEntity(Shell shell, Session referenceSession, String mainMixin,

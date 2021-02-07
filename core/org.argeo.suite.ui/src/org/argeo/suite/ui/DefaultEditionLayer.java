@@ -7,16 +7,19 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
+import org.argeo.cms.Localized;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.util.CmsUiUtils;
-import org.argeo.cms.ui.widgets.TabbedArea;
+import org.argeo.suite.ui.widgets.TabbedArea;
 import org.argeo.util.LangUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.wiring.BundleWiring;
 
 /** An app layer based on an entry area and an editor area. */
 public class DefaultEditionLayer implements SuiteLayer {
@@ -24,6 +27,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 	private CmsUiProvider workArea;
 	private List<String> weights = new ArrayList<>();
 	private boolean startMaximized = false;
+	private Localized title = null;
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
@@ -64,12 +68,43 @@ public class DefaultEditionLayer implements SuiteLayer {
 		tabbedArea.open(uiProvider, context);
 	}
 
-	public void init(Map<String, Object> properties) {
+	@Override
+	public Localized getTitle() {
+		return title;
+	}
+
+	public void init(BundleContext bundleContext, Map<String, Object> properties) {
 		weights = LangUtils.toStringList(properties.get(Property.weights.name()));
 		startMaximized = properties.containsKey(Property.startMaximized.name())
 				&& "true".equals(properties.get(Property.startMaximized.name()));
+
+		String titleStr = (String) properties.get(SuiteLayer.Property.title.name());
+		if (titleStr != null) {
+			if (titleStr.startsWith("%")) {
+				title = new Localized() {
+
+					@Override
+					public String name() {
+						return titleStr;
+					}
+
+					@Override
+					public ClassLoader getL10nClassLoader() {
+						return bundleContext != null
+								? bundleContext.getBundle().adapt(BundleWiring.class).getClassLoader()
+								: getClass().getClassLoader();
+					}
+				};
+			} else {
+				title = new Localized.Untranslated(titleStr);
+			}
+		}
 	}
 
+	public void destroy() {
+		
+	}
+	
 	public void setEntryArea(CmsUiProvider entryArea) {
 		this.entryArea = entryArea;
 	}

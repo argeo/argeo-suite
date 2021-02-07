@@ -87,15 +87,16 @@ public class DefaultLeadPane implements CmsUiProvider {
 				}
 				RankedObject<SuiteLayer> layerObj = layers.get(layerId);
 
-				// TODO deal with i10n
-				String titleStr = (String) layerObj.getProperties().get(SuiteLayer.Property.title.name());
 				Localized title = null;
-				if (titleStr != null) {
-					if (titleStr.startsWith("%")) {
-						// LocaleUtils.local(titleStr, getClass().getClassLoader());
-						title = () -> titleStr;
-					} else {
-						title = new Localized.Untranslated(titleStr);
+				if (!adminLayers.contains(layerId)) {
+					String titleStr = (String) layerObj.getProperties().get(SuiteLayer.Property.title.name());
+					if (titleStr != null) {
+						if (titleStr.startsWith("%")) {
+							// LocaleUtils.local(titleStr, getClass().getClassLoader());
+							title = () -> titleStr;
+						} else {
+							title = new Localized.Untranslated(titleStr);
+						}
 					}
 				}
 
@@ -114,39 +115,7 @@ public class DefaultLeadPane implements CmsUiProvider {
 					first = b;
 			}
 		}
-
-//		if (isAdmin && adminLayers != null)
-//			for (String layerId : adminLayers) {
-//				if (layers.containsKey(layerId)) {
-//					RankedObject<SuiteLayer> layerObj = layers.get(layerId);
-//
-//					String titleStr = (String) layerObj.getProperties().get(SuiteLayer.Property.title.name());
-//					Localized title = null;
-//					if (titleStr != null)
-//						title = new Localized.Untranslated(titleStr);
-//
-//					String iconName = (String) layerObj.getProperties().get(SuiteLayer.Property.icon.name());
-//					SuiteIcon icon = null;
-//					if (iconName != null)
-//						icon = SuiteIcon.valueOf(iconName);
-//
-//					Button b = SuiteUiUtils.createLayerButton(parent, layerId, title, icon);
-//					if (first == null)
-//						first = b;
-//				}
-//			}
-
-//		Button dashboardB = createButton(parent, SuiteMsg.dashboard.name(), SuiteMsg.dashboard, SuiteIcon.dashboard);
-		if (!cmsView.isAnonymous()) {
-//			createButton(parent, SuiteMsg.documents.name(), SuiteMsg.documents, SuiteIcon.documents);
-//			createButton(parent, SuiteMsg.people.name(), SuiteMsg.people, SuiteIcon.people);
-//			createButton(parent, SuiteMsg.locations.name(), SuiteMsg.locations, SuiteIcon.location);
-		}
 		return first;
-	}
-
-	protected void processLayer(String layerDef) {
-
 	}
 
 	public void init(Map<String, Object> properties) {
@@ -193,7 +162,7 @@ public class DefaultLeadPane implements CmsUiProvider {
 		if (msg != null) {
 			Label lbl = new Label(parent, SWT.CENTER);
 			CmsUiUtils.style(lbl, SuiteStyle.leadPane);
-			//CmsUiUtils.markup(lbl);
+			// CmsUiUtils.markup(lbl);
 			ClassLoader l10nClassLoader = getClass().getClassLoader();
 			String txt = LocaleUtils.lead(msg, l10nClassLoader);
 //			String txt = msg.lead();
