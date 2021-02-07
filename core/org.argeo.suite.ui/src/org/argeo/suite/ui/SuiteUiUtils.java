@@ -8,16 +8,17 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.argeo.cms.Localized;
+import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.ui.CmsEditable;
-import org.argeo.cms.ui.CmsTheme;
+import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.dialogs.LightweightDialog;
-import org.argeo.cms.ui.util.CmsIcon;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
+import org.argeo.suite.SuiteRole;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.MouseEvent;
@@ -312,22 +313,9 @@ public class SuiteUiUtils {
 		return img;
 	}
 
-	public static Button createLayerButton(Composite parent, String layer, Localized msg, CmsIcon icon) {
-		CmsTheme theme = CmsTheme.getCmsTheme(parent);
-		Button button = new Button(parent, SWT.PUSH);
-		CmsUiUtils.style(button, SuiteStyle.leadPane);
-		if (icon != null)
-			button.setImage(icon.getBigIcon(theme));
-		button.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, false));
-		// button.setToolTipText(msg.lead());
-		if (msg != null) {
-			Label lbl = new Label(parent, SWT.NONE);
-			CmsUiUtils.style(lbl, SuiteStyle.leadPane);
-			lbl.setText(msg.lead());
-			lbl.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));
-		}
-		CmsUiUtils.sendEventOnSelect(button, SuiteEvent.switchLayer.topic(), SuiteEvent.LAYER, layer);
-		return button;
+	public static boolean isCoworker(CmsView cmsView) {
+		boolean coworker = cmsView.doAs(() -> CurrentUser.isInRole(SuiteRole.coworker.dn()));
+		return coworker;
 	}
 
 //	public static String createAndConfigureEntity(Shell shell, Session referenceSession, String mainMixin,
