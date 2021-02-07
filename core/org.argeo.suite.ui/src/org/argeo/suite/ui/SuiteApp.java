@@ -165,6 +165,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				ui.layout(true, true);
 				setState(ui, LOGIN);
 			} else {
+				if (LOGIN.equals(state))
+					state = null;
 				CmsSession cmsSession = cmsView.getCmsSession();
 				if (ui.getUserDir() == null) {
 					if (cmsView.isAnonymous()) {
