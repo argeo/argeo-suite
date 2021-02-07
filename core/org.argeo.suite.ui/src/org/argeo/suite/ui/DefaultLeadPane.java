@@ -2,7 +2,9 @@ package org.argeo.suite.ui;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import javax.jcr.Node;
@@ -10,12 +12,12 @@ import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.api.NodeConstants;
 import org.argeo.cms.Localized;
 import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.suite.RankedObject;
+import org.argeo.suite.SuiteUtils;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -44,9 +46,23 @@ public class DefaultLeadPane implements CmsUiProvider {
 		layout.marginRight = 10;
 		parent.setLayout(layout);
 
+//		boolean isAdmin = cmsView.doAs(() -> CurrentUser.isInRole(NodeConstants.ROLE_USER_ADMIN));
+		Set<String> userRoles = cmsView.doAs(() -> CurrentUser.roles());
 		Button first = null;
-		for (String layerId : defaultLayers) {
+		layers: for (String layerDef : defaultLayers) {
+			layerDef = layerDef.trim();
+			if ("".equals(layerDef))
+				continue layers;// skip empty lines
+			String[] semiColArr = layerDef.split(";");
+			String layerId = semiColArr[0];
+			Set<String> layerRoles = SuiteUtils.extractRoles(semiColArr);
 			if (layers.containsKey(layerId)) {
+				if (!layerRoles.isEmpty()) {
+					Set<String> intersection = new HashSet<String>(layerRoles);
+					intersection.retainAll(userRoles);
+					if (intersection.isEmpty())
+						continue layers;// skip unauthorized layer
+				}
 				RankedObject<SuiteLayer> layerObj = layers.get(layerId);
 
 				// TODO deal with i10n
@@ -66,29 +82,26 @@ public class DefaultLeadPane implements CmsUiProvider {
 			}
 		}
 
-		// TODO factorise
-		boolean isAdmin = cmsView.doAs(() -> CurrentUser.isInRole(NodeConstants.ROLE_USER_ADMIN));
-		if (isAdmin && adminLayers != null)
-			for (String layerId : adminLayers) {
-				if (layers.containsKey(layerId)) {
-					RankedObject<SuiteLayer> layerObj = layers.get(layerId);
-
-					// TODO deal with i10n
-					String titleStr = (String) layerObj.getProperties().get(SuiteLayer.Property.title.name());
-					Localized title = null;
-					if (titleStr != null)
-						title = new Localized.Untranslated(titleStr);
-
-					String iconName = (String) layerObj.getProperties().get(SuiteLayer.Property.icon.name());
-					SuiteIcon icon = null;
-					if (iconName != null)
-						icon = SuiteIcon.valueOf(iconName);
-
-					Button b = SuiteUiUtils.createLayerButton(parent, layerId, title, icon);
-					if (first == null)
-						first = b;
-				}
-			}
+//		if (isAdmin && adminLayers != null)
+//			for (String layerId : adminLayers) {
+//				if (layers.containsKey(layerId)) {
+//					RankedObject<SuiteLayer> layerObj = layers.get(layerId);
+//
+//					String titleStr = (String) layerObj.getProperties().get(SuiteLayer.Property.title.name());
+//					Localized title = null;
+//					if (titleStr != null)
+//						title = new Localized.Untranslated(titleStr);
+//
+//					String iconName = (String) layerObj.getProperties().get(SuiteLayer.Property.icon.name());
+//					SuiteIcon icon = null;
+//					if (iconName != null)
+//						icon = SuiteIcon.valueOf(iconName);
+//
+//					Button b = SuiteUiUtils.createLayerButton(parent, layerId, title, icon);
+//					if (first == null)
+//						first = b;
+//				}
+//			}
 
 //		Button dashboardB = createButton(parent, SuiteMsg.dashboard.name(), SuiteMsg.dashboard, SuiteIcon.dashboard);
 		if (!cmsView.isAnonymous()) {
@@ -106,8 +119,8 @@ public class DefaultLeadPane implements CmsUiProvider {
 		if (log.isDebugEnabled())
 			log.debug("Default layers: " + Arrays.asList(defaultLayers));
 		adminLayers = (String[]) properties.get(Property.adminLayers.toString());
-		if (log.isDebugEnabled() && adminLayers != null)
-			log.debug("Admin layers: " + Arrays.asList(adminLayers));
+		if (adminLayers != null)
+			log.error("DEPRECATED - Admin layers: " + Arrays.asList(adminLayers));
 	}
 
 	public void addLayer(SuiteLayer layer, Map<String, Object> properties) {
