@@ -24,6 +24,7 @@ import org.apache.commons.logging.LogFactory;
 import org.argeo.api.NodeUtils;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.LocaleUtils;
+import org.argeo.cms.Localized;
 import org.argeo.cms.auth.CmsSession;
 import org.argeo.cms.ui.AbstractCmsApp;
 import org.argeo.cms.ui.CmsTheme;
@@ -60,7 +61,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	private String headerPid;
 	private String leadPanePid;
 	private String loginScreenPid;
-//	private String DASHBOARD_PID = pidPrefix + "dashboard";
+	
+	private String defaultLayerPid = "argeo.suite.ui.dashboardLayer";
 //	private String RECENT_ITEMS_PID = pidPrefix + "recentItems";
 
 	private String defaultUiName = "app";
@@ -76,7 +78,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	// TODO make more optimal or via CmsSession/CmsView
 	private Map<String, SuiteUi> managedUis = new HashMap<>();
 
-//	private CmsUiProvider headerPart = null;
+//	private Localized defaultTitle;
+////	private CmsUiProvider headerPart = null;
 
 	public void init(Map<String, Object> properties) {
 		if (log.isDebugEnabled())
@@ -150,9 +153,13 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			Node context = null;
 			SuiteUi ui = (SuiteUi) parent;
 			CmsView cmsView = CmsView.getCmsView(parent);
+			CmsUiProvider headerUiProvider = findUiProvider(headerPid);
+//			if (headerUiProvider instanceof Localized) {
+//				defaultTitle = (Localized) headerUiProvider;
+//			}
 			if (cmsView.isAnonymous() && publicBasePath == null) {// internal app, must login
 				ui.logout();
-				refreshPart(findUiProvider(headerPid), ui.getHeader(), context);
+				refreshPart(headerUiProvider, ui.getHeader(), context);
 				ui.refreshBelowHeader(false);
 				refreshPart(findUiProvider(loginScreenPid), ui.getBelowHeader(), context);
 				ui.layout(true, true);
@@ -178,7 +185,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				if (context == null)
 					context = ui.getUserDir();
 
-				refreshPart(findUiProvider(headerPid), ui.getHeader(), context);
+				refreshPart(headerUiProvider, ui.getHeader(), context);
 				ui.refreshBelowHeader(true);
 				for (String key : layersByPid.keySet()) {
 					SuiteLayer layer = layersByPid.get(key).get();
@@ -186,7 +193,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				}
 				refreshPart(findUiProvider(leadPanePid), ui.getLeadPane(), context);
 				ui.layout(true, true);
-				setState(parent, state);
+				setState(parent, state != null ? state : defaultLayerPid);
 			}
 		} catch (Exception e) {
 			CmsFeedback.show("Unexpected exception", e);
@@ -211,6 +218,12 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		if (!uiProvidersByPid.containsKey(pid))
 			throw new IllegalArgumentException("No UI provider registered as " + pid);
 		return uiProvidersByPid.get(pid).get();
+	}
+
+	private SuiteLayer findLayer(String pid) {
+		if (!layersByPid.containsKey(pid))
+			throw new IllegalArgumentException("No UI provider registered as " + pid);
+		return layersByPid.get(pid).get();
 	}
 
 	private <T> T findByType(Map<String, RankedObject<T>> byType, Node context) {
@@ -366,8 +379,13 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				String layerId = get(event, SuiteEvent.LAYER);
 				if (layerId != null) {
 //					ui.switchToLayer(layerId, ui.getUserDir());
+					SuiteLayer suiteLayer = findLayer(layerId);
+					Localized layerTitle = suiteLayer.getTitle();
 					ui.getCmsView().runAs(() -> ui.switchToLayer(layerId, ui.getUserDir()));
-					ui.getCmsView().navigateTo(layerId);
+					String title = null;
+					if (layerTitle != null)
+						title = layerTitle.lead();
+					ui.getCmsView().stateChanged(layerId, title);
 				} else {
 					Node node = getNode(ui, event);
 					if (node != null) {

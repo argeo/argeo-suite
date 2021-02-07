@@ -87,15 +87,16 @@ public class DefaultLeadPane implements CmsUiProvider {
 				}
 				RankedObject<SuiteLayer> layerObj = layers.get(layerId);
 
-				// TODO deal with i10n
-				String titleStr = (String) layerObj.getProperties().get(SuiteLayer.Property.title.name());
 				Localized title = null;
-				if (titleStr != null) {
-					if (titleStr.startsWith("%")) {
-						// LocaleUtils.local(titleStr, getClass().getClassLoader());
-						title = () -> titleStr;
-					} else {
-						title = new Localized.Untranslated(titleStr);
+				if (!adminLayers.contains(layerId)) {
+					String titleStr = (String) layerObj.getProperties().get(SuiteLayer.Property.title.name());
+					if (titleStr != null) {
+						if (titleStr.startsWith("%")) {
+							// LocaleUtils.local(titleStr, getClass().getClassLoader());
+							title = () -> titleStr;
+						} else {
+							title = new Localized.Untranslated(titleStr);
+						}
 					}
 				}
 
@@ -193,7 +194,7 @@ public class DefaultLeadPane implements CmsUiProvider {
 		if (msg != null) {
 			Label lbl = new Label(parent, SWT.CENTER);
 			CmsUiUtils.style(lbl, SuiteStyle.leadPane);
-			//CmsUiUtils.markup(lbl);
+			// CmsUiUtils.markup(lbl);
 			ClassLoader l10nClassLoader = getClass().getClassLoader();
 			String txt = LocaleUtils.lead(msg, l10nClassLoader);
 //			String txt = msg.lead();
