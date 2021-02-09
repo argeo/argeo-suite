@@ -1,5 +1,6 @@
 package org.argeo.suite.ui;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -42,7 +43,7 @@ public class DefaultLeadPane implements CmsUiProvider {
 
 	private Map<String, RankedObject<SuiteLayer>> layers = Collections.synchronizedSortedMap(new TreeMap<>());
 	private List<String> defaultLayers;
-	private List<String> adminLayers;
+	private List<String> adminLayers= new ArrayList<>();
 
 	@Override
 	public Control createUi(Composite parent, Node node) throws RepositoryException {
