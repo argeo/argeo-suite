@@ -28,6 +28,13 @@
 			<version>2.3.1-SNAPSHOT</version>
 		</dependency>
 
+		<!-- Argeo Suite Icons -->
+		<dependency>
+			<groupId>org.argeo.suite.icons</groupId>
+			<artifactId>org.argeo.suite.icons.default</artifactId>
+			<version>${version.argeo-suite-icons}</version>
+		</dependency>
+
 		<!-- Argeo Suite -->
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
