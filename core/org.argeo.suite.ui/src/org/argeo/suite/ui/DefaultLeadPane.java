@@ -1,5 +1,6 @@
 package org.argeo.suite.ui;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -13,13 +14,10 @@ import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
 import org.argeo.cms.auth.CurrentUser;
-import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
-import org.argeo.cms.ui.util.CmsIcon;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.suite.RankedObject;
 import org.argeo.suite.SuiteUtils;
@@ -29,8 +27,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.framework.wiring.BundleWiring;
 
 /** Side pane listing various perspectives. */
 public class DefaultLeadPane implements CmsUiProvider {
@@ -42,7 +41,9 @@ public class DefaultLeadPane implements CmsUiProvider {
 
 	private Map<String, RankedObject<SuiteLayer>> layers = Collections.synchronizedSortedMap(new TreeMap<>());
 	private List<String> defaultLayers;
-	private List<String> adminLayers;
+	private List<String> adminLayers = new ArrayList<>();
+
+	private ClassLoader l10nClassLoader;
 
 	@Override
 	public Control createUi(Composite parent, Node node) throws RepositoryException {
@@ -110,7 +111,7 @@ public class DefaultLeadPane implements CmsUiProvider {
 					buttonParent = adminLayersC;
 				else
 					buttonParent = appLayersC;
-				Button b = createLayerButton(buttonParent, layerId, title, icon);
+				Button b = SuiteUiUtils.createLayerButton(buttonParent, layerId, title, icon, l10nClassLoader);
 				if (first == null)
 					first = b;
 			}
@@ -118,7 +119,10 @@ public class DefaultLeadPane implements CmsUiProvider {
 		return first;
 	}
 
-	public void init(Map<String, Object> properties) {
+	public void init(BundleContext bundleContext, Map<String, Object> properties) {
+		l10nClassLoader = bundleContext != null ? bundleContext.getBundle().adapt(BundleWiring.class).getClassLoader()
+				: getClass().getClassLoader();
+
 		String[] defaultLayers = (String[]) properties.get(Property.defaultLayers.toString());
 		if (defaultLayers == null)
 			throw new IllegalArgumentException("Default layers must be set.");
@@ -131,6 +135,10 @@ public class DefaultLeadPane implements CmsUiProvider {
 			if (log.isDebugEnabled())
 				log.debug("Admin layers: " + Arrays.asList(adminLayers));
 		}
+	}
+
+	public void destroy(BundleContext bundleContext, Map<String, String> properties) {
+
 	}
 
 	public void addLayer(SuiteLayer layer, Map<String, Object> properties) {
@@ -151,25 +159,25 @@ public class DefaultLeadPane implements CmsUiProvider {
 		}
 	}
 
-	protected Button createLayerButton(Composite parent, String layer, Localized msg, CmsIcon icon) {
-		CmsTheme theme = CmsTheme.getCmsTheme(parent);
-		Button button = new Button(parent, SWT.PUSH);
-		CmsUiUtils.style(button, SuiteStyle.leadPane);
-		if (icon != null)
-			button.setImage(icon.getBigIcon(theme));
-		button.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, false));
-		// button.setToolTipText(msg.lead());
-		if (msg != null) {
-			Label lbl = new Label(parent, SWT.CENTER);
-			CmsUiUtils.style(lbl, SuiteStyle.leadPane);
-			// CmsUiUtils.markup(lbl);
-			ClassLoader l10nClassLoader = getClass().getClassLoader();
-			String txt = LocaleUtils.lead(msg, l10nClassLoader);
-//			String txt = msg.lead();
-			lbl.setText(txt);
-			lbl.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));
-		}
-		CmsUiUtils.sendEventOnSelect(button, SuiteEvent.switchLayer.topic(), SuiteEvent.LAYER, layer);
-		return button;
-	}
+//	protected Button createLayerButton(Composite parent, String layer, Localized msg, CmsIcon icon) {
+//		CmsTheme theme = CmsTheme.getCmsTheme(parent);
+//		Button button = new Button(parent, SWT.PUSH);
+//		CmsUiUtils.style(button, SuiteStyle.leadPane);
+//		if (icon != null)
+//			button.setImage(icon.getBigIcon(theme));
+//		button.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, false));
+//		// button.setToolTipText(msg.lead());
+//		if (msg != null) {
+//			Label lbl = new Label(parent, SWT.CENTER);
+//			CmsUiUtils.style(lbl, SuiteStyle.leadPane);
+//			// CmsUiUtils.markup(lbl);
+//			ClassLoader l10nClassLoader = getClass().getClassLoader();
+//			String txt = LocaleUtils.lead(msg, l10nClassLoader);
+////			String txt = msg.lead();
+//			lbl.setText(txt);
+//			lbl.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));
+//		}
+//		CmsUiUtils.sendEventOnSelect(button, SuiteEvent.switchLayer.topic(), SuiteEvent.LAYER, layer);
+//		return button;
+//	}
 }

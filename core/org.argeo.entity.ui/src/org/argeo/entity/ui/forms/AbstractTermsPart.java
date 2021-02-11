@@ -5,6 +5,7 @@ import javax.jcr.Item;
 import org.argeo.cms.Localized;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.util.CmsIcon;
+import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.EditablePart;
 import org.argeo.cms.ui.widgets.ContextOverlay;
 import org.argeo.cms.ui.widgets.StyledControl;
@@ -15,6 +16,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolItem;
@@ -73,6 +75,14 @@ public abstract class AbstractTermsPart extends StyledControl implements Editabl
 
 	protected void processTermListLabel(Term term, Label label) {
 
+	}
+
+	protected void setControlLayoutData(Control control) {
+		control.setLayoutData(CmsUiUtils.fillAll());
+	}
+
+	protected void setContainerLayoutData(Composite composite) {
+		composite.setLayoutData(CmsUiUtils.fillAll());
 	}
 
 	//

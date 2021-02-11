@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" immediate="false" name="Default Lead Pane">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" immediate="false" name="Default Lead Pane">
    <implementation class="org.argeo.suite.ui.DefaultLeadPane"/>
    <service>
       <provide interface="org.argeo.cms.ui.CmsUiProvider"/>

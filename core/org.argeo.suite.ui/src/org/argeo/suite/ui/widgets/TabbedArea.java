@@ -11,8 +11,8 @@ import org.argeo.cms.ui.viewers.Section;
 import org.argeo.eclipse.ui.Selected;
 import org.argeo.jcr.Jcr;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -40,6 +40,10 @@ public class TabbedArea extends Composite {
 	private String bodyStyle;
 	private Image closeIcon;
 
+	private StackLayout stackLayout;
+
+	private boolean singleTab = false;
+
 	public TabbedArea(Composite parent, int style) {
 		super(parent, style);
 		CmsUiUtils.style(parent, bodyStyle);
@@ -49,25 +53,19 @@ public class TabbedArea extends Composite {
 		// TODO manage tabs at bottom or sides
 		headers = new Composite(this, SWT.NONE);
 		headers.setLayoutData(CmsUiUtils.fillWidth());
-		// CmsUiUtils.style(headers, bodyStyle);
 		body = new Composite(this, SWT.NONE);
 		body.setLayoutData(CmsUiUtils.fillAll());
-		body.setLayout(new FormLayout());
+		// body.setLayout(new FormLayout());
+		stackLayout = new StackLayout();
+		body.setLayout(stackLayout);
 		emptyState();
 	}
 
 	protected void refreshTabHeaders() {
-		// TODO deal with initialisation better
-//		CmsUiUtils.style(body, bodyStyle);
-
-//		int tabCount = sections.size() > 0 ?(sections.size()>1?sections.size()+1:1)  : 1;
 		int tabCount = sections.size() > 0 ? sections.size() : 1;
 		for (Control tab : headers.getChildren())
 			tab.dispose();
 
-//		GridLayout headersGridLayout = new GridLayout(tabCount, true);
-//		headersGridLayout.marginHeight=0;
-//		headers.setLayout(headersGridLayout);
 		headers.setLayout(CmsUiUtils.noSpaceGridLayout(new GridLayout(tabCount, true)));
 
 		if (sections.size() == 0) {
@@ -85,7 +83,7 @@ public class TabbedArea extends Composite {
 			boolean selected = section == currentSection;
 			Composite sectionHeader = section.createHeader(headers);
 			CmsUiUtils.style(sectionHeader, selected ? tabSelectedStyle : tabStyle);
-			int headerColumns = 2;
+			int headerColumns = singleTab ? 1 : 2;
 			sectionHeader.setLayout(new GridLayout(headerColumns, false));
 			sectionHeader.setLayout(CmsUiUtils.noSpaceGridLayout(headerColumns));
 			Button title = new Button(sectionHeader, SWT.FLAT);
@@ -94,24 +92,18 @@ public class TabbedArea extends Composite {
 			title.addSelectionListener((Selected) (e) -> showTab(tabIndex(section.getNode())));
 			Node node = section.getNode();
 			title.setText(Jcr.getTitle(node));
-			ToolBar toolBar = new ToolBar(sectionHeader, SWT.NONE);
-//			CmsUiUtils.style(toolBar, selected ? tabSelectedStyle : tabStyle);
-			ToolItem closeItem = new ToolItem(toolBar, SWT.FLAT);
-			if (closeIcon != null)
-				closeItem.setImage(closeIcon);
-			else
-				closeItem.setText("X");
-			CmsUiUtils.style(closeItem, selected ? tabSelectedStyle : tabStyle);
-			closeItem.addSelectionListener((Selected) (e) -> closeTab(section));
+			if (!singleTab) {
+				ToolBar toolBar = new ToolBar(sectionHeader, SWT.NONE);
+				ToolItem closeItem = new ToolItem(toolBar, SWT.FLAT);
+				if (closeIcon != null)
+					closeItem.setImage(closeIcon);
+				else
+					closeItem.setText("X");
+				CmsUiUtils.style(closeItem, selected ? tabSelectedStyle : tabStyle);
+				closeItem.addSelectionListener((Selected) (e) -> closeTab(section));
+			}
 		}
 
-//		if(sections.size()>1)
-//		{
-//			ToolBar toolBar = new ToolBar(headers, SWT.NONE);
-//			CmsUiUtils.style(toolBar, tabStyle);
-//			ToolItem closeAllItem = new ToolItem(toolBar, SWT.FLAT);
-//			closeAllItem.setText("X");
-//		}
 	}
 
 	public void view(CmsUiProvider uiProvider, Node context) {
@@ -134,23 +126,20 @@ public class TabbedArea extends Composite {
 		}
 		currentUiProvider = uiProvider;
 		section.setNode(context);
-		section.setLayoutData(CmsUiUtils.coverAll());
+		// section.setLayoutData(CmsUiUtils.coverAll());
 		build(section, uiProvider, context);
 		if (sections.size() == 0)
 			sections.add(section);
 		refreshTabHeaders();
+		index = tabIndex(context);
+		showTab(index);
 		layout(true, true);
 	}
 
 	public void open(CmsUiProvider uiProvider, Node context) {
-//		try {
-//			if (openingTimer > 0)
-//				Thread.sleep(openingTimer);
-//		} catch (InterruptedException e) {
-//			// silent
-//		}
+		if (singleTab)
+			throw new UnsupportedOperationException("Open is not supported in single tab mode.");
 
-		// int index = tabIndex(context);
 		if (previousNode != null && Jcr.getIdentifier(previousNode).equals(Jcr.getIdentifier(context))) {
 			// does nothing
 			return;
@@ -161,21 +150,18 @@ public class TabbedArea extends Composite {
 		int currentIndex = sections.indexOf(currentSection);
 		Section previousSection = new Section(body, SWT.NONE, context);
 		build(previousSection, previousUiProvider, previousNode);
-		previousSection.setLayoutData(CmsUiUtils.coverAll());
-//		sections.remove(currentSection);
-		sections.add(currentIndex + 1, previousSection);
-//		sections.add(currentSection);
-//		nextCurrentSection.moveAbove(null);
-//		if (previousNode != null) {
-//			view(previousUiProvider, previousNode);
-//		}
+		// previousSection.setLayoutData(CmsUiUtils.coverAll());
+		int index = currentIndex + 1;
+		sections.add(index, previousSection);
+		showTab(index);
 		refreshTabHeaders();
 		layout(true, true);
 	}
-	
+
 	public void showTab(int index) {
 		Section sectionToShow = sections.get(index);
-		sectionToShow.moveAbove(null);
+		// sectionToShow.moveAbove(null);
+		stackLayout.topControl = sectionToShow;
 		refreshTabHeaders();
 		layout(true, true);
 	}
@@ -223,7 +209,7 @@ public class TabbedArea extends Composite {
 	}
 
 	protected Section getCurrentSection() {
-		return (Section) body.getChildren()[0];
+		return (Section) stackLayout.topControl;
 	}
 
 	public void setTabStyle(String tabStyle) {
@@ -241,4 +227,9 @@ public class TabbedArea extends Composite {
 	public void setCloseIcon(Image closeIcon) {
 		this.closeIcon = closeIcon;
 	}
+
+	public void setSingleTab(boolean singleTab) {
+		this.singleTab = singleTab;
+	}
+
 }
