@@ -72,6 +72,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 	private final boolean flat;
 
+	private boolean showMainTitle = true;
+
 	private Integer maxMediaWidth = null;
 
 	protected AbstractDbkViewer(Section parent, int style, CmsEditable cmsEditable) {
@@ -105,12 +107,15 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			Node node = section.getNode();
 			TextSection textSection = (TextSection) section;
 			if (node.hasNode(DbkType.title.get())) {
-				if (section.getHeader() == null)
-					section.createHeader();
-				Node titleNode = node.getNode(DbkType.title.get());
-				DocBookSectionTitle title = newSectionTitle(textSection, titleNode);
-				title.setLayoutData(CmsUiUtils.fillWidth());
-				updateContent(title);
+				boolean showTitle = getMainSection() == section ? showMainTitle : true;
+				if (showTitle) {
+					if (section.getHeader() == null)
+						section.createHeader();
+					Node titleNode = node.getNode(DbkType.title.get());
+					DocBookSectionTitle title = newSectionTitle(textSection, titleNode);
+					title.setLayoutData(CmsUiUtils.fillWidth());
+					updateContent(title);
+				}
 			}
 
 			for (NodeIterator ni = node.getNodes(); ni.hasNext();) {
@@ -935,6 +940,10 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 	public void setMaxMediaWidth(Integer maxMediaWidth) {
 		this.maxMediaWidth = maxMediaWidth;
+	}
+
+	public void setShowMainTitle(boolean showMainTitle) {
+		this.showMainTitle = showMainTitle;
 	}
 
 	// FILE UPLOAD LISTENER
