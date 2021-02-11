@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 /** An UI layer for the main work area. */
 public interface SuiteLayer extends CmsUiProvider {
 	static enum Property {
-		title, icon, weights, startMaximized;
+		title, icon, weights, startMaximized, singleTab;
 	}
 
 	void view(CmsUiProvider uiProvider, Composite workArea, Node context);
