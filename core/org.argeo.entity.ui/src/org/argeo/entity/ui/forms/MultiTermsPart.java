@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.jcr.Item;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.argeo.cms.ui.forms.FormStyle;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.EditablePart;
@@ -18,7 +20,6 @@ import org.argeo.jcr.Jcr;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -31,6 +32,7 @@ import org.eclipse.swt.widgets.ToolItem;
 /** {@link EditablePart} for multiple terms. */
 public class MultiTermsPart extends AbstractTermsPart {
 	private static final long serialVersionUID = -4961135649177920808L;
+	private final static Log log = LogFactory.getLog(MultiTermsPart.class);
 
 	public MultiTermsPart(Composite parent, int style, Item item, TermsManager termsManager, String typology) {
 		super(parent, style, item, termsManager, typology);
@@ -176,8 +178,12 @@ public class MultiTermsPart extends AbstractTermsPart {
 		List<String> curr = Jcr.getMultiple(getNode(), property);
 		List<Term> res = new ArrayList<>();
 		if (curr != null)
-			for (String str : curr) {
+			terms: for (String str : curr) {
 				Term term = termsManager.getTerm(str);
+				if (term == null) {
+					log.warn("Ignoring term " + str + " as it was not found.");
+					continue terms;
+				}
 				res.add(term);
 			}
 		return res;
