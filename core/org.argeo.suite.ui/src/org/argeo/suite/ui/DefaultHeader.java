@@ -116,7 +116,7 @@ public class DefaultHeader implements CmsUiProvider, ManagedService {
 		}
 	}
 
-	public void destroy() {
+	public void destroy(BundleContext bundleContext, Map<String, String> properties) {
 
 	}
 

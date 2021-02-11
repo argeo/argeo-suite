@@ -101,7 +101,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 		}
 	}
 
-	public void destroy() {
+	public void destroy(BundleContext bundleContext, Map<String, String> properties) {
 		
 	}
 	
