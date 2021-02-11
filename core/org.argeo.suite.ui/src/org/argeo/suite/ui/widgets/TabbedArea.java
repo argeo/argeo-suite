@@ -49,7 +49,6 @@ public class TabbedArea extends Composite {
 		// TODO manage tabs at bottom or sides
 		headers = new Composite(this, SWT.NONE);
 		headers.setLayoutData(CmsUiUtils.fillWidth());
-		// CmsUiUtils.style(headers, bodyStyle);
 		body = new Composite(this, SWT.NONE);
 		body.setLayoutData(CmsUiUtils.fillAll());
 		body.setLayout(new FormLayout());
@@ -57,17 +56,10 @@ public class TabbedArea extends Composite {
 	}
 
 	protected void refreshTabHeaders() {
-		// TODO deal with initialisation better
-//		CmsUiUtils.style(body, bodyStyle);
-
-//		int tabCount = sections.size() > 0 ?(sections.size()>1?sections.size()+1:1)  : 1;
 		int tabCount = sections.size() > 0 ? sections.size() : 1;
 		for (Control tab : headers.getChildren())
 			tab.dispose();
 
-//		GridLayout headersGridLayout = new GridLayout(tabCount, true);
-//		headersGridLayout.marginHeight=0;
-//		headers.setLayout(headersGridLayout);
 		headers.setLayout(CmsUiUtils.noSpaceGridLayout(new GridLayout(tabCount, true)));
 
 		if (sections.size() == 0) {
@@ -95,7 +87,6 @@ public class TabbedArea extends Composite {
 			Node node = section.getNode();
 			title.setText(Jcr.getTitle(node));
 			ToolBar toolBar = new ToolBar(sectionHeader, SWT.NONE);
-//			CmsUiUtils.style(toolBar, selected ? tabSelectedStyle : tabStyle);
 			ToolItem closeItem = new ToolItem(toolBar, SWT.FLAT);
 			if (closeIcon != null)
 				closeItem.setImage(closeIcon);
@@ -105,13 +96,6 @@ public class TabbedArea extends Composite {
 			closeItem.addSelectionListener((Selected) (e) -> closeTab(section));
 		}
 
-//		if(sections.size()>1)
-//		{
-//			ToolBar toolBar = new ToolBar(headers, SWT.NONE);
-//			CmsUiUtils.style(toolBar, tabStyle);
-//			ToolItem closeAllItem = new ToolItem(toolBar, SWT.FLAT);
-//			closeAllItem.setText("X");
-//		}
 	}
 
 	public void view(CmsUiProvider uiProvider, Node context) {
@@ -143,14 +127,6 @@ public class TabbedArea extends Composite {
 	}
 
 	public void open(CmsUiProvider uiProvider, Node context) {
-//		try {
-//			if (openingTimer > 0)
-//				Thread.sleep(openingTimer);
-//		} catch (InterruptedException e) {
-//			// silent
-//		}
-
-		// int index = tabIndex(context);
 		if (previousNode != null && Jcr.getIdentifier(previousNode).equals(Jcr.getIdentifier(context))) {
 			// does nothing
 			return;
@@ -162,13 +138,7 @@ public class TabbedArea extends Composite {
 		Section previousSection = new Section(body, SWT.NONE, context);
 		build(previousSection, previousUiProvider, previousNode);
 		previousSection.setLayoutData(CmsUiUtils.coverAll());
-//		sections.remove(currentSection);
 		sections.add(currentIndex + 1, previousSection);
-//		sections.add(currentSection);
-//		nextCurrentSection.moveAbove(null);
-//		if (previousNode != null) {
-//			view(previousUiProvider, previousNode);
-//		}
 		refreshTabHeaders();
 		layout(true, true);
 	}
