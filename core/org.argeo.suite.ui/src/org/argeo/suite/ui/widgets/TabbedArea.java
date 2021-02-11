@@ -209,7 +209,7 @@ public class TabbedArea extends Composite {
 	}
 
 	protected Section getCurrentSection() {
-		return (Section) body.getChildren()[0];
+		return (Section) stackLayout.topControl;
 	}
 
 	public void setTabStyle(String tabStyle) {
