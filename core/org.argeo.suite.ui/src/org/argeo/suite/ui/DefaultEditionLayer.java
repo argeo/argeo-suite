@@ -27,6 +27,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 	private CmsUiProvider workArea;
 	private List<String> weights = new ArrayList<>();
 	private boolean startMaximized = false;
+	private boolean singleTab = false;
 	private Localized title = null;
 
 	@Override
@@ -77,6 +78,8 @@ public class DefaultEditionLayer implements SuiteLayer {
 		weights = LangUtils.toStringList(properties.get(Property.weights.name()));
 		startMaximized = properties.containsKey(Property.startMaximized.name())
 				&& "true".equals(properties.get(Property.startMaximized.name()));
+		singleTab = properties.containsKey(Property.singleTab.name())
+				&& "true".equals(properties.get(Property.singleTab.name()));
 
 		String titleStr = (String) properties.get(SuiteLayer.Property.title.name());
 		if (titleStr != null) {
@@ -115,6 +118,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 
 	TabbedArea createTabbedArea(Composite parent, CmsTheme theme) {
 		TabbedArea tabbedArea = new TabbedArea(parent, SWT.NONE);
+		tabbedArea.setSingleTab(singleTab);
 		tabbedArea.setBodyStyle(SuiteStyle.mainTabBody.style());
 		tabbedArea.setTabStyle(SuiteStyle.mainTab.style());
 		tabbedArea.setTabSelectedStyle(SuiteStyle.mainTabSelected.style());
