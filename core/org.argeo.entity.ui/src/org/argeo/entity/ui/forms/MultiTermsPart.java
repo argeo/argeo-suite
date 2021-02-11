@@ -41,7 +41,9 @@ public class MultiTermsPart extends AbstractTermsPart {
 	@Override
 	protected Control createControl(Composite box, String style) {
 		Composite placeholder = new Composite(box, SWT.NONE);
-		RowLayout rl = new RowLayout(SWT.HORIZONTAL);
+
+		boolean vertical = SWT.VERTICAL == (getStyle() & SWT.VERTICAL);
+		RowLayout rl = new RowLayout(vertical ? SWT.VERTICAL : SWT.HORIZONTAL);
 		rl.wrap = true;
 		placeholder.setLayout(rl);
 		List<Term> currentValue = getValue();
