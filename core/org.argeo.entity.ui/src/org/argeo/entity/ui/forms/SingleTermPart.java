@@ -101,17 +101,20 @@ public class SingleTermPart extends AbstractTermsPart {
 				String display = getTermLabel(currentValue);
 				lbl.setText(display);
 				CmsUiUtils.style(lbl, style == null ? FormStyle.propertyText.style() : style);
-
-				lbl.addMouseListener((MouseDoubleClick) (e) -> {
-					startEditing();
-				});
+				if (isEditable()) {
+					lbl.addMouseListener((MouseDoubleClick) (e) -> {
+						startEditing();
+					});
+				}
 			} else {
-				ToolBar toolBar = new ToolBar(block, SWT.HORIZONTAL);
-				ToolItem addItem = new ToolItem(toolBar, SWT.FLAT);
-				styleAdd(addItem);
-				addItem.addSelectionListener((Selected) (e) -> {
-					startEditing();
-				});
+				if (isEditable()) {
+					ToolBar toolBar = new ToolBar(block, SWT.HORIZONTAL);
+					ToolItem addItem = new ToolItem(toolBar, SWT.FLAT);
+					styleAdd(addItem);
+					addItem.addSelectionListener((Selected) (e) -> {
+						startEditing();
+					});
+				}
 			}
 			return block;
 		}
