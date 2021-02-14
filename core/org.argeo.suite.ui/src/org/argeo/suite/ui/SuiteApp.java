@@ -175,7 +175,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 					state = null;
 				CmsSession cmsSession = cmsView.getCmsSession();
 				if (ui.getUserDir() == null) {
-					if (cmsView.isAnonymous()) {
+					// FIXME NPE on CMSSession when logging in from anonymous
+					if (cmsSession==null || cmsView.isAnonymous()) {
 						assert publicBasePath != null;
 						ui.initSessions(getRepository(), publicBasePath);
 					} else {
