@@ -1,8 +1,6 @@
 package org.argeo.suite.ui;
 
-import java.util.Dictionary;
 import java.util.Map;
-import java.util.TreeMap;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -13,7 +11,6 @@ import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsUiUtils;
-import org.argeo.util.LangUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -25,14 +22,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.wiring.BundleWiring;
-import org.osgi.service.cm.ConfigurationException;
-import org.osgi.service.cm.ManagedService;
 
-/** HEader of a standard Argeo Suite application. */
-public class DefaultHeader implements CmsUiProvider, ManagedService {
+/** Header of a standard Argeo Suite application. */
+public class DefaultHeader implements CmsUiProvider {
 	public final static String TITLE_PROPERTY = "argeo.suite.ui.header.title";
-	private Map<String, String> properties;
-
 	private Localized title = null;
 
 	@Override
@@ -92,7 +85,6 @@ public class DefaultHeader implements CmsUiProvider, ManagedService {
 	}
 
 	public void init(BundleContext bundleContext, Map<String, String> properties) {
-		this.properties = new TreeMap<>(properties);
 		String titleStr = (String) properties.get(TITLE_PROPERTY);
 		if (titleStr != null) {
 			if (titleStr.startsWith("%")) {
@@ -118,12 +110,6 @@ public class DefaultHeader implements CmsUiProvider, ManagedService {
 
 	public void destroy(BundleContext bundleContext, Map<String, String> properties) {
 
-	}
-
-	@Override
-	public void updated(Dictionary<String, ?> properties) throws ConfigurationException {
-		if (properties != null)
-			this.properties.putAll(LangUtils.dictToStringMap(properties));
 	}
 
 	public Localized getTitle() {

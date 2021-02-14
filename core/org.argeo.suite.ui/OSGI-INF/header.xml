@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" immediate="false" name="Default Work Header">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" immediate="false" name="Default Suite Header">
    <implementation class="org.argeo.suite.ui.DefaultHeader"/>
    <service>
       <provide interface="org.argeo.cms.ui.CmsUiProvider"/>
-      <provide interface="org.osgi.service.cm.ManagedService"/>
    </service>
    <properties entry="config/header.properties"/>
 </scr:component>

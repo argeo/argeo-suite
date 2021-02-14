@@ -26,6 +26,7 @@ class SuiteUi extends Composite {
 
 	private Localized title;
 	private Composite header;
+	private Composite footer;
 	private Composite belowHeader;
 	private Composite leadPane;
 	private Composite dynamicArea;
@@ -52,6 +53,11 @@ class SuiteUi extends Composite {
 
 		belowHeader = new Composite(this, SWT.NONE);
 		belowHeader.setLayoutData(CmsUiUtils.fillAll());
+
+		footer = new Composite(this, SWT.NONE);
+		footer.setLayout(CmsUiUtils.noSpaceGridLayout());
+		CmsUiUtils.style(header, SuiteStyle.header);
+		footer.setLayoutData(CmsUiUtils.fillWidth());
 	}
 
 	public void refreshBelowHeader(boolean initApp) {
@@ -179,6 +185,10 @@ class SuiteUi extends Composite {
 
 	Composite getHeader() {
 		return header;
+	}
+
+	Composite getFooter() {
+		return footer;
 	}
 
 	Composite getLeadPane() {

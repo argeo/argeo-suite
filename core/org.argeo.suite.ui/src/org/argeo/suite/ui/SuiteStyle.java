@@ -4,15 +4,17 @@ import org.argeo.cms.ui.util.CmsStyle;
 
 /** Styles used by Argeo Suite work UI. */
 public enum SuiteStyle implements CmsStyle {
-	// Header
+	// header
 	header, headerTitle, headerMenu, headerMenuItem,
-	// Recent items
+	// footer
+	footer,
+	// recent items
 	recentItems,
-	// Lead pane
+	// lead pane
 	leadPane, leadPaneItem, leadPaneSectionTitle, leadPaneSubSectionTitle,
-	// Group composite
+	// group composite
 	titleContainer, titleLabel, subTitleLabel, formLine, formColumn, navigationBar, navigationTitle, navigationButton,
-	// Forms elements
+	// forms elements
 	simpleLabel, simpleText, simpleInput,
 	// table
 	titleCell,
@@ -20,7 +22,7 @@ public enum SuiteStyle implements CmsStyle {
 	workArea,
 	// tabbed area
 	mainTabBody, mainTabSelected, mainTab,
-	// Buttons
+	// buttons
 	inlineButton;
 
 	@Override

@@ -60,6 +60,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	private String pidPrefix;
 	private String headerPid;
+	private String footerPid;
 	private String leadPanePid;
 	private String loginScreenPid;
 
@@ -99,6 +100,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			throw new IllegalArgumentException("PID prefix must be set.");
 
 		headerPid = pidPrefix + "header";
+		footerPid = pidPrefix + "footer";
 		leadPanePid = pidPrefix + "leadPane";
 		loginScreenPid = pidPrefix + "loginScreen";
 	}
@@ -151,6 +153,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			SuiteUi ui = (SuiteUi) parent;
 			CmsView cmsView = CmsView.getCmsView(parent);
 			CmsUiProvider headerUiProvider = findUiProvider(headerPid);
+			CmsUiProvider footerUiProvider = findUiProvider(footerPid);
 			Localized appTitle = null;
 			if (headerUiProvider instanceof DefaultHeader) {
 				appTitle = ((DefaultHeader) headerUiProvider).getTitle();
@@ -159,9 +162,12 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 			if (cmsView.isAnonymous() && publicBasePath == null) {// internal app, must login
 				ui.logout();
-				refreshPart(headerUiProvider, ui.getHeader(), context);
+				if (headerUiProvider != null)
+					refreshPart(headerUiProvider, ui.getHeader(), context);
 				ui.refreshBelowHeader(false);
 				refreshPart(findUiProvider(loginScreenPid), ui.getBelowHeader(), context);
+				if (footerUiProvider != null)
+					refreshPart(footerUiProvider, ui.getFooter(), context);
 				ui.layout(true, true);
 				setState(ui, LOGIN);
 			} else {
@@ -188,13 +194,16 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				if (context == null)
 					context = ui.getUserDir();
 
-				refreshPart(headerUiProvider, ui.getHeader(), context);
+				if (headerUiProvider != null)
+					refreshPart(headerUiProvider, ui.getHeader(), context);
 				ui.refreshBelowHeader(true);
 				for (String key : layersByPid.keySet()) {
 					SuiteLayer layer = layersByPid.get(key).get();
 					ui.addLayer(key, layer);
 				}
 				refreshPart(findUiProvider(leadPanePid), ui.getLeadPane(), context);
+				if (footerUiProvider != null)
+					refreshPart(footerUiProvider, ui.getFooter(), context);
 				ui.layout(true, true);
 				setState(parent, state != null ? state : defaultLayerPid);
 			}
@@ -219,13 +228,13 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	private CmsUiProvider findUiProvider(String pid) {
 		if (!uiProvidersByPid.containsKey(pid))
-			throw new IllegalArgumentException("No UI provider registered as " + pid);
+			return null;
 		return uiProvidersByPid.get(pid).get();
 	}
 
 	private SuiteLayer findLayer(String pid) {
 		if (!layersByPid.containsKey(pid))
-			throw new IllegalArgumentException("No UI provider registered as " + pid);
+			return null;
 		return layersByPid.get(pid).get();
 	}
 
