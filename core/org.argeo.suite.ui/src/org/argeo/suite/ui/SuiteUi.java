@@ -56,7 +56,7 @@ class SuiteUi extends Composite {
 
 		footer = new Composite(this, SWT.NONE);
 		footer.setLayout(CmsUiUtils.noSpaceGridLayout());
-		CmsUiUtils.style(header, SuiteStyle.header);
+		CmsUiUtils.style(footer, SuiteStyle.footer);
 		footer.setLayoutData(CmsUiUtils.fillWidth());
 	}
 
