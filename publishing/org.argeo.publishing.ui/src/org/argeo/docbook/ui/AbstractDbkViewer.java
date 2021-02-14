@@ -75,6 +75,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 	private boolean showMainTitle = true;
 
 	private Integer maxMediaWidth = null;
+	private String defaultSectionStyle;
 
 	protected AbstractDbkViewer(Section parent, int style, CmsEditable cmsEditable) {
 		super(parent, style, cmsEditable);
@@ -106,6 +107,11 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			CmsUiUtils.clear(section);
 			Node node = section.getNode();
 			TextSection textSection = (TextSection) section;
+			String style = node.hasProperty(DbkAttr.role.name()) ? node.getProperty(DbkAttr.role.name()).getString()
+					: getDefaultSectionStyle();
+			if (style != null)
+				CmsUiUtils.style(textSection, style);
+
 			if (node.hasNode(DbkType.title.get())) {
 				boolean showTitle = getMainSection() == section ? showMainTitle : true;
 				if (showTitle) {
@@ -143,7 +149,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			for (NodeIterator ni = section.getNode().getNodes(DbkType.section.get()); ni.hasNext();) {
 				Node child = ni.nextNode();
 				if (isDbk(child, DbkType.section)) {
-					TextSection newSection = new TextSection(section, SWT.NONE, child);
+					TextSection newSection = newTextSection(section, child);
 					newSection.setLayoutData(CmsUiUtils.fillWidth());
 					refresh(newSection);
 				}
@@ -153,6 +159,11 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				refresh(s);
 		}
 		// section.layout(true, true);
+	}
+
+	/** To be overridden in order to provide additional SectionPart types */
+	protected TextSection newTextSection(Section section, Node node) {
+		return new TextSection(section, SWT.NONE, node);
 	}
 
 	/** To be overridden in order to provide additional SectionPart types */
@@ -944,6 +955,14 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 	public void setShowMainTitle(boolean showMainTitle) {
 		this.showMainTitle = showMainTitle;
+	}
+
+	public String getDefaultSectionStyle() {
+		return defaultSectionStyle;
+	}
+
+	public void setDefaultSectionStyle(String defaultSectionStyle) {
+		this.defaultSectionStyle = defaultSectionStyle;
 	}
 
 	// FILE UPLOAD LISTENER

@@ -91,7 +91,9 @@ public class TabbedArea extends Composite {
 			title.setLayoutData(CmsUiUtils.fillWidth());
 			title.addSelectionListener((Selected) (e) -> showTab(tabIndex(section.getNode())));
 			Node node = section.getNode();
-			title.setText(Jcr.getTitle(node));
+			String titleStr = Jcr.getTitle(node);
+			// TODO internationalize
+			title.setText(titleStr);
 			if (!singleTab) {
 				ToolBar toolBar = new ToolBar(sectionHeader, SWT.NONE);
 				ToolItem closeItem = new ToolItem(toolBar, SWT.FLAT);

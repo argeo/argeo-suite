@@ -27,7 +27,7 @@ public abstract class AbstractTermsPart extends StyledControl implements Editabl
 	protected final TermsManager termsManager;
 	protected final Typology typology;
 
-	protected final boolean editable;
+	private final boolean editable;
 
 	private CmsIcon deleteIcon;
 	private CmsIcon addIcon;
@@ -37,7 +37,7 @@ public abstract class AbstractTermsPart extends StyledControl implements Editabl
 	private Composite highlight;
 
 	protected final CmsTheme theme;
-
+	
 	public AbstractTermsPart(Composite parent, int style, Item item, TermsManager termsManager, String typology) {
 		super(parent, style, item);
 		if (item == null)
@@ -47,6 +47,10 @@ public abstract class AbstractTermsPart extends StyledControl implements Editabl
 		this.theme = CmsTheme.getCmsTheme(parent);
 		editable = !(SWT.READ_ONLY == (style & SWT.READ_ONLY));
 		highlightColor = parent.getDisplay().getSystemColor(SWT.COLOR_GRAY);
+	}
+
+	public boolean isEditable() {
+		return editable;
 	}
 
 	protected void createHighlight(Composite block) {

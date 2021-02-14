@@ -105,9 +105,9 @@ public class DefaultEditionLayer implements SuiteLayer {
 	}
 
 	public void destroy(BundleContext bundleContext, Map<String, String> properties) {
-		
+
 	}
-	
+
 	public void setEntryArea(CmsUiProvider entryArea) {
 		this.entryArea = entryArea;
 	}
@@ -159,7 +159,11 @@ public class DefaultEditionLayer implements SuiteLayer {
 			}
 			if (startMaximized)
 				setMaximizedControl(editorArea);
-			editorArea.setLayout(new GridLayout());
+			GridLayout editorAreaLayout = new GridLayout();
+			editorAreaLayout.verticalSpacing = 0;
+			editorAreaLayout.marginBottom = 0;
+			editorAreaLayout.marginHeight = 0;
+			editorArea.setLayout(editorAreaLayout);
 
 			if (DefaultEditionLayer.this.workArea == null) {
 				tabbedArea = createTabbedArea(editorArea, theme);

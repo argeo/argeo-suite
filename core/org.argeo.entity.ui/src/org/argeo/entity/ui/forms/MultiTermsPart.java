@@ -55,7 +55,8 @@ public class MultiTermsPart extends AbstractTermsPart {
 				String display = getTermLabel(value);
 				lbl.setText(display);
 				CmsUiUtils.style(lbl, style == null ? FormStyle.propertyText.style() : style);
-				if (editable)
+				processTermListLabel(value, lbl);
+				if (isEditable())
 					lbl.addMouseListener((MouseDoubleClick) (e) -> {
 						startEditing();
 					});
@@ -79,7 +80,7 @@ public class MultiTermsPart extends AbstractTermsPart {
 				}
 			}
 		else {// empty
-			if (editable && !isEditing()) {
+			if (isEditable() && !isEditing()) {
 				ToolBar toolBar = new ToolBar(placeholder, SWT.HORIZONTAL);
 				ToolItem addItem = new ToolItem(toolBar, SWT.FLAT);
 				styleAdd(addItem);
