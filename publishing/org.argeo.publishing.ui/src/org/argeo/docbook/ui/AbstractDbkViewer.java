@@ -149,7 +149,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			for (NodeIterator ni = section.getNode().getNodes(DbkType.section.get()); ni.hasNext();) {
 				Node child = ni.nextNode();
 				if (isDbk(child, DbkType.section)) {
-					TextSection newSection = new TextSection(section, SWT.NONE, child);
+					TextSection newSection = newTextSection(section, child);
 					newSection.setLayoutData(CmsUiUtils.fillWidth());
 					refresh(newSection);
 				}
@@ -159,6 +159,11 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				refresh(s);
 		}
 		// section.layout(true, true);
+	}
+
+	/** To be overridden in order to provide additional SectionPart types */
+	protected TextSection newTextSection(Section section, Node node) {
+		return new TextSection(section, SWT.NONE, node);
 	}
 
 	/** To be overridden in order to provide additional SectionPart types */

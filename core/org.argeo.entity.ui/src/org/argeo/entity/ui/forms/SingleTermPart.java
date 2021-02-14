@@ -101,6 +101,7 @@ public class SingleTermPart extends AbstractTermsPart {
 				String display = getTermLabel(currentValue);
 				lbl.setText(display);
 				CmsUiUtils.style(lbl, style == null ? FormStyle.propertyText.style() : style);
+				processTermListLabel(currentValue, lbl);
 				if (isEditable()) {
 					lbl.addMouseListener((MouseDoubleClick) (e) -> {
 						startEditing();

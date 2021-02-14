@@ -55,6 +55,7 @@ public class MultiTermsPart extends AbstractTermsPart {
 				String display = getTermLabel(value);
 				lbl.setText(display);
 				CmsUiUtils.style(lbl, style == null ? FormStyle.propertyText.style() : style);
+				processTermListLabel(value, lbl);
 				if (isEditable())
 					lbl.addMouseListener((MouseDoubleClick) (e) -> {
 						startEditing();
