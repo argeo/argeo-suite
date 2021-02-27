@@ -59,15 +59,20 @@ public class DefaultLeadPane implements CmsUiProvider {
 		appLayersC.setLayout(layout);
 		appLayersC.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false));
 
-		Composite adminLayersC = new Composite(parent, SWT.NONE);
-		CmsUiUtils.style(adminLayersC, SuiteStyle.leadPane);
-		GridLayout adminLayout = new GridLayout();
-		adminLayout.verticalSpacing = 10;
-		adminLayout.marginBottom = 10;
-		adminLayout.marginLeft = 10;
-		adminLayout.marginRight = 10;
-		adminLayersC.setLayout(adminLayout);
-		adminLayersC.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, true));
+		Composite adminLayersC;
+		if (!adminLayers.isEmpty()) {
+			adminLayersC = new Composite(parent, SWT.NONE);
+			CmsUiUtils.style(adminLayersC, SuiteStyle.leadPane);
+			GridLayout adminLayout = new GridLayout();
+			adminLayout.verticalSpacing = 10;
+			adminLayout.marginBottom = 10;
+			adminLayout.marginLeft = 10;
+			adminLayout.marginRight = 10;
+			adminLayersC.setLayout(adminLayout);
+			adminLayersC.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, true));
+		} else {
+			adminLayersC = null;
+		}
 
 //		boolean isAdmin = cmsView.doAs(() -> CurrentUser.isInRole(NodeConstants.ROLE_USER_ADMIN));
 		Set<String> userRoles = cmsView.doAs(() -> CurrentUser.roles());
