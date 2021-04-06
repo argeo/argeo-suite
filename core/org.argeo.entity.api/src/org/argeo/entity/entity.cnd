@@ -43,7 +43,7 @@ mixin
 
 [entity:term]
 orderable
-- name (NAME) m
+- name (NAME)
 - * (*)
 + term (entity:term) = entity:term *
 
