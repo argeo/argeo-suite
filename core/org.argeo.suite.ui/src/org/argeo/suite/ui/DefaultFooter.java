@@ -8,6 +8,7 @@ import javax.jcr.RepositoryException;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.osgi.framework.BundleContext;
@@ -18,6 +19,7 @@ public class DefaultFooter implements CmsUiProvider {
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
 		parent.setLayout(CmsUiUtils.noSpaceGridLayout());
 		Composite content = new Composite(parent, SWT.NONE);
+		content.setLayoutData(new GridData(0, 0));
 		Control contentControl = createContent(content, context);
 
 		// TODO support and guarantee
