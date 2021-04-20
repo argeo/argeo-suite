@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.argeo.suite</groupId>
 		<artifactId>core</artifactId>
-		<version>2.1.22-SNAPSHOT</version>
+		<version>2.1.22</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>org.argeo.suite.ui</artifactId>
@@ -14,12 +14,12 @@
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.suite.core</artifactId>
-			<version>2.1.22-SNAPSHOT</version>
+			<version>2.1.22</version>
 		</dependency>
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.entity.ui</artifactId>
-			<version>2.1.22-SNAPSHOT</version>
+			<version>2.1.22</version>
 		</dependency>
 
 		<!-- Argeo Commons -->
