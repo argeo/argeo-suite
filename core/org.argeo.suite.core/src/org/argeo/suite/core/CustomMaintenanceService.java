@@ -36,6 +36,7 @@ public abstract class CustomMaintenanceService extends AbstractMaintenanceServic
 			for (String terms : typologies) {
 				loadTerms(termsBase, terms);
 			}
+			// TODO do not save here, so that upper layers can decide when to save
 			termsBase.getSession().save();
 		}
 	}
@@ -62,6 +63,7 @@ public abstract class CustomMaintenanceService extends AbstractMaintenanceServic
 			}
 			if (log.isDebugEnabled())
 				log.debug("Terms '" + name + "' loaded.");
+			// TODO do not save here, so that upper layers can decide when to save
 			termsBase.getSession().save();
 		} catch (RepositoryException | IOException e) {
 			log.error("Cannot load terms '" + name + "': " + e.getMessage());
