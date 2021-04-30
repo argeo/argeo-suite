@@ -3,10 +3,12 @@ package org.argeo.docbook;
 import static org.argeo.docbook.DbkType.para;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
@@ -149,6 +151,16 @@ public class DbkUtils {
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static void importXml(Node baseNode, InputStream in) throws IOException {
+		try {
+			baseNode.getSession().importXML(baseNode.getPath(), in,
+					ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+		} catch (RepositoryException e) {
+			throw new JcrException("Cannot import XML to " + baseNode, e);
+		}
+
 	}
 
 	/** Singleton. */
