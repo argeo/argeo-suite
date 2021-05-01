@@ -8,3 +8,9 @@ org.eclipse.jface.viewers,\
 org.eclipse.jface.window,\
 org.osgi.framework,\
 *
+
+Service-Component:\
+OSGI-INF/peopleLayer.xml,\
+OSGI-INF/personUiProvider.xml,\
+OSGI-INF/peopleEntryArea.xml
+

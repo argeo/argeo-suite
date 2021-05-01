@@ -8,3 +8,7 @@ org.eclipse.swt,\
 org.eclipse.jface.viewers,\
 org.osgi.framework,\
 *
+
+Service-Component:\
+OSGI-INF/mapLayer.xml,\
+OSGI-INF/overviewMap.xml
