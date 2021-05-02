@@ -32,7 +32,7 @@ class SuiteUi extends Composite {
 	private Composite dynamicArea;
 
 	private Session sysSession;
-//	private Session homeSession;
+	private Session homeSession;
 	private Node userDir;
 
 	private Map<String, SuiteLayer> layers = new HashMap<>();
@@ -205,11 +205,11 @@ class SuiteUi extends Composite {
 //
 	synchronized void initSessions(Repository repository, String userDirPath) throws RepositoryException {
 		this.sysSession = repository.login();
-//		this.homeSession = repository.login(NodeConstants.HOME_WORKSPACE);
+		this.homeSession = repository.login(NodeConstants.HOME_WORKSPACE);
 		userDir = sysSession.getNode(userDirPath);
 		addDisposeListener((e) -> {
 			Jcr.logout(sysSession);
-//			Jcr.logout(homeSession);
+			Jcr.logout(homeSession);
 		});
 	}
 
@@ -226,8 +226,8 @@ class SuiteUi extends Composite {
 			return sysSession;
 		if (NodeConstants.SYS_WORKSPACE.equals(workspaceName))
 			return sysSession;
-//		else if (NodeConstants.HOME_WORKSPACE.equals(workspaceName))
-//			return homeSession;
+		else if (NodeConstants.HOME_WORKSPACE.equals(workspaceName))
+			return homeSession;
 		else
 			throw new IllegalArgumentException("Unknown workspace " + workspaceName);
 	}

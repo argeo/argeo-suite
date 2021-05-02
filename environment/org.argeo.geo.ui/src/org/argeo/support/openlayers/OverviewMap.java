@@ -9,10 +9,7 @@ import javax.jcr.observation.EventIterator;
 import javax.jcr.observation.EventListener;
 import javax.jcr.query.Query;
 
-import org.argeo.api.NodeConstants;
-import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.JcrException;
@@ -45,8 +42,8 @@ public class OverviewMap implements CmsUiProvider {
 							}
 						});
 				}
-			}, Event.PROPERTY_CHANGED | Event.NODE_ADDED | Event.NODE_REMOVED | Event.PROPERTY_ADDED,
-					"/", true, null, nodeTypes, false);
+			}, Event.PROPERTY_CHANGED | Event.NODE_ADDED | Event.NODE_REMOVED | Event.PROPERTY_ADDED, "/", true, null,
+					nodeTypes, false);
 		} catch (RepositoryException e) {
 			throw new IllegalStateException("Cannot add JCR observer", e);
 		}
@@ -56,11 +53,8 @@ public class OverviewMap implements CmsUiProvider {
 
 	protected void refreshUi(Composite parent, Node context) throws RepositoryException {
 		CmsUiUtils.clear(parent);
-		boolean coworker = CmsView.getCmsView(parent).doAs(() -> CurrentUser.isInRole(NodeConstants.ROLE_USER_ADMIN));
 		Query query = context.getSession().getWorkspace().getQueryManager()
-				.createQuery("SELECT * FROM [" + EntityType.local.get() + "] WHERE [entity:type]='"
-						+ EntityType.geopoint.get() + "'",
-						Query.JCR_SQL2);
+				.createQuery("SELECT * FROM [" + EntityType.geopoint.get() + "]", Query.JCR_SQL2);
 		List<Node> geoPoints = JcrUtils.nodeIteratorToList(query.execute().getNodes());
 		OpenLayersMap apafMap = new OpenLayersMap(parent, SWT.NONE, getClass().getResource("map-osm.html"));
 		apafMap.setLayoutData(CmsUiUtils.fillAll());
