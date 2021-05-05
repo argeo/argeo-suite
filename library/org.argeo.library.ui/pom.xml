@@ -7,7 +7,7 @@
 		<version>2.3.1-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>org.argeo.documents.ui</artifactId>
+	<artifactId>org.argeo.library.ui</artifactId>
 	<name>Documents UI</name>
 	<packaging>jar</packaging>
 	<dependencies>

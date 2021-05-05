@@ -1,4 +1,4 @@
-package org.argeo.documents.ui;
+package org.argeo.library.ui;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

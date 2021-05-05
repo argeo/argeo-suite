@@ -6,7 +6,7 @@
    </service>
    <properties entry="config/leadPane.properties"/>
    <property name="defaultLayers" type="String">argeo.suite.ui.dashboardLayer
-argeo.documents.ui.documentsLayer
+argeo.library.ui.contentLayer
 argeo.people.ui.peopleLayer
 argeo.geo.ui.mapLayer
    </property>

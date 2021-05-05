@@ -1,4 +1,4 @@
-package org.argeo.documents.ui;
+package org.argeo.library.ui;
 
 import java.io.IOException;
 import java.io.InputStream;

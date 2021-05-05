@@ -1,4 +1,4 @@
-package org.argeo.documents.ui;
+package org.argeo.library.ui;
 
 import static org.argeo.cms.ui.dialogs.CmsMessageDialog.openConfirm;
 import static org.argeo.cms.ui.dialogs.CmsMessageDialog.openError;

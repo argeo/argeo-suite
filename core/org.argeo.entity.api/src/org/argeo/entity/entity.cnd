@@ -36,6 +36,12 @@ mixin
 //+ * (entity:composite)
 
 //
+// STRUCTURE
+//
+[entity:space]
+mixin
+
+//
 // TYPOLOGY
 //
 [entity:typologies]

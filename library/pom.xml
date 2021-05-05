@@ -11,6 +11,6 @@
 	<name>Argeo Library Components</name>
 	<packaging>pom</packaging>
 	<modules>
-		<module>org.argeo.documents.ui</module>
+		<module>org.argeo.library.ui</module>
 	</modules>
 </project>

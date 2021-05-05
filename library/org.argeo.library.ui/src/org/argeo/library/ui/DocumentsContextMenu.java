@@ -1,12 +1,12 @@
-package org.argeo.documents.ui;
+package org.argeo.library.ui;
 
-import static org.argeo.documents.ui.DocumentsUiService.ACTION_ID_BOOKMARK_FOLDER;
-import static org.argeo.documents.ui.DocumentsUiService.ACTION_ID_CREATE_FOLDER;
-import static org.argeo.documents.ui.DocumentsUiService.ACTION_ID_DELETE;
-import static org.argeo.documents.ui.DocumentsUiService.ACTION_ID_DOWNLOAD_FOLDER;
-import static org.argeo.documents.ui.DocumentsUiService.ACTION_ID_RENAME;
-import static org.argeo.documents.ui.DocumentsUiService.ACTION_ID_SHARE_FOLDER;
-import static org.argeo.documents.ui.DocumentsUiService.ACTION_ID_UPLOAD_FILE;
+import static org.argeo.library.ui.DocumentsUiService.ACTION_ID_BOOKMARK_FOLDER;
+import static org.argeo.library.ui.DocumentsUiService.ACTION_ID_CREATE_FOLDER;
+import static org.argeo.library.ui.DocumentsUiService.ACTION_ID_DELETE;
+import static org.argeo.library.ui.DocumentsUiService.ACTION_ID_DOWNLOAD_FOLDER;
+import static org.argeo.library.ui.DocumentsUiService.ACTION_ID_RENAME;
+import static org.argeo.library.ui.DocumentsUiService.ACTION_ID_SHARE_FOLDER;
+import static org.argeo.library.ui.DocumentsUiService.ACTION_ID_UPLOAD_FILE;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

@@ -1,10 +1,12 @@
 Service-Component:\
-OSGI-INF/entryArea.xml,\
-OSGI-INF/documentsLayer.xml,\
+OSGI-INF/contentEntryArea.xml,\
+OSGI-INF/fsEntryArea.xml,\
+OSGI-INF/contentLayer.xml,\
 OSGI-INF/documentsFolder.xml
 
 Import-Package:\
 org.eclipse.swt,\
+javax.jcr.nodetype,\
 org.argeo.api,\
 org.argeo.suite.ui,\
 *
