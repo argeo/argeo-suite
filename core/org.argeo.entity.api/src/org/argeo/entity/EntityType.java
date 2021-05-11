@@ -5,7 +5,7 @@ public enum EntityType implements JcrName {
 	// entity
 	entity, local, relatedTo,
 	// structure
-	space,
+	space, document,
 	// typology
 	typologies, terms, term,
 	// form

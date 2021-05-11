@@ -41,6 +41,9 @@ mixin
 [entity:space]
 mixin
 
+[entity:document]
+mixin
+
 //
 // TYPOLOGY
 //
