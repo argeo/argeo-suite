@@ -67,7 +67,7 @@
 		<!-- Argeo Library -->
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.documents.ui</artifactId>
+			<artifactId>org.argeo.library.ui</artifactId>
 			<version>2.3.1-SNAPSHOT</version>
 		</dependency>
 
