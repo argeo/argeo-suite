@@ -37,6 +37,7 @@ import org.argeo.entity.EntityConstants;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
+import org.argeo.jcr.JcrException;
 import org.argeo.suite.RankedObject;
 import org.argeo.suite.SuiteUtils;
 import org.argeo.util.LangUtils;
@@ -176,7 +177,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				CmsSession cmsSession = cmsView.getCmsSession();
 				if (ui.getUserDir() == null) {
 					// FIXME NPE on CMSSession when logging in from anonymous
-					if (cmsSession==null || cmsView.isAnonymous()) {
+					if (cmsSession == null || cmsView.isAnonymous()) {
 						assert publicBasePath != null;
 						ui.initSessions(getRepository(), publicBasePath);
 					} else {
@@ -245,31 +246,34 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		try {
 			// mixins
 			Set<String> types = new TreeSet<>();
-			for (NodeType nodeType : context.getMixinNodeTypes()) {
-				String typeName = nodeType.getName();
-				if (byType.containsKey(typeName)) {
-					types.add(typeName);
+			for (NodeType mixinType : context.getMixinNodeTypes()) {
+				String mixinTypeName = mixinType.getName();
+				if (byType.containsKey(mixinTypeName)) {
+					types.add(mixinTypeName);
+				}
+				for (NodeType superType : mixinType.getDeclaredSupertypes()) {
+					if (byType.containsKey(superType.getName())) {
+						types.add(superType.getName());
+					}
 				}
 			}
 			// primary node type
-			{
-				NodeType nodeType = context.getPrimaryNodeType();
-				String typeName = nodeType.getName();
-				if (byType.containsKey(typeName)) {
-					types.add(typeName);
-				}
-				for (NodeType mixin : nodeType.getDeclaredSupertypes()) {
-					if (byType.containsKey(mixin.getName())) {
-						types.add(mixin.getName());
-					}
+			NodeType primaryType = context.getPrimaryNodeType();
+			String primaryTypeName = primaryType.getName();
+			if (byType.containsKey(primaryTypeName)) {
+				types.add(primaryTypeName);
+			}
+			for (NodeType superType : primaryType.getDeclaredSupertypes()) {
+				if (byType.containsKey(superType.getName())) {
+					types.add(superType.getName());
 				}
 			}
 			// entity type
 			if (context.isNodeType(EntityType.entity.get())) {
 				if (context.hasProperty(EntityNames.ENTITY_TYPE)) {
-					String typeName = context.getProperty(EntityNames.ENTITY_TYPE).getString();
-					if (byType.containsKey(typeName)) {
-						types.add(typeName);
+					String entityTypeName = context.getProperty(EntityNames.ENTITY_TYPE).getString();
+					if (byType.containsKey(entityTypeName)) {
+						types.add(entityTypeName);
 					}
 				}
 			}
@@ -282,13 +286,38 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			}
 
 			if (types.size() == 0)
-				throw new IllegalArgumentException("No type found for " + context);
+				throw new IllegalArgumentException("No type found for " + context + " (" + listTypes(context) + ")");
 			String type = types.iterator().next();
 			if (!byType.containsKey(type))
 				throw new IllegalArgumentException("No component found for " + context + " with type " + type);
 			return byType.get(type).get();
 		} catch (RepositoryException e) {
 			throw new IllegalStateException(e);
+		}
+	}
+
+	private static String listTypes(Node context) {
+		try {
+			StringBuilder sb = new StringBuilder();
+			sb.append(context.getPrimaryNodeType().getName());
+			for (NodeType superType : context.getPrimaryNodeType().getDeclaredSupertypes()) {
+				sb.append(' ');
+				sb.append(superType.getName());
+			}
+
+			for (NodeType nodeType : context.getMixinNodeTypes()) {
+				sb.append(' ');
+				sb.append(nodeType.getName());
+				if (nodeType.getName().equals(EntityType.entity.get()))
+					sb.append('/').append(context.getProperty(EntityNames.ENTITY_TYPE).getString());
+				for (NodeType superType : nodeType.getDeclaredSupertypes()) {
+					sb.append(' ');
+					sb.append(superType.getName());
+				}
+			}
+			return sb.toString();
+		} catch (RepositoryException e) {
+			throw new JcrException(e);
 		}
 	}
 
