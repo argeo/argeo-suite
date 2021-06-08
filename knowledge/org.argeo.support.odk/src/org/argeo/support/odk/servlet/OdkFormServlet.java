@@ -3,6 +3,8 @@ package org.argeo.support.odk.servlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +43,8 @@ public class OdkFormServlet extends HttpServlet {
 		boolean oldApproach = false;
 		try {
 			if (!oldApproach) {
-				session.exportDocumentView(pathInfo + "/" + OdkNames.H_HTML, resp.getOutputStream(), true, false);
+				String path = URLDecoder.decode(pathInfo, StandardCharsets.UTF_8);
+				session.exportDocumentView(path + "/" + OdkNames.H_HTML, resp.getOutputStream(), true, false);
 			} else {
 
 				String fileName = FilenameUtils.getName(pathInfo);
