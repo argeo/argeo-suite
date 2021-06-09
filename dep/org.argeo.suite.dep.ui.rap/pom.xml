@@ -246,7 +246,7 @@
 									<goal>rpm</goal>
 								</goals>
 								<configuration>
-									<name>argeo-suite-ui-rap</name>
+									<name>argeo-suite-ui-rap-unstable</name>
 									<mappings>
 										<mapping>
 											<directory>/usr/share/osgi</directory>
@@ -266,7 +266,7 @@
 									</mappings>
 									<requires>
 										<require>argeo-cms-ui-rap</require>
-										<require>argeo-suite-ui-rap-tp</require>
+										<require>argeo-suite-ui-rap-tp-unstable</require>
 									</requires>
 								</configuration>
 							</execution>
@@ -307,7 +307,7 @@
 									<goal>rpm</goal>
 								</goals>
 								<configuration>
-									<name>argeo-suite-ui-rap-tp</name>
+									<name>argeo-suite-ui-rap-tp-unstable</name>
 									<version>${version.argeo-tp}</version>
 									<release>${maven.build.timestamp}</release>
 									<mappings>

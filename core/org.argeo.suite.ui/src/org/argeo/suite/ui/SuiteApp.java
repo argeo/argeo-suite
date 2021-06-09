@@ -308,7 +308,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			for (NodeType nodeType : context.getMixinNodeTypes()) {
 				sb.append(' ');
 				sb.append(nodeType.getName());
-				if (nodeType.getName().equals(EntityType.entity.get()))
+				if (nodeType.getName().equals(EntityType.local.get()))
 					sb.append('/').append(context.getProperty(EntityNames.ENTITY_TYPE).getString());
 				for (NodeType superType : nodeType.getDeclaredSupertypes()) {
 					sb.append(' ');

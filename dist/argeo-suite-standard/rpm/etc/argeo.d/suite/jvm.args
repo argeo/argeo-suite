@@ -1,0 +1,1 @@
+-Dlog4j.configuration=file:/etc/argeo.d/suite/log4j.properties

@@ -6,9 +6,9 @@
 		<version>2.3.1-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>argeo-suite-demo</artifactId>
+	<artifactId>argeo-suite-standard</artifactId>
 	<packaging>pom</packaging>
-	<name>Argeo Suite Demo</name>
+	<name>Argeo Suite Standard</name>
 	<profiles>
 		<profile>
 			<id>rpmbuild</id>
@@ -25,51 +25,31 @@
 									<goal>rpm</goal>
 								</goals>
 								<configuration>
-									<name>argeo-suite-demo</name>
+									<name>argeo-suite-standard-unstable</name>
 									<mappings>
 										<mapping>
-											<directory>/etc/argeo.d/demo</directory>
+											<directory>/etc/argeo.d/suite</directory>
 											<configuration>noreplace</configuration>
 											<directoryIncluded>false</directoryIncluded>
 											<sources>
 												<source>
-													<location>rpm/etc/argeo.d/demo</location>
+													<location>rpm/etc/argeo.d/suite</location>
 												</source>
 											</sources>
 										</mapping>
 										<mapping>
-											<directory>/etc/argeo.d/demo/init</directory>
+											<directory>/etc/systemd/system/argeo@suite.service.d</directory>
 											<configuration>noreplace</configuration>
 											<directoryIncluded>false</directoryIncluded>
 											<sources>
 												<source>
-													<location>rpm/etc/argeo.d/demo/init</location>
-												</source>
-											</sources>
-										</mapping>
-										<mapping>
-											<directory>/var/lib/argeo.d/demo/state</directory>
-											<configuration>noreplace</configuration>
-											<directoryIncluded>false</directoryIncluded>
-											<sources>
-												<source>
-													<location>rpm/var/lib/argeo.d/demo/state</location>
-												</source>
-											</sources>
-										</mapping>
-										<mapping>
-											<directory>/etc/systemd/system/argeo@demo.service.d</directory>
-											<configuration>noreplace</configuration>
-											<directoryIncluded>false</directoryIncluded>
-											<sources>
-												<source>
-													<location>rpm/etc/systemd/system/argeo@demo.service.d</location>
+													<location>rpm/etc/systemd/system/argeo@suite.service.d</location>
 												</source>
 											</sources>
 										</mapping>
 									</mappings>
 									<requires>
-										<require>argeo-suite-ui-rap</require>
+										<require>argeo-suite-ui-rap-unstable</require>
 									</requires>
 								</configuration>
 							</execution>
