@@ -33,10 +33,6 @@
 			<version>2.3.1-SNAPSHOT</version>
 			<scope>provided</scope>
 			<exclusions>
-				<exclusion>
-					<groupId>org.argeo.tp.apache</groupId>
-					<artifactId>org.apache.xerces</artifactId>
-				</exclusion>
 				<!-- Avoid slf4j implementations lurking in the classpath. -->
 				<exclusion>
 					<groupId>org.argeo.tp.sdk</groupId>

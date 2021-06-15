@@ -109,10 +109,6 @@
 			<groupId>org.argeo.tp.javax</groupId>
 			<artifactId>javax.xml.bind</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.apache</groupId>
-			<artifactId>org.apache.xerces</artifactId>
-		</dependency>
 
 		<!-- Jackson JSON processor -->
 		<dependency>
