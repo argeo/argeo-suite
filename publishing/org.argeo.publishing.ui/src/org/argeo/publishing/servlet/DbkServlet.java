@@ -8,6 +8,9 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.jcr.Node;
 import javax.jcr.Repository;
@@ -33,6 +36,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.io.IOUtils;
 import org.apache.xalan.processor.TransformerFactoryImpl;
 import org.argeo.cms.servlet.ServletAuthUtils;
+import org.argeo.cms.ui.CmsTheme;
 import org.argeo.docbook.DbkUtils;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
@@ -51,20 +55,42 @@ public class DbkServlet extends HttpServlet {
 	private TransformerFactory transformerFactory;
 	private Templates docBoookTemplates;
 
+	private Map<String, CmsTheme> themes = Collections.synchronizedMap(new HashMap<>());
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+		String pathInfo = req.getPathInfo();
+		if (pathInfo.startsWith("//"))
+			pathInfo = pathInfo.substring(1);
+		String path = URLDecoder.decode(pathInfo, StandardCharsets.UTF_8);
+
+		if (path.toLowerCase().endsWith(".css")) {
+			path = path.substring(1);
+			int firstSlash = path.indexOf('/');
+			String themeId = path.substring(0, firstSlash);
+			String cssPath = path.substring(firstSlash);
+			CmsTheme cmsTheme = themes.get(themeId);
+			if (cmsTheme == null)
+				throw new IllegalArgumentException("Theme " + themeId + " not found.");
+			resp.setContentType("text/css");
+			IOUtils.copy(cmsTheme.getResourceAsStream(cssPath), resp.getOutputStream());
+			return;
+		}
 
 		Session session = null;
 		try {
 			session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), req);
-
-			String pathInfo = req.getPathInfo();
-			if (pathInfo.startsWith("//"))
-				pathInfo = pathInfo.substring(1);
-			String path = URLDecoder.decode(pathInfo, StandardCharsets.UTF_8);
-
 			Node node = session.getNode(path);
 			if (DbkUtils.isDbk(node)) {
+				CmsTheme cmsTheme = null;
+				String themeId = req.getParameter("themeId");
+				if (themeId != null) {
+					cmsTheme = themes.get(themeId);
+					if (cmsTheme == null)
+						throw new IllegalArgumentException("Theme " + themeId + " not found.");
+				}
+
 				// TODO customise DocBook so that it outputs UTF-8
 				// see http://www.sagehill.net/docbookxsl/OutputEncoding.html
 				resp.setContentType("text/html; charset=ISO-8859-1");
@@ -92,6 +118,19 @@ public class DbkServlet extends HttpServlet {
 					Source xmlInput = new DOMSource(doc);
 
 					Transformer transformer = docBoookTemplates.newTransformer();
+
+					// gather CSS
+					if (cmsTheme != null) {
+						StringBuilder sb = new StringBuilder();
+						for (String cssPath : cmsTheme.getWebCssPaths()) {
+							sb.append(req.getContextPath()).append(req.getServletPath()).append('/');
+							sb.append(themeId).append('/').append(cssPath).append(' ');
+						}
+						sb.append("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap").append(' ');
+						sb.append("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;1,400&display=swap").append(' ');
+						if (sb.length() > 0)
+							transformer.setParameter("html.stylesheet", sb.toString());
+					}
 					transformer.transform(xmlInput, xmlOutput);
 //				resp.getOutputStream().write(out.toByteArray());
 				} catch (Exception e) {
@@ -158,6 +197,14 @@ public class DbkServlet extends HttpServlet {
 
 	public void setRepository(Repository repository) {
 		this.repository = repository;
+	}
+
+	public void addTheme(CmsTheme theme, Map<String, String> properties) {
+		themes.put(theme.getThemeId(), theme);
+	}
+
+	public void removeTheme(CmsTheme theme, Map<String, String> properties) {
+		themes.remove(theme.getThemeId());
 	}
 
 }

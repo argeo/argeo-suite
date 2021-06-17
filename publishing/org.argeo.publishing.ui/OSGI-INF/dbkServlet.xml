@@ -7,4 +7,5 @@
    <property name="osgi.http.whiteboard.servlet.pattern" type="String" value="/dbk/*"/>
    <property name="osgi.http.whiteboard.context.select" type="String" value="(osgi.http.whiteboard.context.name=htmlServletContext)"/>"/>
    <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="static" target="(cn=ego)"/>
+   <reference bind="addTheme" cardinality="0..n" interface="org.argeo.cms.ui.CmsTheme" name="CmsTheme" policy="dynamic" unbind="removeTheme"/>
 </scr:component>
