@@ -53,6 +53,16 @@ public class DbkUtils {
 		return Jcr.getName(node).equals(type.get());
 	}
 
+	/** Whether this node is a DocBook type. */
+	public static boolean isDbk(Node node) {
+		String name = Jcr.getName(node);
+		for (DbkType type : DbkType.values()) {
+			if (name.equals(type.get()))
+				return true;
+		}
+		return false;
+	}
+
 	public static String getTitle(Node node) {
 		return JcrxApi.getXmlValue(node, DbkType.title.get());
 	}
