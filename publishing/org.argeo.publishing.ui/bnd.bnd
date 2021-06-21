@@ -17,4 +17,5 @@ Service-Component:\
 OSGI-INF/fontsServlet.xml,\
 OSGI-INF/htmlServletContext.xml,\
 OSGI-INF/dbkServlet.xml,\
-OSGI-INF/documentUiProvider.xml
+OSGI-INF/documentUiProvider.xml,\
+OSGI-INF/dbk4Converter.xml
