@@ -3,7 +3,6 @@ package org.argeo.docbook.ui;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import org.argeo.cms.text.TextSection;
 import org.argeo.cms.ui.CmsEditable;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.docbook.DbkUtils;

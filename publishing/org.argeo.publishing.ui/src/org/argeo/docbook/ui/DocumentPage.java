@@ -6,7 +6,6 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 
-import org.argeo.cms.text.TextEditorHeader;
 import org.argeo.cms.ui.CmsEditable;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.util.CmsLink;

@@ -1,4 +1,4 @@
-package org.argeo.cms.text;
+package org.argeo.docbook.ui;
 
 import javax.jcr.Item;
 

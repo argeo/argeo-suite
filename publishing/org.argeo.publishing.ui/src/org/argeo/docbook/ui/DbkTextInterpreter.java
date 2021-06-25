@@ -7,11 +7,9 @@ import static org.argeo.docbook.DbkUtils.isDbk;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.UUID;
 
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Item;
@@ -20,22 +18,13 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.io.IOUtils;
-import org.argeo.cms.text.TextInterpreter;
 import org.argeo.docbook.DbkAttr;
 import org.argeo.docbook.DbkType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
-import org.argeo.jcr.JcrxType;
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 /** Based on HTML with a few Wiki-like shortcuts. */
 public class DbkTextInterpreter implements TextInterpreter {

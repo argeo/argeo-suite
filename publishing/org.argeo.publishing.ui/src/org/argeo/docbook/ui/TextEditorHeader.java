@@ -1,4 +1,4 @@
-package org.argeo.cms.text;
+package org.argeo.docbook.ui;
 
 import java.util.Observable;
 import java.util.Observer;

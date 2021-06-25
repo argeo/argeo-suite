@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.jcr.Node;
 
-import org.argeo.cms.text.Paragraph;
-import org.argeo.cms.text.TextSection;
 import org.argeo.cms.ui.CmsEditable;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.EditablePart;
