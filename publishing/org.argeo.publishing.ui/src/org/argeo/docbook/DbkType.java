@@ -10,6 +10,8 @@ public enum DbkType implements JcrName {
 	//
 	mediaobject, imageobject, imagedata,
 	//
+	link,
+	//
 	;
 
 	@Override

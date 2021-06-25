@@ -7,4 +7,7 @@ public enum DbkAttr {
 	fileref, contentwidth, contentdepth
 	//
 	;
+
+	public final static String XLINK_HREF = "xlink:href";
+
 }
