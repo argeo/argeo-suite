@@ -109,18 +109,27 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			if (style != null)
 				CmsUiUtils.style(textSection, style);
 
+			// Title
+			Node titleNode = null;
+			// We give priority to ./title vs ./info/title, like the DocBook XSL
 			if (node.hasNode(DbkType.title.get())) {
+				titleNode = node.getNode(DbkType.title.get());
+			} else if (node.hasNode(DbkType.info.get() + '/' + DbkType.title.get())) {
+				titleNode = node.getNode(DbkType.info.get() + '/' + DbkType.title.get());
+			}
+
+			if (titleNode != null) {
 				boolean showTitle = getMainSection() == section ? showMainTitle : true;
 				if (showTitle) {
 					if (section.getHeader() == null)
 						section.createHeader();
-					Node titleNode = node.getNode(DbkType.title.get());
 					DocBookSectionTitle title = newSectionTitle(textSection, titleNode);
 					title.setLayoutData(CmsUiUtils.fillWidth());
 					updateContent(title);
 				}
 			}
 
+			// content
 			for (NodeIterator ni = node.getNodes(); ni.hasNext();) {
 				Node child = ni.nextNode();
 				SectionPart sectionPart = null;
@@ -130,13 +139,19 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 //						Node imageDataNode = child.getNode(DbkType.imageobject.get()).getNode(DbkType.imagedata.get());
 //						sectionPart = newImg(textSection, imageDataNode);
 //					}
+				} else if (isDbk(child, DbkType.info)) {
+					// TODO enrich UI based on info
+				} else if (isDbk(child, DbkType.title)) {
+					// already managed
 				} else if (isDbk(child, para)) {
 					sectionPart = newParagraph(textSection, child);
-				} else {
+				} else if (isDbk(child, DbkType.section)) {
 					sectionPart = newSectionPart(textSection, child);
 //					if (sectionPart == null)
 //						throw new IllegalArgumentException("Unsupported node " + child);
 					// TODO list node types in exception
+				} else {
+					throw new IllegalArgumentException("Unsupported node type for "+child);
 				}
 				if (sectionPart != null && sectionPart instanceof Control)
 					((Control) sectionPart).setLayoutData(CmsUiUtils.fillWidth());
@@ -266,7 +281,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			if (title == getEdited())
 				title.setText(textInterpreter.read(title.getNode()));
 			else
-				title.setText(textInterpreter.raw(title.getNode()));
+				title.setText(textInterpreter.readSimpleHtml(title.getNode()));
 		}
 	}
 

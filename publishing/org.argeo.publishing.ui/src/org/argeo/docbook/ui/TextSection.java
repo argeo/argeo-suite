@@ -20,6 +20,8 @@ public class TextSection extends Section {
 
 	private boolean titleReadOnly = false;
 
+	private final int level;
+
 	public TextSection(Composite parent, int style, Node node) {
 		this(parent, findSection(parent), style, node);
 	}
@@ -31,6 +33,11 @@ public class TextSection extends Section {
 	private TextSection(Composite parent, Section parentSection, int style, Node node) {
 		super(parent, parentSection, style, node);
 		flat = SWT.FLAT == (style & SWT.FLAT);
+		if (parentSection instanceof TextSection) {
+			level = ((TextSection) parentSection).getLevel() + 1;
+		} else {
+			level = 0;
+		}
 		// CmsUiUtils.style(this, TextStyles.TEXT_SECTION);
 	}
 
@@ -42,12 +49,18 @@ public class TextSection extends Section {
 		return flat;
 	}
 
+	/** The level of this section, similar to h1, h2, etc. in HTML. */
+	public int getLevel() {
+		return level;
+	}
+
 	public String getTitleStyle() {
 		if (titleStyle != null)
 			return titleStyle;
 		// TODO make base H styles configurable
-		Integer relativeDepth = getRelativeDepth();
-		return relativeDepth == 0 ? TextStyles.TEXT_TITLE : TextStyles.TEXT_H + relativeDepth;
+//		Integer relativeDepth = getRelativeDepth();
+//		System.out.println("Level: "+getLevel());
+		return getLevel() == 0 ? TextStyles.TEXT_TITLE : "h" + getLevel();
 	}
 
 	public void setDefaultTextStyle(String defaultTextStyle) {
@@ -64,5 +77,5 @@ public class TextSection extends Section {
 
 	public void setTitleReadOnly(boolean titleReadOnly) {
 		this.titleReadOnly = titleReadOnly;
-	}	
+	}
 }
