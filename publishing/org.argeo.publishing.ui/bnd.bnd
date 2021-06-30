@@ -19,4 +19,5 @@ OSGI-INF/fontsServlet.xml,\
 OSGI-INF/htmlServletContext.xml,\
 OSGI-INF/dbkServlet.xml,\
 OSGI-INF/documentUiProvider.xml,\
+OSGI-INF/wwwLayer.xml,\
 OSGI-INF/dbk4Converter.xml

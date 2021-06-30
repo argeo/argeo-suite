@@ -37,6 +37,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.xalan.processor.TransformerFactoryImpl;
 import org.argeo.cms.servlet.ServletAuthUtils;
 import org.argeo.cms.ui.CmsTheme;
+import org.argeo.docbook.DbkType;
 import org.argeo.docbook.DbkUtils;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
@@ -81,7 +82,13 @@ public class DbkServlet extends HttpServlet {
 		Session session = null;
 		try {
 			session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), req);
-			Node node = session.getNode(path);
+			Node documentNode = session.getNode(path);
+			Node node;
+			if (documentNode.hasNode(DbkType.article.get()))
+				node = documentNode.getNode(DbkType.article.get());
+			else {
+				throw new IllegalArgumentException("Unsupported node " + documentNode);
+			}
 			if (DbkUtils.isDbk(node)) {
 				CmsTheme cmsTheme = null;
 				String themeId = req.getParameter("themeId");
@@ -98,7 +105,7 @@ public class DbkServlet extends HttpServlet {
 				// TODO optimise with pipes, SAX, etc. ?
 				byte[] arr;
 				try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-					session.exportDocumentView(path, out, true, false);
+					session.exportDocumentView(node.getPath(), out, true, false);
 					arr = out.toByteArray();
 //				System.out.println(new String(arr, StandardCharsets.UTF_8));
 				} catch (RepositoryException e) {
@@ -126,8 +133,11 @@ public class DbkServlet extends HttpServlet {
 							sb.append(req.getContextPath()).append(req.getServletPath()).append('/');
 							sb.append(themeId).append('/').append(cssPath).append(' ');
 						}
-						sb.append("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap").append(' ');
-						sb.append("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;1,400&display=swap").append(' ');
+						sb.append("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap")
+								.append(' ');
+						sb.append(
+								"https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;1,400&display=swap")
+								.append(' ');
 						if (sb.length() > 0)
 							transformer.setParameter("html.stylesheet", sb.toString());
 					}

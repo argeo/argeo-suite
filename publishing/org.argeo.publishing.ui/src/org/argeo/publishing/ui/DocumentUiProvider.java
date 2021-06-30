@@ -28,7 +28,7 @@ public class DocumentUiProvider implements CmsUiProvider {
 			// Title
 			parent.setLayout(CmsUiUtils.noSpaceGridLayout());
 
-			CmsLink toHtml = new CmsLink("To HTML", "/html/dbk" + textNode.getPath());
+			CmsLink toHtml = new CmsLink("To HTML", "/html/dbk" + context.getPath());
 			toHtml.createUiPart(parent, context);
 
 			ScrolledPage page = new ScrolledPage(parent, SWT.NONE);

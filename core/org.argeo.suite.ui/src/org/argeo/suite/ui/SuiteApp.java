@@ -55,6 +55,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	public final static String PUBLIC_BASE_PATH_PROPERTY = "publicBasePath";
 	public final static String DEFAULT_UI_NAME_PROPERTY = "defaultUiName";
 	public final static String DEFAULT_THEME_ID_PROPERTY = "defaultThemeId";
+	public final static String DEFAULT_LAYER_PROPERTY = "defaultLayer";
 	private final static String LOGIN = "login";
 
 	private String publicBasePath = null;
@@ -88,6 +89,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			defaultUiName = LangUtils.get(properties, DEFAULT_UI_NAME_PROPERTY);
 		if (properties.containsKey(DEFAULT_THEME_ID_PROPERTY))
 			defaultThemeId = LangUtils.get(properties, DEFAULT_THEME_ID_PROPERTY);
+		if (properties.containsKey(DEFAULT_LAYER_PROPERTY))
+			defaultLayerPid = LangUtils.get(properties, DEFAULT_LAYER_PROPERTY);
 		publicBasePath = LangUtils.get(properties, PUBLIC_BASE_PATH_PROPERTY);
 
 		if (properties.containsKey(Constants.SERVICE_PID)) {
@@ -155,6 +158,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			CmsView cmsView = CmsView.getCmsView(parent);
 			CmsUiProvider headerUiProvider = findUiProvider(headerPid);
 			CmsUiProvider footerUiProvider = findUiProvider(footerPid);
+			CmsUiProvider leadPaneUiProvider = findUiProvider(leadPanePid);
+
 			Localized appTitle = null;
 			if (headerUiProvider instanceof DefaultHeader) {
 				appTitle = ((DefaultHeader) headerUiProvider).getTitle();
@@ -203,7 +208,9 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 					SuiteLayer layer = layersByPid.get(key).get();
 					ui.addLayer(key, layer);
 				}
-				refreshPart(findUiProvider(leadPanePid), ui.getLeadPane(), context);
+
+				if (leadPaneUiProvider != null)
+					refreshPart(leadPaneUiProvider, ui.getLeadPane(), context);
 				if (footerUiProvider != null)
 					refreshPart(footerUiProvider, ui.getFooter(), context);
 				ui.layout(true, true);

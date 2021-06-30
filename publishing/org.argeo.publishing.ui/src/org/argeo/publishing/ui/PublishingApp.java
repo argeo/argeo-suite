@@ -8,43 +8,46 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.api.NodeUtils;
 import org.argeo.cms.ui.AbstractCmsApp;
 import org.argeo.cms.ui.CmsApp;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.docbook.DbkType;
 import org.argeo.docbook.ui.DocumentPage;
 import org.argeo.jcr.Jcr;
-import org.argeo.jcr.JcrUtils;
+import org.argeo.suite.ui.SuiteApp;
 import org.argeo.util.LangUtils;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.osgi.framework.Constants;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventHandler;
 
 /**
  * A {@link CmsApp} dedicated to publishing, typically a public or internal web
  * site.
  */
-public class PublishingApp extends AbstractCmsApp {
+public class PublishingApp extends AbstractCmsApp implements EventHandler {
 	private final static Log log = LogFactory.getLog(PublishingApp.class);
 
 	private String pid;
 	private String defaultThemeId;
 	private String defaultUiName = "";
 
+	private String publicBasePath = null;
+
 	private CmsUiProvider landingPage;
+	private CmsUiProvider defaultProvider = new DocumentUiProvider();
 
 	public void init(Map<String, String> properties) {
 		if (properties.containsKey(DEFAULT_UI_NAME_PROPERTY))
 			defaultUiName = LangUtils.get(properties, DEFAULT_UI_NAME_PROPERTY);
 		if (properties.containsKey(DEFAULT_THEME_ID_PROPERTY))
 			defaultThemeId = LangUtils.get(properties, DEFAULT_THEME_ID_PROPERTY);
+		publicBasePath = LangUtils.get(properties, SuiteApp.PUBLIC_BASE_PATH_PROPERTY);
 		pid = properties.get(Constants.SERVICE_PID);
 
 		if (log.isDebugEnabled())
@@ -66,21 +69,22 @@ public class PublishingApp extends AbstractCmsApp {
 
 	@Override
 	public Composite initUi(Composite parent) {
-		Session adminSession = NodeUtils.openDataAdminSession(getRepository(), null);
+//		Session adminSession = NodeUtils.openDataAdminSession(getRepository(), null);
+		Session session = Jcr.login(getRepository(), null);
 		parent.setLayout(new GridLayout());
-		Node indexNode;
-		try {
-			indexNode = JcrUtils.getOrAdd(Jcr.getRootNode(adminSession), DocumentPage.WWW, DbkType.article.get());
-			adminSession.save();
-		} catch (RepositoryException e) {
-			throw new IllegalStateException(e);
-		}
+		Node indexNode = Jcr.getNode(session, publicBasePath + "/index");
+//		try {
+//			indexNode = JcrUtils.getOrAdd(Jcr.getRootNode(adminSession), DocumentPage.WWW, DbkType.article.get());
+//			adminSession.save();
+//		} catch (RepositoryException e) {
+//			throw new IllegalStateException(e);
+//		}
 
 		Control page;
 		if (landingPage != null) {
 			page = landingPage.createUiPart(parent, indexNode);
 		} else {
-			page = new DocumentPage().createUiPart(parent, indexNode);
+			page = defaultProvider.createUiPart(parent, indexNode);
 		}
 		return (Composite) page;
 	}
@@ -88,7 +92,10 @@ public class PublishingApp extends AbstractCmsApp {
 	@Override
 	public void refreshUi(Composite parent, String state) {
 		parent.setLayout(new GridLayout());
-		new DocumentPage().createUiPart(parent, null);
+		if (landingPage != null)
+			landingPage.createUiPart(parent, null);
+		else
+			defaultProvider.createUiPart(parent, null);
 	}
 
 	@Override
@@ -103,6 +110,12 @@ public class PublishingApp extends AbstractCmsApp {
 
 	public void setLandingPage(CmsUiProvider landingPage) {
 		this.landingPage = landingPage;
+	}
+
+	@Override
+	public void handleEvent(Event event) {
+		// TODO listen to some events
+
 	}
 
 }
