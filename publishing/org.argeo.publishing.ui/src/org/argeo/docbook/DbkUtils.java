@@ -106,6 +106,32 @@ public class DbkUtils {
 		return p;
 	}
 
+	/**
+	 * Removes a paragraph if it empty. The sesison is not saved.
+	 * 
+	 * @return true if the paragraph was empty and it was removed
+	 */
+	public static boolean removeIfEmptyParagraph(Node node) {
+		try {
+			if (isDbk(node, DbkType.para)) {
+				NodeIterator nit = node.getNodes();
+				if (!nit.hasNext())
+					return false;// log this unexpected situation?
+				Node first = nit.nextNode();
+				if (nit.hasNext())
+					return false;
+				String str = JcrxApi.getXmlValue(first);
+				if (str != null && str.trim().equals("")) {
+					node.remove();
+					return true;
+				}
+			}
+			return false;
+		} catch (RepositoryException e) {
+			throw new JcrException("Cannot remove possibly empty paragraph", e);
+		}
+	}
+
 	public static Node insertImageAfter(Node sibling) {
 		try {
 
