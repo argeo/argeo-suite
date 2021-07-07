@@ -63,6 +63,28 @@ class SuiteTypology implements Typology {
 		}
 	}
 
+	public Term findTermByName(String name) {
+		List<SuiteTerm> collected = new ArrayList<>();
+		for (SuiteTerm subTerm : subTerms) {
+			collectTermsByName(subTerm, name, collected);
+		}
+		if (collected.isEmpty())
+			return null;
+		if (collected.size() == 1)
+			return collected.get(0);
+		throw new IllegalArgumentException(
+				"There are " + collected.size() + " terms with name " + name + " in typology " + getId());
+	}
+
+	private void collectTermsByName(SuiteTerm term, String name, List<SuiteTerm> collected) {
+		if (term.getName().equals(name)) {
+			collected.add(term);
+		}
+		for (SuiteTerm subTerm : term.getSubTerms()) {
+			collectTermsByName(subTerm, name, collected);
+		}
+	}
+
 	private void collectSubTerms(List<SuiteTerm> terms, SuiteTerm term) {
 		for (SuiteTerm subTerm : term.getSubTerms()) {
 			terms.add(subTerm);

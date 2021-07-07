@@ -11,4 +11,5 @@ public interface Typology {
 
 	List<? extends Term> getSubTerms();
 
+	Term findTermByName(String name);
 }
