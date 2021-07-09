@@ -7,6 +7,7 @@ import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.SectionPart;
 import org.argeo.cms.ui.widgets.EditableText;
 import org.argeo.cms.ui.widgets.TextStyles;
+import org.argeo.docbook.DbkType;
 
 /** An editable paragraph. */
 public class Paragraph extends EditableText implements SectionPart {
@@ -17,7 +18,7 @@ public class Paragraph extends EditableText implements SectionPart {
 	public Paragraph(TextSection section, int style, Node node) throws RepositoryException {
 		super(section, style, node);
 		this.section = section;
-		CmsUiUtils.style(this, TextStyles.TEXT_PARAGRAPH);
+		CmsUiUtils.style(this, DbkType.para.name());
 	}
 
 	public TextSection getSection() {

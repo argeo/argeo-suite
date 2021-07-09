@@ -6,6 +6,7 @@ import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.EditablePart;
 import org.argeo.cms.ui.viewers.Section;
 import org.argeo.cms.ui.widgets.TextStyles;
+import org.argeo.docbook.DbkType;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -13,7 +14,7 @@ import org.eclipse.swt.widgets.Control;
 /** An editable section. */
 public class TextSection extends Section {
 	private static final long serialVersionUID = -8625209546243220689L;
-	private String defaultTextStyle = TextStyles.TEXT_DEFAULT;
+	private String defaultTextStyle = DbkType.para.name();
 	private String titleStyle;
 
 	private final boolean flat;
@@ -38,7 +39,7 @@ public class TextSection extends Section {
 		} else {
 			level = 0;
 		}
-		// CmsUiUtils.style(this, TextStyles.TEXT_SECTION);
+		CmsUiUtils.style(this, DbkType.section.name());
 	}
 
 	public String getDefaultTextStyle() {
