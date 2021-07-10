@@ -190,12 +190,12 @@ public class OpenLayersMap extends Composite {
 					if (centerLat != null && centerLng != null) {
 						setCenter(centerLng, centerLat);
 					}
-					if (vectorSource != null)
-						renderVectorSource();
-					if (gpxSource != null)
-						renderGpxSource();
 					if (!geoJsonSources.isEmpty())
 						renderGeoJsonSources();
+					if (gpxSource != null)
+						renderGpxSource();
+					if (vectorSource != null)
+						renderVectorSource();
 				}
 				return null;
 			} catch (Exception e) {
