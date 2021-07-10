@@ -134,11 +134,13 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				Node child = ni.nextNode();
 				SectionPart sectionPart = null;
 				if (isDbk(child, DbkType.mediaobject)) {
-					sectionPart = newImg(textSection, child);
-//					if (child.hasNode(DbkType.imageobject.get())) {
-//						Node imageDataNode = child.getNode(DbkType.imageobject.get()).getNode(DbkType.imagedata.get());
-//						sectionPart = newImg(textSection, imageDataNode);
-//					}
+					if (child.hasNode(DbkType.imageobject.get())) {
+						sectionPart = newImg(textSection, child);
+					} else if (child.hasNode(DbkType.videoobject.get())) {
+						sectionPart = newVideo(textSection, child);
+					} else {
+						throw new IllegalArgumentException("Unsupported media object " + child);
+					}
 				} else if (isDbk(child, DbkType.info)) {
 					// TODO enrich UI based on info
 				} else if (isDbk(child, DbkType.title)) {
@@ -151,7 +153,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 //						throw new IllegalArgumentException("Unsupported node " + child);
 					// TODO list node types in exception
 				} else {
-					throw new IllegalArgumentException("Unsupported node type for "+child);
+					throw new IllegalArgumentException("Unsupported node type for " + child);
 				}
 				if (sectionPart != null && sectionPart instanceof Control)
 					((Control) sectionPart).setLayoutData(CmsUiUtils.fillWidth());
@@ -209,6 +211,34 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			img.setMouseListener(getMouseListener());
 			img.setFocusListener(getFocusListener());
 			return img;
+		} catch (RepositoryException e) {
+			throw new JcrException("Cannot add new image " + node, e);
+		}
+	}
+
+	protected DbkVideo newVideo(TextSection parent, Node node) {
+		try {
+//			node.getSession();
+//			Composite wrapper = new Composite(parent, SWT.NONE);
+//			new Label(wrapper,SWT.NONE).setText("TEST");
+			DbkVideo video = new DbkVideo(parent, SWT.BORDER, node);
+			GridData gd;
+			if (maxMediaWidth != null) {
+				gd = new GridData(SWT.CENTER, SWT.FILL, false, false);
+				// TODO, manage size
+				gd.widthHint = maxMediaWidth;
+				gd.heightHint = (int) (gd.heightHint * 0.5625);
+//				img.setPreferredSize(new Point(maxMediaWidth, 0));
+			} else {
+				gd = new GridData(SWT.CENTER, SWT.FILL, false, false);
+				gd.widthHint = video.getWidth();
+				gd.heightHint = video.getHeight();
+//				gd = new GridData(video.getWidth(),video.getHeight());
+			}
+//			wrapper.setLayoutData(gd);
+			video.setLayoutData(gd);
+			updateContent(video);
+			return null;
 		} catch (RepositoryException e) {
 			throw new JcrException("Cannot add new image " + node, e);
 		}
@@ -273,6 +303,9 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			} else if (part instanceof DbkImg) {
 				DbkImg editableImage = (DbkImg) part;
 				imageManager.load(partNode, part.getControl(), editableImage.getPreferredImageSize());
+			} else if (part instanceof DbkVideo) {
+				DbkVideo video = (DbkVideo) part;
+				video.load(part.getControl());
 			}
 		} else if (part instanceof DocBookSectionTitle) {
 			DocBookSectionTitle title = (DocBookSectionTitle) part;

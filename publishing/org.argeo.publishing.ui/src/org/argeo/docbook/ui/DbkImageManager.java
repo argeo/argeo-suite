@@ -114,6 +114,7 @@ public class DbkImageManager extends DefaultImageManager {
 			return null;
 		URI fileUri;
 		try {
+			// FIXME it messes up with the '/'
 			fileUri = new URI(URLEncoder.encode(fileref, StandardCharsets.UTF_8.toString()));
 		} catch (URISyntaxException | UnsupportedEncodingException e) {
 			throw new IllegalArgumentException("File ref in " + imageDataNode + " is badly formatted", e);
@@ -122,7 +123,7 @@ public class DbkImageManager extends DefaultImageManager {
 			return fileUri.toString();
 		// local
 		Node fileNode = getFileNode(imageDataNode);
-		String url = CmsUiUtils.getDataPath(fileNode);
+		String url = getCleanDataPath(fileNode);
 		return url;
 	}
 

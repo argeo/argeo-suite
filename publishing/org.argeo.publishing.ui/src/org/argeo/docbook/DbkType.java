@@ -8,7 +8,7 @@ public enum DbkType implements JcrName {
 	//
 	info, title, para,
 	//
-	mediaobject, imageobject, imagedata,
+	mediaobject, imageobject, imagedata, videoobject, videodata,
 	//
 	link,
 	//
