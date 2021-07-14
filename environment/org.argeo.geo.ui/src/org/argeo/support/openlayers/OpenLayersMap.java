@@ -121,7 +121,8 @@ public class OpenLayersMap extends Composite {
 				sb.append("})");
 			}
 		}
-		sb.append("] })");
+		sb.append("]");
+		sb.append(" })");
 		this.vectorSource = sb.toString();
 		if (log.isTraceEnabled())
 			log.trace("Vector source: " + vectorSource);
@@ -131,8 +132,13 @@ public class OpenLayersMap extends Composite {
 	protected void renderVectorSource() {
 		if (vectorSource == null)
 			return;
-		if (isRenderCompleted())
-			browser.evaluate("map.addLayer(new ol.layer.Vector({ source: " + vectorSource + "}));");
+		if (isRenderCompleted()) {
+//			String style = ", style: new ol.style.Style({  image: new ol.style.Icon({ src: 'https://openlayers.org/en/latest/examples/data/icon.png' }) })";
+			String style = "";
+			String toEvaluate = "map.addLayer(new ol.layer.Vector({ source: " + vectorSource + style + "}));";
+			System.out.println(toEvaluate);
+			browser.execute(toEvaluate);
+		}
 	}
 
 	public void addPoint(Double lng, Double lat) {
