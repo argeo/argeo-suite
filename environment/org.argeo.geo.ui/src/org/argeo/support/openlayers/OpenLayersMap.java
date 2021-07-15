@@ -136,7 +136,7 @@ public class OpenLayersMap extends Composite {
 //			String style = ", style: new ol.style.Style({  image: new ol.style.Icon({ src: 'https://openlayers.org/en/latest/examples/data/icon.png' }) })";
 			String style = "";
 			String toEvaluate = "map.addLayer(new ol.layer.Vector({ source: " + vectorSource + style + "}));";
-			System.out.println(toEvaluate);
+//			System.out.println(toEvaluate);
 			browser.execute(toEvaluate);
 		}
 	}
