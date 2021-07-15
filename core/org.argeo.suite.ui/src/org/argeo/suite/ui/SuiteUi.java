@@ -149,6 +149,7 @@ class SuiteUi extends Composite {
 		}
 		throw new IllegalArgumentException("Layer is not registered.");
 	}
+	
 
 	void addLayer(String id, SuiteLayer layer) {
 		layers.put(id, layer);

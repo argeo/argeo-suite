@@ -45,7 +45,7 @@ public class TabbedArea extends Composite {
 	private boolean singleTab = false;
 
 	public TabbedArea(Composite parent, int style) {
-		super(parent, style);
+		super(parent, SWT.NONE);
 		CmsUiUtils.style(parent, bodyStyle);
 
 		setLayout(CmsUiUtils.noSpaceGridLayout());
@@ -200,6 +200,16 @@ public class TabbedArea extends Composite {
 		refreshTabHeaders();
 		showTab(nextIndex);
 	}
+	
+	public void closeAllTabs() {
+		for(Section section:sections) {
+			section.dispose();			
+		}
+		sections.clear();
+		emptyState();
+		refreshTabHeaders();
+		layout(true, true);
+	}
 
 	protected void emptyState() {
 		new Section(body, SWT.NONE, null);
@@ -212,6 +222,15 @@ public class TabbedArea extends Composite {
 
 	protected Section getCurrentSection() {
 		return (Section) stackLayout.topControl;
+	}
+
+	public Node getCurrentContext() {
+		Section section = getCurrentSection();
+		if (section != null) {
+			return section.getNode();
+		} else {
+			return null;
+		}
 	}
 
 	public void setTabStyle(String tabStyle) {
