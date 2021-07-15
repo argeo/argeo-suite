@@ -115,15 +115,21 @@ public class DbkUtils {
 		try {
 			if (isDbk(node, DbkType.para)) {
 				NodeIterator nit = node.getNodes();
-				if (!nit.hasNext())
-					return false;// log this unexpected situation?
+				if (!nit.hasNext()) {
+					node.remove();
+					return true;
+				}
 				Node first = nit.nextNode();
 				if (nit.hasNext())
 					return false;
-				String str = JcrxApi.getXmlValue(first);
-				if (str != null && str.trim().equals("")) {
-					node.remove();
-					return true;
+				if (first.getName().equals(Jcr.JCR_XMLTEXT)) {
+					String str = JcrxApi.getXmlValue(first);
+					if (str != null && str.trim().equals("")) {
+						node.remove();
+						return true;
+					}
+				} else {
+					return false;
 				}
 			}
 			return false;
