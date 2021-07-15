@@ -15,7 +15,7 @@ public class DocumentTextEditor extends AbstractDbkViewer {
 
 	public DocumentTextEditor(Composite parent, int style, Node textNode, CmsEditable cmsEditable) {
 		super(new TextSection(parent, style, textNode), style, cmsEditable);
-		refresh();
+//		refresh();
 		getMainSection().setLayoutData(CmsUiUtils.fillWidth());
 	}
 
