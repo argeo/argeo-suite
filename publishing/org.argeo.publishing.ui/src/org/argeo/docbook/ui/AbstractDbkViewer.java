@@ -99,6 +99,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 	protected void refresh(Control control) throws RepositoryException {
 		if (!(control instanceof Section))
 			return;
+		long begin = System.currentTimeMillis();
 		Section section = (Section) control;
 		if (section instanceof TextSection) {
 			CmsUiUtils.clear(section);
@@ -173,6 +174,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				refresh(s);
 		}
 		// section.layout(true, true);
+		long duration = System.currentTimeMillis() - begin;
+//		System.out.println(duration + " ms - " + DbkUtils.getTitle(section.getNode()));
 	}
 
 	/** To be overridden in order to provide additional SectionPart types */
@@ -302,7 +305,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 					paragraph.setText(textInterpreter.readSimpleHtml(partNode));
 			} else if (part instanceof DbkImg) {
 				DbkImg editableImage = (DbkImg) part;
-				imageManager.load(partNode, part.getControl(), editableImage.getPreferredImageSize());
+				//imageManager.load(partNode, part.getControl(), editableImage.getPreferredImageSize());
 			} else if (part instanceof DbkVideo) {
 				DbkVideo video = (DbkVideo) part;
 				video.load(part.getControl());
