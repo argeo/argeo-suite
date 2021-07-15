@@ -20,7 +20,9 @@ import org.argeo.jcr.Jcr;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -44,10 +46,11 @@ public class MultiTermsPart extends AbstractTermsPart {
 
 		boolean vertical = SWT.VERTICAL == (getStyle() & SWT.VERTICAL);
 		RowLayout rl = new RowLayout(vertical ? SWT.VERTICAL : SWT.HORIZONTAL);
-		rl.wrap = true;
+//		rl.wrap = true;
+		rl.justify = true;
 		placeholder.setLayout(rl);
 		List<Term> currentValue = getValue();
-		if (currentValue != null && !currentValue.isEmpty())
+		if (currentValue != null && !currentValue.isEmpty()) {
 			for (Term value : currentValue) {
 				Composite block = new Composite(placeholder, SWT.NONE);
 				block.setLayout(CmsUiUtils.noSpaceGridLayout(3));
@@ -79,7 +82,7 @@ public class MultiTermsPart extends AbstractTermsPart {
 
 				}
 			}
-		else {// empty
+		} else {// empty
 			if (isEditable() && !isEditing()) {
 				ToolBar toolBar = new ToolBar(placeholder, SWT.HORIZONTAL);
 				ToolItem addItem = new ToolItem(toolBar, SWT.FLAT);
