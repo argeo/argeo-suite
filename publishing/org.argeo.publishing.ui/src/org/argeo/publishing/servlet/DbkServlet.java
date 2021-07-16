@@ -133,6 +133,7 @@ public class DbkServlet extends HttpServlet {
 							sb.append(req.getContextPath()).append(req.getServletPath()).append('/');
 							sb.append(themeId).append('/').append(cssPath).append(' ');
 						}
+						// FIXME make it more generic
 						sb.append("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap")
 								.append(' ');
 						sb.append(

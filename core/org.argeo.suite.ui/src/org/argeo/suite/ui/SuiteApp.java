@@ -365,7 +365,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		}
 	}
 
-	private String nodeToState(Node node) {
+	// TODO move it to an internal package?
+	static String nodeToState(Node node) {
 		return '/' + Jcr.getWorkspaceName(node) + Jcr.getPath(node);
 	}
 

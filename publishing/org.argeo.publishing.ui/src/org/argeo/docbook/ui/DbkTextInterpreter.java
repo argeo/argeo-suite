@@ -30,6 +30,8 @@ import org.argeo.jcr.JcrException;
 public class DbkTextInterpreter implements TextInterpreter {
 	private DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
+	private String linkCssClass = DbkType.link.name();
+
 	@Override
 	public void write(Item item, String content) {
 		try {
@@ -199,7 +201,7 @@ public class DbkTextInterpreter implements TextInterpreter {
 					String href = child.getProperty(DbkAttr.XLINK_HREF).getString();
 					// TODO deal with other forbidden XML characters?
 					href = href.replace("&", "&amp;");
-					sb.append("<a href=\"").append(href).append("\">");
+					sb.append("<a class='" + linkCssClass + "' href='").append(href).append("'>");
 					readAsSimpleHtml(child, sb);
 					sb.append("</a>");
 				}

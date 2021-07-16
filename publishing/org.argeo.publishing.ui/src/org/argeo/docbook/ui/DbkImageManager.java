@@ -123,7 +123,7 @@ public class DbkImageManager extends DefaultImageManager {
 			return fileUri.toString();
 		// local
 		Node fileNode = getFileNode(imageDataNode);
-		String url = getCleanDataPath(fileNode);
+		String url = CmsUiUtils.getDataPathForUrl(fileNode);
 		return url;
 	}
 

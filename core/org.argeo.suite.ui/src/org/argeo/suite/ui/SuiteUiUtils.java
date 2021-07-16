@@ -16,11 +16,14 @@ import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.dialogs.LightweightDialog;
 import org.argeo.cms.ui.util.CmsEvent;
 import org.argeo.cms.ui.util.CmsIcon;
+import org.argeo.cms.ui.util.CmsLink;
+import org.argeo.cms.ui.util.CmsStyle;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
+import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.suite.SuiteRole;
 import org.eclipse.swt.SWT;
@@ -222,6 +225,11 @@ public class SuiteUiUtils {
 	}
 
 	public static Label addPicture(Composite parent, Node fileNode, Integer maxWidth) throws RepositoryException {
+		return addPicture(parent, fileNode, maxWidth, null);
+	}
+
+	public static Label addPicture(Composite parent, Node fileNode, Integer maxWidth, Node link)
+			throws RepositoryException {
 		Node content = fileNode.getNode(Node.JCR_CONTENT);
 		// TODO move it deeper in the middleware.
 		if (!content.isNodeType(EntityType.box.get())) {
@@ -261,61 +269,85 @@ public class SuiteUiUtils {
 		}
 		Label img = new Label(parent, SWT.NONE);
 		CmsUiUtils.markup(img);
-		img.setText(CmsUiUtils.img(fileNode, width.toString(), height.toString()));
+		StringBuffer txt = new StringBuffer();
+		String target = toLink(link);
+		if (target != null)
+			txt.append("<a href='").append(target).append("'>");
+		txt.append(CmsUiUtils.img(fileNode, width.toString(), height.toString()));
+		if (target != null)
+			txt.append("</a>");
+		img.setText(txt.toString());
 		if (parent.getLayout() instanceof GridLayout) {
 			GridData gd = new GridData(SWT.CENTER, SWT.CENTER, false, false);
 			gd.widthHint = width.intValue();
 			gd.heightHint = height.intValue();
 			img.setLayoutData(gd);
 		}
-		img.addMouseListener(new MouseListener() {
-			private static final long serialVersionUID = -1362242049325206168L;
 
-			@Override
-			public void mouseUp(MouseEvent e) {
-			}
+		if (target == null)
+			img.addMouseListener(new MouseListener() {
+				private static final long serialVersionUID = -1362242049325206168L;
 
-			@Override
-			public void mouseDown(MouseEvent e) {
-			}
+				@Override
+				public void mouseUp(MouseEvent e) {
+				}
 
-			@Override
-			public void mouseDoubleClick(MouseEvent e) {
-				LightweightDialog dialog = new LightweightDialog(img.getShell()) {
+				@Override
+				public void mouseDown(MouseEvent e) {
+				}
 
-					@Override
-					protected Control createDialogArea(Composite parent) {
-						parent.setLayout(new GridLayout());
-						ScrolledComposite scroll = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
-						scroll.setLayoutData(CmsUiUtils.fillAll());
-						scroll.setLayout(CmsUiUtils.noSpaceGridLayout());
-						scroll.setExpandHorizontal(true);
-						scroll.setExpandVertical(true);
-						// scroll.setAlwaysShowScrollBars(true);
+				@Override
+				public void mouseDoubleClick(MouseEvent e) {
+					LightweightDialog dialog = new LightweightDialog(img.getShell()) {
 
-						Composite c = new Composite(scroll, SWT.NONE);
-						scroll.setContent(c);
-						c.setLayout(new GridLayout());
-						c.setLayoutData(CmsUiUtils.fillAll());
-						Label bigImg = new Label(c, SWT.NONE);
-						CmsUiUtils.markup(bigImg);
-						bigImg.setText(CmsUiUtils.img(fileNode, Jcr.get(content, EntityNames.SVG_WIDTH),
-								Jcr.get(content, EntityNames.SVG_HEIGHT)));
-						bigImg.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
-						return bigImg;
-					}
+						@Override
+						protected Control createDialogArea(Composite parent) {
+							parent.setLayout(new GridLayout());
+							ScrolledComposite scroll = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+							scroll.setLayoutData(CmsUiUtils.fillAll());
+							scroll.setLayout(CmsUiUtils.noSpaceGridLayout());
+							scroll.setExpandHorizontal(true);
+							scroll.setExpandVertical(true);
+							// scroll.setAlwaysShowScrollBars(true);
 
-					@Override
-					protected Point getInitialSize() {
-						Point shellSize = img.getShell().getSize();
-						return new Point(shellSize.x - 100, shellSize.y - 100);
-					}
+							Composite c = new Composite(scroll, SWT.NONE);
+							scroll.setContent(c);
+							c.setLayout(new GridLayout());
+							c.setLayoutData(CmsUiUtils.fillAll());
+							Label bigImg = new Label(c, SWT.NONE);
+							CmsUiUtils.markup(bigImg);
+							bigImg.setText(CmsUiUtils.img(fileNode, Jcr.get(content, EntityNames.SVG_WIDTH),
+									Jcr.get(content, EntityNames.SVG_HEIGHT)));
+							bigImg.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
+							return bigImg;
+						}
 
-				};
-				dialog.open();
-			}
-		});
+						@Override
+						protected Point getInitialSize() {
+							Point shellSize = img.getShell().getSize();
+							return new Point(shellSize.x - 100, shellSize.y - 100);
+						}
+
+					};
+					dialog.open();
+				}
+			});
 		return img;
+	}
+
+	public static String toLink(Node node) {
+		try {
+			return node != null ? "#" + CmsUiUtils.cleanPathForUrl(SuiteApp.nodeToState(node)) : null;
+		} catch (RepositoryException e) {
+			throw new JcrException("Cannot get link from " + node, e);
+		}
+	}
+
+	public static Control addLink(Composite parent, String label, Node node, CmsStyle style)
+			throws RepositoryException {
+		String target = toLink(node);
+		CmsLink link = new CmsLink(label, target, style);
+		return link.createUi(parent, node);
 	}
 
 	public static boolean isCoworker(CmsView cmsView) {
