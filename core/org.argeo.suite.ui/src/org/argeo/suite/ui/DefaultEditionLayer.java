@@ -39,7 +39,8 @@ public class DefaultEditionLayer implements SuiteLayer {
 		if (entryArea != null) {
 			if (fixedEntryArea) {
 				FixedEditionArea editionArea = new FixedEditionArea(parent, parent.getStyle());
-				entryArea.createUi(editionArea.getEntryArea(), context);
+				Control entryAreaC = entryArea.createUi(editionArea.getEntryArea(), context);
+				CmsUiUtils.style(entryAreaC, SuiteStyle.entryArea);
 				if (this.defaultView != null) {
 					editionArea.getTabbedArea().view(defaultView, context);
 				}
@@ -76,7 +77,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 				throw new JcrException("Cannot rebuild work area", e);
 			}
 		}
-		
+
 		// tabbed area
 		TabbedArea tabbedArea = findTabbedArea(workAreaC);
 		if (tabbedArea == null)
