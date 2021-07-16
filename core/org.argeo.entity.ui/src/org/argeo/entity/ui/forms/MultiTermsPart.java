@@ -47,7 +47,7 @@ public class MultiTermsPart extends AbstractTermsPart {
 		boolean vertical = SWT.VERTICAL == (getStyle() & SWT.VERTICAL);
 		RowLayout rl = new RowLayout(vertical ? SWT.VERTICAL : SWT.HORIZONTAL);
 //		rl.wrap = true;
-		rl.justify = true;
+//		rl.justify = true;
 		placeholder.setLayout(rl);
 		List<Term> currentValue = getValue();
 		if (currentValue != null && !currentValue.isEmpty()) {
