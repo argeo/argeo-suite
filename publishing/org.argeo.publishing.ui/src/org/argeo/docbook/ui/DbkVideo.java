@@ -18,6 +18,7 @@ import org.argeo.docbook.DbkAttr;
 import org.argeo.docbook.DbkType;
 import org.argeo.docbook.DbkUtils;
 import org.argeo.eclipse.ui.Selected;
+import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
 import org.argeo.naming.NamingUtils;
 import org.eclipse.swt.SWT;
@@ -150,9 +151,9 @@ public class DbkVideo extends StyledControl implements SectionPart, NodePart {
 				public void widgetSelected(SelectionEvent e) {
 					try {
 						mediaobject.remove();
-						Composite parent = getParent();
+						mediaobject.getSession().save();
 						dispose();
-						parent.layout(true, true);
+						getSection().getParent().layout(true, true);
 					} catch (RepositoryException e1) {
 						throw new JcrException("Cannot update " + mediaobject, e1);
 					}
