@@ -336,7 +336,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		if (!state.startsWith("/")) {
 			if (parent instanceof SuiteUi) {
 				SuiteUi ui = (SuiteUi) parent;
-				if (LOGIN.equals(state) || state.equals(HOME_STATE)) {
+				if (LOGIN.equals(state)) {
 					String appTitle = "";
 					if (ui.getTitle() != null)
 						appTitle = ui.getTitle().lead();
@@ -348,7 +348,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 //					return; // does nothing
 //				else {
 				Map<String, Object> properties = new HashMap<>();
-				properties.put(SuiteEvent.LAYER, state);
+				String layerId = HOME_STATE.equals(state) ? defaultLayerPid : state;
+				properties.put(SuiteEvent.LAYER, layerId);
 				properties.put(SuiteEvent.NODE_PATH, HOME_STATE);
 				ui.getCmsView().sendEvent(SuiteEvent.switchLayer.topic(), properties);
 //				}
@@ -443,6 +444,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				if (layerId != null) {
 //					ui.switchToLayer(layerId, ui.getUserDir());
 					SuiteLayer suiteLayer = findLayer(layerId);
+					if (suiteLayer == null)
+						throw new IllegalArgumentException("No layer '" + layerId + "' available.");
 					Localized layerTitle = suiteLayer.getTitle();
 					// FIXME make sure we don't rebuild the work area twice
 					Composite workArea = ui.getCmsView().doAs(() -> ui.switchToLayer(layerId, ui.getUserDir()));
@@ -452,7 +455,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 					Node nodeFromState = getNode(ui, event);
 					if (nodeFromState != null && nodeFromState.getPath().equals(ui.getUserDir().getPath())) {
 						// default layer view is forced
-						ui.getCmsView().stateChanged(layerId, appTitle + title);
+						String state = defaultLayerPid.equals(layerId) ? "~" : layerId;
+						ui.getCmsView().stateChanged(state, appTitle + title);
 						suiteLayer.view(null, workArea, nodeFromState);
 					} else {
 						Node layerCurrentContext = suiteLayer.getCurrentContext(workArea);
