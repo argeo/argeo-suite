@@ -350,6 +350,19 @@ public class SuiteUiUtils {
 		return link.createUi(parent, node);
 	}
 
+	public static Control addExternalLink(Composite parent, String label, String url, String plainCssAnchorClass)
+			throws RepositoryException {
+		Label lbl = new Label(parent, SWT.NONE);
+		CmsUiUtils.markup(lbl);
+		StringBuilder txt = new StringBuilder();
+		txt.append("<a class='" + plainCssAnchorClass + "'");
+		txt.append(" href='").append(url).append("'>");
+		txt.append(label);
+		txt.append("</a>");
+		lbl.setText(txt.toString());
+		return lbl;
+	}
+
 	public static boolean isCoworker(CmsView cmsView) {
 		boolean coworker = cmsView.doAs(() -> CurrentUser.isInRole(SuiteRole.coworker.dn()));
 		return coworker;
