@@ -221,13 +221,13 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 	protected DbkVideo newVideo(TextSection parent, Node node) {
 		try {
-			DbkVideo video = new DbkVideo(parent,getCmsEditable().canEdit()?SWT.NONE : SWT.READ_ONLY, node);
+			DbkVideo video = new DbkVideo(parent, getCmsEditable().canEdit() ? SWT.NONE : SWT.READ_ONLY, node);
 			GridData gd;
 			if (maxMediaWidth != null) {
 				gd = new GridData(SWT.CENTER, SWT.FILL, false, false);
 				// TODO, manage size
-				gd.widthHint = maxMediaWidth;
-				gd.heightHint = (int) (gd.heightHint * 0.5625);
+//				gd.widthHint = maxMediaWidth;
+//				gd.heightHint = (int) (gd.heightHint * 0.5625);
 			} else {
 				gd = new GridData(SWT.CENTER, SWT.FILL, false, false);
 //				gd.widthHint = video.getWidth();
@@ -235,7 +235,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			}
 			video.setLayoutData(gd);
 			updateContent(video);
-			return null;
+			return video;
 		} catch (RepositoryException e) {
 			throw new JcrException("Cannot add new image " + node, e);
 		}
@@ -807,8 +807,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		return newParagraph;
 	}
 
-	protected Paragraph sectionTitleSplitted(DbkSectionTitle sectionTitle, Node newNode)
-			throws RepositoryException {
+	protected Paragraph sectionTitleSplitted(DbkSectionTitle sectionTitle, Node newNode) throws RepositoryException {
 		updateContent(sectionTitle);
 		Paragraph newParagraph = newParagraph(sectionTitle.getSection(), newNode);
 		// we assume beforeFirst is not null since there was a sectionTitle

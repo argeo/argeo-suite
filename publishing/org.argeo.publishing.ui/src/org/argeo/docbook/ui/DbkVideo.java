@@ -58,15 +58,15 @@ public class DbkVideo extends StyledControl implements SectionPart, NodePart {
 
 		Composite browserC = new Composite(wrapper, SWT.NONE);
 		browserC.setLayout(CmsUiUtils.noSpaceGridLayout());
-//		wrapper.setLayoutData(CmsUiUtils.fillAll());
-		Browser browser = new Browser(browserC, SWT.NONE);
-		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+		GridData gd = new GridData(SWT.CENTER, SWT.FILL, true, true);
 		gd.widthHint = getWidth();
 		gd.heightHint = getHeight();
 		browserC.setLayoutData(gd);
+//		wrapper.setLayoutData(CmsUiUtils.fillAll());
+		Browser browser = new Browser(browserC, SWT.NONE);
 
 		if (editable) {
-			Composite editor = new Composite(wrapper, SWT.NONE);
+			Composite editor = new Composite(wrapper, SWT.BORDER);
 			editor.setLayout(new GridLayout(3, false));
 			editor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 			String fileref = DbkUtils.getMediaFileref(mediaobject);
@@ -74,7 +74,7 @@ public class DbkVideo extends StyledControl implements SectionPart, NodePart {
 			if (fileref != null)
 				text.setText(fileref);
 			else
-				text.setMessage("Embed URL of the video.");
+				text.setMessage("Embed URL of the video");
 			text.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 			Button updateB = new Button(editor, SWT.FLAT);
 			updateB.setText("Update");
@@ -95,22 +95,39 @@ public class DbkVideo extends StyledControl implements SectionPart, NodePart {
 							return;
 						}
 
-						// transform YouTube watch URL in embed
-						String youTubeVideoId = null;
-						if ("www.youtube.com".equals(uri.getHost()) || "youtube.com".equals(uri.getHost())) {
-							if ("/watch".equals(uri.getPath())) {
-								Map<String, List<String>> map = NamingUtils.queryToMap(uri);
-								youTubeVideoId = map.get("v").get(0);
+						// Transform watch URL in embed
+						// YouTube
+						String videoId = null;
+						if ("www.youtube.com".equals(uri.getHost()) || "youtube.com".equals(uri.getHost())
+								|| "youtu.be".equals(uri.getHost())) {
+							if ("www.youtube.com".equals(uri.getHost()) || "youtube.com".equals(uri.getHost())) {
+								if ("/watch".equals(uri.getPath())) {
+									Map<String, List<String>> map = NamingUtils.queryToMap(uri);
+									videoId = map.get("v").get(0);
+								}
+							} else if ("youtu.be".equals(uri.getHost())) {
+								videoId = uri.getPath().substring(1);
 							}
-						} else if ("youtu.be".equals(uri.getHost())) {
-							youTubeVideoId = uri.getPath().substring(1);
+							if (videoId != null) {
+								try {
+									uri = new URI("https://www.youtube.com/embed/" + videoId);
+									text.setText(uri.toString());
+								} catch (URISyntaxException e1) {
+									throw new IllegalStateException(e1);
+								}
+							}
 						}
-						if (youTubeVideoId != null) {
-							try {
-								uri = new URI("https://www.youtube.com/embed/" + youTubeVideoId);
-								text.setText(uri.toString());
-							} catch (URISyntaxException e1) {
-								throw new IllegalStateException(e1);
+
+						// Vimeo
+						if ("vimeo.com".equals(uri.getHost())) {
+							videoId = uri.getPath().substring(1);
+							if (videoId != null) {
+								try {
+									uri = new URI("https://player.vimeo.com/video/" + videoId);
+									text.setText(uri.toString());
+								} catch (URISyntaxException e1) {
+									throw new IllegalStateException(e1);
+								}
 							}
 						}
 
@@ -175,7 +192,7 @@ public class DbkVideo extends StyledControl implements SectionPart, NodePart {
 
 	@Override
 	protected void setContainerLayoutData(Composite composite) {
-		composite.setLayoutData(CmsUiUtils.fillAll());
+		composite.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, true, true));
 	}
 
 	@Override
