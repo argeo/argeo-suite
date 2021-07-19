@@ -124,7 +124,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				if (showTitle) {
 					if (section.getHeader() == null)
 						section.createHeader();
-					DocBookSectionTitle title = newSectionTitle(textSection, titleNode);
+					DbkSectionTitle title = newSectionTitle(textSection, titleNode);
 					title.setLayoutData(CmsUiUtils.fillWidth());
 					updateContent(title);
 				}
@@ -241,12 +241,12 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		}
 	}
 
-	protected DocBookSectionTitle newSectionTitle(TextSection parent, Node titleNode) throws RepositoryException {
+	protected DbkSectionTitle newSectionTitle(TextSection parent, Node titleNode) throws RepositoryException {
 		int style = parent.getStyle();
 		Composite titleParent = newSectionHeader(parent);
 		if (parent.isTitleReadOnly())
 			style = style | SWT.READ_ONLY;
-		DocBookSectionTitle title = new DocBookSectionTitle(titleParent, style, titleNode);
+		DbkSectionTitle title = new DbkSectionTitle(titleParent, style, titleNode);
 		updateContent(title);
 		title.setMouseListener(getMouseListener());
 		title.setFocusListener(getFocusListener());
@@ -257,20 +257,20 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 	 * To be overridden in order to provide additional processing at the section
 	 * level.
 	 * 
-	 * @return the parent to use for the {@link DocBookSectionTitle}, by default
+	 * @return the parent to use for the {@link DbkSectionTitle}, by default
 	 *         {@link Section#getHeader()}
 	 */
 	protected Composite newSectionHeader(TextSection section) {
 		return section.getHeader();
 	}
 
-	protected DocBookSectionTitle prepareSectionTitle(Section newSection, String titleText) throws RepositoryException {
+	protected DbkSectionTitle prepareSectionTitle(Section newSection, String titleText) throws RepositoryException {
 		Node sectionNode = newSection.getNode();
 		Node titleNode = DbkUtils.getOrAddDbk(sectionNode, DbkType.title);
 		getTextInterpreter().write(titleNode, titleText);
 		if (newSection.getHeader() == null)
 			newSection.createHeader();
-		DocBookSectionTitle sectionTitle = newSectionTitle((TextSection) newSection, sectionNode);
+		DbkSectionTitle sectionTitle = newSectionTitle((TextSection) newSection, sectionNode);
 		return sectionTitle;
 	}
 
@@ -305,8 +305,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				DbkVideo video = (DbkVideo) part;
 				video.load(part.getControl());
 			}
-		} else if (part instanceof DocBookSectionTitle) {
-			DocBookSectionTitle title = (DocBookSectionTitle) part;
+		} else if (part instanceof DbkSectionTitle) {
+			DbkSectionTitle title = (DbkSectionTitle) part;
 			title.setStyle(title.getSection().getTitleStyle());
 			// use control AFTER setting style
 			if (title == getEdited())
@@ -539,8 +539,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 				Paragraph secondParagraph = paragraphSplitted(paragraph, secondNode);
 				edit(secondParagraph, 0);
-			} else if (getEdited() instanceof DocBookSectionTitle) {
-				DocBookSectionTitle sectionTitle = (DocBookSectionTitle) getEdited();
+			} else if (getEdited() instanceof DbkSectionTitle) {
+				DbkSectionTitle sectionTitle = (DbkSectionTitle) getEdited();
 				Text text = (Text) sectionTitle.getControl();
 				String txt = text.getText();
 				int caretPosition = text.getCaretPosition();
@@ -666,7 +666,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				// main title
 				if (section == mainSection && section instanceof TextSection && paragraphNode.getIndex() == 1
 						&& !sectionNode.hasNode(DbkType.title.get())) {
-					DocBookSectionTitle sectionTitle = prepareSectionTitle(section, txt);
+					DbkSectionTitle sectionTitle = prepareSectionTitle(section, txt);
 					edit(sectionTitle, 0);
 					return;
 				}
@@ -702,8 +702,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				newSection.getParent().layout();
 				layout(newSection);
 				persistChanges(sectionNode);
-			} else if (getEdited() instanceof DocBookSectionTitle) {
-				DocBookSectionTitle sectionTitle = (DocBookSectionTitle) getEdited();
+			} else if (getEdited() instanceof DbkSectionTitle) {
+				DbkSectionTitle sectionTitle = (DbkSectionTitle) getEdited();
 				Section section = sectionTitle.getSection();
 				Section parentSection = section.getParentSection();
 				if (parentSection == null)
@@ -734,8 +734,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		try {
 			if (getEdited() instanceof Paragraph) {
 				upload(getEdited());
-			} else if (getEdited() instanceof DocBookSectionTitle) {
-				DocBookSectionTitle sectionTitle = (DocBookSectionTitle) getEdited();
+			} else if (getEdited() instanceof DbkSectionTitle) {
+				DbkSectionTitle sectionTitle = (DbkSectionTitle) getEdited();
 				Section section = sectionTitle.getSection();
 				Node sectionNode = section.getNode();
 				Section parentSection = section.getParentSection();
@@ -807,7 +807,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		return newParagraph;
 	}
 
-	protected Paragraph sectionTitleSplitted(DocBookSectionTitle sectionTitle, Node newNode)
+	protected Paragraph sectionTitleSplitted(DbkSectionTitle sectionTitle, Node newNode)
 			throws RepositoryException {
 		updateContent(sectionTitle);
 		Paragraph newParagraph = newParagraph(sectionTitle.getSection(), newNode);

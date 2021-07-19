@@ -60,8 +60,8 @@ public class TextSection extends Section {
 			return titleStyle;
 		// TODO make base H styles configurable
 //		Integer relativeDepth = getRelativeDepth();
-//		System.out.println("Level: "+getLevel());
-		return getLevel() == 0 ? TextStyles.TEXT_TITLE : "h" + getLevel();
+//		System.out.println("Level: " + getLevel());
+		return "h" + (getLevel() + 1);
 	}
 
 	public void setDefaultTextStyle(String defaultTextStyle) {

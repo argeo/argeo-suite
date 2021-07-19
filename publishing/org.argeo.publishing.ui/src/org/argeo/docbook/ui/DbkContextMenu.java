@@ -66,8 +66,8 @@ class DbkContextMenu {
 			insertMediaB(parent, img);
 			insertParagraphB(parent, DbkMsg.insertParagraph.lead(), img);
 
-		} else if (editablePart instanceof DocBookSectionTitle) {
-			DocBookSectionTitle sectionTitle = (DocBookSectionTitle) editablePart;
+		} else if (editablePart instanceof DbkSectionTitle) {
+			DbkSectionTitle sectionTitle = (DbkSectionTitle) editablePart;
 			TextSection section = sectionTitle.getSection();
 			if (!section.isTitleReadOnly()) {
 				Label deleteB = new Label(shell, SWT.NONE);
