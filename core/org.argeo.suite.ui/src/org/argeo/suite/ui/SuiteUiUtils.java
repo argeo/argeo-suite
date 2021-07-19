@@ -350,13 +350,17 @@ public class SuiteUiUtils {
 		return link.createUi(parent, node);
 	}
 
-	public static Control addExternalLink(Composite parent, String label, String url, String plainCssAnchorClass)
-			throws RepositoryException {
+	public static Control addExternalLink(Composite parent, String label, String url, String plainCssAnchorClass,
+			boolean newWindow) throws RepositoryException {
 		Label lbl = new Label(parent, SWT.NONE);
 		CmsUiUtils.markup(lbl);
 		StringBuilder txt = new StringBuilder();
 		txt.append("<a class='" + plainCssAnchorClass + "'");
-		txt.append(" href='").append(url).append("'>");
+		txt.append(" href='").append(url).append("'");
+		if (newWindow) {
+			txt.append(" target='blank_'");
+		}
+		txt.append(">");
 		txt.append(label);
 		txt.append("</a>");
 		lbl.setText(txt.toString());
