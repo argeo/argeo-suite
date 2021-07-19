@@ -221,24 +221,18 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 	protected DbkVideo newVideo(TextSection parent, Node node) {
 		try {
-//			node.getSession();
-//			Composite wrapper = new Composite(parent, SWT.NONE);
-//			new Label(wrapper,SWT.NONE).setText("TEST");
-			DbkVideo video = new DbkVideo(parent, SWT.BORDER, node);
+			DbkVideo video = new DbkVideo(parent,getCmsEditable().canEdit()?SWT.NONE : SWT.READ_ONLY, node);
 			GridData gd;
 			if (maxMediaWidth != null) {
 				gd = new GridData(SWT.CENTER, SWT.FILL, false, false);
 				// TODO, manage size
 				gd.widthHint = maxMediaWidth;
 				gd.heightHint = (int) (gd.heightHint * 0.5625);
-//				img.setPreferredSize(new Point(maxMediaWidth, 0));
 			} else {
 				gd = new GridData(SWT.CENTER, SWT.FILL, false, false);
-				gd.widthHint = video.getWidth();
-				gd.heightHint = video.getHeight();
-//				gd = new GridData(video.getWidth(),video.getHeight());
+//				gd.widthHint = video.getWidth();
+//				gd.heightHint = video.getHeight();
 			}
-//			wrapper.setLayoutData(gd);
 			video.setLayoutData(gd);
 			updateContent(video);
 			return null;
@@ -305,7 +299,8 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 					paragraph.setText(textInterpreter.readSimpleHtml(partNode));
 			} else if (part instanceof DbkImg) {
 				DbkImg editableImage = (DbkImg) part;
-				//imageManager.load(partNode, part.getControl(), editableImage.getPreferredImageSize());
+				// imageManager.load(partNode, part.getControl(),
+				// editableImage.getPreferredImageSize());
 			} else if (part instanceof DbkVideo) {
 				DbkVideo video = (DbkVideo) part;
 				video.load(part.getControl());

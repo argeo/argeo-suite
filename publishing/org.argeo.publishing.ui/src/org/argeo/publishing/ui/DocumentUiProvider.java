@@ -6,6 +6,7 @@ import javax.jcr.nodetype.NodeType;
 
 import org.argeo.cms.ui.CmsEditable;
 import org.argeo.cms.ui.CmsUiProvider;
+import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsLink;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.JcrVersionCmsEditable;
@@ -22,6 +23,7 @@ public class DocumentUiProvider implements CmsUiProvider {
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
+		CmsView cmsView = CmsView.getCmsView(parent);
 		CmsEditable cmsEditable = new JcrVersionCmsEditable(context);
 		if (context.hasNode(DbkType.article.get())) {
 			Node textNode = context.getNode(DbkType.article.get());
@@ -35,7 +37,10 @@ public class DocumentUiProvider implements CmsUiProvider {
 			page.setLayoutData(CmsUiUtils.fillAll());
 			page.setLayout(CmsUiUtils.noSpaceGridLayout());
 
-			AbstractDbkViewer dbkEditor = new DocumentTextEditor(page, SWT.NONE, textNode, cmsEditable);
+			cmsView.runAs(() -> {
+				AbstractDbkViewer dbkEditor = new DocumentTextEditor(page, SWT.NONE, textNode, cmsEditable);
+				dbkEditor.refresh();
+			});
 			return page;
 
 		} else if (context.isNodeType(NodeType.NT_FILE)) {

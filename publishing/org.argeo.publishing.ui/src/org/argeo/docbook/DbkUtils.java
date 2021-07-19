@@ -11,7 +11,9 @@ import java.nio.file.Path;
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
+import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
+import javax.jcr.ValueFormatException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -165,6 +167,46 @@ public class DbkUtils {
 			return mediaNode;
 		} catch (RepositoryException e) {
 			throw new JcrException("Cannot insert empty image after " + sibling, e);
+		}
+	}
+
+	public static Node insertVideoAfter(Node sibling) {
+		try {
+
+			Node parent = sibling.getParent();
+			Node mediaNode = addDbk(parent, DbkType.mediaobject);
+			// TODO optimise?
+			parent.orderBefore(mediaNode.getName() + "[" + mediaNode.getIndex() + "]",
+					sibling.getName() + "[" + sibling.getIndex() + "]");
+			parent.orderBefore(sibling.getName() + "[" + sibling.getIndex() + "]",
+					mediaNode.getName() + "[" + mediaNode.getIndex() + "]");
+
+			Node videoNode = addDbk(mediaNode, DbkType.videoobject);
+			Node videoDataNode = addDbk(videoNode, DbkType.videodata);
+			return mediaNode;
+		} catch (RepositoryException e) {
+			throw new JcrException("Cannot insert empty image after " + sibling, e);
+		}
+	}
+
+	public static String getMediaFileref(Node node) {
+		try {
+			Node mediadata;
+			if (node.hasNode(DbkType.imageobject.get())) {
+				mediadata = node.getNode(DbkType.imageobject.get()).getNode(DbkType.imagedata.get());
+			} else if (node.hasNode(DbkType.videoobject.get())) {
+				mediadata = node.getNode(DbkType.videoobject.get()).getNode(DbkType.videodata.get());
+			} else {
+				throw new IllegalArgumentException("Fileref not found in " + node);
+			}
+
+			if (mediadata.hasProperty(DbkAttr.fileref.name())) {
+				return mediadata.getProperty(DbkAttr.fileref.name()).getString();
+			} else {
+				return null;
+			}
+		} catch (RepositoryException e) {
+			throw new JcrException("Cannot retrieve file ref from " + node, e);
 		}
 	}
 

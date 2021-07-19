@@ -58,12 +58,12 @@ class DbkContextMenu {
 		if (editablePart instanceof Paragraph) {
 			Paragraph paragraph = (Paragraph) editablePart;
 			deletePartB(parent, DbkMsg.deleteParagraph.lead(), paragraph);
-			insertMediaB(parent, DbkMsg.insertMedia.lead(), paragraph);
+			insertMediaB(parent,  paragraph);
 
 		} else if (editablePart instanceof Img) {
 			Img img = (Img) editablePart;
 			deletePartB(parent, DbkMsg.deleteMedia.lead(), img);
-			insertMediaB(parent, DbkMsg.insertMedia.lead(), img);
+			insertMediaB(parent, img);
 			insertParagraphB(parent, DbkMsg.insertParagraph.lead(), img);
 
 		} else if (editablePart instanceof DocBookSectionTitle) {
@@ -77,7 +77,7 @@ class DbkContextMenu {
 					hide();
 				});
 			}
-			insertMediaB(parent, DbkMsg.insertMedia.lead(), sectionTitle.getSection(), sectionTitle);
+			insertMediaB(parent,  sectionTitle.getSection(), sectionTitle);
 		}
 
 		StyledToolMouseListener stml = new StyledToolMouseListener(editablePart);
@@ -128,15 +128,23 @@ class DbkContextMenu {
 		shell.setVisible(false);
 	}
 
-	protected void insertMediaB(Composite parent, String msg, SectionPart sectionPart) {
-		insertMediaB(parent, msg, sectionPart.getSection(), sectionPart);
+	protected void insertMediaB(Composite parent, SectionPart sectionPart) {
+		insertMediaB(parent,  sectionPart.getSection(), sectionPart);
 	}
 
-	protected void insertMediaB(Composite parent, String msg, Section section, NodePart nodePart) {
-		Label insertMediaB = new Label(parent, SWT.NONE);
-		insertMediaB.setText(DbkMsg.insertMedia.lead());
-		insertMediaB.addMouseListener((MouseDown) (e) -> {
+	protected void insertMediaB(Composite parent, Section section, NodePart nodePart) {
+		Label insertPictureB = new Label(parent, SWT.NONE);
+		insertPictureB.setText(DbkMsg.insertPicture.lead());
+		insertPictureB.addMouseListener((MouseDown) (e) -> {
 			Node newNode = DbkUtils.insertImageAfter(nodePart.getNode());
+			Jcr.save(newNode);
+			textViewer.insertPart(section, newNode);
+			hide();
+		});
+		Label insertVideoB = new Label(parent, SWT.NONE);
+		insertVideoB.setText(DbkMsg.insertVideo.lead());
+		insertVideoB.addMouseListener((MouseDown) (e) -> {
+			Node newNode = DbkUtils.insertVideoAfter(nodePart.getNode());
 			Jcr.save(newNode);
 			textViewer.insertPart(section, newNode);
 			hide();

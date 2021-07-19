@@ -1,10 +1,13 @@
 package org.argeo.docbook.ui;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Map;
+
 import javax.jcr.Item;
 import javax.jcr.Node;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
-import javax.jcr.ValueFormatException;
 
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.NodePart;
@@ -13,12 +16,19 @@ import org.argeo.cms.ui.viewers.SectionPart;
 import org.argeo.cms.ui.widgets.StyledControl;
 import org.argeo.docbook.DbkAttr;
 import org.argeo.docbook.DbkType;
+import org.argeo.docbook.DbkUtils;
+import org.argeo.eclipse.ui.Selected;
 import org.argeo.jcr.JcrException;
+import org.argeo.naming.NamingUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Text;
 
 public class DbkVideo extends StyledControl implements SectionPart, NodePart {
 	private static final long serialVersionUID = -8753232181570351880L;
@@ -27,43 +37,137 @@ public class DbkVideo extends StyledControl implements SectionPart, NodePart {
 	private int width = 640;
 	private int height = 360;
 
+	private boolean editable;
+
 	public DbkVideo(Composite parent, int style, Node node) {
 		this(Section.findSection(parent), parent, style, node);
 	}
 
 	DbkVideo(Section section, Composite parent, int style, Node node) {
 		super(parent, style, node);
+		editable = !(SWT.READ_ONLY == (style & SWT.READ_ONLY));
 		this.section = section;
 		setStyle(DbkType.videoobject.name());
 	}
 
 	@Override
 	protected Control createControl(Composite box, String style) {
-		Browser browser = new Browser(box, SWT.NONE);
+		Node mediaobject = getNode();
+		Composite wrapper = new Composite(box, SWT.NONE);
+		wrapper.setLayout(CmsUiUtils.noSpaceGridLayout());
+
+		Composite browserC = new Composite(wrapper, SWT.NONE);
+		browserC.setLayout(CmsUiUtils.noSpaceGridLayout());
+//		wrapper.setLayoutData(CmsUiUtils.fillAll());
+		Browser browser = new Browser(browserC, SWT.NONE);
 		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
 		gd.widthHint = getWidth();
 		gd.heightHint = getHeight();
-		browser.setLayoutData(gd);
+		browserC.setLayoutData(gd);
+
+		if (editable) {
+			Composite editor = new Composite(wrapper, SWT.NONE);
+			editor.setLayout(new GridLayout(3, false));
+			editor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+			String fileref = DbkUtils.getMediaFileref(mediaobject);
+			Text text = new Text(editor, SWT.SINGLE);
+			if (fileref != null)
+				text.setText(fileref);
+			else
+				text.setMessage("Embed URL of the video.");
+			text.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+			Button updateB = new Button(editor, SWT.FLAT);
+			updateB.setText("Update");
+			updateB.addSelectionListener(new Selected() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					try {
+						Node videodata = mediaobject.getNode(DbkType.videoobject.get())
+								.getNode(DbkType.videodata.get());
+						String txt = text.getText();
+						URI uri;
+						try {
+							uri = new URI(txt);
+						} catch (URISyntaxException e1) {
+							text.setText("");
+							text.setMessage("Invalid URL");
+							return;
+						}
+
+						// transform YouTube watch URL in embed
+						String youTubeVideoId = null;
+						if ("www.youtube.com".equals(uri.getHost()) || "youtube.com".equals(uri.getHost())) {
+							if ("/watch".equals(uri.getPath())) {
+								Map<String, List<String>> map = NamingUtils.queryToMap(uri);
+								youTubeVideoId = map.get("v").get(0);
+							}
+						} else if ("youtu.be".equals(uri.getHost())) {
+							youTubeVideoId = uri.getPath().substring(1);
+						}
+						if (youTubeVideoId != null) {
+							try {
+								uri = new URI("https://www.youtube.com/embed/" + youTubeVideoId);
+								text.setText(uri.toString());
+							} catch (URISyntaxException e1) {
+								throw new IllegalStateException(e1);
+							}
+						}
+
+						videodata.setProperty(DbkAttr.fileref.name(), uri.toString());
+						// TODO better integrate it in the edition lifecycle
+						videodata.getSession().save();
+						load(browser);
+					} catch (RepositoryException e1) {
+						throw new JcrException("Cannot update " + mediaobject, e1);
+					}
+
+				}
+			});
+
+			Button deleteB = new Button(editor, SWT.FLAT);
+			deleteB.setText("Delete");
+			deleteB.addSelectionListener(new Selected() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+					try {
+						mediaobject.remove();
+						Composite parent = getParent();
+						dispose();
+						parent.layout(true, true);
+					} catch (RepositoryException e1) {
+						throw new JcrException("Cannot update " + mediaobject, e1);
+					}
+
+				}
+			});
+		}
+
+		// TODO caption
 		return browser;
 	}
 
 	public void load(Control control) {
-		Browser browser = (Browser) control;
 		try {
-			getNode().getSession();
-			String src = getNode().getNode(DbkType.videoobject.get()).getNode(DbkType.videodata.get())
-					.getProperty(DbkAttr.fileref.name()).getString();
-			// TODO manage self-hosted videos
-			// TODO for YouTube videos, check whether the URL starts with
-			// https://www.youtube.com/embed/ and not https://www.youtube.com/watch?v=
-			StringBuilder html = new StringBuilder();
-			html.append(
-					"<iframe frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen=\"true\"");
-			// TODO make size configurable
-			html.append("width=\"").append(width).append("\" height=\"").append(height).append("\" ");
-			html.append("src=\"").append(src).append("\" ");
-			html.append("/>");
-			browser.setText(html.toString());
+			if (control instanceof Browser) {
+				Browser browser = (Browser) control;
+				getNode().getSession();
+				String fileref = DbkUtils.getMediaFileref(getNode());
+				if (fileref != null) {
+					// TODO manage self-hosted videos
+					// TODO for YouTube videos, check whether the URL starts with
+					// https://www.youtube.com/embed/ and not https://www.youtube.com/watch?v=
+					StringBuilder html = new StringBuilder();
+					html.append(
+							"<iframe frameborder=\"0\" allow=\"autoplay; fullscreen; picture-in-picture\" allowfullscreen=\"true\"");
+					// TODO make size configurable
+					html.append("width=\"").append(width).append("\" height=\"").append(height).append("\" ");
+					html.append("src=\"").append(fileref).append("\" ");
+					html.append("/>");
+					browser.setText(html.toString());
+				}
+			}
 		} catch (RepositoryException e) {
 			throw new JcrException("Cannot retrieve src for video " + getNode(), e);
 		}
