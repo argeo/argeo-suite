@@ -41,7 +41,11 @@ public class OpenLayersMap extends Composite {
 	private String vectorSource = null;
 	private String gpxSource = null;
 
+	private String vectorSourceStyle;
+
 	private List<String> geoJsonSources = new ArrayList<>();
+	private Map<String, String> vectorSources = new HashMap<>();
+	private Map<String, String> layerStyles = new HashMap<>();
 
 	private CmsView cmsView;
 
@@ -101,7 +105,7 @@ public class OpenLayersMap extends Composite {
 		this.zoom = zoom;
 	}
 
-	public void addPoints(List<Node> geoPoints) throws RepositoryException {
+	protected String asVectorSource(List<Node> geoPoints) throws RepositoryException {
 		boolean first = true;
 		StringBuffer sb = new StringBuffer("new ol.source.Vector({ features: [");
 		for (int i = 0; i < geoPoints.size(); i++) {
@@ -118,26 +122,60 @@ public class OpenLayersMap extends Composite {
 				sb.append(lng).append(',').append(lat);
 				sb.append("]))");
 				sb.append(",path:'").append(node.getPath()).append("'");
+				sb.append(",name:'").append(node.getName()).append("'");
+				String entityType = null;
+				if (node.isNodeType(EntityType.local.get())) {
+					entityType = node.getProperty(EntityNames.ENTITY_TYPE).getString();
+					sb.append(", type:'").append(entityType).append("'");
+				}
 				sb.append("})");
 			}
 		}
 		sb.append("]");
 		sb.append(" })");
-		this.vectorSource = sb.toString();
+		return sb.toString();
+	}
+
+	public void addPoints(List<Node> geoPoints) throws RepositoryException {
+		this.vectorSource = asVectorSource(geoPoints);
 		if (log.isTraceEnabled())
 			log.trace("Vector source: " + vectorSource);
 		renderVectorSource();
+	}
+
+	public void addPoints(String layerName, List<Node> geoPoints, String style) throws RepositoryException {
+		this.vectorSources.put(layerName, asVectorSource(geoPoints));
+		if (style != null) {
+			layerStyles.put(layerName, style);
+		}
+		renderVectorSources();
 	}
 
 	protected void renderVectorSource() {
 		if (vectorSource == null)
 			return;
 		if (isRenderCompleted()) {
-//			String style = ", style: new ol.style.Style({  image: new ol.style.Icon({ src: 'https://openlayers.org/en/latest/examples/data/icon.png' }) })";
-			String style = "";
+//			String style = ", style: new ol.style.Style({  image: new ol.style.Icon({ src: '/pkg/org.djapps.on.openheritage.ui/map_oc.png' }) })";
+			String style = vectorSourceStyle != null ? ", style: " + vectorSourceStyle : "";
+//			String style = "";
 			String toEvaluate = "map.addLayer(new ol.layer.Vector({ source: " + vectorSource + style + "}));";
 //			System.out.println(toEvaluate);
 			browser.execute(toEvaluate);
+		}
+	}
+
+	protected void renderVectorSources() {
+		if (vectorSources.isEmpty())
+			return;
+		if (isRenderCompleted()) {
+			StringBuilder toExecute = new StringBuilder();
+			for (String name : vectorSources.keySet()) {
+				String style = layerStyles.containsKey(name) ? ", style: " + layerStyles.get(name) : "";
+				String toEvaluate = "map.addLayer(new ol.layer.Vector({ source: " + vectorSources.get(name) + style
+						+ ",name: '" + name + "'}));";
+				toExecute.append(toEvaluate);
+			}
+			browser.execute(toExecute.toString());
 		}
 	}
 
@@ -180,6 +218,10 @@ public class OpenLayersMap extends Composite {
 		}
 	}
 
+	public void setVectorSourceStyle(String vectorSourceStyle) {
+		this.vectorSourceStyle = vectorSourceStyle;
+	}
+
 	private class RenderCompleted extends BrowserFunction {
 
 		RenderCompleted(Browser browser, String name) {
@@ -202,6 +244,8 @@ public class OpenLayersMap extends Composite {
 						renderGpxSource();
 					if (vectorSource != null)
 						renderVectorSource();
+					if (!vectorSources.isEmpty())
+						renderVectorSources();
 				}
 				return null;
 			} catch (Exception e) {
