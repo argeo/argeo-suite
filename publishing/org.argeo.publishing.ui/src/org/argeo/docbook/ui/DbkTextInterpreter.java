@@ -252,7 +252,10 @@ public class DbkTextInterpreter implements TextInterpreter {
 	public String readSimpleHtml(Item item) {
 		try {
 			StringBuilder sb = new StringBuilder();
+//			sb.append("<div style='text-align: justify;'>");
 			readAsSimpleHtml((Node) item, sb);
+//			sb.append("</div>");
+//			System.out.println(sb);
 			return sb.toString();
 		} catch (RepositoryException e) {
 			throw new JcrException("Cannot convert " + item + " to simple HTML", e);

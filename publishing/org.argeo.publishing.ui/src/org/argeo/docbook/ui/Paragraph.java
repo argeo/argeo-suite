@@ -8,6 +8,8 @@ import org.argeo.cms.ui.viewers.SectionPart;
 import org.argeo.cms.ui.widgets.EditableText;
 import org.argeo.cms.ui.widgets.TextStyles;
 import org.argeo.docbook.DbkType;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 /** An editable paragraph. */
 public class Paragraph extends EditableText implements SectionPart {
@@ -23,6 +25,13 @@ public class Paragraph extends EditableText implements SectionPart {
 
 	public TextSection getSection() {
 		return section;
+	}
+
+	@Override
+	protected Label createLabel(Composite box, String style) {
+		Label lbl = super.createLabel(box, style);
+		CmsUiUtils.disableMarkupValidation(lbl);
+		return lbl;
 	}
 
 	@Override
