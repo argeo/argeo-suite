@@ -125,7 +125,7 @@ public class DbkUtils {
 				if (nit.hasNext())
 					return false;
 				if (first.getName().equals(Jcr.JCR_XMLTEXT)) {
-					String str = JcrxApi.getXmlValue(first);
+					String str = Jcr.get(first, Jcr.JCR_XMLCHARACTERS);
 					if (str != null && str.trim().equals("")) {
 						node.remove();
 						return true;
