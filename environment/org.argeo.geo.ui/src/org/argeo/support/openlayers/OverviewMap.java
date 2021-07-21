@@ -56,11 +56,11 @@ public class OverviewMap implements CmsUiProvider {
 		Query query = context.getSession().getWorkspace().getQueryManager()
 				.createQuery("SELECT * FROM [" + EntityType.geopoint.get() + "]", Query.JCR_SQL2);
 		List<Node> geoPoints = JcrUtils.nodeIteratorToList(query.execute().getNodes());
-		OpenLayersMap apafMap = new OpenLayersMap(parent, SWT.NONE, getClass().getResource("map-osm.html"));
-		apafMap.setLayoutData(CmsUiUtils.fillAll());
+		OpenLayersMap map = new OpenLayersMap(parent, SWT.NONE, getClass().getResource("map-osm.html"));
+		map.setLayoutData(CmsUiUtils.fillAll());
 
 		// apafMap.setZoom(7);
 		// apafMap.setCenter(-2.472, 8.010);
-		apafMap.addPoints(geoPoints);
+		map.addPoints(geoPoints);
 	}
 }

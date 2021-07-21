@@ -12,3 +12,6 @@ org.osgi.framework,\
 Service-Component:\
 OSGI-INF/mapLayer.xml,\
 OSGI-INF/overviewMap.xml
+
+Provide-Capability:\
+cms.publish;pkg=org.djapps.on.openheritage.ui,file="*.png,*.js,*.html"
