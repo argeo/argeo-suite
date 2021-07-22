@@ -44,7 +44,7 @@ public class MultiTermsPart extends AbstractTermsPart {
 
 		boolean vertical = SWT.VERTICAL == (getStyle() & SWT.VERTICAL);
 		RowLayout rl = new RowLayout(vertical ? SWT.VERTICAL : SWT.HORIZONTAL);
-		rl = CmsUiUtils.noSpaceRowLayout(rl);
+		rl = CmsUiUtils.noMarginsRowLayout(rl);
 //		rl.wrap = true;
 //		rl.justify = true;
 		placeholder.setLayout(rl);
