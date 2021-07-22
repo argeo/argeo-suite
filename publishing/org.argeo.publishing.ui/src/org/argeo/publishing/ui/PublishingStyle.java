@@ -10,6 +10,8 @@ public enum PublishingStyle implements CmsStyle {
 	tag, menu,
 	// text style
 	title, subTitle, chapo, para, sectionTitle, subSectionTitle,
+	// links
+	internalLink,
 	// composite style
 	framed, line;
 
