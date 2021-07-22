@@ -20,9 +20,7 @@ import org.argeo.jcr.Jcr;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -46,6 +44,7 @@ public class MultiTermsPart extends AbstractTermsPart {
 
 		boolean vertical = SWT.VERTICAL == (getStyle() & SWT.VERTICAL);
 		RowLayout rl = new RowLayout(vertical ? SWT.VERTICAL : SWT.HORIZONTAL);
+		rl = CmsUiUtils.noSpaceRowLayout(rl);
 //		rl.wrap = true;
 //		rl.justify = true;
 		placeholder.setLayout(rl);
@@ -54,7 +53,7 @@ public class MultiTermsPart extends AbstractTermsPart {
 			for (Term value : currentValue) {
 				Composite block = new Composite(placeholder, SWT.NONE);
 				block.setLayout(CmsUiUtils.noSpaceGridLayout(3));
-				Label lbl = new Label(block, SWT.SINGLE);
+				Label lbl = new Label(block, SWT.NONE);
 				String display = getTermLabel(value);
 				lbl.setText(display);
 				CmsUiUtils.style(lbl, style == null ? FormStyle.propertyText.style() : style);
