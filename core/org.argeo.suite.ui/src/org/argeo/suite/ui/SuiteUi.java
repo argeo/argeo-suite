@@ -175,7 +175,7 @@ class SuiteUi extends Composite {
 	synchronized void logout() {
 		userDir = null;
 		Jcr.logout(sysSession);
-//		Jcr.logout(homeSession);
+		Jcr.logout(homeSession);
 		currentLayerId = null;
 		workAreas.clear();
 	}
