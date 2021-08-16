@@ -10,7 +10,7 @@
 	<packaging>pom</packaging>
 	<name>Parent POM for Argeo Suite Extensions</name>
 	<description />
-	<version>2.3.1-SNAPSHOT</version>
+	<version>2.3.1</version>
 	<properties>
 		<!-- Dependencies -->
 		<version.argeo-tp>2.1.27</version.argeo-tp>
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.suite.dep.ui.rap</artifactId>
-			<version>2.3.1-SNAPSHOT</version>
+			<version>2.3.1</version>
 			<scope>provided</scope>
 			<exclusions>
 				<!-- Avoid slf4j implementations lurking in the classpath. -->
@@ -168,4 +168,8 @@
 			</plugin>
 		</plugins>
 	</reporting>
+
+  <scm>
+    <tag>argeo-suite-2.3.1</tag>
+  </scm>
 </project>
