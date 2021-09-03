@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.argeo.suite</groupId>
 		<artifactId>dep</artifactId>
-		<version>2.1.16-SNAPSHOT</version>
+		<version>2.1.23-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>org.argeo.suite.dep.e4.rcp</artifactId>
@@ -15,10 +15,58 @@
 	<dependencies>
 		<!-- Base Argeo platform distribution -->
 		<dependency>
-			<groupId>org.argeo.slc.rcp</groupId>
+			<groupId>org.argeo.commons.rcp</groupId>
 			<artifactId>org.argeo.dep.cms.e4.rcp</artifactId>
-			<version>${version.argeo-slc}</version>
+			<version>${version.argeo-rcp}</version>
 			<type>pom</type>
+		</dependency>
+
+		<!-- Jackson JSON processor -->
+		<dependency>
+			<groupId>org.argeo.tp.jackson</groupId>
+			<artifactId>com.fasterxml.jackson.core.jackson-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.jackson</groupId>
+			<artifactId>com.fasterxml.jackson.core.jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.jackson</groupId>
+			<artifactId>com.fasterxml.jackson.core.jackson-annotations</artifactId>
+		</dependency>
+
+		<!-- POI requirements -->
+		<dependency>
+			<groupId>org.argeo.tp.apache.commons</groupId>
+			<artifactId>org.apache.commons.math3</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache.commons</groupId>
+			<artifactId>org.apache.commons.collections4</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.xml.security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.xmlbeans</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.xalan</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.xalan.serializer</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.xml.resolver</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.tp.apache</groupId>
+			<artifactId>org.apache.xerces</artifactId>
 		</dependency>
 
 		<!-- Argeo TP Extras -->

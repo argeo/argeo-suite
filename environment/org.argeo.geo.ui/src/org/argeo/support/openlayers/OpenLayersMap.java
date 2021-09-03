@@ -121,8 +121,8 @@ public class OpenLayersMap extends Composite {
 				sb.append("new ol.geom.Point(ol.proj.fromLonLat([");
 				sb.append(lng).append(',').append(lat);
 				sb.append("]))");
-				sb.append(",path:'").append(node.getPath()).append("'");
-				sb.append(",name:'").append(node.getName()).append("'");
+				sb.append(",path:\"").append(node.getPath()).append("\"");
+				sb.append(",name:\"").append(node.getName()).append("\"");
 				String entityType = null;
 				if (node.isNodeType(EntityType.local.get())) {
 					entityType = node.getProperty(EntityNames.ENTITY_TYPE).getString();
@@ -175,6 +175,7 @@ public class OpenLayersMap extends Composite {
 						+ ",name: '" + name + "'}));";
 				toExecute.append(toEvaluate);
 			}
+			System.out.println(toExecute);
 			browser.execute(toExecute.toString());
 		}
 	}
