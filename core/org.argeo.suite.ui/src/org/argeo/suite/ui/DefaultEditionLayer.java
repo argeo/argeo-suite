@@ -71,7 +71,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 			try {
 				CmsUiUtils.clear(workAreaC);
 				workArea.createUi(workAreaC, context);
-				workAreaC.requestLayout();
+				workAreaC.layout(true, true);
 				return;
 			} catch (RepositoryException e) {
 				throw new JcrException("Cannot rebuild work area", e);

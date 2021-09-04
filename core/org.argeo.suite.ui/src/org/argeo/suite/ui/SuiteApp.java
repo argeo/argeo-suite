@@ -343,16 +343,11 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 					ui.getCmsView().stateChanged(state, appTitle);
 					return;
 				}
-				String currentLayerId = ui.getCurrentLayerId();
-//				if (state.equals(currentLayerId))
-//					return; // does nothing
-//				else {
 				Map<String, Object> properties = new HashMap<>();
 				String layerId = HOME_STATE.equals(state) ? defaultLayerPid : state;
 				properties.put(SuiteEvent.LAYER, layerId);
 				properties.put(SuiteEvent.NODE_PATH, HOME_STATE);
 				ui.getCmsView().sendEvent(SuiteEvent.switchLayer.topic(), properties);
-//				}
 			}
 			return;
 		}
