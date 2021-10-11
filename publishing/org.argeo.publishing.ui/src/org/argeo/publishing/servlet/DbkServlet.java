@@ -79,91 +79,95 @@ public class DbkServlet extends HttpServlet {
 			return;
 		}
 
+		if (path.toLowerCase().endsWith("/index.html")) {
+			path = path.substring(0, path.length() - "/index.html".length());
+		}
+
 		Session session = null;
 		try {
 			session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), req);
-			Node documentNode = session.getNode(path);
-			Node node;
-			if (documentNode.hasNode(DbkType.article.get()))
-				node = documentNode.getNode(DbkType.article.get());
-			else {
-				throw new IllegalArgumentException("Unsupported node " + documentNode);
-			}
-			if (DbkUtils.isDbk(node)) {
-				CmsTheme cmsTheme = null;
-				String themeId = req.getParameter("themeId");
-				if (themeId != null) {
-					cmsTheme = themes.get(themeId);
-					if (cmsTheme == null)
-						throw new IllegalArgumentException("Theme " + themeId + " not found.");
-				}
+			Node node = session.getNode(path);
 
-				// TODO customise DocBook so that it outputs UTF-8
-				// see http://www.sagehill.net/docbookxsl/OutputEncoding.html
-				resp.setContentType("text/html; charset=ISO-8859-1");
+			if (node.hasNode(DbkType.article.get())) {
+				Node dbkNode = node.getNode(DbkType.article.get());
+				if (DbkUtils.isDbk(dbkNode)) {
+					CmsTheme cmsTheme = null;
+					String themeId = req.getParameter("themeId");
+					if (themeId != null) {
+						cmsTheme = themes.get(themeId);
+						if (cmsTheme == null)
+							throw new IllegalArgumentException("Theme " + themeId + " not found.");
+					}
 
-				// TODO optimise with pipes, SAX, etc. ?
-				byte[] arr;
-				try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-					session.exportDocumentView(node.getPath(), out, true, false);
-					arr = out.toByteArray();
+					// TODO customise DocBook so that it outputs UTF-8
+					// see http://www.sagehill.net/docbookxsl/OutputEncoding.html
+					resp.setContentType("text/html; charset=ISO-8859-1");
+
+					// TODO optimise with pipes, SAX, etc. ?
+					byte[] arr;
+					try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+						session.exportDocumentView(dbkNode.getPath(), out, true, false);
+						arr = out.toByteArray();
 //				System.out.println(new String(arr, StandardCharsets.UTF_8));
-				} catch (RepositoryException e) {
-					throw new JcrException(e);
-				}
+					} catch (RepositoryException e) {
+						throw new JcrException(e);
+					}
 
-				try (InputStream in = new ByteArrayInputStream(arr);
+					try (InputStream in = new ByteArrayInputStream(arr);
 //					ByteArrayOutputStream out = new ByteArrayOutputStream();
-				) {
+					) {
 
-					Result xmlOutput = new StreamResult(resp.getOutputStream());
+						Result xmlOutput = new StreamResult(resp.getOutputStream());
 
-					DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
+						DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
 //				Document doc = docBuilder.parse(new File(
 //						System.getProperty("user.home") + "/dev/git/gpl/argeo-qa/doc/platform/argeo-platform.dbk.xml"));
-					Document doc = docBuilder.parse(in);
-					Source xmlInput = new DOMSource(doc);
+						Document doc = docBuilder.parse(in);
+						Source xmlInput = new DOMSource(doc);
 
-					Transformer transformer = docBoookTemplates.newTransformer();
+						Transformer transformer = docBoookTemplates.newTransformer();
 
-					// gather CSS
-					if (cmsTheme != null) {
-						StringBuilder sb = new StringBuilder();
-						for (String cssPath : cmsTheme.getWebCssPaths()) {
-							sb.append(req.getContextPath()).append(req.getServletPath()).append('/');
-							sb.append(themeId).append('/').append(cssPath).append(' ');
+						// gather CSS
+						if (cmsTheme != null) {
+							StringBuilder sb = new StringBuilder();
+							for (String cssPath : cmsTheme.getWebCssPaths()) {
+								sb.append(req.getContextPath()).append(req.getServletPath()).append('/');
+								sb.append(themeId).append('/').append(cssPath).append(' ');
+							}
+							// FIXME make it more generic
+							sb.append("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap")
+									.append(' ');
+							sb.append(
+									"https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;1,400&display=swap")
+									.append(' ');
+							if (sb.length() > 0)
+								transformer.setParameter("html.stylesheet", sb.toString());
 						}
-						// FIXME make it more generic
-						sb.append("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap")
-								.append(' ');
-						sb.append(
-								"https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;1,400&display=swap")
-								.append(' ');
-						if (sb.length() > 0)
-							transformer.setParameter("html.stylesheet", sb.toString());
-					}
-					transformer.transform(xmlInput, xmlOutput);
+						transformer.transform(xmlInput, xmlOutput);
 //				resp.getOutputStream().write(out.toByteArray());
-				} catch (Exception e) {
-					throw new ServletException("Cannot transform " + path, e);
+					} catch (Exception e) {
+						throw new ServletException("Cannot transform " + path, e);
+					}
 				}
-			} else if (node.isNodeType(NodeType.NT_FILE)) {// media download etc.
-				String fileNameLowerCase = node.getName().toLowerCase();
-				if (fileNameLowerCase.endsWith(".jpg") || fileNameLowerCase.endsWith(".jpeg")) {
-					resp.setContentType("image/jpeg");
-				} else if (fileNameLowerCase.endsWith(".png")) {
-					resp.setContentType("image/png");
-				} else if (fileNameLowerCase.endsWith(".gif")) {
-					resp.setContentType("image/gif");
-				} else if (fileNameLowerCase.endsWith(".svg")) {
-					resp.setContentType("image/svg+xml");
-				} else {
-					// TODO know more content types...
-					resp.setHeader("Content-Disposition", "attachment; filename=\"" + node.getName() + "\"");
-				}
-				IOUtils.copy(JcrUtils.getFileAsStream(node), resp.getOutputStream());
 			} else {
-				throw new IllegalArgumentException("Unsupported node " + node);
+				if (node.isNodeType(NodeType.NT_FILE)) {// media download etc.
+					String fileNameLowerCase = node.getName().toLowerCase();
+					if (fileNameLowerCase.endsWith(".jpg") || fileNameLowerCase.endsWith(".jpeg")) {
+						resp.setContentType("image/jpeg");
+					} else if (fileNameLowerCase.endsWith(".png")) {
+						resp.setContentType("image/png");
+					} else if (fileNameLowerCase.endsWith(".gif")) {
+						resp.setContentType("image/gif");
+					} else if (fileNameLowerCase.endsWith(".svg")) {
+						resp.setContentType("image/svg+xml");
+					} else {
+						// TODO know more content types...
+						resp.setHeader("Content-Disposition", "attachment; filename=\"" + node.getName() + "\"");
+					}
+					IOUtils.copy(JcrUtils.getFileAsStream(node), resp.getOutputStream());
+				} else {
+					throw new IllegalArgumentException("Unsupported node " + node);
+				}
 			}
 		} catch (RepositoryException e1) {
 			throw new JcrException(e1);
