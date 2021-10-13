@@ -97,7 +97,7 @@ public class OdkFormListServlet extends HttpServlet {
 						if (node.hasProperty(Property.JCR_DESCRIPTION))
 							sb.append("<name>" + node.getProperty(Property.JCR_DESCRIPTION).getString() + "</name>");
 						sb.append("<downloadUrl>" + protocol + "://" + serverName
-								+ (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort) + "/api/odk/form/"
+								+ (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort) + "/api/odk/form"
 								+ node.getPath() + "</downloadUrl>");
 						if (node.hasNode(OrxManifestName.manifest.name())) {
 							sb.append("<manifestUrl>" + protocol + "://" + serverName
