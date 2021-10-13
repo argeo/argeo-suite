@@ -1,6 +1,5 @@
 package org.argeo.support.odk.servlet;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
@@ -63,14 +62,24 @@ public class OdkManifestServlet extends HttpServlet {
 							writer.append("<filename>");
 							writer.append(target.getPath().substring(1) + ".xml");
 							writer.append("</filename>");
-							try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-								session.exportDocumentView(target.getPath(), out, true, false);
-								String fileCsum = DigestUtils.digest(DigestUtils.MD5, out.toByteArray());
-//						JcrxApi.addChecksum(file, fileCsum);
-								writer.append("<hash>");
-								writer.append("md5sum:" + fileCsum);
-								writer.append("</hash>");
-							}
+
+							StringBuilder xml = new StringBuilder();
+							xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+							toSimpleXml(target, xml);
+							String fileCsum = DigestUtils.digest(DigestUtils.MD5,
+									xml.toString().getBytes(StandardCharsets.UTF_8));
+							writer.append("<hash>");
+							writer.append("md5sum:" + fileCsum);
+							writer.append("</hash>");
+
+//							try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+//								session.exportDocumentView(target.getPath(), out, true, false);
+//								String fileCsum = DigestUtils.digest(DigestUtils.MD5, out.toByteArray());
+////						JcrxApi.addChecksum(file, fileCsum);
+//								writer.append("<hash>");
+//								writer.append("md5sum:" + fileCsum);
+//								writer.append("</hash>");
+//							}
 							writer.append("<downloadUrl>" + protocol + "://" + serverName
 									+ (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort)
 									+ "/api/odk/formManifest" + file.getPath() + "</downloadUrl>");
