@@ -1,10 +1,14 @@
 Service-Component:\
 OSGI-INF/cmsApp.xml,\
+OSGI-INF/eventRecorder.xml,\
 OSGI-INF/header.xml,\
 OSGI-INF/footer.xml,\
 OSGI-INF/leadPane.xml,\
 OSGI-INF/loginScreen.xml,\
 OSGI-INF/recentItems.xml,\
+OSGI-INF/adminLeadPane.xml,\
+OSGI-INF/termsEntryArea.xml,\
+OSGI-INF/termsLayer.xml,\
 OSGI-INF/dashboard.xml,\
 OSGI-INF/dashboardLayer.xml
 

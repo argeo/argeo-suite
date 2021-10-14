@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -65,11 +66,13 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	private String headerPid;
 	private String footerPid;
 	private String leadPanePid;
+	private String adminLeadPanePid;
 	private String loginScreenPid;
 
 	private String defaultLayerPid = "argeo.suite.ui.dashboardLayer";
 
 	private String defaultUiName = "app";
+	private String adminUiName = "admin";
 	private String defaultThemeId = "org.argeo.suite.theme.default";
 
 	private Map<String, RankedObject<CmsUiProvider>> uiProvidersByPid = Collections.synchronizedMap(new HashMap<>());
@@ -107,6 +110,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		headerPid = pidPrefix + "header";
 		footerPid = pidPrefix + "footer";
 		leadPanePid = pidPrefix + "leadPane";
+		adminLeadPanePid = pidPrefix + "adminLeadPane";
 		loginScreenPid = pidPrefix + "loginScreen";
 	}
 
@@ -123,6 +127,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	public Set<String> getUiNames() {
 		HashSet<String> uiNames = new HashSet<>();
 		uiNames.add(defaultUiName);
+		uiNames.add(adminUiName);
 		return uiNames;
 	}
 
@@ -156,10 +161,19 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		try {
 			Node context = null;
 			SuiteUi ui = (SuiteUi) parent;
+
+			String uiName = Objects.toString(ui.getParent().getData(UI_NAME_PROPERTY), null);
+			if (uiName == null)
+				throw new IllegalStateException("UI name should not be null");
 			CmsView cmsView = CmsView.getCmsView(parent);
 			CmsUiProvider headerUiProvider = findUiProvider(headerPid);
 			CmsUiProvider footerUiProvider = findUiProvider(footerPid);
-			CmsUiProvider leadPaneUiProvider = findUiProvider(leadPanePid);
+			CmsUiProvider leadPaneUiProvider;
+			if (adminUiName.equals(uiName)) {
+				leadPaneUiProvider = findUiProvider(adminLeadPanePid);
+			} else {
+				leadPaneUiProvider = findUiProvider(leadPanePid);
+			}
 
 			Localized appTitle = null;
 			if (headerUiProvider instanceof DefaultHeader) {

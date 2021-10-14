@@ -29,6 +29,7 @@ class SuiteUi extends Composite {
 	private Composite footer;
 	private Composite belowHeader;
 	private Composite leadPane;
+	private Composite sidePane;
 	private Composite dynamicArea;
 
 	private Session sysSession;
@@ -64,14 +65,20 @@ class SuiteUi extends Composite {
 		CmsUiUtils.clear(belowHeader);
 		int style = getStyle();
 		if (initApp) {
-			belowHeader.setLayout(CmsUiUtils.noSpaceGridLayout(2));
+			belowHeader.setLayout(CmsUiUtils.noSpaceGridLayout(3));
 
 			if (SWT.RIGHT_TO_LEFT == (style & SWT.RIGHT_TO_LEFT)) {// arabic, hebrew, etc.
+				sidePane = new Composite(belowHeader, SWT.NONE);
+				sidePane.setLayout(CmsUiUtils.noSpaceGridLayout());
+				sidePane.setLayoutData(CmsUiUtils.fillHeight());
 				dynamicArea = new Composite(belowHeader, SWT.NONE);
 				leadPane = new Composite(belowHeader, SWT.NONE);
 			} else {
 				leadPane = new Composite(belowHeader, SWT.NONE);
 				dynamicArea = new Composite(belowHeader, SWT.NONE);
+				sidePane = new Composite(belowHeader, SWT.NONE);
+				sidePane.setLayout(CmsUiUtils.noSpaceGridLayout());
+				sidePane.setLayoutData(CmsUiUtils.fillHeight());
 			}
 			leadPane.setLayoutData(CmsUiUtils.fillHeight());
 			leadPane.setLayout(CmsUiUtils.noSpaceGridLayout());
@@ -149,7 +156,6 @@ class SuiteUi extends Composite {
 		}
 		throw new IllegalArgumentException("Layer is not registered.");
 	}
-	
 
 	void addLayer(String id, SuiteLayer layer) {
 		layers.put(id, layer);
@@ -194,6 +200,10 @@ class SuiteUi extends Composite {
 
 	Composite getLeadPane() {
 		return leadPane;
+	}
+
+	Composite getSidePane() {
+		return sidePane;
 	}
 
 	Composite getBelowHeader() {
