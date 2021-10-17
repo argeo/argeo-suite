@@ -60,7 +60,8 @@ public class OdkManifestServlet extends HttpServlet {
 						if (file.isNodeType(NodeType.NT_ADDRESS)) {
 							Node target = file.getProperty(Property.JCR_ID).getNode();
 							writer.append("<filename>");
-							writer.append(target.getPath().substring(1) + ".xml");
+//							writer.append(target.getPath().substring(1) + ".xml");
+							writer.append(target.getName() + ".xml");
 							writer.append("</filename>");
 
 							StringBuilder xml = new StringBuilder();
