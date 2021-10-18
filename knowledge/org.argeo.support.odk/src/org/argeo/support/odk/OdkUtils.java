@@ -70,9 +70,12 @@ public class OdkUtils {
 							String path = instanceUri.getPath();
 							if (!path.endsWith(".xml"))
 								throw new IllegalArgumentException("File uri " + instanceUri + " must end with .xml");
-							path = path.substring(0, path.length() - ".xml".length());
+							// Work around bug in ODK Collect not supporting paths
+							// path = path.substring(0, path.length() - ".xml".length());
+							// Node target = file.getSession().getNode(path);
+							String uuid = path.substring(1, path.length() - ".xml".length());
+							Node target = file.getSession().getNodeByIdentifier(uuid);
 							// FIXME hard code terms path in order to test ODK Collect bug
-							Node target = file.getSession().getNode("/example/terms"+path);
 							if (target.isNodeType(NodeType.MIX_REFERENCEABLE)) {
 								file.setProperty(Property.JCR_ID, target);
 								if (file.hasProperty(Property.JCR_PATH))
