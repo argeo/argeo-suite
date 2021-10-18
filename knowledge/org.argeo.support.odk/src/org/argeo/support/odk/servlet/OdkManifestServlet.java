@@ -1,5 +1,6 @@
 package org.argeo.support.odk.servlet;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
@@ -7,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.Property;
-import javax.jcr.PropertyIterator;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -60,27 +60,28 @@ public class OdkManifestServlet extends HttpServlet {
 						if (file.isNodeType(NodeType.NT_ADDRESS)) {
 							Node target = file.getProperty(Property.JCR_ID).getNode();
 							writer.append("<filename>");
-//							writer.append(target.getPath().substring(1) + ".xml");
-							writer.append(target.getName() + ".xml");
+							// Work around bug in ODK Collect not supporting paths
+							// writer.append(target.getPath().substring(1) + ".xml");
+							writer.append(target.getIdentifier() + ".xml");
 							writer.append("</filename>");
 
-							StringBuilder xml = new StringBuilder();
-							xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-							toSimpleXml(target, xml);
-							String fileCsum = DigestUtils.digest(DigestUtils.MD5,
-									xml.toString().getBytes(StandardCharsets.UTF_8));
-							writer.append("<hash>");
-							writer.append("md5sum:" + fileCsum);
-							writer.append("</hash>");
+//							StringBuilder xml = new StringBuilder();
+//							xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+//							JcrUtils.toSimpleXml(target, xml);
+//							String fileCsum = DigestUtils.digest(DigestUtils.MD5,
+//									xml.toString().getBytes(StandardCharsets.UTF_8));
+//							writer.append("<hash>");
+//							writer.append("md5sum:" + fileCsum);
+//							writer.append("</hash>");
 
-//							try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-//								session.exportDocumentView(target.getPath(), out, true, false);
-//								String fileCsum = DigestUtils.digest(DigestUtils.MD5, out.toByteArray());
-////						JcrxApi.addChecksum(file, fileCsum);
-//								writer.append("<hash>");
-//								writer.append("md5sum:" + fileCsum);
-//								writer.append("</hash>");
-//							}
+							try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+								session.exportDocumentView(target.getPath(), out, true, false);
+								String fileCsum = DigestUtils.digest(DigestUtils.MD5, out.toByteArray());
+//						JcrxApi.addChecksum(file, fileCsum);
+								writer.append("<hash>");
+								writer.append("md5sum:" + fileCsum);
+								writer.append("</hash>");
+							}
 							writer.append("<downloadUrl>" + protocol + "://" + serverName
 									+ (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort)
 									+ "/api/odk/formManifest" + file.getPath() + "</downloadUrl>");
@@ -93,18 +94,19 @@ public class OdkManifestServlet extends HttpServlet {
 			} else if (node.isNodeType(OrxManifestName.mediaFile.get())) {
 				if (node.isNodeType(NodeType.NT_ADDRESS)) {
 					Node target = node.getProperty(Property.JCR_ID).getNode();
-					StringBuilder xml = new StringBuilder();
-					xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-					toSimpleXml(target, xml);
-					System.out.println(xml);
-					resp.getOutputStream().write(xml.toString().getBytes(StandardCharsets.UTF_8));
-					resp.flushBuffer();
 
-//					try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-//						session.exportDocumentView(target.getPath(), out, true, false);
-//						System.out.println(new String(out.toByteArray(), StandardCharsets.UTF_8));
-//						resp.getOutputStream().write(out.toByteArray());
-//					}
+//					StringBuilder xml = new StringBuilder();
+//					xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+//					JcrUtils.toSimpleXml(target, xml);
+//					System.out.println(xml);
+//					resp.getOutputStream().write(xml.toString().getBytes(StandardCharsets.UTF_8));
+//					resp.flushBuffer();
+
+					try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+						session.exportDocumentView(target.getPath(), out, true, false);
+						System.out.println(new String(out.toByteArray(), StandardCharsets.UTF_8));
+						resp.getOutputStream().write(out.toByteArray());
+					}
 				} else {
 					throw new IllegalArgumentException("Unsupported node " + node);
 				}
@@ -117,43 +119,6 @@ public class OdkManifestServlet extends HttpServlet {
 			Jcr.logout(session);
 		}
 
-	}
-
-	private static void toSimpleXml(Node node, StringBuilder sb) throws RepositoryException {
-		sb.append('<');
-		String nodeName = node.getName();
-		int colIndex = nodeName.indexOf(':');
-		if (colIndex > 0) {
-			nodeName = nodeName.substring(colIndex + 1);
-		}
-		sb.append(nodeName);
-		PropertyIterator pit = node.getProperties();
-		properties: while (pit.hasNext()) {
-			Property p = pit.nextProperty();
-			if (p.isMultiple())
-				continue properties;
-			String propertyName = p.getName();
-			int pcolIndex = propertyName.indexOf(':');
-			if (pcolIndex > 0)
-				continue properties;
-			sb.append(' ');
-			sb.append(propertyName);
-			sb.append('=');
-			sb.append('\"').append(p.getString()).append('\"');
-		}
-
-		if (node.hasNodes()) {
-			sb.append('>');
-			NodeIterator children = node.getNodes();
-			while (children.hasNext()) {
-				toSimpleXml(children.nextNode(), sb);
-			}
-			sb.append("</");
-			sb.append(nodeName);
-			sb.append('>');
-		} else {
-			sb.append("/>");
-		}
 	}
 
 	public void setRepository(Repository repository) {
