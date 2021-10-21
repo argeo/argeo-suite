@@ -35,6 +35,11 @@ mixin
 //+ * (entity:reference)
 //+ * (entity:composite)
 
+[entity:query] > nt:query, mix:referenceable
+
+[entity:querySet]
++ * (entity:query) = entity:query *
+
 //
 // STRUCTURE
 //
@@ -65,6 +70,7 @@ orderable
 //
 [entity:form]
 mixin
++ queries (entity:querySet) = entity:querySet
 
 [entity:formSubmission]
 mixin

@@ -18,7 +18,7 @@ public class JcrEntityDefinition implements EntityDefinition {
 	private Repository repository;
 
 	private String type;
-	private String defaultEditoryId;
+	private String defaultEditorId;
 
 	public void init(BundleContext bundleContext, Map<String, String> properties) throws RepositoryException {
 		Session adminSession = NodeUtils.openDataAdminSession(repository, null);
@@ -26,7 +26,7 @@ public class JcrEntityDefinition implements EntityDefinition {
 			type = properties.get(EntityConstants.TYPE);
 			if (type == null)
 				throw new IllegalArgumentException("Entity type property " + EntityConstants.TYPE + " must be set.");
-			defaultEditoryId = properties.get(EntityConstants.DEFAULT_EDITORY_ID);
+			defaultEditorId = properties.get(EntityConstants.DEFAULT_EDITOR_ID);
 //			String definitionPath = EntityNames.ENTITY_DEFINITIONS_PATH + '/' + type;
 //			if (!adminSession.itemExists(definitionPath)) {
 //				Node entityDefinition = JcrUtils.mkdirs(adminSession, definitionPath, EntityTypes.ENTITY_DEFINITION);
@@ -50,7 +50,7 @@ public class JcrEntityDefinition implements EntityDefinition {
 
 	@Override
 	public String getEditorId(Node entity) {
-		return defaultEditoryId;
+		return defaultEditorId;
 	}
 
 	@Override

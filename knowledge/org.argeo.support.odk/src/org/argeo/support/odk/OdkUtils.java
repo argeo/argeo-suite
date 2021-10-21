@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
@@ -12,10 +13,16 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.Value;
 import javax.jcr.nodetype.NodeType;
+import javax.jcr.query.Query;
+import javax.jcr.query.QueryResult;
+import javax.jcr.query.Row;
+import javax.jcr.query.RowIterator;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.argeo.entity.EntityMimeType;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
@@ -26,7 +33,8 @@ import org.argeo.util.DigestUtils;
 public class OdkUtils {
 	private final static Log log = LogFactory.getLog(OdkUtils.class);
 
-	public static void loadOdkForm(Node formBase, String name, InputStream in) throws RepositoryException, IOException {
+	public static Node loadOdkForm(Node formBase, String name, InputStream in, InputStream... additionalNodes)
+			throws RepositoryException, IOException {
 		if (!formBase.isNodeType(EntityType.formSet.get()))
 			throw new IllegalArgumentException(
 					"Parent path " + formBase + " must be of type " + EntityType.formSet.get());
@@ -37,10 +45,12 @@ public class OdkUtils {
 		String previousFormVersion = Jcr.get(form, OrxListName.version.get());
 
 		Session s = formBase.getSession();
-//		String res = "/odk/apafSession.odk.xml";
-//		try (InputStream in = getClass().getClassLoader().getResourceAsStream(res)) {
 		s.importXML(form.getPath(), in, ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
-//		}
+
+		for (InputStream additionalIn : additionalNodes) {
+			s.importXML(form.getPath(), additionalIn, ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
+		}
+		s.save();
 
 		// manage instances
 		// NodeIterator instances =
@@ -62,29 +72,62 @@ public class OdkUtils {
 					}
 				if (instanceUri != null) {
 					if ("jr".equals(instanceUri.getScheme())) {
+						String uuid;
+						String mimeType;
+						String encoding = StandardCharsets.UTF_8.name();
 						String type = instanceUri.getHost();
+						String path = instanceUri.getPath();
 						if ("file".equals(type)) {
-							Node manifest = JcrUtils.getOrAdd(form, OrxManifestName.manifest.name(),
-									OrxManifestName.manifest.get());
-							Node file = JcrUtils.getOrAdd(manifest, instanceId);
-							String path = instanceUri.getPath();
 							if (!path.endsWith(".xml"))
 								throw new IllegalArgumentException("File uri " + instanceUri + " must end with .xml");
 							// Work around bug in ODK Collect not supporting paths
 							// path = path.substring(0, path.length() - ".xml".length());
 							// Node target = file.getSession().getNode(path);
-							String uuid = path.substring(1, path.length() - ".xml".length());
-							Node target = file.getSession().getNodeByIdentifier(uuid);
-							// FIXME hard code terms path in order to test ODK Collect bug
-							if (target.isNodeType(NodeType.MIX_REFERENCEABLE)) {
-								file.setProperty(Property.JCR_ID, target);
-								if (file.hasProperty(Property.JCR_PATH))
-									file.getProperty(Property.JCR_PATH).remove();
-							} else {
-								file.setProperty(Property.JCR_PATH, target.getPath());
-								if (file.hasProperty(Property.JCR_ID))
-									file.getProperty(Property.JCR_ID).remove();
+							uuid = path.substring(1, path.length() - ".xml".length());
+							mimeType = EntityMimeType.XML.getMimeType();
+						} else if ("file-csv".equals(type)) {
+							if (!path.endsWith(".csv"))
+								throw new IllegalArgumentException("File uri " + instanceUri + " must end with .csv");
+							// Work around bug in ODK Collect not supporting paths
+							// path = path.substring(0, path.length() - ".csv".length());
+							// Node target = file.getSession().getNode(path);
+							uuid = path.substring(1, path.length() - ".csv".length());
+							mimeType = EntityMimeType.CSV.getMimeType();
+						} else {
+							throw new IllegalArgumentException("Unsupported instance type " + type);
+						}
+						Node manifest = JcrUtils.getOrAdd(form, OrxManifestName.manifest.name(),
+								OrxManifestName.manifest.get());
+						Node file = JcrUtils.getOrAdd(manifest, instanceId);
+						file.addMixin(NodeType.MIX_MIMETYPE);
+						file.setProperty(Property.JCR_MIMETYPE, mimeType);
+						file.setProperty(Property.JCR_ENCODING, encoding);
+						Node target = file.getSession().getNodeByIdentifier(uuid);
+
+						if (target.isNodeType(NodeType.NT_QUERY)) {
+							Query query = target.getSession().getWorkspace().getQueryManager().getQuery(target);
+							query.setLimit(10);
+							QueryResult queryResult = query.execute();
+							RowIterator rit = queryResult.getRows();
+							while (rit.hasNext()) {
+								Row row = rit.nextRow();
+								for (Value value : row.getValues()) {
+									System.out.print(value.getString());
+									System.out.print(',');
+								}
+								System.out.print('\n');
 							}
+
+						}
+
+						if (target.isNodeType(NodeType.MIX_REFERENCEABLE)) {
+							file.setProperty(Property.JCR_ID, target);
+							if (file.hasProperty(Property.JCR_PATH))
+								file.getProperty(Property.JCR_PATH).remove();
+						} else {
+							file.setProperty(Property.JCR_PATH, target.getPath());
+							if (file.hasProperty(Property.JCR_ID))
+								file.getProperty(Property.JCR_ID).remove();
 						}
 					}
 				}
@@ -126,7 +169,7 @@ public class OdkUtils {
 				s.refresh(false);
 				if (log.isDebugEnabled())
 					log.debug("Unmodified form " + form);
-				return;
+				return form;
 			} else {
 				if (formVersion.equals(previousFormVersion)) {
 					s.refresh(false);
@@ -145,6 +188,7 @@ public class OdkUtils {
 				}
 			}
 		}
+		return form;
 	}
 
 	/** Singleton. */
