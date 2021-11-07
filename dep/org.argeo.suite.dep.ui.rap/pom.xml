@@ -11,6 +11,20 @@
 	<name>Suite Platform UI RAP</name>
 	<packaging>jar</packaging>
 	<dependencies>
+		<!-- Base CMS distribution -->
+		<dependency>
+			<groupId>org.argeo.commons</groupId>
+			<artifactId>org.argeo.dep.cms.ui.rap</artifactId>
+			<version>${version.argeo-commons}</version>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.commons</groupId>
+			<artifactId>org.argeo.dep.cms.ext</artifactId>
+			<version>${version.argeo-commons}</version>
+			<type>pom</type>
+		</dependency>
+
 		<!-- Entity Framework -->
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
@@ -102,26 +116,6 @@
 			<version>2.1.24-SNAPSHOT</version>
 		</dependency>
 
-		<!-- Additional Third Parties -->
-		<dependency>
-			<groupId>org.argeo.tp.javax</groupId>
-			<artifactId>javax.xml.bind</artifactId>
-		</dependency>
-
-		<!-- Jackson JSON processor -->
-		<dependency>
-			<groupId>org.argeo.tp.jackson</groupId>
-			<artifactId>com.fasterxml.jackson.core.jackson-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.jackson</groupId>
-			<artifactId>com.fasterxml.jackson.core.jackson-databind</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.jackson</groupId>
-			<artifactId>com.fasterxml.jackson.core.jackson-annotations</artifactId>
-		</dependency>
-
 		<!-- PDFBox -->
 		<dependency>
 			<groupId>org.argeo.tp.apache</groupId>
@@ -134,40 +128,6 @@
 		<dependency>
 			<groupId>org.argeo.tp.apache</groupId>
 			<artifactId>org.apache.pdfbox.jempbox</artifactId>
-		</dependency>
-
-		<!-- POI requirements -->
-		<dependency>
-			<groupId>org.argeo.tp.apache.commons</groupId>
-			<artifactId>org.apache.commons.math3</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.apache.commons</groupId>
-			<artifactId>org.apache.commons.collections4</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.apache</groupId>
-			<artifactId>org.apache.xml.security</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.apache</groupId>
-			<artifactId>org.apache.xmlbeans</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.apache</groupId>
-			<artifactId>org.apache.xalan</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.apache</groupId>
-			<artifactId>org.apache.xalan.serializer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.apache</groupId>
-			<artifactId>org.apache.xml.resolver</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.apache</groupId>
-			<artifactId>org.apache.xerces</artifactId>
 		</dependency>
 
 		<!-- POI (MS office documents) -->
@@ -186,24 +146,6 @@
 		<dependency>
 			<groupId>org.argeo.tp.apache</groupId>
 			<artifactId>org.apache.poi.scratchpad</artifactId>
-		</dependency>
-
-		<!-- Mail -->
-		<dependency>
-			<groupId>org.argeo.tp.javax</groupId>
-			<artifactId>javax.activation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.tp.javax</groupId>
-			<artifactId>javax.mail</artifactId>
-		</dependency>
-
-		<!-- Base CMS distribution -->
-		<dependency>
-			<groupId>org.argeo.commons</groupId>
-			<artifactId>org.argeo.dep.cms.ui.rap</artifactId>
-			<version>${version.argeo-commons}</version>
-			<type>pom</type>
 		</dependency>
 
 		<!-- Argeo TP Extras -->
@@ -327,6 +269,9 @@
 											</sources>
 										</mapping>
 									</mappings>
+									<requires>
+										<require>argeo-cms-ext-tp</require>
+									</requires>
 								</configuration>
 							</execution>
 						</executions>
