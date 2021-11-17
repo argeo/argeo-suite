@@ -1,0 +1,4 @@
+-include: \
+${workspace}/cnf/unstable.bnd, \
+${workspace}/cnf/argeo.bnd, \
+-${workspace}/cnf/release.bnd

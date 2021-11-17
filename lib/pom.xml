@@ -3,19 +3,19 @@
 	<parent>
 		<groupId>org.argeo.maven</groupId>
 		<artifactId>argeo-osgi-parent</artifactId>
-		<version>2.1.3</version>
+		<version>2.1.4</version>
 	</parent>
 	<groupId>org.argeo.suite</groupId>
 	<artifactId>argeo-suite-lib</artifactId>
 	<packaging>pom</packaging>
 	<name>Parent POM for Argeo Suite Extensions</name>
 	<description />
-	<version>2.3.2-SNAPSHOT</version>
+	<version>2.3-SNAPSHOT</version>
 	<properties>
 		<!-- Dependencies -->
 		<version.argeo-tp>2.1.27</version.argeo-tp>
 		<version.argeo-tp-extras>2.1.13</version.argeo-tp-extras>
-		<version.argeo-commons>2.1.103</version.argeo-commons>
+		<version.argeo-commons>2.3-SNAPSHOT</version.argeo-commons>
 		<version.argeo-suite-icons>2.1.1</version.argeo-suite-icons>
 
 		<argeo.rpm.stagingRepository>/srv/rpmfactory/unstable/argeo</argeo.rpm.stagingRepository>
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.suite.dep.ui.rap</artifactId>
-			<version>2.3.2-SNAPSHOT</version>
+			<version>2.3-SNAPSHOT</version>
 			<scope>provided</scope>
 			<exclusions>
 				<!-- Avoid slf4j implementations lurking in the classpath. -->
