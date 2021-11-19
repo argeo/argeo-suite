@@ -200,8 +200,8 @@
 										</mapping>
 									</mappings>
 									<requires>
-										<require>argeo-cms-ui-rap</require>
-										<require>argeo-suite-ui-rap-tp-unstable</require>
+										<require>argeo-cms-ui-rap${argeo.rpm.suffix}</require>
+										<require>argeo-suite-ui-rap-tp${argeo.rpm.suffix}</require>
 									</requires>
 								</configuration>
 							</execution>
