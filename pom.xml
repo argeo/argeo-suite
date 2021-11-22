@@ -23,13 +23,25 @@
 		<git.rw />
 	</properties>
 	<modules>
-		<module>core</module>
+		<!-- Entity Framework -->
+		<module>org.argeo.entity.api</module>
+		<module>org.argeo.entity.core</module>
+		<module>org.argeo.entity.ui</module>
+
+		<!-- Argeo Suite -->
+		<module>org.argeo.suite.core</module>
+		<module>org.argeo.suite.ui</module>
+		<module>org.argeo.suite.ui.rap</module>
+		<module>org.argeo.suite.theme.default</module>
+
 		<!-- Functional areas -->
-		<module>people</module>
-		<module>library</module>
-		<module>environment</module>
-		<module>publishing</module>
-		<module>knowledge</module>
+		<module>org.argeo.people.ui</module>
+		<module>org.argeo.library.ui</module>
+		<module>org.argeo.geo.ui</module>
+		<module>org.argeo.publishing.ui</module>
+		<module>org.argeo.support.xforms</module>
+		<module>org.argeo.support.odk</module>
+		<module>org.argeo.support.geonames</module>
 
 		<!-- Packaging -->
 		<module>dep</module>
