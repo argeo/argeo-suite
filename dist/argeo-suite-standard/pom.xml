@@ -25,7 +25,7 @@
 									<goal>rpm</goal>
 								</goals>
 								<configuration>
-									<name>argeo-suite-standard-unstable</name>
+									<name>argeo-suite-standard${argeo.rpm.suffix}</name>
 									<mappings>
 										<mapping>
 											<directory>/etc/argeo.d/suite</directory>
