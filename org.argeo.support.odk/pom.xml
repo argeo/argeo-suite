@@ -3,36 +3,23 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.argeo.suite</groupId>
-		<artifactId>dep</artifactId>
+		<artifactId>argeo-suite</artifactId>
 		<version>2.1-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>org.argeo.suite.dep.e4.rap</artifactId>
-	<name>Suite Platform E4 RAP</name>
+	<artifactId>org.argeo.support.odk</artifactId>
+	<name>ODK support</name>
 	<packaging>jar</packaging>
 	<dependencies>
-		<!-- Argeo Suite UI -->
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.suite.dep.ui.rap</artifactId>
+			<artifactId>org.argeo.suite.core</artifactId>
 			<version>2.1-SNAPSHOT</version>
-			<type>pom</type>
 		</dependency>
-
-
-		<!-- Base CMS distribution -->
 		<dependency>
-			<groupId>org.argeo.commons</groupId>
-			<artifactId>org.argeo.dep.cms.e4.rap</artifactId>
-			<version>${version.argeo-commons}</version>
-			<type>pom</type>
+			<groupId>org.argeo.suite</groupId>
+			<artifactId>org.argeo.support.xforms</artifactId>
+			<version>2.1-SNAPSHOT</version>
 		</dependency>
-
-		<!-- Argeo TP Extras -->
-		<!-- <dependency> -->
-		<!-- <groupId>org.argeo.tp.payment</groupId> -->
-		<!-- <artifactId>com.stripe</artifactId> -->
-		<!-- </dependency> -->
-
 	</dependencies>
 </project>

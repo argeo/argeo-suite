@@ -1,0 +1,3 @@
+-include: \
+${workspace}/cnf/argeo.bnd, \
+${workspace}/cnf/testing.bnd

@@ -1,0 +1,8 @@
+version.released=2.3.2
+qualifier=.next
+
+category=org.argeo.suite
+Bundle-RequiredExecutionEnvironment=JavaSE-11
+
+argeo.rpm.stagingRepository=/srv/rpmfactory/unstable/argeo-osgi-2/argeo
+argeo.rpm.suffix=-unstable

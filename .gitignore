@@ -1,2 +1,5 @@
-/target/
-/.DS_Store
+**/bin/
+**/target/
+**/generated/
+**/MANIFEST.MF
+**/.DS_Store
