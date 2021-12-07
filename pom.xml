@@ -83,6 +83,11 @@
 					<groupId>org.argeo.tp.misc</groupId>
 					<artifactId>slf4j.osgi</artifactId>
 				</exclusion>
+				<!-- Make sure JTA is not used anymore -->
+				<exclusion>
+					<groupId>org.argeo.tp.javax</groupId>
+					<artifactId>javax.transaction-api</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 	</dependencies>
