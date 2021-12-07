@@ -23,8 +23,8 @@ import javax.servlet.http.Part;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.api.NodeUtils;
 import org.argeo.cms.auth.CmsSession;
+import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.cms.servlet.ServletAuthUtils;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
@@ -65,7 +65,7 @@ public class OdkSubmissionServlet extends HttpServlet {
 			Session adminSession = null;
 			try {
 				// TODO centralise at a deeper level
-				adminSession = NodeUtils.openDataAdminSession(repository, null);
+				adminSession = CmsJcrUtils.openDataAdminSession(repository, null);
 				SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
 			} finally {
 				Jcr.logout(adminSession);

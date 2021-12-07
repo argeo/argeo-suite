@@ -22,11 +22,11 @@ import javax.naming.ldap.LdapName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.api.NodeUtils;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
 import org.argeo.cms.auth.CmsSession;
+import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.cms.ui.AbstractCmsApp;
 import org.argeo.cms.ui.CmsTheme;
 import org.argeo.cms.ui.CmsUiProvider;
@@ -203,7 +203,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 					} else {
 						Session adminSession = null;
 						try {
-							adminSession = NodeUtils.openDataAdminSession(getRepository(), null);
+							adminSession = CmsJcrUtils.openDataAdminSession(getRepository(), null);
 							Node userDir = SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
 							ui.initSessions(getRepository(), userDir.getPath());
 						} finally {
@@ -303,7 +303,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 //			if (context.getPath().equals("/")) {// root node
 //				types.add("nt:folder");
 //			}
-			if (NodeUtils.isUserHome(context) && byType.containsKey("nt:folder")) {// home node
+			if (CmsJcrUtils.isUserHome(context) && byType.containsKey("nt:folder")) {// home node
 				types.add("nt:folder");
 			}
 
@@ -520,7 +520,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			else {
 				Session adminSession = null;
 				try {
-					adminSession = NodeUtils.openDataAdminSession(getRepository(), workspaceName);
+					adminSession = CmsJcrUtils.openDataAdminSession(getRepository(), workspaceName);
 					SuiteUtils.getOrCreateUserNode(adminSession, userDn);
 				} finally {
 					Jcr.logout(adminSession);

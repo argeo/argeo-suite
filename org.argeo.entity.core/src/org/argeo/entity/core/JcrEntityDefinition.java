@@ -7,7 +7,7 @@ import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.argeo.api.NodeUtils;
+import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.entity.EntityConstants;
 import org.argeo.entity.EntityDefinition;
 import org.argeo.jcr.Jcr;
@@ -21,7 +21,7 @@ public class JcrEntityDefinition implements EntityDefinition {
 	private String defaultEditorId;
 
 	public void init(BundleContext bundleContext, Map<String, String> properties) throws RepositoryException {
-		Session adminSession = NodeUtils.openDataAdminSession(repository, null);
+		Session adminSession = CmsJcrUtils.openDataAdminSession(repository, null);
 		try {
 			type = properties.get(EntityConstants.TYPE);
 			if (type == null)
