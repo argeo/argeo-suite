@@ -29,7 +29,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.cms.ui.dialogs.CmsFeedback;
 import org.argeo.eclipse.ui.EclipseUiUtils;
-import org.argeo.eclipse.ui.specific.OpenFile;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.FileDialog;
@@ -89,8 +88,8 @@ public class DocumentsUiService {
 			}
 			String uri = Paths.get(tmpFile.getAbsolutePath()).toUri().toString();
 			Map<String, String> params = new HashMap<String, String>();
-			params.put(OpenFile.PARAM_FILE_NAME, name);
-			params.put(OpenFile.PARAM_FILE_URI, uri);
+//			params.put(OpenFile.PARAM_FILE_NAME, name);
+//			params.put(OpenFile.PARAM_FILE_URI, uri);
 			// FIXME open file without a command
 			// CommandUtils.callCommand(OpenFile.ID, params);
 		} catch (IOException e1) {

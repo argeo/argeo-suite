@@ -17,19 +17,20 @@
 			<version>2.3-SNAPSHOT</version>
 		</dependency>
 
+		<!-- Specific -->
+		<dependency>
+			<groupId>org.argeo.commons</groupId>
+			<artifactId>org.argeo.swt.specific.rap</artifactId>
+			<version>${version.argeo-commons}</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- Eclipse E4 -->
 		<dependency>
 			<groupId>org.argeo.tp</groupId>
 			<artifactId>argeo-tp-rap-e4</artifactId>
 			<version>${version.argeo-tp}</version>
 			<type>pom</type>
-			<scope>provided</scope>
-		</dependency>
-		<!-- Specific -->
-		<dependency>
-			<groupId>org.argeo.commons</groupId>
-			<artifactId>org.argeo.eclipse.ui.rap</artifactId>
-			<version>${version.argeo-commons}</version>
 			<scope>provided</scope>
 		</dependency>
 

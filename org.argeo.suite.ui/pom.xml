@@ -25,12 +25,13 @@
 		<!-- Argeo Commons -->
 		<dependency>
 			<groupId>org.argeo.commons</groupId>
-			<artifactId>org.argeo.eclipse.ui</artifactId>
+			<artifactId>org.argeo.cms.ui</artifactId>
 			<version>${version.argeo-commons}</version>
 		</dependency>
+		<!-- Specific -->
 		<dependency>
 			<groupId>org.argeo.commons</groupId>
-			<artifactId>org.argeo.eclipse.ui.rap</artifactId>
+			<artifactId>org.argeo.swt.specific.rap</artifactId>
 			<version>${version.argeo-commons}</version>
 			<scope>provided</scope>
 		</dependency>
