@@ -16,8 +16,8 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.api.NodeConstants;
-import org.argeo.cms.ui.CmsView;
-import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.api.cms.CmsView;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
 import org.argeo.suite.ui.SuiteEvent;
@@ -51,11 +51,11 @@ public class OpenLayersMap extends Composite {
 
 	public OpenLayersMap(Composite parent, int style, URL mapHtml) {
 		super(parent, style);
-		cmsView = CmsView.getCmsView(parent);
+		cmsView = CmsSwtUtils.getCmsView(parent);
 		setLayout(new GridLayout());
 
 		browser = new Browser(this, SWT.BORDER);
-		browser.setLayoutData(CmsUiUtils.fillAll());
+		browser.setLayoutData(CmsSwtUtils.fillAll());
 		String html;
 		try (InputStream in = mapHtml.openStream()) {
 			html = IOUtils.toString(in, StandardCharsets.UTF_8);

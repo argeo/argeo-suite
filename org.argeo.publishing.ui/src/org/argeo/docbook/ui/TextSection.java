@@ -2,7 +2,7 @@ package org.argeo.docbook.ui;
 
 import javax.jcr.Node;
 
-import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.viewers.EditablePart;
 import org.argeo.cms.ui.viewers.Section;
 import org.argeo.cms.ui.widgets.TextStyles;
@@ -39,7 +39,7 @@ public class TextSection extends Section {
 		} else {
 			level = 0;
 		}
-		CmsUiUtils.style(this, DbkType.section.name());
+		CmsSwtUtils.style(this, DbkType.section.name());
 	}
 
 	public String getDefaultTextStyle() {

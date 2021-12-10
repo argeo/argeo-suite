@@ -5,13 +5,12 @@ import java.util.Set;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
+import org.argeo.api.cms.CmsTheme;
 import org.argeo.cms.CmsUserManager;
-import org.argeo.cms.ui.CmsTheme;
+import org.argeo.cms.swt.CmsSwtUtils;
+import org.argeo.cms.swt.Selected;
+import org.argeo.cms.swt.dialogs.CmsWizardDialog;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.cms.ui.CmsView;
-import org.argeo.cms.ui.dialogs.CmsWizardDialog;
-import org.argeo.cms.ui.util.CmsUiUtils;
-import org.argeo.eclipse.ui.Selected;
 import org.argeo.naming.LdapAttrs;
 import org.argeo.suite.SuiteRole;
 import org.argeo.suite.ui.SuiteEvent;
@@ -44,7 +43,7 @@ public class SuiteUsersEntryArea implements CmsUiProvider {
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
-		CmsTheme theme = CmsTheme.getCmsTheme(parent);
+		CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
 		parent.setLayout(new GridLayout());
 		TableViewer usersViewer = new TableViewer(parent);
 		usersViewer.setContentProvider(new UsersContentProvider());
@@ -94,8 +93,8 @@ public class SuiteUsersEntryArea implements CmsUiProvider {
 		});
 
 		Composite bottom = new Composite(parent, SWT.NONE);
-		bottom.setLayoutData(CmsUiUtils.fillWidth());
-		bottom.setLayout(CmsUiUtils.noSpaceGridLayout());
+		bottom.setLayoutData(CmsSwtUtils.fillWidth());
+		bottom.setLayout(CmsSwtUtils.noSpaceGridLayout());
 		ToolBar bottomToolBar = new ToolBar(bottom, SWT.NONE);
 		bottomToolBar.setLayoutData(new GridData(SWT.END, SWT.FILL, true, false));
 		ToolItem deleteItem = new ToolItem(bottomToolBar, SWT.FLAT);
@@ -111,7 +110,7 @@ public class SuiteUsersEntryArea implements CmsUiProvider {
 				User user = (User) usersViewer.getStructuredSelection().getFirstElement();
 				if (user != null) {
 //					Node userNode = getOrCreateUserNode(user, context);
-					CmsView.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(),
+					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(),
 							SuiteEvent.eventProperties(user));
 				}
 
@@ -122,7 +121,7 @@ public class SuiteUsersEntryArea implements CmsUiProvider {
 				User user = (User) usersViewer.getStructuredSelection().getFirstElement();
 				if (user != null) {
 //					Node userNode = getOrCreateUserNode(user, context);
-					CmsView.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(),
+					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(),
 							SuiteEvent.eventProperties(user));
 					deleteItem.setEnabled(true);
 				} else {
@@ -141,7 +140,7 @@ public class SuiteUsersEntryArea implements CmsUiProvider {
 			}
 		});
 
-		usersViewer.getTable().setLayoutData(CmsUiUtils.fillAll());
+		usersViewer.getTable().setLayoutData(CmsSwtUtils.fillAll());
 		usersViewer.setInput(cmsUserManager);
 
 		return usersViewer.getTable();

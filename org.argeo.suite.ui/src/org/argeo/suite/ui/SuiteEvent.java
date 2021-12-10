@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.jcr.Node;
 
-import org.argeo.cms.ui.util.CmsEvent;
+import org.argeo.api.cms.CmsEvent;
 import org.argeo.jcr.Jcr;
 import org.osgi.service.useradmin.User;
 

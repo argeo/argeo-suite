@@ -5,12 +5,12 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
+import org.argeo.api.cms.CmsTheme;
+import org.argeo.api.cms.CmsView;
 import org.argeo.cms.Localized;
 import org.argeo.cms.auth.CurrentUser;
-import org.argeo.cms.ui.CmsTheme;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.cms.ui.CmsView;
-import org.argeo.cms.ui.util.CmsUiUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -30,14 +30,14 @@ public class DefaultHeader implements CmsUiProvider {
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
-		CmsView cmsView = CmsView.getCmsView(parent);
-		CmsTheme theme = CmsTheme.getCmsTheme(parent);
+		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
+		CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
 
-		parent.setLayout(CmsUiUtils.noSpaceGridLayout(new GridLayout(3, true)));
+		parent.setLayout(CmsSwtUtils.noSpaceGridLayout(new GridLayout(3, true)));
 
 		// TODO right to left
 		Composite lead = new Composite(parent, SWT.NONE);
-		CmsUiUtils.style(lead, SuiteStyle.header);
+		CmsSwtUtils.style(lead, SuiteStyle.header);
 		lead.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, true, false));
 		lead.setLayout(new GridLayout());
 		Label lbl = new Label(lead, SWT.NONE);
@@ -46,22 +46,22 @@ public class DefaultHeader implements CmsUiProvider {
 //		lbl.setText(LocaleUtils.isLocaleKey(title) ? LocaleUtils.local(title, getClass().getClassLoader()).toString()
 //				: title);
 		lbl.setText(title.lead());
-		CmsUiUtils.style(lbl, SuiteStyle.headerTitle);
-		lbl.setLayoutData(CmsUiUtils.fillWidth());
+		CmsSwtUtils.style(lbl, SuiteStyle.headerTitle);
+		lbl.setLayoutData(CmsSwtUtils.fillWidth());
 
 		Composite middle = new Composite(parent, SWT.NONE);
-		CmsUiUtils.style(middle, SuiteStyle.header);
+		CmsSwtUtils.style(middle, SuiteStyle.header);
 		middle.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, false));
 		middle.setLayout(new GridLayout());
 
 		Composite end = new Composite(parent, SWT.NONE);
-		CmsUiUtils.style(end, SuiteStyle.header);
+		CmsSwtUtils.style(end, SuiteStyle.header);
 		end.setLayoutData(new GridData(SWT.END, SWT.CENTER, true, false));
 
 		if (!cmsView.isAnonymous()) {
 			end.setLayout(new GridLayout(2, false));
 			Label userL = new Label(end, SWT.NONE);
-			CmsUiUtils.style(userL, SuiteStyle.header);
+			CmsSwtUtils.style(userL, SuiteStyle.header);
 			userL.setText(CurrentUser.getDisplayName());
 			Button logoutB = new Button(end, SWT.FLAT);
 //			CmsUiUtils.style(logoutB, SuiteStyle.header);

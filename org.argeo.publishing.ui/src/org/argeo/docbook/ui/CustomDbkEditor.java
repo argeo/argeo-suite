@@ -2,7 +2,7 @@ package org.argeo.docbook.ui;
 
 import javax.jcr.Node;
 
-import org.argeo.cms.ui.CmsEditable;
+import org.argeo.api.cms.CmsEditable;
 import org.argeo.cms.ui.viewers.Section;
 import org.eclipse.swt.widgets.Composite;
 

@@ -9,8 +9,8 @@ import javax.jcr.observation.EventIterator;
 import javax.jcr.observation.EventListener;
 import javax.jcr.query.Query;
 
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
@@ -52,12 +52,12 @@ public class OverviewMap implements CmsUiProvider {
 	}
 
 	protected void refreshUi(Composite parent, Node context) throws RepositoryException {
-		CmsUiUtils.clear(parent);
+		CmsSwtUtils.clear(parent);
 		Query query = context.getSession().getWorkspace().getQueryManager()
 				.createQuery("SELECT * FROM [" + EntityType.geopoint.get() + "]", Query.JCR_SQL2);
 		List<Node> geoPoints = JcrUtils.nodeIteratorToList(query.execute().getNodes());
 		OpenLayersMap map = new OpenLayersMap(parent, SWT.NONE, getClass().getResource("map-osm.html"));
-		map.setLayoutData(CmsUiUtils.fillAll());
+		map.setLayoutData(CmsSwtUtils.fillAll());
 
 		// apafMap.setZoom(7);
 		// apafMap.setCenter(-2.472, 8.010);

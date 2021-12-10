@@ -17,18 +17,18 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NodeType;
 
-import org.argeo.cms.ui.CmsImageManager;
+import org.argeo.api.cms.Cms2DSize;
+import org.argeo.api.cms.CmsImageManager;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.util.DefaultImageManager;
-import org.argeo.docbook.DbkUtils;
 import org.argeo.docbook.DbkAttr;
 import org.argeo.docbook.DbkType;
+import org.argeo.docbook.DbkUtils;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
 import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.Point;
 
 /** Add DocBook images support to {@link CmsImageManager}. */
 public class DbkImageManager extends DefaultImageManager {
@@ -38,59 +38,72 @@ public class DbkImageManager extends DefaultImageManager {
 		this.baseFolder = baseFolder;
 	}
 
-	Node getImageDataNode(Node mediaObjectNode) throws RepositoryException {
-		if (mediaObjectNode.hasNode(DbkType.imageobject.get())) {
-			Node imageDataNode = mediaObjectNode.getNode(DbkType.imageobject.get()).getNode(DbkType.imagedata.get());
-			return imageDataNode;
-		} else {
-			throw new IllegalStateException("No image data found for " + mediaObjectNode);
+	Node getImageDataNode(Node mediaObjectNode) {
+		try {
+			if (mediaObjectNode.hasNode(DbkType.imageobject.get())) {
+				Node imageDataNode = mediaObjectNode.getNode(DbkType.imageobject.get())
+						.getNode(DbkType.imagedata.get());
+				return imageDataNode;
+			} else {
+				throw new IllegalStateException("No image data found for " + mediaObjectNode);
+			}
+		} catch (RepositoryException e) {
+			throw new JcrException(e);
 		}
 	}
 
 	@Override
-	public Binary getImageBinary(Node node) throws RepositoryException {
+	public Binary getImageBinary(Node node) {
 		Node fileNode = null;
 		if (DbkUtils.isDbk(node, DbkType.mediaobject)) {
 			Node imageDataNode = getImageDataNode(node);
 			fileNode = getFileNode(imageDataNode);
 		}
-		if (node.isNodeType(NT_FILE)) {
-			fileNode = node;
-		}
-		if (fileNode != null) {
-			return node.getNode(JCR_CONTENT).getProperty(JCR_DATA).getBinary();
-		} else {
-			return null;
+		try {
+			if (node.isNodeType(NT_FILE)) {
+				fileNode = node;
+			}
+			if (fileNode != null) {
+				return node.getNode(JCR_CONTENT).getProperty(JCR_DATA).getBinary();
+			} else {
+				return null;
+			}
+		} catch (RepositoryException e) {
+			throw new JcrException(e);
 		}
 	}
 
-	public Point getImageSize(Node mediaObjectNode) throws RepositoryException {
+	public Cms2DSize getImageSize(Node mediaObjectNode) {
 		Node imageDataNode = getImageDataNode(mediaObjectNode);
 		Node fileNode = getFileNode(imageDataNode);
 		if (fileNode == null)
-			return new Point(0, 0);
-		Point intrinsicSize;
-		if (fileNode.hasProperty(EntityNames.SVG_WIDTH) && fileNode.hasProperty(EntityNames.SVG_HEIGHT)) {
-			int width = (int) fileNode.getProperty(EntityNames.SVG_WIDTH).getLong();
-			int height = (int) fileNode.getProperty(EntityNames.SVG_HEIGHT).getLong();
-			intrinsicSize = new Point(width, height);
-		} else {
-			try (InputStream in = JcrUtils.getFileAsStream(fileNode)) {
-				ImageData id = new ImageData(in);
-				intrinsicSize = updateSize(fileNode, id);
-			} catch (IOException e) {
-				throw new RuntimeException("Cannot load file " + fileNode, e);
+			return new Cms2DSize(0, 0);
+		try {
+			Cms2DSize intrinsicSize;
+			if (fileNode.hasProperty(EntityNames.SVG_WIDTH) && fileNode.hasProperty(EntityNames.SVG_HEIGHT)) {
+				int width = (int) fileNode.getProperty(EntityNames.SVG_WIDTH).getLong();
+				int height = (int) fileNode.getProperty(EntityNames.SVG_HEIGHT).getLong();
+				intrinsicSize = new Cms2DSize(width, height);
+			} else {
+				try (InputStream in = JcrUtils.getFileAsStream(fileNode)) {
+					ImageData id = new ImageData(in);
+					intrinsicSize = updateSize(fileNode, id);
+				} catch (IOException e) {
+					throw new RuntimeException("Cannot load file " + fileNode, e);
+				}
 			}
+			// TODO interpret image data infos
+			return intrinsicSize;
+		} catch (RepositoryException e) {
+			throw new JcrException(e);
 		}
-		// TODO interpret image data infos
-		return intrinsicSize;
 	}
 
-	protected Point updateSize(Node fileNode, ImageData id) throws RepositoryException {
+	protected Cms2DSize updateSize(Node fileNode, ImageData id) throws RepositoryException {
 		fileNode.addMixin(EntityType.box.get());
 		fileNode.setProperty(EntityNames.SVG_WIDTH, id.width);
 		fileNode.setProperty(EntityNames.SVG_HEIGHT, id.height);
-		return new Point(id.width, id.height);
+		return new Cms2DSize(id.width, id.height);
 	}
 
 	@Override
@@ -104,12 +117,16 @@ public class DbkImageManager extends DefaultImageManager {
 	}
 
 	@Override
-	public String getImageUrl(Node mediaObjectNode) throws RepositoryException {
+	public String getImageUrl(Node mediaObjectNode) {
 		Node imageDataNode = getImageDataNode(mediaObjectNode);
 		// TODO factorise
 		String fileref = null;
-		if (imageDataNode.hasProperty(DbkAttr.fileref.name()))
-			fileref = imageDataNode.getProperty(DbkAttr.fileref.name()).getString();
+		try {
+			if (imageDataNode.hasProperty(DbkAttr.fileref.name()))
+				fileref = imageDataNode.getProperty(DbkAttr.fileref.name()).getString();
+		} catch (RepositoryException e) {
+			throw new JcrException(e);
+		}
 		if (fileref == null)
 			return null;
 		URI fileUri;
@@ -127,19 +144,23 @@ public class DbkImageManager extends DefaultImageManager {
 		return url;
 	}
 
-	protected Node getFileNode(Node imageDataNode) throws RepositoryException {
+	protected Node getFileNode(Node imageDataNode) {
 		// FIXME make URL use case more robust
-		String fileref = null;
-		if (imageDataNode.hasProperty(DbkAttr.fileref.name()))
-			fileref = imageDataNode.getProperty(DbkAttr.fileref.name()).getString();
-		if (fileref == null)
-			return null;
-		Node fileNode;
-		if (fileref.startsWith("/"))
-			fileNode = baseFolder.getSession().getNode(fileref);
-		else
-			fileNode = baseFolder.getNode(fileref);
-		return fileNode;
+		try {
+			String fileref = null;
+			if (imageDataNode.hasProperty(DbkAttr.fileref.name()))
+				fileref = imageDataNode.getProperty(DbkAttr.fileref.name()).getString();
+			if (fileref == null)
+				return null;
+			Node fileNode;
+			if (fileref.startsWith("/"))
+				fileNode = baseFolder.getSession().getNode(fileref);
+			else
+				fileNode = baseFolder.getNode(fileref);
+			return fileNode;
+		} catch (RepositoryException e) {
+			throw new JcrException(e);
+		}
 	}
 
 	protected Node getMediaFolder() {

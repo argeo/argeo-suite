@@ -1,6 +1,5 @@
 package org.argeo.docbook.ui;
 
-import static org.argeo.cms.ui.util.CmsUiUtils.fillWidth;
 import static org.argeo.docbook.DbkType.para;
 import static org.argeo.docbook.DbkUtils.addDbk;
 import static org.argeo.docbook.DbkUtils.isDbk;
@@ -19,8 +18,9 @@ import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.cms.ui.CmsEditable;
-import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.api.cms.Cms2DSize;
+import org.argeo.api.cms.CmsEditable;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.viewers.AbstractPageViewer;
 import org.argeo.cms.ui.viewers.EditablePart;
 import org.argeo.cms.ui.viewers.NodePart;
@@ -102,13 +102,13 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		long begin = System.currentTimeMillis();
 		Section section = (Section) control;
 		if (section instanceof TextSection) {
-			CmsUiUtils.clear(section);
+			CmsSwtUtils.clear(section);
 			Node node = section.getNode();
 			TextSection textSection = (TextSection) section;
 			String style = node.hasProperty(DbkAttr.role.name()) ? node.getProperty(DbkAttr.role.name()).getString()
 					: getDefaultSectionStyle();
 			if (style != null)
-				CmsUiUtils.style(textSection, style);
+				CmsSwtUtils.style(textSection, style);
 
 			// Title
 			Node titleNode = null;
@@ -125,7 +125,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 					if (section.getHeader() == null)
 						section.createHeader();
 					DbkSectionTitle title = newSectionTitle(textSection, titleNode);
-					title.setLayoutData(CmsUiUtils.fillWidth());
+					title.setLayoutData(CmsSwtUtils.fillWidth());
 					updateContent(title);
 				}
 			}
@@ -157,7 +157,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 					throw new IllegalArgumentException("Unsupported node type for " + child);
 				}
 				if (sectionPart != null && sectionPart instanceof Control)
-					((Control) sectionPart).setLayoutData(CmsUiUtils.fillWidth());
+					((Control) sectionPart).setLayoutData(CmsSwtUtils.fillWidth());
 			}
 
 //			if (!flat)
@@ -165,7 +165,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				Node child = ni.nextNode();
 				if (isDbk(child, DbkType.section)) {
 					TextSection newSection = newTextSection(section, child);
-					newSection.setLayoutData(CmsUiUtils.fillWidth());
+					newSection.setLayoutData(CmsSwtUtils.fillWidth());
 					refresh(newSection);
 				}
 			}
@@ -192,7 +192,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 	protected Paragraph newParagraph(TextSection parent, Node node) throws RepositoryException {
 		Paragraph paragraph = new Paragraph(parent, parent.getStyle(), node);
 		updateContent(paragraph);
-		paragraph.setLayoutData(fillWidth());
+		paragraph.setLayoutData(CmsSwtUtils.fillWidth());
 		paragraph.setMouseListener(getMouseListener());
 		paragraph.setFocusListener(getFocusListener());
 		return paragraph;
@@ -205,9 +205,9 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 			if (maxMediaWidth != null) {
 				imgGd = new GridData(SWT.CENTER, SWT.FILL, false, false);
 				imgGd.widthHint = maxMediaWidth;
-				img.setPreferredSize(new Point(maxMediaWidth, 0));
+				img.setPreferredSize(new Cms2DSize(maxMediaWidth, 0));
 			} else {
-				imgGd = CmsUiUtils.grabWidth(SWT.CENTER, SWT.DEFAULT);
+				imgGd = CmsSwtUtils.grabWidth(SWT.CENTER, SWT.DEFAULT);
 			}
 			img.setLayoutData(imgGd);
 			updateContent(img);
@@ -691,7 +691,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 				getTextInterpreter().write(titleNode, txt);
 
 				TextSection newSection = new TextSection(section, section.getStyle(), newSectionNode);
-				newSection.setLayoutData(CmsUiUtils.fillWidth());
+				newSection.setLayoutData(CmsSwtUtils.fillWidth());
 				newSection.moveBelow(paragraph);
 
 				// dispose
@@ -801,7 +801,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		Section section = paragraph.getSection();
 		updateContent(paragraph);
 		Paragraph newParagraph = newParagraph((TextSection) section, newNode);
-		newParagraph.setLayoutData(CmsUiUtils.fillWidth());
+		newParagraph.setLayoutData(CmsSwtUtils.fillWidth());
 		newParagraph.moveBelow(paragraph);
 		layout(paragraph.getControl(), newParagraph.getControl());
 		return newParagraph;

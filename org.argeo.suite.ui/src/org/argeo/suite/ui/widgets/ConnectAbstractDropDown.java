@@ -3,7 +3,7 @@ package org.argeo.suite.ui.widgets;
 import java.util.Arrays;
 import java.util.List;
 
-import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.rap.rwt.widgets.DropDown;
 import org.eclipse.swt.SWT;
@@ -67,7 +67,7 @@ public abstract class ConnectAbstractDropDown {
 		dropDown = new DropDown(text);
 		Object obj = dropDown;
 		if (obj instanceof Widget)
-			CmsUiUtils.markup((Widget) obj);
+			CmsSwtUtils.markup((Widget) obj);
 		readOnly = (style & SWT.READ_ONLY) != 0;
 		this.refreshOnFocus = refreshOnFocus;
 		addListeners();

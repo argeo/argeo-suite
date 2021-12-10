@@ -2,5 +2,5 @@ Service-Component:\
 OSGI-INF/cmsTheme.xml
 
 Import-Package:\
-org.argeo.cms.ui.util,\
+org.argeo.cms.swt.osgi,\
 *

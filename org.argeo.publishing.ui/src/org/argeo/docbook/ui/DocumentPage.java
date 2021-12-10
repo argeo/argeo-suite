@@ -6,10 +6,10 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 
-import org.argeo.cms.ui.CmsEditable;
+import org.argeo.api.cms.CmsEditable;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ui.util.CmsLink;
-import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.JcrVersionCmsEditable;
 import org.argeo.cms.ui.widgets.ScrolledPage;
 import org.argeo.docbook.DbkType;
@@ -28,14 +28,14 @@ public class DocumentPage implements CmsUiProvider {
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
 
 		ScrolledPage page = new ScrolledPage(parent, SWT.NONE);
-		page.setLayout(CmsUiUtils.noSpaceGridLayout());
-		GridData textGd = CmsUiUtils.fillAll();
+		page.setLayout(CmsSwtUtils.noSpaceGridLayout());
+		GridData textGd = CmsSwtUtils.fillAll();
 		page.setLayoutData(textGd);
 
 		if (context.isNodeType(DbkType.article.get())) {
 			CmsEditable cmsEditable = new JcrVersionCmsEditable(context);
 			if (cmsEditable.canEdit())
-				new TextEditorHeader(cmsEditable, parent, SWT.NONE).setLayoutData(CmsUiUtils.fillWidth());
+				new TextEditorHeader(cmsEditable, parent, SWT.NONE).setLayoutData(CmsSwtUtils.fillWidth());
 			if (!cmsEditable.isEditing())
 				cmsEditable.startEditing();
 			new DocumentTextEditor(page, SWT.FLAT, context, cmsEditable);

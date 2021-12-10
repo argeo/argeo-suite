@@ -15,10 +15,9 @@ import javax.jcr.observation.EventListener;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
 
-import org.argeo.cms.ui.CmsTheme;
+import org.argeo.api.cms.CmsTheme;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.cms.ui.CmsView;
-import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
@@ -66,7 +65,7 @@ public class RecentItems implements CmsUiProvider {
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
-		theme = CmsTheme.getCmsTheme(parent);
+		theme = CmsSwtUtils.getCmsTheme(parent);
 		parent.setLayout(new GridLayout());
 //		parent.setLayout(CmsUiUtils.noSpaceGridLayout());
 		parent.setLayout(new GridLayout());
@@ -89,11 +88,11 @@ public class RecentItems implements CmsUiProvider {
 			return null;
 		SingleEntityViewer entityViewer = new SingleEntityViewer(parent, SWT.NONE, context.getSession());
 		entityViewer.createUi();
-		entityViewer.getViewer().getTable().setLayoutData(CmsUiUtils.fillAll());
+		entityViewer.getViewer().getTable().setLayoutData(CmsSwtUtils.fillAll());
 
 		Composite bottom = new Composite(parent, SWT.NONE);
-		bottom.setLayoutData(CmsUiUtils.fillWidth());
-		bottom.setLayout(CmsUiUtils.noSpaceGridLayout());
+		bottom.setLayoutData(CmsSwtUtils.fillWidth());
+		bottom.setLayout(CmsSwtUtils.noSpaceGridLayout());
 		ToolBar bottomToolBar = new ToolBar(bottom, SWT.NONE);
 		bottomToolBar.setLayoutData(new GridData(SWT.END, SWT.FILL, true, false));
 		ToolItem deleteItem = new ToolItem(bottomToolBar, SWT.FLAT);
@@ -108,7 +107,7 @@ public class RecentItems implements CmsUiProvider {
 			public void doubleClick(DoubleClickEvent event) {
 				Node node = (Node) entityViewer.getViewer().getStructuredSelection().getFirstElement();
 				if (node != null)
-					CmsView.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(),
+					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(),
 							SuiteEvent.eventProperties(node));
 
 			}
@@ -117,7 +116,7 @@ public class RecentItems implements CmsUiProvider {
 			public void selectionChanged(SelectionChangedEvent event) {
 				Node node = (Node) entityViewer.getViewer().getStructuredSelection().getFirstElement();
 				if (node != null) {
-					CmsView.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(),
+					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(),
 							SuiteEvent.eventProperties(node));
 					deleteItem.setEnabled(true);
 				} else {

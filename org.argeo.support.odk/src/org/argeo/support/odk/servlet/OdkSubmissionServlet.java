@@ -23,7 +23,7 @@ import javax.servlet.http.Part;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.cms.auth.CmsSession;
+import org.argeo.api.cms.CmsSession;
 import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.cms.servlet.ServletAuthUtils;
 import org.argeo.jcr.Jcr;

@@ -8,8 +8,8 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.argeo.cms.CmsUserManager;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.Section;
 import org.argeo.naming.LdapAttrs;
 import org.argeo.suite.ui.SuiteMsg;
@@ -31,7 +31,7 @@ public class SuiteUserUiProvider implements CmsUiProvider {
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
 		Section main = new Section(parent, SWT.NONE, context);
-		main.setLayoutData(CmsUiUtils.fillAll());
+		main.setLayoutData(CmsSwtUtils.fillAll());
 
 		String uid = context.getName();
 		User user = cmsUserManager.getUserFromLocalId(uid);
@@ -58,7 +58,7 @@ public class SuiteUserUiProvider implements CmsUiProvider {
 		// Section rolesSection = new Section(main, SWT.NONE, context);
 		Group rolesSection = new Group(main, SWT.NONE);
 		rolesSection.setText("Roles");
-		rolesSection.setLayoutData(CmsUiUtils.fillWidth());
+		rolesSection.setLayoutData(CmsSwtUtils.fillWidth());
 		rolesSection.setLayout(new GridLayout());
 		// new Label(rolesSection, SWT.NONE).setText("Roles:");
 		List<String> roles = Arrays.asList(cmsUserManager.getUserRoles(user.getName()));

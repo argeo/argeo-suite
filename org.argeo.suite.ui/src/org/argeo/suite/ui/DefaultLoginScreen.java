@@ -3,10 +3,11 @@ package org.argeo.suite.ui;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
+import org.argeo.api.cms.CmsView;
 import org.argeo.cms.auth.CurrentUser;
+import org.argeo.cms.swt.CmsSwtUtils;
+import org.argeo.cms.swt.auth.CmsLogin;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.cms.ui.CmsView;
-import org.argeo.cms.ui.widgets.auth.CmsLogin;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -18,7 +19,7 @@ public class DefaultLoginScreen implements CmsUiProvider {
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
-		CmsView cmsView = CmsView.getCmsView(parent);
+		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
 		if (!cmsView.isAnonymous())
 			throw new IllegalStateException(CurrentUser.getUsername() + " is already logged in");
 

@@ -3,7 +3,7 @@ package org.argeo.docbook.ui;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.viewers.SectionPart;
 import org.argeo.cms.ui.widgets.EditableText;
 import org.argeo.cms.ui.widgets.TextStyles;
@@ -20,7 +20,7 @@ public class Paragraph extends EditableText implements SectionPart {
 	public Paragraph(TextSection section, int style, Node node) throws RepositoryException {
 		super(section, style, node);
 		this.section = section;
-		CmsUiUtils.style(this, DbkType.para.name());
+		CmsSwtUtils.style(this, DbkType.para.name());
 	}
 
 	public TextSection getSection() {
@@ -30,7 +30,7 @@ public class Paragraph extends EditableText implements SectionPart {
 	@Override
 	protected Label createLabel(Composite box, String style) {
 		Label lbl = super.createLabel(box, style);
-		CmsUiUtils.disableMarkupValidation(lbl);
+		CmsSwtUtils.disableMarkupValidation(lbl);
 		return lbl;
 	}
 

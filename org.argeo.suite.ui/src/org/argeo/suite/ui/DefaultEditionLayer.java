@@ -7,10 +7,10 @@ import java.util.Map;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
+import org.argeo.api.cms.CmsTheme;
 import org.argeo.cms.Localized;
-import org.argeo.cms.ui.CmsTheme;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.jcr.JcrException;
 import org.argeo.suite.ui.widgets.TabbedArea;
 import org.argeo.util.LangUtils;
@@ -40,7 +40,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 			if (fixedEntryArea) {
 				FixedEditionArea editionArea = new FixedEditionArea(parent, parent.getStyle());
 				Control entryAreaC = entryArea.createUi(editionArea.getEntryArea(), context);
-				CmsUiUtils.style(entryAreaC, SuiteStyle.entryArea);
+				CmsSwtUtils.style(entryAreaC, SuiteStyle.entryArea);
 				if (this.defaultView != null) {
 					editionArea.getTabbedArea().view(defaultView, context);
 				}
@@ -59,7 +59,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 				this.workArea.createUi(area, context);
 				return area;
 			}
-			CmsTheme theme = CmsTheme.getCmsTheme(parent);
+			CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
 			TabbedArea tabbedArea = createTabbedArea(parent, theme);
 			return tabbedArea;
 		}
@@ -69,7 +69,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 	public void view(CmsUiProvider uiProvider, Composite workAreaC, Node context) {
 		if (workArea != null) {
 			try {
-				CmsUiUtils.clear(workAreaC);
+				CmsSwtUtils.clear(workAreaC);
 				workArea.createUi(workAreaC, context);
 				workAreaC.layout(true, true);
 				return;
@@ -183,7 +183,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 		tabbedArea.setTabStyle(SuiteStyle.mainTab.style());
 		tabbedArea.setTabSelectedStyle(SuiteStyle.mainTabSelected.style());
 		tabbedArea.setCloseIcon(SuiteIcon.close.getSmallIcon(theme));
-		tabbedArea.setLayoutData(CmsUiUtils.fillAll());
+		tabbedArea.setLayoutData(CmsSwtUtils.fillAll());
 		return tabbedArea;
 	}
 
@@ -195,7 +195,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 
 		SashFormEditionArea(Composite parent, int style) {
 			super(parent, SWT.HORIZONTAL);
-			CmsTheme theme = CmsTheme.getCmsTheme(parent);
+			CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
 
 			Composite editorC;
 			if (SWT.RIGHT_TO_LEFT == (style & SWT.RIGHT_TO_LEFT)) {// arabic, hebrew, etc.
@@ -220,7 +220,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 			if (startMaximized)
 				setMaximizedControl(editorC);
 
-			GridLayout editorAreaLayout = CmsUiUtils.noSpaceGridLayout();
+			GridLayout editorAreaLayout = CmsSwtUtils.noSpaceGridLayout();
 //			editorAreaLayout.verticalSpacing = 0;
 //			editorAreaLayout.marginBottom = 0;
 //			editorAreaLayout.marginHeight = 0;
@@ -248,9 +248,9 @@ public class DefaultEditionLayer implements SuiteLayer {
 
 		public FixedEditionArea(Composite parent, int style) {
 			super(parent, style);
-			CmsTheme theme = CmsTheme.getCmsTheme(parent);
+			CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
 
-			setLayout(CmsUiUtils.noSpaceGridLayout(2));
+			setLayout(CmsSwtUtils.noSpaceGridLayout(2));
 
 			Composite editorC;
 			if (SWT.RIGHT_TO_LEFT == (style & SWT.RIGHT_TO_LEFT)) {// arabic, hebrew, etc.
@@ -260,16 +260,16 @@ public class DefaultEditionLayer implements SuiteLayer {
 				entryC = new Composite(this, SWT.NONE);
 				editorC = new Composite(this, SWT.NONE);
 			}
-			entryC.setLayoutData(CmsUiUtils.fillHeight());
+			entryC.setLayoutData(CmsSwtUtils.fillHeight());
 
-			GridLayout editorAreaLayout = CmsUiUtils.noSpaceGridLayout();
+			GridLayout editorAreaLayout = CmsSwtUtils.noSpaceGridLayout();
 //			editorAreaLayout.verticalSpacing = 0;
 //			editorAreaLayout.marginBottom = 0;
 //			editorAreaLayout.marginHeight = 0;
 //			editorAreaLayout.marginLeft = 0;
 //			editorAreaLayout.marginRight = 0;
 			editorC.setLayout(editorAreaLayout);
-			editorC.setLayoutData(CmsUiUtils.fillAll());
+			editorC.setLayoutData(CmsSwtUtils.fillAll());
 
 			tabbedArea = createTabbedArea(editorC, theme);
 		}

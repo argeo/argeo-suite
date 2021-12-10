@@ -14,11 +14,11 @@ import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.argeo.api.cms.CmsView;
 import org.argeo.cms.Localized;
 import org.argeo.cms.auth.CurrentUser;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.cms.ui.CmsView;
-import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.suite.RankedObject;
 import org.argeo.suite.SuiteUtils;
 import org.eclipse.swt.SWT;
@@ -47,10 +47,10 @@ public class DefaultLeadPane implements CmsUiProvider {
 
 	@Override
 	public Control createUi(Composite parent, Node node) throws RepositoryException {
-		CmsView cmsView = CmsView.getCmsView(parent);
-		parent.setLayout(CmsUiUtils.noSpaceGridLayout());
+		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
+		parent.setLayout(CmsSwtUtils.noSpaceGridLayout());
 		Composite appLayersC = new Composite(parent, SWT.NONE);
-		CmsUiUtils.style(appLayersC, SuiteStyle.leadPane);
+		CmsSwtUtils.style(appLayersC, SuiteStyle.leadPane);
 		GridLayout layout = new GridLayout();
 		layout.verticalSpacing = 10;
 		layout.marginTop = 10;
@@ -62,7 +62,7 @@ public class DefaultLeadPane implements CmsUiProvider {
 		Composite adminLayersC;
 		if (!adminLayers.isEmpty()) {
 			adminLayersC = new Composite(parent, SWT.NONE);
-			CmsUiUtils.style(adminLayersC, SuiteStyle.leadPane);
+			CmsSwtUtils.style(adminLayersC, SuiteStyle.leadPane);
 			GridLayout adminLayout = new GridLayout();
 			adminLayout.verticalSpacing = 10;
 			adminLayout.marginBottom = 10;

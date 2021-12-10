@@ -1,6 +1,6 @@
 package org.argeo.support.openlayers;
 
-import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -10,12 +10,12 @@ public class OLMap extends Composite {
 
 	public OLMap(Composite parent, int style) {
 		super(parent, style);
-		setLayout(CmsUiUtils.noSpaceGridLayout());
+		setLayout(CmsSwtUtils.noSpaceGridLayout());
 		div = new Label(this, SWT.NONE);
-		CmsUiUtils.markup(div);
-		CmsUiUtils.disableMarkupValidation(div);
+		CmsSwtUtils.markup(div);
+		CmsSwtUtils.disableMarkupValidation(div);
 		div.setText("<div id='map'></div>");
-		div.setLayoutData(CmsUiUtils.fillAll());
+		div.setLayoutData(CmsSwtUtils.fillAll());
 	}
 
 }

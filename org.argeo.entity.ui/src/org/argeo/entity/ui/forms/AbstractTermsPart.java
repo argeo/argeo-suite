@@ -2,10 +2,10 @@ package org.argeo.entity.ui.forms;
 
 import javax.jcr.Item;
 
+import org.argeo.api.cms.CmsTheme;
 import org.argeo.cms.Localized;
-import org.argeo.cms.ui.CmsTheme;
-import org.argeo.cms.ui.util.CmsIcon;
-import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.cms.swt.CmsIcon;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.viewers.EditablePart;
 import org.argeo.cms.ui.widgets.ContextOverlay;
 import org.argeo.cms.ui.widgets.StyledControl;
@@ -44,7 +44,7 @@ public abstract class AbstractTermsPart extends StyledControl implements Editabl
 			throw new IllegalArgumentException("Item cannot be null");
 		this.termsManager = termsManager;
 		this.typology = termsManager.getTypology(typology);
-		this.theme = CmsTheme.getCmsTheme(parent);
+		this.theme = CmsSwtUtils.getCmsTheme(parent);
 		editable = !(SWT.READ_ONLY == (style & SWT.READ_ONLY));
 		highlightColor = parent.getDisplay().getSystemColor(SWT.COLOR_GRAY);
 	}
@@ -82,11 +82,11 @@ public abstract class AbstractTermsPart extends StyledControl implements Editabl
 	}
 
 	protected void setControlLayoutData(Control control) {
-		control.setLayoutData(CmsUiUtils.fillAll());
+		control.setLayoutData(CmsSwtUtils.fillAll());
 	}
 
 	protected void setContainerLayoutData(Composite composite) {
-		composite.setLayoutData(CmsUiUtils.fillAll());
+		composite.setLayoutData(CmsSwtUtils.fillAll());
 	}
 
 	//

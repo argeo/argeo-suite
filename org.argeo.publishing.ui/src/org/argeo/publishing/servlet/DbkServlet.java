@@ -35,8 +35,8 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.xalan.processor.TransformerFactoryImpl;
+import org.argeo.api.cms.CmsTheme;
 import org.argeo.cms.servlet.ServletAuthUtils;
-import org.argeo.cms.ui.CmsTheme;
 import org.argeo.docbook.DbkType;
 import org.argeo.docbook.DbkUtils;
 import org.argeo.jcr.Jcr;

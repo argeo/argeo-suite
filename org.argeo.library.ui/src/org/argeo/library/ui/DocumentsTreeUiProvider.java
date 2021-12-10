@@ -9,11 +9,11 @@ import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 
 import org.argeo.api.NodeConstants;
+import org.argeo.api.cms.CmsView;
 import org.argeo.cms.fs.CmsFsUtils;
 import org.argeo.cms.jcr.CmsJcrUtils;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.cms.ui.CmsView;
-import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.fs.FsTreeViewer;
 import org.argeo.jcr.Jcr;
 import org.argeo.suite.ui.SuiteEvent;
@@ -33,7 +33,7 @@ public class DocumentsTreeUiProvider implements CmsUiProvider {
 		parent.setLayout(new GridLayout());
 		FsTreeViewer fsTreeViewer = new FsTreeViewer(parent, SWT.NONE);
 		fsTreeViewer.configureDefaultSingleColumnTable(500);
-		CmsView cmsView = CmsView.getCmsView(parent);
+		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
 		Node homeNode = CmsJcrUtils.getUserHome(cmsView.doAs(() -> Jcr.login(repository, NodeConstants.HOME_WORKSPACE)));
 		parent.addDisposeListener((e1) -> Jcr.logout(homeNode));
 		Path homePath = CmsFsUtils.getPath(nodeFileSystemProvider, homeNode);
@@ -64,7 +64,7 @@ public class DocumentsTreeUiProvider implements CmsUiProvider {
 			}
 		});
 		fsTreeViewer.setPathsInput(homePath);
-		fsTreeViewer.getControl().setLayoutData(CmsUiUtils.fillAll());
+		fsTreeViewer.getControl().setLayoutData(CmsSwtUtils.fillAll());
 		fsTreeViewer.getControl().getParent().layout(true, true);
 		return fsTreeViewer.getControl();
 	}

@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.spi.FileSystemProvider;
 
 import javax.jcr.Node;
-import javax.jcr.RepositoryException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -37,8 +36,7 @@ public class DocumentsFileComposite extends Composite {
 	// UI Parts for the browser
 	private Composite rightPannelCmp;
 
-	public DocumentsFileComposite(Composite parent, int style, Node context,
-			FileSystemProvider fsp) {
+	public DocumentsFileComposite(Composite parent, int style, Node context, FileSystemProvider fsp) {
 		super(parent, style);
 		this.currentBaseContext = context;
 		this.setLayout(EclipseUiUtils.noSpaceGridLayout());
@@ -61,19 +59,15 @@ public class DocumentsFileComposite extends Composite {
 		// browser.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true,
 		// true));
 		browser.setLayoutData(EclipseUiUtils.fillAll());
-		try {
-			// FIXME make it more robust
-			String url = CmsUiUtils.getDataUrl(currentBaseContext, UiContext.getHttpRequest());
-			// FIXME issue with the redirection to https
-			if (url.startsWith("http://") && !url.startsWith("http://localhost"))
-				url = "https://" + url.substring("http://".length(), url.length());
-			if (log.isTraceEnabled())
-				log.debug("Trying to display " + url);
-			browser.setUrl(url);
-			browser.layout(true, true);
-		} catch (RepositoryException re) {
-			throw new IllegalStateException("Cannot open file at " + currentBaseContext, re);
-		}
+		// FIXME make it more robust
+		String url = CmsUiUtils.getDataUrl(currentBaseContext, UiContext.getHttpRequest());
+		// FIXME issue with the redirection to https
+		if (url.startsWith("http://") && !url.startsWith("http://localhost"))
+			url = "https://" + url.substring("http://".length(), url.length());
+		if (log.isTraceEnabled())
+			log.debug("Trying to display " + url);
+		browser.setUrl(url);
+		browser.layout(true, true);
 	}
 
 	/**
@@ -118,8 +112,8 @@ public class DocumentsFileComposite extends Composite {
 	// Simplify UI implementation
 	private void addProperty(Composite parent, String propName, String value) {
 		Label propLbl = new Label(parent, SWT.NONE);
-		//propLbl.setText(ConnectUtils.replaceAmpersand(propName + ": " + value));
+		// propLbl.setText(ConnectUtils.replaceAmpersand(propName + ": " + value));
 		propLbl.setText(value);
-		//CmsUiUtils.markup(propLbl);
+		// CmsUiUtils.markup(propLbl);
 	}
 }

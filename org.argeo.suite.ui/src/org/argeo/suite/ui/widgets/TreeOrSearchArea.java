@@ -1,6 +1,6 @@
 package org.argeo.suite.ui.widgets;
 
-import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
@@ -30,11 +30,11 @@ public class TreeOrSearchArea extends Composite {
 		parent.setLayout(new GridLayout());
 		Composite searchC = new Composite(parent, SWT.NONE);
 		searchC.setLayout(new GridLayout());
-		searchC.setLayoutData(CmsUiUtils.fillWidth());
+		searchC.setLayoutData(CmsSwtUtils.fillWidth());
 		createSearchUi(searchC);
 
 		Composite bodyC = new Composite(parent, SWT.NONE);
-		bodyC.setLayoutData(CmsUiUtils.fillAll());
+		bodyC.setLayoutData(CmsSwtUtils.fillAll());
 		bodyLayout = new StackLayout();
 		bodyC.setLayout(bodyLayout);
 		Composite treeC = new Composite(bodyC, SWT.NONE);
@@ -46,21 +46,21 @@ public class TreeOrSearchArea extends Composite {
 	}
 
 	protected void createSearchUi(Composite parent) {
-		parent.setLayout(CmsUiUtils.noSpaceGridLayout());
+		parent.setLayout(CmsSwtUtils.noSpaceGridLayout());
 		searchT = new Text(parent, SWT.MULTI | SWT.BORDER);
-		searchT.setLayoutData(CmsUiUtils.fillWidth());
+		searchT.setLayoutData(CmsSwtUtils.fillWidth());
 	}
 
 	protected void createTreeUi(Composite parent) {
-		parent.setLayout(CmsUiUtils.noSpaceGridLayout());
+		parent.setLayout(CmsSwtUtils.noSpaceGridLayout());
 		treeViewer = new TreeViewer(parent);
-		treeViewer.getTree().setLayoutData(CmsUiUtils.fillAll());
+		treeViewer.getTree().setLayoutData(CmsSwtUtils.fillAll());
 	}
 
 	protected void createSearchResultsUi(Composite parent) {
-		parent.setLayout(CmsUiUtils.noSpaceGridLayout());
+		parent.setLayout(CmsSwtUtils.noSpaceGridLayout());
 		searchResultsViewer = new TreeViewer(parent);
-		searchResultsViewer.getTree().setLayoutData(CmsUiUtils.fillAll());
+		searchResultsViewer.getTree().setLayoutData(CmsSwtUtils.fillAll());
 	}
 
 	public TreeViewer getTreeViewer() {

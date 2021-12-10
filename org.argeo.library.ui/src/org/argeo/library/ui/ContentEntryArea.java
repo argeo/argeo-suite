@@ -10,10 +10,9 @@ import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.query.Query;
 
-import org.argeo.cms.ui.CmsTheme;
+import org.argeo.api.cms.CmsTheme;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.cms.ui.CmsView;
-import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
@@ -38,11 +37,11 @@ public class ContentEntryArea implements CmsUiProvider {
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
-		CmsTheme theme = CmsTheme.getCmsTheme(parent);
+		CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
 
 		parent.setLayout(new GridLayout());
 		Ui ui = new Ui(parent, SWT.NONE);
-		ui.setLayoutData(CmsUiUtils.fillAll());
+		ui.setLayoutData(CmsSwtUtils.fillAll());
 
 		TreeViewerColumn nameCol = new TreeViewerColumn(ui.getTreeViewer(), SWT.NONE);
 		nameCol.getColumn().setWidth(400);
@@ -82,7 +81,7 @@ public class ContentEntryArea implements CmsUiProvider {
 			public void doubleClick(DoubleClickEvent event) {
 				Node user = (Node) ui.getTreeViewer().getStructuredSelection().getFirstElement();
 				if (user != null) {
-					CmsView.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(),
+					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(),
 							SuiteEvent.eventProperties(user));
 				}
 
@@ -92,7 +91,7 @@ public class ContentEntryArea implements CmsUiProvider {
 			public void selectionChanged(SelectionChangedEvent event) {
 				Node user = (Node) ui.getTreeViewer().getStructuredSelection().getFirstElement();
 				if (user != null) {
-					CmsView.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(),
+					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(),
 							SuiteEvent.eventProperties(user));
 				}
 			}

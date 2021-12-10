@@ -3,8 +3,8 @@ package org.argeo.docbook.ui;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import org.argeo.cms.ui.CmsEditable;
-import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.api.cms.CmsEditable;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.docbook.DbkUtils;
 import org.argeo.docbook.DbkType;
 import org.eclipse.swt.widgets.Composite;
@@ -16,7 +16,7 @@ public class DocumentTextEditor extends AbstractDbkViewer {
 	public DocumentTextEditor(Composite parent, int style, Node textNode, CmsEditable cmsEditable) {
 		super(new TextSection(parent, style, textNode), style, cmsEditable);
 //		refresh();
-		getMainSection().setLayoutData(CmsUiUtils.fillWidth());
+		getMainSection().setLayoutData(CmsSwtUtils.fillWidth());
 	}
 
 	@Override

@@ -9,7 +9,8 @@ import javax.jcr.Item;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.cms.swt.CmsSwtUtils;
+import org.argeo.cms.swt.Selected;
 import org.argeo.cms.ui.viewers.NodePart;
 import org.argeo.cms.ui.viewers.Section;
 import org.argeo.cms.ui.viewers.SectionPart;
@@ -17,7 +18,6 @@ import org.argeo.cms.ui.widgets.StyledControl;
 import org.argeo.docbook.DbkAttr;
 import org.argeo.docbook.DbkType;
 import org.argeo.docbook.DbkUtils;
-import org.argeo.eclipse.ui.Selected;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
 import org.argeo.naming.NamingUtils;
@@ -55,10 +55,10 @@ public class DbkVideo extends StyledControl implements SectionPart, NodePart {
 	protected Control createControl(Composite box, String style) {
 		Node mediaobject = getNode();
 		Composite wrapper = new Composite(box, SWT.NONE);
-		wrapper.setLayout(CmsUiUtils.noSpaceGridLayout());
+		wrapper.setLayout(CmsSwtUtils.noSpaceGridLayout());
 
 		Composite browserC = new Composite(wrapper, SWT.NONE);
-		browserC.setLayout(CmsUiUtils.noSpaceGridLayout());
+		browserC.setLayout(CmsSwtUtils.noSpaceGridLayout());
 		GridData gd = new GridData(SWT.CENTER, SWT.FILL, true, true);
 		gd.widthHint = getWidth();
 		gd.heightHint = getHeight();
@@ -198,7 +198,7 @@ public class DbkVideo extends StyledControl implements SectionPart, NodePart {
 
 	@Override
 	protected void setControlLayoutData(Control control) {
-		control.setLayoutData(CmsUiUtils.fillAll());
+		control.setLayoutData(CmsSwtUtils.fillAll());
 	}
 
 	@Override

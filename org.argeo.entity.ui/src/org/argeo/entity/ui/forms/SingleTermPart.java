@@ -4,13 +4,13 @@ import java.util.List;
 
 import javax.jcr.Item;
 
+import org.argeo.cms.swt.CmsSwtUtils;
+import org.argeo.cms.swt.MouseDoubleClick;
+import org.argeo.cms.swt.MouseDown;
+import org.argeo.cms.swt.Selected;
 import org.argeo.cms.ui.forms.FormStyle;
-import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.EditablePart;
 import org.argeo.cms.ui.widgets.ContextOverlay;
-import org.argeo.eclipse.ui.MouseDoubleClick;
-import org.argeo.eclipse.ui.MouseDown;
-import org.argeo.eclipse.ui.Selected;
 import org.argeo.entity.Term;
 import org.argeo.entity.TermsManager;
 import org.argeo.jcr.Jcr;
@@ -37,12 +37,12 @@ public class SingleTermPart extends AbstractTermsPart {
 	protected Control createControl(Composite box, String style) {
 		if (isEditing()) {
 			Composite block = new Composite(box, SWT.NONE);
-			block.setLayout(CmsUiUtils.noSpaceGridLayout(3));
+			block.setLayout(CmsSwtUtils.noSpaceGridLayout(3));
 
 			createHighlight(block);
 
 			Text txt = new Text(block, SWT.SINGLE | SWT.BORDER);
-			CmsUiUtils.style(txt, style == null ? FormStyle.propertyText.style() : style);
+			CmsSwtUtils.style(txt, style == null ? FormStyle.propertyText.style() : style);
 
 			ToolBar toolBar = new ToolBar(block, SWT.HORIZONTAL);
 			ToolItem deleteItem = new ToolItem(toolBar, SWT.PUSH);
@@ -94,13 +94,13 @@ public class SingleTermPart extends AbstractTermsPart {
 			return block;
 		} else {
 			Composite block = new Composite(box, SWT.NONE);
-			block.setLayout(CmsUiUtils.noSpaceGridLayout(2));
+			block.setLayout(CmsSwtUtils.noSpaceGridLayout(2));
 			Term currentValue = getValue();
 			if (currentValue != null) {
 				Label lbl = new Label(block, SWT.SINGLE);
 				String display = getTermLabel(currentValue);
 				lbl.setText(display);
-				CmsUiUtils.style(lbl, style == null ? FormStyle.propertyText.style() : style);
+				CmsSwtUtils.style(lbl, style == null ? FormStyle.propertyText.style() : style);
 				processTermListLabel(currentValue, lbl);
 				if (isEditable()) {
 					lbl.addMouseListener((MouseDoubleClick) (e) -> {
@@ -123,7 +123,7 @@ public class SingleTermPart extends AbstractTermsPart {
 
 	@Override
 	protected void refresh(ContextOverlay contextArea, String filter, Text txt) {
-		CmsUiUtils.clear(contextArea);
+		CmsSwtUtils.clear(contextArea);
 		List<? extends Term> terms = termsManager.listAllTerms(typology.getId());
 		terms: for (Term term : terms) {
 			String display = getTermLabel(term);

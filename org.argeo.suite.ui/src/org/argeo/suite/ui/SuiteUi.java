@@ -11,16 +11,17 @@ import javax.jcr.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.api.NodeConstants;
+import org.argeo.api.cms.CmsUi;
+import org.argeo.api.cms.CmsView;
 import org.argeo.cms.Localized;
-import org.argeo.cms.ui.CmsView;
-import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.jcr.Jcr;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 
 /** The view for the default ergonomics of Argeo Suite. */
-class SuiteUi extends Composite {
+class SuiteUi extends Composite implements CmsUi {
 	private static final long serialVersionUID = 6207018859086689108L;
 	private final static Log log = LogFactory.getLog(SuiteUi.class);
 
@@ -44,51 +45,51 @@ class SuiteUi extends Composite {
 
 	public SuiteUi(Composite parent, int style) {
 		super(parent, style);
-		cmsView = CmsView.getCmsView(parent);
-		this.setLayout(CmsUiUtils.noSpaceGridLayout());
+		cmsView = CmsSwtUtils.getCmsView(parent);
+		this.setLayout(CmsSwtUtils.noSpaceGridLayout());
 
 		header = new Composite(this, SWT.NONE);
-		header.setLayout(CmsUiUtils.noSpaceGridLayout());
-		CmsUiUtils.style(header, SuiteStyle.header);
-		header.setLayoutData(CmsUiUtils.fillWidth());
+		header.setLayout(CmsSwtUtils.noSpaceGridLayout());
+		CmsSwtUtils.style(header, SuiteStyle.header);
+		header.setLayoutData(CmsSwtUtils.fillWidth());
 
 		belowHeader = new Composite(this, SWT.NONE);
-		belowHeader.setLayoutData(CmsUiUtils.fillAll());
+		belowHeader.setLayoutData(CmsSwtUtils.fillAll());
 
 		footer = new Composite(this, SWT.NONE);
-		footer.setLayout(CmsUiUtils.noSpaceGridLayout());
-		CmsUiUtils.style(footer, SuiteStyle.footer);
-		footer.setLayoutData(CmsUiUtils.fillWidth());
+		footer.setLayout(CmsSwtUtils.noSpaceGridLayout());
+		CmsSwtUtils.style(footer, SuiteStyle.footer);
+		footer.setLayoutData(CmsSwtUtils.fillWidth());
 	}
 
 	public void refreshBelowHeader(boolean initApp) {
-		CmsUiUtils.clear(belowHeader);
+		CmsSwtUtils.clear(belowHeader);
 		int style = getStyle();
 		if (initApp) {
-			belowHeader.setLayout(CmsUiUtils.noSpaceGridLayout(3));
+			belowHeader.setLayout(CmsSwtUtils.noSpaceGridLayout(3));
 
 			if (SWT.RIGHT_TO_LEFT == (style & SWT.RIGHT_TO_LEFT)) {// arabic, hebrew, etc.
 				sidePane = new Composite(belowHeader, SWT.NONE);
-				sidePane.setLayout(CmsUiUtils.noSpaceGridLayout());
-				sidePane.setLayoutData(CmsUiUtils.fillHeight());
+				sidePane.setLayout(CmsSwtUtils.noSpaceGridLayout());
+				sidePane.setLayoutData(CmsSwtUtils.fillHeight());
 				dynamicArea = new Composite(belowHeader, SWT.NONE);
 				leadPane = new Composite(belowHeader, SWT.NONE);
 			} else {
 				leadPane = new Composite(belowHeader, SWT.NONE);
 				dynamicArea = new Composite(belowHeader, SWT.NONE);
 				sidePane = new Composite(belowHeader, SWT.NONE);
-				sidePane.setLayout(CmsUiUtils.noSpaceGridLayout());
-				sidePane.setLayoutData(CmsUiUtils.fillHeight());
+				sidePane.setLayout(CmsSwtUtils.noSpaceGridLayout());
+				sidePane.setLayoutData(CmsSwtUtils.fillHeight());
 			}
-			leadPane.setLayoutData(CmsUiUtils.fillHeight());
-			leadPane.setLayout(CmsUiUtils.noSpaceGridLayout());
-			CmsUiUtils.style(leadPane, SuiteStyle.leadPane);
+			leadPane.setLayoutData(CmsSwtUtils.fillHeight());
+			leadPane.setLayout(CmsSwtUtils.noSpaceGridLayout());
+			CmsSwtUtils.style(leadPane, SuiteStyle.leadPane);
 
-			dynamicArea.setLayoutData(CmsUiUtils.fillAll());
+			dynamicArea.setLayoutData(CmsSwtUtils.fillAll());
 			dynamicArea.setLayout(new FormLayout());
 
 		} else {
-			belowHeader.setLayout(CmsUiUtils.noSpaceGridLayout());
+			belowHeader.setLayout(CmsSwtUtils.noSpaceGridLayout());
 		}
 	}
 
@@ -172,8 +173,8 @@ class SuiteUi extends Composite {
 
 	protected Composite initLayer(String id, SuiteLayer layer, Node context) {
 		Composite workArea = cmsView.doAs(() -> (Composite) layer.createUiPart(dynamicArea, context));
-		CmsUiUtils.style(workArea, SuiteStyle.workArea);
-		workArea.setLayoutData(CmsUiUtils.coverAll());
+		CmsSwtUtils.style(workArea, SuiteStyle.workArea);
+		workArea.setLayoutData(CmsSwtUtils.coverAll());
 		workAreas.put(id, workArea);
 		return workArea;
 	}

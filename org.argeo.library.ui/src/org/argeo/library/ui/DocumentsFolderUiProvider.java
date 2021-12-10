@@ -6,10 +6,10 @@ import java.nio.file.spi.FileSystemProvider;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
+import org.argeo.api.cms.CmsView;
 import org.argeo.cms.fs.CmsFsUtils;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.cms.ui.CmsView;
-import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.jcr.Jcr;
 import org.argeo.suite.ui.SuiteEvent;
 import org.eclipse.swt.SWT;
@@ -22,7 +22,7 @@ public class DocumentsFolderUiProvider implements CmsUiProvider {
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
-		CmsView cmsView = CmsView.getCmsView(parent);
+		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
 		DocumentsFolderComposite dfc = new DocumentsFolderComposite(parent, SWT.NONE, context) {
 
 			@Override
@@ -32,7 +32,7 @@ public class DocumentsFolderUiProvider implements CmsUiProvider {
 				cmsView.sendEvent(SuiteEvent.openNewPart.topic(), SuiteEvent.eventProperties(folderNode));
 			}
 		};
-		dfc.setLayoutData(CmsUiUtils.fillAll());
+		dfc.setLayoutData(CmsSwtUtils.fillAll());
 		dfc.populate(cmsView.doAs(() -> CmsFsUtils.getPath(nodeFileSystemProvider, context)));
 		return dfc;
 	}

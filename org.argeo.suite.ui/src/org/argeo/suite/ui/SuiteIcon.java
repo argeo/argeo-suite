@@ -1,6 +1,6 @@
 package org.argeo.suite.ui;
 
-import org.argeo.cms.ui.util.CmsIcon;
+import org.argeo.cms.swt.CmsIcon;
 
 /** Icon names used by Argeo Suite. */
 public enum SuiteIcon implements CmsIcon {

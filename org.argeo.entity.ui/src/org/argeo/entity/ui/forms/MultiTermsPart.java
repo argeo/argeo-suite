@@ -7,13 +7,13 @@ import javax.jcr.Item;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.argeo.cms.swt.CmsSwtUtils;
+import org.argeo.cms.swt.MouseDoubleClick;
+import org.argeo.cms.swt.MouseDown;
+import org.argeo.cms.swt.Selected;
 import org.argeo.cms.ui.forms.FormStyle;
-import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.EditablePart;
 import org.argeo.cms.ui.widgets.ContextOverlay;
-import org.argeo.eclipse.ui.MouseDoubleClick;
-import org.argeo.eclipse.ui.MouseDown;
-import org.argeo.eclipse.ui.Selected;
 import org.argeo.entity.Term;
 import org.argeo.entity.TermsManager;
 import org.argeo.jcr.Jcr;
@@ -44,7 +44,7 @@ public class MultiTermsPart extends AbstractTermsPart {
 
 		boolean vertical = SWT.VERTICAL == (getStyle() & SWT.VERTICAL);
 		RowLayout rl = new RowLayout(vertical ? SWT.VERTICAL : SWT.HORIZONTAL);
-		rl = CmsUiUtils.noMarginsRowLayout(rl);
+		rl = CmsSwtUtils.noMarginsRowLayout(rl);
 //		rl.wrap = true;
 //		rl.justify = true;
 		placeholder.setLayout(rl);
@@ -52,11 +52,11 @@ public class MultiTermsPart extends AbstractTermsPart {
 		if (currentValue != null && !currentValue.isEmpty()) {
 			for (Term value : currentValue) {
 				Composite block = new Composite(placeholder, SWT.NONE);
-				block.setLayout(CmsUiUtils.noSpaceGridLayout(3));
+				block.setLayout(CmsSwtUtils.noSpaceGridLayout(3));
 				Label lbl = new Label(block, SWT.NONE);
 				String display = getTermLabel(value);
 				lbl.setText(display);
-				CmsUiUtils.style(lbl, style == null ? FormStyle.propertyText.style() : style);
+				CmsSwtUtils.style(lbl, style == null ? FormStyle.propertyText.style() : style);
 				processTermListLabel(value, lbl);
 				if (isEditable())
 					lbl.addMouseListener((MouseDoubleClick) (e) -> {
@@ -94,15 +94,15 @@ public class MultiTermsPart extends AbstractTermsPart {
 
 		if (isEditing()) {
 			Composite block = new Composite(placeholder, SWT.NONE);
-			block.setLayout(CmsUiUtils.noSpaceGridLayout(3));
+			block.setLayout(CmsSwtUtils.noSpaceGridLayout(3));
 
 			createHighlight(block);
 
 			Text txt = new Text(block, SWT.SINGLE | SWT.BORDER);
-			txt.setLayoutData(CmsUiUtils.fillWidth());
+			txt.setLayoutData(CmsSwtUtils.fillWidth());
 //			txt.setMessage("[new]");
 
-			CmsUiUtils.style(txt, style == null ? FormStyle.propertyText.style() : style);
+			CmsSwtUtils.style(txt, style == null ? FormStyle.propertyText.style() : style);
 
 			ToolBar toolBar = new ToolBar(block, SWT.HORIZONTAL);
 			ToolItem cancelItem = new ToolItem(toolBar, SWT.FLAT);
@@ -151,7 +151,7 @@ public class MultiTermsPart extends AbstractTermsPart {
 
 	@Override
 	protected void refresh(ContextOverlay contextArea, String filter, Text txt) {
-		CmsUiUtils.clear(contextArea);
+		CmsSwtUtils.clear(contextArea);
 		List<? extends Term> terms = termsManager.listAllTerms(typology.getId());
 		List<Term> currentValue = getValue();
 		terms: for (Term term : terms) {

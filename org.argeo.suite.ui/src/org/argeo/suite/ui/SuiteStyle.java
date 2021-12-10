@@ -1,6 +1,6 @@
 package org.argeo.suite.ui;
 
-import org.argeo.cms.ui.util.CmsStyle;
+import org.argeo.api.cms.CmsStyle;
 
 /** Styles used by Argeo Suite work UI. */
 public enum SuiteStyle implements CmsStyle {

@@ -1,6 +1,6 @@
 package org.argeo.suite.ui;
 
-import static org.argeo.cms.ui.CmsView.CMS_VIEW_UID_PROPERTY;
+import static org.argeo.api.cms.CmsView.CMS_VIEW_UID_PROPERTY;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,6 +14,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.jcr.Node;
+import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
@@ -22,17 +23,18 @@ import javax.naming.ldap.LdapName;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.argeo.api.cms.CmsSession;
+import org.argeo.api.cms.CmsTheme;
+import org.argeo.api.cms.CmsUi;
+import org.argeo.api.cms.CmsView;
+import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
-import org.argeo.cms.auth.CmsSession;
 import org.argeo.cms.jcr.CmsJcrUtils;
-import org.argeo.cms.ui.AbstractCmsApp;
-import org.argeo.cms.ui.CmsTheme;
+import org.argeo.cms.swt.CmsSwtUtils;
+import org.argeo.cms.swt.dialogs.CmsFeedback;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.cms.ui.CmsView;
-import org.argeo.cms.ui.dialogs.CmsFeedback;
-import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.specific.UiContext;
 import org.argeo.entity.EntityConstants;
 import org.argeo.entity.EntityNames;
@@ -85,6 +87,9 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	// TODO make more optimal or via CmsSession/CmsView
 	private Map<String, SuiteUi> managedUis = new HashMap<>();
 
+	private Repository repository;
+
+
 	public void init(Map<String, Object> properties) {
 		if (log.isDebugEnabled())
 			log.info("Argeo Suite App started");
@@ -132,15 +137,16 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	}
 
 	@Override
-	public Composite initUi(Composite parent) {
-		String uiName = parent.getData(UI_NAME_PROPERTY) != null ? parent.getData(UI_NAME_PROPERTY).toString() : null;
-		CmsView cmsView = CmsView.getCmsView(parent);
+	public CmsUi initUi(Object parent) {
+		Composite uiParent =(Composite) parent;
+		String uiName = uiParent.getData(UI_NAME_PROPERTY) != null ? uiParent.getData(UI_NAME_PROPERTY).toString() : null;
+		CmsView cmsView = CmsSwtUtils.getCmsView(uiParent);
 		if (cmsView == null)
 			throw new IllegalStateException("No CMS view is registered.");
 		CmsTheme theme = getTheme(uiName);
 		if (theme != null)
-			CmsTheme.registerCmsTheme(parent.getShell(), theme);
-		SuiteUi argeoSuiteUi = new SuiteUi(parent, SWT.INHERIT_DEFAULT);
+			CmsSwtUtils.registerCmsTheme(uiParent.getShell(), theme);
+		SuiteUi argeoSuiteUi = new SuiteUi(uiParent, SWT.INHERIT_DEFAULT);
 		String uid = cmsView.getUid();
 		managedUis.put(uid, argeoSuiteUi);
 		argeoSuiteUi.addDisposeListener((e) -> {
@@ -157,15 +163,15 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	}
 
 	@Override
-	public void refreshUi(Composite parent, String state) {
+	public void refreshUi(CmsUi cmsUi, String state) {
 		try {
 			Node context = null;
-			SuiteUi ui = (SuiteUi) parent;
+			SuiteUi ui = (SuiteUi) cmsUi;
 
 			String uiName = Objects.toString(ui.getParent().getData(UI_NAME_PROPERTY), null);
 			if (uiName == null)
 				throw new IllegalStateException("UI name should not be null");
-			CmsView cmsView = CmsView.getCmsView(parent);
+			CmsView cmsView = CmsSwtUtils.getCmsView(ui);
 			CmsUiProvider headerUiProvider = findUiProvider(headerPid);
 			CmsUiProvider footerUiProvider = findUiProvider(footerPid);
 			CmsUiProvider leadPaneUiProvider;
@@ -229,7 +235,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				if (footerUiProvider != null)
 					refreshPart(footerUiProvider, ui.getFooter(), context);
 				ui.layout(true, true);
-				setState(parent, state != null ? state : defaultLayerPid);
+				setState(ui, state != null ? state : defaultLayerPid);
 			}
 		} catch (Exception e) {
 			CmsFeedback.show("Unexpected exception", e);
@@ -246,7 +252,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	}
 
 	private void refreshPart(CmsUiProvider uiProvider, Composite part, Node context) {
-		CmsUiUtils.clear(part);
+		CmsSwtUtils.clear(part);
 		uiProvider.createUiPart(part, context);
 	}
 
@@ -344,12 +350,12 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	}
 
 	@Override
-	public void setState(Composite parent, String state) {
+	public void setState(CmsUi cmsUi, String state) {
 		if (state == null)
 			return;
 		if (!state.startsWith("/")) {
-			if (parent instanceof SuiteUi) {
-				SuiteUi ui = (SuiteUi) parent;
+			if (cmsUi instanceof SuiteUi) {
+				SuiteUi ui = (SuiteUi) cmsUi;
 				if (LOGIN.equals(state)) {
 					String appTitle = "";
 					if (ui.getTitle() != null)
@@ -365,7 +371,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			}
 			return;
 		}
-		SuiteUi suiteUi = (SuiteUi) parent;
+		SuiteUi suiteUi = (SuiteUi) cmsUi;
 		Node node = stateToNode(suiteUi, state);
 		if (node == null) {
 			suiteUi.getCmsView().navigateTo(HOME_STATE);
@@ -620,4 +626,13 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		this.cmsUserManager = cmsUserManager;
 	}
 
+	public Repository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
+	}
+
+	
 }

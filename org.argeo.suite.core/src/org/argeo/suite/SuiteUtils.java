@@ -12,7 +12,7 @@ import javax.naming.ldap.LdapName;
 import javax.security.auth.x500.X500Principal;
 
 import org.argeo.api.NodeConstants;
-import org.argeo.cms.auth.CmsSession;
+import org.argeo.api.cms.CmsSession;
 import org.argeo.entity.EntityType;
 import org.argeo.jackrabbit.security.JackrabbitSecurityUtils;
 import org.argeo.jcr.JcrException;

@@ -4,9 +4,10 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NodeType;
 
-import org.argeo.cms.ui.CmsEditable;
+import org.argeo.api.cms.CmsEditable;
+import org.argeo.api.cms.CmsView;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.cms.ui.CmsView;
 import org.argeo.cms.ui.util.CmsLink;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.viewers.JcrVersionCmsEditable;
@@ -23,19 +24,19 @@ public class DocumentUiProvider implements CmsUiProvider {
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
-		CmsView cmsView = CmsView.getCmsView(parent);
+		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
 		CmsEditable cmsEditable = new JcrVersionCmsEditable(context);
 		if (context.hasNode(DbkType.article.get())) {
 			Node textNode = context.getNode(DbkType.article.get());
 			// Title
-			parent.setLayout(CmsUiUtils.noSpaceGridLayout());
+			parent.setLayout(CmsSwtUtils.noSpaceGridLayout());
 
 			CmsLink toHtml = new CmsLink("To HTML", "/html/dbk" + context.getPath()+"/index.html");
 			toHtml.createUiPart(parent, context);
 
 			ScrolledPage page = new ScrolledPage(parent, SWT.NONE);
-			page.setLayoutData(CmsUiUtils.fillAll());
-			page.setLayout(CmsUiUtils.noSpaceGridLayout());
+			page.setLayoutData(CmsSwtUtils.fillAll());
+			page.setLayout(CmsSwtUtils.noSpaceGridLayout());
 
 			cmsView.runAs(() -> {
 				AbstractDbkViewer dbkEditor = new DocumentTextEditor(page, SWT.NONE, textNode, cmsEditable);
@@ -49,7 +50,7 @@ public class DocumentUiProvider implements CmsUiProvider {
 				Browser browser = new Browser(parent, SWT.NONE);
 				String dataPath = CmsUiUtils.getDataPath(context);
 				browser.setUrl(dataPath);
-				browser.setLayoutData(CmsUiUtils.fillAll());
+				browser.setLayoutData(CmsSwtUtils.fillAll());
 				return browser;
 			}
 		}

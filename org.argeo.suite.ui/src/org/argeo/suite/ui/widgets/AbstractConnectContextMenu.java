@@ -3,7 +3,7 @@ package org.argeo.suite.ui.widgets;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -54,7 +54,7 @@ public abstract class AbstractConnectContextMenu {
 			Button btn = new Button(boxCmp, SWT.FLAT | SWT.LEAD);
 			btn.setText(getLabel(actionId));
 			btn.setLayoutData(EclipseUiUtils.fillWidth());
-			CmsUiUtils.markup(btn);
+			CmsSwtUtils.markup(btn);
 //			CmsUiUtils.style(btn, actionId + ConnectUiStyles.BUTTON_SUFFIX);
 			btn.setData(KEY_ACTION_ID, actionId);
 			btn.addSelectionListener(asl);

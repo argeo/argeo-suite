@@ -8,14 +8,15 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.jcr.Node;
+import javax.jcr.Repository;
 import javax.jcr.Session;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.cms.ui.AbstractCmsApp;
-import org.argeo.cms.ui.CmsApp;
+import org.argeo.api.cms.CmsApp;
+import org.argeo.api.cms.CmsUi;
+import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.docbook.ui.DocumentPage;
 import org.argeo.jcr.Jcr;
 import org.argeo.suite.ui.SuiteApp;
 import org.argeo.util.LangUtils;
@@ -41,6 +42,8 @@ public class PublishingApp extends AbstractCmsApp implements EventHandler {
 
 	private CmsUiProvider landingPage;
 	private CmsUiProvider defaultProvider = new DocumentUiProvider();
+
+	private Repository repository;
 
 	public void init(Map<String, String> properties) {
 		if (properties.containsKey(DEFAULT_UI_NAME_PROPERTY))
@@ -68,7 +71,8 @@ public class PublishingApp extends AbstractCmsApp implements EventHandler {
 	}
 
 	@Override
-	public Composite initUi(Composite parent) {
+	public CmsUi initUi(Object uiParent) {
+		Composite parent = (Composite) uiParent;
 //		Session adminSession = NodeUtils.openDataAdminSession(getRepository(), null);
 		Session session = Jcr.login(getRepository(), null);
 		parent.setLayout(new GridLayout());
@@ -86,11 +90,12 @@ public class PublishingApp extends AbstractCmsApp implements EventHandler {
 		} else {
 			page = defaultProvider.createUiPart(parent, indexNode);
 		}
-		return (Composite) page;
+		return (CmsUi) page;
 	}
 
 	@Override
-	public void refreshUi(Composite parent, String state) {
+	public void refreshUi(CmsUi cmsUi, String state) {
+		Composite parent = (Composite) cmsUi;
 		parent.setLayout(new GridLayout());
 		if (landingPage != null)
 			landingPage.createUiPart(parent, null);
@@ -99,7 +104,7 @@ public class PublishingApp extends AbstractCmsApp implements EventHandler {
 	}
 
 	@Override
-	public void setState(Composite parent, String state) {
+	public void setState(CmsUi cmsUi, String state) {
 
 	}
 
@@ -116,6 +121,14 @@ public class PublishingApp extends AbstractCmsApp implements EventHandler {
 	public void handleEvent(Event event) {
 		// TODO listen to some events
 
+	}
+
+	public Repository getRepository() {
+		return repository;
+	}
+
+	public void setRepository(Repository repository) {
+		this.repository = repository;
 	}
 
 }

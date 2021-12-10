@@ -1,8 +1,8 @@
 package org.argeo.library.ui;
 
-import static org.argeo.cms.ui.dialogs.CmsMessageDialog.openConfirm;
-import static org.argeo.cms.ui.dialogs.CmsMessageDialog.openError;
-import static org.argeo.cms.ui.dialogs.SingleValueDialog.ask;
+import static org.argeo.cms.swt.dialogs.CmsMessageDialog.openConfirm;
+import static org.argeo.cms.swt.dialogs.CmsMessageDialog.openError;
+import static org.argeo.cms.swt.dialogs.SingleValueDialog.ask;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -27,7 +27,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.argeo.cms.ui.dialogs.CmsFeedback;
+import org.argeo.cms.swt.dialogs.CmsFeedback;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;

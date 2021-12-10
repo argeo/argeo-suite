@@ -3,7 +3,7 @@ package org.argeo.docbook.ui;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.widgets.Img;
 import org.eclipse.rap.fileupload.FileUploadEvent;
 import org.eclipse.rap.fileupload.FileUploadHandler;
@@ -35,12 +35,12 @@ public class DbkImg extends Img {
 
 	@Override
 	protected void setContainerLayoutData(Composite composite) {
-		composite.setLayoutData(CmsUiUtils.grabWidth(SWT.CENTER, SWT.DEFAULT));
+		composite.setLayoutData(CmsSwtUtils.grabWidth(SWT.CENTER, SWT.DEFAULT));
 	}
 
 	@Override
 	protected void setControlLayoutData(Control control) {
-		control.setLayoutData(CmsUiUtils.grabWidth(SWT.CENTER, SWT.DEFAULT));
+		control.setLayoutData(CmsSwtUtils.grabWidth(SWT.CENTER, SWT.DEFAULT));
 	}
 
 	@Override

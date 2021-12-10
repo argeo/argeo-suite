@@ -7,17 +7,18 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+import org.argeo.api.cms.CmsEditable;
+import org.argeo.api.cms.CmsEvent;
+import org.argeo.api.cms.CmsStyle;
+import org.argeo.api.cms.CmsTheme;
+import org.argeo.api.cms.CmsView;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
 import org.argeo.cms.auth.CurrentUser;
-import org.argeo.cms.ui.CmsEditable;
-import org.argeo.cms.ui.CmsTheme;
-import org.argeo.cms.ui.CmsView;
-import org.argeo.cms.ui.dialogs.LightweightDialog;
-import org.argeo.cms.ui.util.CmsEvent;
-import org.argeo.cms.ui.util.CmsIcon;
+import org.argeo.cms.swt.CmsIcon;
+import org.argeo.cms.swt.CmsSwtUtils;
+import org.argeo.cms.swt.dialogs.LightweightDialog;
 import org.argeo.cms.ui.util.CmsLink;
-import org.argeo.cms.ui.util.CmsStyle;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.entity.EntityNames;
@@ -51,19 +52,19 @@ public class SuiteUiUtils {
 	/** creates a title bar composite with label and optional button */
 	public static void addTitleBar(Composite parent, String title, Boolean isEditable) {
 		Composite titleBar = new Composite(parent, SWT.NONE);
-		titleBar.setLayoutData(CmsUiUtils.fillWidth());
-		CmsUiUtils.style(titleBar, SuiteStyle.titleContainer);
+		titleBar.setLayoutData(CmsSwtUtils.fillWidth());
+		CmsSwtUtils.style(titleBar, SuiteStyle.titleContainer);
 
-		titleBar.setLayout(CmsUiUtils.noSpaceGridLayout(new GridLayout(2, false)));
+		titleBar.setLayout(CmsSwtUtils.noSpaceGridLayout(new GridLayout(2, false)));
 		Label titleLbl = new Label(titleBar, SWT.NONE);
 		titleLbl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
-		CmsUiUtils.style(titleLbl, SuiteStyle.titleLabel);
+		CmsSwtUtils.style(titleLbl, SuiteStyle.titleLabel);
 		titleLbl.setText(title);
 
 		if (isEditable) {
 			Button editBtn = new Button(titleBar, SWT.PUSH);
 			editBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
-			CmsUiUtils.style(editBtn, SuiteStyle.inlineButton);
+			CmsSwtUtils.style(editBtn, SuiteStyle.inlineButton);
 			editBtn.setText("Edit");
 		}
 	}
@@ -72,7 +73,7 @@ public class SuiteUiUtils {
 		Label lbl = new Label(parent, SWT.WRAP);
 		lbl.setText(label);
 		// lbl.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, true, true));
-		CmsUiUtils.style(lbl, SuiteStyle.simpleLabel);
+		CmsSwtUtils.style(lbl, SuiteStyle.simpleLabel);
 		return lbl;
 	}
 
@@ -87,20 +88,20 @@ public class SuiteUiUtils {
 		if (message != null)
 			txt.setMessage(message);
 		txt.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, true, true));
-		CmsUiUtils.style(txt, SuiteStyle.simpleText);
+		CmsSwtUtils.style(txt, SuiteStyle.simpleText);
 		return txt;
 	}
 
 	public static Text addFormInputField(Composite parent, String placeholder) {
 		Text txt = new Text(parent, SWT.BORDER);
 
-		GridData gridData = CmsUiUtils.fillWidth();
+		GridData gridData = CmsSwtUtils.fillWidth();
 		txt.setLayoutData(gridData);
 
 		if (placeholder != null)
 			txt.setText(placeholder);
 
-		CmsUiUtils.style(txt, SuiteStyle.simpleInput);
+		CmsSwtUtils.style(txt, SuiteStyle.simpleInput);
 		return txt;
 	}
 
@@ -109,11 +110,11 @@ public class SuiteUiUtils {
 		Composite lineComposite = new Composite(parent, SWT.NONE);
 		lineComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		lineComposite.setLayout(new GridLayout(2, false));
-		CmsUiUtils.style(lineComposite, SuiteStyle.formLine);
+		CmsSwtUtils.style(lineComposite, SuiteStyle.formLine);
 		addFormLabel(lineComposite, label);
 		Text txt = addFormTextField(lineComposite, text, null);
 		txt.setEditable(false);
-		txt.setLayoutData(CmsUiUtils.fillWidth());
+		txt.setLayoutData(CmsSwtUtils.fillWidth());
 		return txt;
 	}
 
@@ -122,7 +123,7 @@ public class SuiteUiUtils {
 		Composite lineComposite = new Composite(parent, SWT.NONE);
 		lineComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		lineComposite.setLayout(new GridLayout(2, false));
-		CmsUiUtils.style(lineComposite, SuiteStyle.formLine);
+		CmsSwtUtils.style(lineComposite, SuiteStyle.formLine);
 		addFormLabel(lineComposite, label);
 		String text = Jcr.get(node, property);
 //		int style = cmsEditable.isEditing() ? SWT.WRAP : SWT.WRAP;
@@ -135,7 +136,7 @@ public class SuiteUiUtils {
 		} else {
 			txt.setEditable(false);
 		}
-		txt.setLayoutData(CmsUiUtils.fillWidth());
+		txt.setLayoutData(CmsSwtUtils.fillWidth());
 		return txt;
 	}
 
@@ -143,10 +144,10 @@ public class SuiteUiUtils {
 		Composite lineComposite = new Composite(parent, SWT.NONE);
 		lineComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		lineComposite.setLayout(new GridLayout(2, false));
-		CmsUiUtils.style(lineComposite, SuiteStyle.formLine);
+		CmsSwtUtils.style(lineComposite, SuiteStyle.formLine);
 		addFormLabel(lineComposite, label);
 		Text txt = addFormInputField(lineComposite, placeholder);
-		txt.setLayoutData(CmsUiUtils.fillWidth());
+		txt.setLayoutData(CmsSwtUtils.fillWidth());
 		return txt;
 	}
 
@@ -158,14 +159,14 @@ public class SuiteUiUtils {
 		Composite lineComposite = new Composite(parent, SWT.NONE);
 		lineComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		lineComposite.setLayout(new GridLayout(3, false));
-		CmsUiUtils.style(lineComposite, SuiteStyle.formLine);
+		CmsSwtUtils.style(lineComposite, SuiteStyle.formLine);
 		Label offsetLbl = new Label(lineComposite, SWT.NONE);
 		GridData gridData = new GridData();
 		gridData.widthHint = offset;
 		offsetLbl.setLayoutData(gridData);
 		addFormLabel(lineComposite, label);
 		Text txt = addFormTextField(lineComposite, text, null);
-		txt.setLayoutData(CmsUiUtils.fillWidth());
+		txt.setLayoutData(CmsSwtUtils.fillWidth());
 		return txt;
 	}
 
@@ -177,7 +178,7 @@ public class SuiteUiUtils {
 		addFormLabel(parent, label);
 		Text txt = addFormTextField(parent, text, null);
 		txt.setEditable(false);
-		txt.setLayoutData(CmsUiUtils.fillWidth());
+		txt.setLayoutData(CmsSwtUtils.fillWidth());
 		return txt;
 	}
 
@@ -198,7 +199,7 @@ public class SuiteUiUtils {
 		} else {
 			txt.setEditable(false);
 		}
-		txt.setLayoutData(CmsUiUtils.fillWidth());
+		txt.setLayoutData(CmsSwtUtils.fillWidth());
 		return txt;
 	}
 
@@ -214,7 +215,7 @@ public class SuiteUiUtils {
 		Composite lineComposite = new Composite(parent, SWT.NONE);
 		lineComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		lineComposite.setLayout(new GridLayout(2, true));
-		CmsUiUtils.style(lineComposite, SuiteStyle.formLine);
+		CmsSwtUtils.style(lineComposite, SuiteStyle.formLine);
 		addFormLabel(lineComposite, label);
 
 		return addPicture(lineComposite, fileNode);
@@ -268,7 +269,7 @@ public class SuiteUiUtils {
 			height = Math.round(ratio * height);
 		}
 		Label img = new Label(parent, SWT.NONE);
-		CmsUiUtils.markup(img);
+		CmsSwtUtils.markup(img);
 		StringBuffer txt = new StringBuffer();
 		String target = toLink(link);
 		if (target != null)
@@ -304,8 +305,8 @@ public class SuiteUiUtils {
 						protected Control createDialogArea(Composite parent) {
 							parent.setLayout(new GridLayout());
 							ScrolledComposite scroll = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
-							scroll.setLayoutData(CmsUiUtils.fillAll());
-							scroll.setLayout(CmsUiUtils.noSpaceGridLayout());
+							scroll.setLayoutData(CmsSwtUtils.fillAll());
+							scroll.setLayout(CmsSwtUtils.noSpaceGridLayout());
 							scroll.setExpandHorizontal(true);
 							scroll.setExpandVertical(true);
 							// scroll.setAlwaysShowScrollBars(true);
@@ -313,9 +314,9 @@ public class SuiteUiUtils {
 							Composite c = new Composite(scroll, SWT.NONE);
 							scroll.setContent(c);
 							c.setLayout(new GridLayout());
-							c.setLayoutData(CmsUiUtils.fillAll());
+							c.setLayoutData(CmsSwtUtils.fillAll());
 							Label bigImg = new Label(c, SWT.NONE);
-							CmsUiUtils.markup(bigImg);
+							CmsSwtUtils.markup(bigImg);
 							bigImg.setText(CmsUiUtils.img(fileNode, Jcr.get(content, EntityNames.SVG_WIDTH),
 									Jcr.get(content, EntityNames.SVG_HEIGHT)));
 							bigImg.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
@@ -336,11 +337,7 @@ public class SuiteUiUtils {
 	}
 
 	public static String toLink(Node node) {
-		try {
 			return node != null ? "#" + CmsUiUtils.cleanPathForUrl(SuiteApp.nodeToState(node)) : null;
-		} catch (RepositoryException e) {
-			throw new JcrException("Cannot get link from " + node, e);
-		}
 	}
 
 	public static Control addLink(Composite parent, String label, Node node, CmsStyle style)
@@ -353,7 +350,7 @@ public class SuiteUiUtils {
 	public static Control addExternalLink(Composite parent, String label, String url, String plainCssAnchorClass,
 			boolean newWindow) throws RepositoryException {
 		Label lbl = new Label(parent, SWT.NONE);
-		CmsUiUtils.markup(lbl);
+		CmsSwtUtils.markup(lbl);
 		StringBuilder txt = new StringBuilder();
 		txt.append("<a class='" + plainCssAnchorClass + "'");
 		txt.append(" href='").append(url).append("'");
@@ -378,22 +375,22 @@ public class SuiteUiUtils {
 
 	public static Button createLayerButton(Composite parent, String layer, Localized msg, CmsIcon icon,
 			ClassLoader l10nClassLoader) {
-		CmsTheme theme = CmsTheme.getCmsTheme(parent);
+		CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
 		Button button = new Button(parent, SWT.PUSH);
-		CmsUiUtils.style(button, SuiteStyle.leadPane);
+		CmsSwtUtils.style(button, SuiteStyle.leadPane);
 		if (icon != null)
 			button.setImage(icon.getBigIcon(theme));
 		button.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, false));
 		// button.setToolTipText(msg.lead());
 		if (msg != null) {
 			Label lbl = new Label(parent, SWT.CENTER);
-			CmsUiUtils.style(lbl, SuiteStyle.leadPane);
+			CmsSwtUtils.style(lbl, SuiteStyle.leadPane);
 			String txt = LocaleUtils.lead(msg, l10nClassLoader);
 //			String txt = msg.lead();
 			lbl.setText(txt);
 			lbl.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));
 		}
-		CmsUiUtils.sendEventOnSelect(button, SuiteEvent.switchLayer.topic(), SuiteEvent.LAYER, layer);
+		CmsSwtUtils.sendEventOnSelect(button, SuiteEvent.switchLayer.topic(), SuiteEvent.LAYER, layer);
 		return button;
 	}
 

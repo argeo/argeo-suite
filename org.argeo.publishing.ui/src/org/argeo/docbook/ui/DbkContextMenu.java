@@ -5,8 +5,9 @@ import java.util.List;
 
 import javax.jcr.Node;
 
-import org.argeo.cms.ui.CmsEditable;
-import org.argeo.cms.ui.util.CmsUiUtils;
+import org.argeo.api.cms.CmsEditable;
+import org.argeo.cms.swt.CmsSwtUtils;
+import org.argeo.cms.swt.MouseDown;
 import org.argeo.cms.ui.viewers.EditablePart;
 import org.argeo.cms.ui.viewers.NodePart;
 import org.argeo.cms.ui.viewers.Section;
@@ -15,7 +16,6 @@ import org.argeo.cms.ui.widgets.EditableText;
 import org.argeo.cms.ui.widgets.Img;
 import org.argeo.docbook.DbkMsg;
 import org.argeo.docbook.DbkUtils;
-import org.argeo.eclipse.ui.MouseDown;
 import org.argeo.jcr.Jcr;
 import org.eclipse.rap.rwt.RWT;
 import org.eclipse.swt.SWT;
@@ -49,7 +49,7 @@ class DbkContextMenu {
 	void show(EditablePart editablePart, Point location, List<String> availableStyles) {
 		if (shell.isVisible())
 			shell.setVisible(false);
-		CmsUiUtils.clear(shell);
+		CmsSwtUtils.clear(shell);
 		Composite parent = shell;
 		CmsEditable cmsEditable = textViewer.getCmsEditable();
 //		if (availableStyles.isEmpty())

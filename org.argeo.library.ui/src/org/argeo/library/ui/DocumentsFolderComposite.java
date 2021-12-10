@@ -15,9 +15,9 @@ import javax.jcr.Node;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.fs.FileDrop;
 import org.argeo.cms.ui.fs.FsStyles;
-import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.ColumnDefinition;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.eclipse.ui.fs.FileIconNameLabelProvider;
@@ -217,7 +217,7 @@ public class DocumentsFolderComposite extends Composite {
 			nameStr = path.getFileName().toString();
 //		elemBtn.setText(nameStr + " >> ");
 		elemBtn.setText(nameStr);
-		CmsUiUtils.style(elemBtn, FsStyles.BREAD_CRUMB_BTN);
+		CmsSwtUtils.style(elemBtn, FsStyles.BREAD_CRUMB_BTN);
 		elemBtn.addSelectionListener(new SelectionAdapter() {
 			private static final long serialVersionUID = -4103695476023480651L;
 
@@ -244,7 +244,7 @@ public class DocumentsFolderComposite extends Composite {
 
 		// Bread crumbs
 		breadCrumbCmp = new Composite(filterCmp, SWT.NO_FOCUS);
-		CmsUiUtils.style(breadCrumbCmp, FsStyles.BREAD_CRUMB_BTN);
+		CmsSwtUtils.style(breadCrumbCmp, FsStyles.BREAD_CRUMB_BTN);
 		RowLayout breadCrumbLayout = new RowLayout();
 		breadCrumbLayout.spacing = 0;
 		breadCrumbLayout.marginTop = 0;
