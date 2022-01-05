@@ -9,15 +9,15 @@
 		<version>2.3-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>org.argeo.suite.dep.e4.rcp</artifactId>
-	<name>Suite E4 Platform RCP</name>
+	<artifactId>org.argeo.suite.dep.ui.rcp</artifactId>
+	<name>Suite Platform RCP</name>
 	<packaging>jar</packaging>
 	<dependencies>
 		<!-- Base Argeo platform distribution -->
 		<dependency>
-			<groupId>org.argeo.commons.rcp</groupId>
-			<artifactId>org.argeo.dep.cms.e4.rcp</artifactId>
-			<version>${version.argeo-rcp}</version>
+			<groupId>org.argeo.commons</groupId>
+			<artifactId>org.argeo.dep.cms.ui.rcp</artifactId>
+			<version>${version.argeo-commons}</version>
 			<type>pom</type>
 		</dependency>
 
@@ -101,8 +101,8 @@
 										</mapping>
 									</mappings>
 									<requires>
-										<require>argeo-cms-e4-rcp</require>
-										<require>argeo-connect-tp</require>
+										<require>argeo-cms-ui-rcp</require>
+										<require>argeo-cms-ext-tp</require>
 									</requires>
 								</configuration>
 							</execution>

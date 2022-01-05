@@ -13,7 +13,7 @@
 	<modules>
 		<module>org.argeo.suite.dep.ui.rap</module>
 		<module>org.argeo.suite.dep.e4.rap</module>
-		<!-- <module>org.argeo.suite.dep.e4.rcp</module> -->
+		<module>org.argeo.suite.dep.ui.rcp</module>
 	</modules>
 	<build>
 		<plugins>

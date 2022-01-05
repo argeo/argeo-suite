@@ -14,7 +14,7 @@
 		<!-- Argeo Commons -->
 		<dependency>
 			<groupId>org.argeo.commons</groupId>
-			<artifactId>org.argeo.enterprise</artifactId>
+			<artifactId>org.argeo.util</artifactId>
 			<version>${version.argeo-commons}</version>
 		</dependency>
 	</dependencies>

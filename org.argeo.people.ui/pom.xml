@@ -19,7 +19,7 @@
 
 		<!-- Specific -->
 		<dependency>
-			<groupId>org.argeo.commons</groupId>
+			<groupId>org.argeo.commons.rap</groupId>
 			<artifactId>org.argeo.swt.specific.rap</artifactId>
 			<version>${version.argeo-commons}</version>
 			<scope>provided</scope>
