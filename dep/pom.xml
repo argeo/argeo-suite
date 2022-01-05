@@ -102,7 +102,7 @@
 				<!-- OSGi test -->
 				<dependency>
 					<groupId>org.argeo.commons</groupId>
-					<artifactId>org.argeo.osgi.boot</artifactId>
+					<artifactId>org.argeo.init</artifactId>
 					<version>${version.argeo-commons}</version>
 					<scope>test</scope>
 				</dependency>
