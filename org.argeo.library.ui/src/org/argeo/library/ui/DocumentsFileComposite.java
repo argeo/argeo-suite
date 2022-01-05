@@ -7,8 +7,7 @@ import java.nio.file.spi.FileSystemProvider;
 
 import javax.jcr.Node;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.cms.fs.CmsFsUtils;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
@@ -29,7 +28,7 @@ import org.eclipse.swt.widgets.Label;
 public class DocumentsFileComposite extends Composite {
 	private static final long serialVersionUID = -7567632342889241793L;
 
-	private final static Log log = LogFactory.getLog(DocumentsFileComposite.class);
+	private final static CmsLog log = CmsLog.getLog(DocumentsFileComposite.class);
 
 	private final Node currentBaseContext;
 

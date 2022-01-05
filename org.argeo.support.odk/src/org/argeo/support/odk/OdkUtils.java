@@ -20,8 +20,7 @@ import javax.jcr.query.QueryResult;
 import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.entity.EntityMimeType;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
@@ -31,7 +30,7 @@ import org.argeo.util.DigestUtils;
 
 /** Utilities around ODK. */
 public class OdkUtils {
-	private final static Log log = LogFactory.getLog(OdkUtils.class);
+	private final static CmsLog log = CmsLog.getLog(OdkUtils.class);
 
 	public static Node loadOdkForm(Node formBase, String name, InputStream in, InputStream... additionalNodes)
 			throws RepositoryException, IOException {

@@ -10,7 +10,7 @@ import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.argeo.api.NodeConstants;
+import org.argeo.api.cms.CmsConstants;
 import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
@@ -29,7 +29,7 @@ public class SuiteTermsManager implements TermsManager {
 	private Session adminSession;
 
 	public void init() {
-		adminSession = CmsJcrUtils.openDataAdminSession(repository, NodeConstants.SYS_WORKSPACE);
+		adminSession = CmsJcrUtils.openDataAdminSession(repository, CmsConstants.SYS_WORKSPACE);
 	}
 
 	@Override

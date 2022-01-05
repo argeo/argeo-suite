@@ -1,6 +1,6 @@
 package org.argeo.entity;
 
-import org.argeo.naming.LdapAttrs;
+import org.argeo.util.naming.LdapAttrs;
 
 /** Constants used to name entity structures. */
 public interface EntityNames {

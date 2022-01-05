@@ -1,13 +1,12 @@
 package org.argeo.suite.ui;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.argeo.api.cms.CmsLog;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
 /** Record UI events. */
 public class EventRecorder implements EventHandler {
-	private final static Log log = LogFactory.getLog(EventRecorder.class);
+	private final static CmsLog log = CmsLog.getLog(EventRecorder.class);
 
 	public void init() {
 

@@ -16,10 +16,9 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.argeo.api.cms.Cms2DSize;
 import org.argeo.api.cms.CmsEditable;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.viewers.AbstractPageViewer;
 import org.argeo.cms.ui.viewers.EditablePart;
@@ -57,7 +56,7 @@ import org.eclipse.swt.widgets.Text;
 /** Base class for text viewers and editors. */
 public abstract class AbstractDbkViewer extends AbstractPageViewer implements KeyListener, Observer {
 	private static final long serialVersionUID = -2401274679492339668L;
-	private final static Log log = LogFactory.getLog(AbstractDbkViewer.class);
+	private final static CmsLog log = CmsLog.getLog(AbstractDbkViewer.class);
 
 	private final Section mainSection;
 

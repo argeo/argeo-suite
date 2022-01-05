@@ -11,15 +11,14 @@ import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.maintenance.AbstractMaintenanceService;
 
 /** Base for custom initialisations. */
 public abstract class CustomMaintenanceService extends AbstractMaintenanceService {
-	private final static Log log = LogFactory.getLog(AbstractMaintenanceService.class);
+	private final static CmsLog log = CmsLog.getLog(AbstractMaintenanceService.class);
 
 	protected List<String> getTypologies() {
 		return new ArrayList<>();

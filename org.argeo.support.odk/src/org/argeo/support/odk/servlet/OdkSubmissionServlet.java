@@ -21,9 +21,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.argeo.api.cms.CmsSession;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.cms.auth.RemoteAuthRequest;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.jcr.CmsJcrUtils;
@@ -37,7 +36,7 @@ import org.argeo.support.xforms.FormSubmissionListener;
 /** Receives a form submission. */
 public class OdkSubmissionServlet extends HttpServlet {
 	private static final long serialVersionUID = 7834401404691302385L;
-	private final static Log log = LogFactory.getLog(OdkSubmissionServlet.class);
+	private final static CmsLog log = CmsLog.getLog(OdkSubmissionServlet.class);
 
 	private final static String XML_SUBMISSION_FILE = "xml_submission_file";
 

@@ -8,7 +8,7 @@ import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.security.Privilege;
 
-import org.argeo.api.NodeConstants;
+import org.argeo.api.cms.CmsConstants;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.maintenance.AbstractMaintenanceService;
@@ -31,7 +31,7 @@ public class SuiteMaintenanceService extends AbstractMaintenanceService {
 
 	@Override
 	public void configurePrivileges(Session adminSession) throws RepositoryException {
-		JcrUtils.addPrivilege(adminSession, EntityType.user.basePath(), NodeConstants.ROLE_USER_ADMIN,
+		JcrUtils.addPrivilege(adminSession, EntityType.user.basePath(), CmsConstants.ROLE_USER_ADMIN,
 				Privilege.JCR_ALL);
 		//JcrUtils.addPrivilege(adminSession, "/", SuiteRole.coworker.dn(), Privilege.JCR_READ);
 	}

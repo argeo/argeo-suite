@@ -11,10 +11,9 @@ import javax.jcr.Node;
 import javax.jcr.Repository;
 import javax.jcr.Session;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.argeo.api.cms.CmsApp;
 import org.argeo.api.cms.CmsUi;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.jcr.Jcr;
@@ -32,7 +31,7 @@ import org.osgi.service.event.EventHandler;
  * site.
  */
 public class PublishingApp extends AbstractCmsApp implements EventHandler {
-	private final static Log log = LogFactory.getLog(PublishingApp.class);
+	private final static CmsLog log = CmsLog.getLog(PublishingApp.class);
 
 	private String pid;
 	private String defaultThemeId;

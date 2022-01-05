@@ -19,9 +19,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.argeo.api.NodeConstants;
+import org.argeo.api.cms.CmsConstants;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.servlet.ServletHttpRequest;
 import org.argeo.entity.EntityType;
@@ -34,7 +33,7 @@ import org.argeo.support.odk.OrxManifestName;
 /** Lists available forms. */
 public class OdkFormListServlet extends HttpServlet {
 	private static final long serialVersionUID = 2706191315048423321L;
-	private final static Log log = LogFactory.getLog(OdkFormListServlet.class);
+	private final static CmsLog log = CmsLog.getLog(OdkFormListServlet.class);
 
 	private Set<OdkForm> odkForms = Collections.synchronizedSet(new HashSet<>());
 
@@ -55,7 +54,7 @@ public class OdkFormListServlet extends HttpServlet {
 
 		String pathInfo = req.getPathInfo();
 
-		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, NodeConstants.SYS_WORKSPACE),
+		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, CmsConstants.SYS_WORKSPACE),
 				new ServletHttpRequest(req));
 //		session = NodeUtils.openDataAdminSession(repository, NodeConstants.SYS_WORKSPACE);
 		Writer writer = resp.getWriter();

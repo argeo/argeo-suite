@@ -21,12 +21,11 @@ import javax.jcr.nodetype.NodeType;
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.argeo.api.cms.CmsSession;
 import org.argeo.api.cms.CmsTheme;
 import org.argeo.api.cms.CmsUi;
 import org.argeo.api.cms.CmsView;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.LocaleUtils;
@@ -53,7 +52,7 @@ import org.osgi.service.useradmin.User;
 
 /** The Argeo Suite App. */
 public class SuiteApp extends AbstractCmsApp implements EventHandler {
-	private final static Log log = LogFactory.getLog(SuiteApp.class);
+	private final static CmsLog log = CmsLog.getLog(SuiteApp.class);
 
 	public final static String PUBLIC_BASE_PATH_PROPERTY = "publicBasePath";
 	public final static String DEFAULT_UI_NAME_PROPERTY = "defaultUiName";

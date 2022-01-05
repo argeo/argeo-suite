@@ -2,15 +2,14 @@ package org.argeo.suite;
 
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.argeo.api.cms.CmsLog;
 
 /**
  * A container for an object whose relevance can be ranked. Typically used in an
  * OSGi context with the service.ranking property.
  */
 public class RankedObject<T> {
-	private final static Log log = LogFactory.getLog(RankedObject.class);
+	private final static CmsLog log = CmsLog.getLog(RankedObject.class);
 
 	private final static String SERVICE_RANKING = "service.ranking";
 //	private final static String SERVICE_ID = "service.id";

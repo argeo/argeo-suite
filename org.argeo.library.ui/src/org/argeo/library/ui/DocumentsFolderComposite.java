@@ -13,8 +13,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.fs.FileDrop;
 import org.argeo.cms.ui.fs.FsStyles;
@@ -59,7 +58,7 @@ import org.eclipse.swt.widgets.Text;
  * the middle and an overview at right hand side.
  */
 public class DocumentsFolderComposite extends Composite {
-	private final static Log log = LogFactory.getLog(DocumentsFolderComposite.class);
+	private final static CmsLog log = CmsLog.getLog(DocumentsFolderComposite.class);
 	private static final long serialVersionUID = -40347919096946585L;
 
 	private final Node currentBaseContext;

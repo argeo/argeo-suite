@@ -5,8 +5,7 @@ import java.util.List;
 
 import javax.jcr.Item;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.MouseDoubleClick;
 import org.argeo.cms.swt.MouseDown;
@@ -32,7 +31,7 @@ import org.eclipse.swt.widgets.ToolItem;
 /** {@link EditablePart} for multiple terms. */
 public class MultiTermsPart extends AbstractTermsPart {
 	private static final long serialVersionUID = -4961135649177920808L;
-	private final static Log log = LogFactory.getLog(MultiTermsPart.class);
+	private final static CmsLog log = CmsLog.getLog(MultiTermsPart.class);
 
 	public MultiTermsPart(Composite parent, int style, Item item, TermsManager termsManager, String typology) {
 		super(parent, style, item, termsManager, typology);

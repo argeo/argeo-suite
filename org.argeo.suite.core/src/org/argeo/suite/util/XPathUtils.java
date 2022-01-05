@@ -9,13 +9,12 @@ import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryManager;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.jackrabbit.util.ISO9075;
+import org.argeo.api.cms.CmsLog;
 
 /** Ease XPath generation for JCR requests */
 public class XPathUtils {
-	private final static Log log = LogFactory.getLog(XPathUtils.class);
+	private final static CmsLog log = CmsLog.getLog(XPathUtils.class);
 
 	private final static String QUERY_XPATH = "xpath";
 

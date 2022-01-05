@@ -12,9 +12,8 @@ import java.util.TreeMap;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.argeo.api.cms.CmsView;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.cms.Localized;
 import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -33,7 +32,7 @@ import org.osgi.framework.wiring.BundleWiring;
 
 /** Side pane listing various perspectives. */
 public class DefaultLeadPane implements CmsUiProvider {
-	private final static Log log = LogFactory.getLog(DefaultLeadPane.class);
+	private final static CmsLog log = CmsLog.getLog(DefaultLeadPane.class);
 
 	public static enum Property {
 		defaultLayers, adminLayers;

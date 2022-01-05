@@ -13,10 +13,9 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.argeo.api.NodeConstants;
 import org.argeo.api.cms.CmsView;
+import org.argeo.api.cms.CmsLog;
+import org.argeo.api.cms.CmsConstants;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.entity.EntityNames;
 import org.argeo.entity.EntityType;
@@ -31,7 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 public class OpenLayersMap extends Composite {
 	private static final long serialVersionUID = 1055893020490283622L;
 
-	private final static Log log = LogFactory.getLog(OpenLayersMap.class);
+	private final static CmsLog log = CmsLog.getLog(OpenLayersMap.class);
 
 	private Browser browser;
 	private boolean renderCompleted = false;
@@ -269,7 +268,7 @@ public class OpenLayersMap extends Composite {
 			String path = arguments[0].toString();
 			Map<String, Object> properties = new HashMap<>();
 			properties.put(SuiteEvent.NODE_PATH, path);
-			properties.put(SuiteEvent.WORKSPACE, NodeConstants.SYS_WORKSPACE);
+			properties.put(SuiteEvent.WORKSPACE, CmsConstants.SYS_WORKSPACE);
 			cmsView.sendEvent(SuiteEvent.refreshPart.topic(), properties);
 			return null;
 		}

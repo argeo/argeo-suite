@@ -8,11 +8,10 @@ import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.argeo.api.NodeConstants;
 import org.argeo.api.cms.CmsUi;
 import org.argeo.api.cms.CmsView;
+import org.argeo.api.cms.CmsLog;
+import org.argeo.api.cms.CmsConstants;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.jcr.Jcr;
@@ -23,7 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 /** The view for the default ergonomics of Argeo Suite. */
 class SuiteUi extends Composite implements CmsUi {
 	private static final long serialVersionUID = 6207018859086689108L;
-	private final static Log log = LogFactory.getLog(SuiteUi.class);
+	private final static CmsLog log = CmsLog.getLog(SuiteUi.class);
 
 	private Localized title;
 	private Composite header;
@@ -217,7 +216,7 @@ class SuiteUi extends Composite implements CmsUi {
 //
 	synchronized void initSessions(Repository repository, String userDirPath) throws RepositoryException {
 		this.sysSession = repository.login();
-		this.homeSession = repository.login(NodeConstants.HOME_WORKSPACE);
+		this.homeSession = repository.login(CmsConstants.HOME_WORKSPACE);
 		userDir = sysSession.getNode(userDirPath);
 		addDisposeListener((e) -> {
 			Jcr.logout(sysSession);
@@ -236,9 +235,9 @@ class SuiteUi extends Composite implements CmsUi {
 	Session getSession(String workspaceName) {
 		if (workspaceName == null)
 			return sysSession;
-		if (NodeConstants.SYS_WORKSPACE.equals(workspaceName))
+		if (CmsConstants.SYS_WORKSPACE.equals(workspaceName))
 			return sysSession;
-		else if (NodeConstants.HOME_WORKSPACE.equals(workspaceName))
+		else if (CmsConstants.HOME_WORKSPACE.equals(workspaceName))
 			return homeSession;
 		else
 			throw new IllegalArgumentException("Unknown workspace " + workspaceName);

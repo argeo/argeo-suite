@@ -25,8 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.cms.swt.dialogs.CmsFeedback;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -35,7 +34,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
 public class DocumentsUiService {
-	private final static Log log = LogFactory.getLog(DocumentsUiService.class);
+	private final static CmsLog log = CmsLog.getLog(DocumentsUiService.class);
 
 	// Default known actions
 	public final static String ACTION_ID_CREATE_FOLDER = "createFolder";

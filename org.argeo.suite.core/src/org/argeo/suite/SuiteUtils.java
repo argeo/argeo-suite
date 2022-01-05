@@ -11,13 +11,13 @@ import javax.jcr.security.Privilege;
 import javax.naming.ldap.LdapName;
 import javax.security.auth.x500.X500Principal;
 
-import org.argeo.api.NodeConstants;
 import org.argeo.api.cms.CmsSession;
+import org.argeo.api.cms.CmsConstants;
 import org.argeo.entity.EntityType;
 import org.argeo.jackrabbit.security.JackrabbitSecurityUtils;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
-import org.argeo.naming.LdapAttrs;
+import org.argeo.util.naming.LdapAttrs;
 
 /** Utilities around the Argeo Suite APIs. */
 public class SuiteUtils {
@@ -43,7 +43,7 @@ public class SuiteUtils {
 						Privilege.JCR_READ);
 				JcrUtils.addPrivilege(adminSession, userNode.getPath(), new X500Principal(userDn.toString()).getName(),
 						Privilege.JCR_READ);
-				JcrUtils.addPrivilege(adminSession, userNode.getPath(), NodeConstants.ROLE_USER_ADMIN,
+				JcrUtils.addPrivilege(adminSession, userNode.getPath(), CmsConstants.ROLE_USER_ADMIN,
 						Privilege.JCR_ALL);
 			} else {
 				userNode = usersBase.getNode(uid);

@@ -15,8 +15,7 @@ import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
 import javax.jcr.ValueFormatException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
@@ -25,7 +24,7 @@ import org.argeo.jcr.JcrxApi;
 
 /** Utilities around DocBook. */
 public class DbkUtils {
-	private final static Log log = LogFactory.getLog(DbkUtils.class);
+	private final static CmsLog log = CmsLog.getLog(DbkUtils.class);
 
 	/** Get or add a DocBook element. */
 	public static Node getOrAddDbk(Node parent, DbkType child) {

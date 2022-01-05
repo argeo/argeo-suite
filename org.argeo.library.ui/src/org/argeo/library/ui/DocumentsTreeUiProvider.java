@@ -8,8 +8,8 @@ import javax.jcr.Node;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 
-import org.argeo.api.NodeConstants;
 import org.argeo.api.cms.CmsView;
+import org.argeo.api.cms.CmsConstants;
 import org.argeo.cms.fs.CmsFsUtils;
 import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -34,7 +34,7 @@ public class DocumentsTreeUiProvider implements CmsUiProvider {
 		FsTreeViewer fsTreeViewer = new FsTreeViewer(parent, SWT.NONE);
 		fsTreeViewer.configureDefaultSingleColumnTable(500);
 		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
-		Node homeNode = CmsJcrUtils.getUserHome(cmsView.doAs(() -> Jcr.login(repository, NodeConstants.HOME_WORKSPACE)));
+		Node homeNode = CmsJcrUtils.getUserHome(cmsView.doAs(() -> Jcr.login(repository, CmsConstants.HOME_WORKSPACE)));
 		parent.addDisposeListener((e1) -> Jcr.logout(homeNode));
 		Path homePath = CmsFsUtils.getPath(nodeFileSystemProvider, homeNode);
 		fsTreeViewer.addSelectionChangedListener((e) -> {

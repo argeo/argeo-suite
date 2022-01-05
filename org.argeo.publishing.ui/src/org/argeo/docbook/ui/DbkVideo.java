@@ -20,7 +20,7 @@ import org.argeo.docbook.DbkType;
 import org.argeo.docbook.DbkUtils;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
-import org.argeo.naming.NamingUtils;
+import org.argeo.util.naming.NamingUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.SelectionEvent;
