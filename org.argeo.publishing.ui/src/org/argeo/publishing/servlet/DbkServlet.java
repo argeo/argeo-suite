@@ -36,7 +36,7 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.io.IOUtils;
 import org.apache.xalan.processor.TransformerFactoryImpl;
 import org.argeo.api.cms.CmsTheme;
-import org.argeo.cms.servlet.ServletAuthUtils;
+import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.servlet.ServletHttpRequest;
 import org.argeo.docbook.DbkType;
 import org.argeo.docbook.DbkUtils;
@@ -86,7 +86,7 @@ public class DbkServlet extends HttpServlet {
 
 		Session session = null;
 		try {
-			session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), new ServletHttpRequest(req));
+			session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), new ServletHttpRequest(req));
 			Node node = session.getNode(path);
 
 			if (node.hasNode(DbkType.article.get())) {

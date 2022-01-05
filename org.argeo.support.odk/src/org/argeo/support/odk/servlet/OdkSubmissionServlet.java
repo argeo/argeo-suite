@@ -24,9 +24,9 @@ import javax.servlet.http.Part;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.api.cms.CmsSession;
-import org.argeo.cms.auth.HttpRequest;
+import org.argeo.cms.auth.RemoteAuthRequest;
+import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.jcr.CmsJcrUtils;
-import org.argeo.cms.servlet.ServletAuthUtils;
 import org.argeo.cms.servlet.ServletHttpRequest;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
@@ -55,16 +55,16 @@ public class OdkSubmissionServlet extends HttpServlet {
 		resp.setDateHeader("Date", System.currentTimeMillis());
 		resp.setIntHeader("X-OpenRosa-Accept-Content-Length", 1024 * 1024);
 
-		HttpRequest request = new ServletHttpRequest(req);
-		Session session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), request);
+		RemoteAuthRequest request = new ServletHttpRequest(req);
+		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), request);
 
 		try {
 //			Node submissions = JcrUtils.mkdirs(session,
 //					"/" + EntityType.form.get() + "/" + EntityNames.SUBMISSIONS_BASE);
-			CmsSession cmsSession = ServletAuthUtils.getCmsSession(request);
+			CmsSession cmsSession = RemoteAuthUtils.getCmsSession(request);
 
 			ClassLoader currentContextCl = Thread.currentThread().getContextClassLoader();
-			Thread.currentThread().setContextClassLoader(ServletAuthUtils.class.getClassLoader());
+			Thread.currentThread().setContextClassLoader(RemoteAuthUtils.class.getClassLoader());
 			Session adminSession = null;
 			try {
 				// TODO centralise at a deeper level
