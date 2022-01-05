@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.output.NullOutputStream;
 import org.argeo.cms.servlet.ServletAuthUtils;
+import org.argeo.cms.servlet.ServletHttpRequest;
 import org.argeo.entity.EntityMimeType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
@@ -56,7 +57,7 @@ public class OdkManifestServlet extends HttpServlet {
 		int serverPort = req.getServerPort();
 		String protocol = serverPort == 443 || req.isSecure() ? "https" : "http";
 
-		Session session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), req);
+		Session session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), new ServletHttpRequest(req));
 
 		try {
 			Node node = session.getNode(pathInfo);

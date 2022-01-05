@@ -24,8 +24,10 @@ import javax.servlet.http.Part;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.api.cms.CmsSession;
+import org.argeo.cms.auth.HttpRequest;
 import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.cms.servlet.ServletAuthUtils;
+import org.argeo.cms.servlet.ServletHttpRequest;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.suite.SuiteUtils;
@@ -53,12 +55,13 @@ public class OdkSubmissionServlet extends HttpServlet {
 		resp.setDateHeader("Date", System.currentTimeMillis());
 		resp.setIntHeader("X-OpenRosa-Accept-Content-Length", 1024 * 1024);
 
-		Session session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), req);
+		HttpRequest request = new ServletHttpRequest(req);
+		Session session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), request);
 
 		try {
 //			Node submissions = JcrUtils.mkdirs(session,
 //					"/" + EntityType.form.get() + "/" + EntityNames.SUBMISSIONS_BASE);
-			CmsSession cmsSession = ServletAuthUtils.getCmsSession(req);
+			CmsSession cmsSession = ServletAuthUtils.getCmsSession(request);
 
 			ClassLoader currentContextCl = Thread.currentThread().getContextClassLoader();
 			Thread.currentThread().setContextClassLoader(ServletAuthUtils.class.getClassLoader());

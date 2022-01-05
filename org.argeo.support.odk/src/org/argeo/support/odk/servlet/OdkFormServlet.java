@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FilenameUtils;
 import org.argeo.cms.servlet.ServletAuthUtils;
+import org.argeo.cms.servlet.ServletHttpRequest;
 import org.argeo.jcr.Jcr;
 import org.argeo.support.odk.OdkForm;
 import org.argeo.support.odk.OdkNames;
@@ -34,7 +35,7 @@ public class OdkFormServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("text/xml; charset=utf-8");
 
-		Session session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), req);
+		Session session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), new ServletHttpRequest(req));
 
 		String pathInfo = req.getPathInfo();
 		if (pathInfo.startsWith("//"))

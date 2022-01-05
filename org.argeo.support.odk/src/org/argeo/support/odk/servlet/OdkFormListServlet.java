@@ -23,6 +23,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.argeo.api.NodeConstants;
 import org.argeo.cms.servlet.ServletAuthUtils;
+import org.argeo.cms.servlet.ServletHttpRequest;
 import org.argeo.entity.EntityType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrxApi;
@@ -54,7 +55,8 @@ public class OdkFormListServlet extends HttpServlet {
 
 		String pathInfo = req.getPathInfo();
 
-		Session session = ServletAuthUtils.doAs(() -> Jcr.login(repository, NodeConstants.SYS_WORKSPACE), req);
+		Session session = ServletAuthUtils.doAs(() -> Jcr.login(repository, NodeConstants.SYS_WORKSPACE),
+				new ServletHttpRequest(req));
 //		session = NodeUtils.openDataAdminSession(repository, NodeConstants.SYS_WORKSPACE);
 		Writer writer = resp.getWriter();
 		writer.append("<?xml version='1.0' encoding='UTF-8' ?>");

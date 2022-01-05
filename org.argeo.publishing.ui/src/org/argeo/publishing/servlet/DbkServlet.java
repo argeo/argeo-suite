@@ -37,6 +37,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.xalan.processor.TransformerFactoryImpl;
 import org.argeo.api.cms.CmsTheme;
 import org.argeo.cms.servlet.ServletAuthUtils;
+import org.argeo.cms.servlet.ServletHttpRequest;
 import org.argeo.docbook.DbkType;
 import org.argeo.docbook.DbkUtils;
 import org.argeo.jcr.Jcr;
@@ -85,7 +86,7 @@ public class DbkServlet extends HttpServlet {
 
 		Session session = null;
 		try {
-			session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), req);
+			session = ServletAuthUtils.doAs(() -> Jcr.login(repository, null), new ServletHttpRequest(req));
 			Node node = session.getNode(path);
 
 			if (node.hasNode(DbkType.article.get())) {
