@@ -18,7 +18,7 @@
 		</dependency>
 <!-- 		<dependency> -->
 <!-- 			<groupId>org.argeo.suite</groupId> -->
-<!-- 			<artifactId>org.argeo.entity.ui</artifactId> -->
+<!-- 			<artifactId>org.argeo.app.api.ui</artifactId> -->
 <!-- 			<version>2.3-SNAPSHOT</version> -->
 <!-- 		</dependency> -->
 

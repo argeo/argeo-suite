@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" name="Argeo Suite App">
-   <implementation class="org.argeo.suite.ui.SuiteApp"/>
+   <implementation class="org.argeo.app.ui.SuiteApp"/>
    <service>
       <provide interface="org.argeo.api.cms.CmsApp"/>
       <provide interface="org.osgi.service.event.EventHandler"/>
@@ -9,6 +9,6 @@
    <reference bind="addUiProvider" cardinality="0..n" interface="org.argeo.cms.ui.CmsUiProvider" name="CmsUiProvider" policy="dynamic" unbind="removeUiProvider"/>
    <reference bind="addTheme" cardinality="1..n" interface="org.argeo.api.cms.CmsTheme" name="CmsTheme" policy="dynamic" unbind="removeTheme"/>
    <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="dynamic" target="(cn=ego)"/>
-   <reference bind="addLayer" cardinality="1..n" interface="org.argeo.suite.ui.SuiteLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
+   <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.ui.SuiteLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
    <reference bind="setCmsUserManager" cardinality="1..1" interface="org.argeo.cms.CmsUserManager" name="CmsUserManager" policy="static"/>
 </scr:component>

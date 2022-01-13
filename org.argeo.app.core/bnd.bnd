@@ -10,5 +10,4 @@ org.osgi.service.useradmin,\
 javax.jcr.nodetype,\
 javax.jcr.security,\
 com.fasterxml.jackson.core,\
-org.argeo.entity,\
 *

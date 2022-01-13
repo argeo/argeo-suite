@@ -16,7 +16,6 @@ Import-Package:\
 org.argeo.cms.ui.widgets,\
 org.eclipse.swt,\
 org.osgi.framework,\
-org.argeo.entity,\
 org.eclipse.core.commands.common,\
 org.eclipse.jface.window,\
 org.eclipse.jface.dialogs,\

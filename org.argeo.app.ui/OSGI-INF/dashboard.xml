@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="Default Dashboard">
-   <implementation class="org.argeo.suite.ui.DefaultDashboard"/>
+   <implementation class="org.argeo.app.ui.DefaultDashboard"/>
    <service>
       <provide interface="org.argeo.cms.ui.CmsUiProvider"/>
    </service>

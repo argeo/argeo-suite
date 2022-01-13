@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="ODK Manifest Servlet">
-   <implementation class="org.argeo.support.odk.servlet.OdkManifestServlet"/>
+   <implementation class="org.argeo.app.odk.servlet.OdkManifestServlet"/>
    <service>
       <provide interface="javax.servlet.Servlet"/>
    </service>

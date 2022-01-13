@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" name="Event Recorder">
-   <implementation class="org.argeo.suite.ui.EventRecorder"/>
+   <implementation class="org.argeo.app.ui.EventRecorder"/>
    <service>
       <provide interface="org.osgi.service.event.EventHandler"/>
    </service>

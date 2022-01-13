@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" immediate="false" name="Default Lead Pane">
-   <implementation class="org.argeo.suite.ui.DefaultLeadPane"/>
+   <implementation class="org.argeo.app.ui.DefaultLeadPane"/>
    <service>
       <provide interface="org.argeo.cms.ui.CmsUiProvider"/>
    </service>
@@ -10,5 +10,5 @@ argeo.library.ui.contentLayer
 argeo.people.ui.peopleLayer
 argeo.geo.ui.mapLayer
    </property>
-   <reference bind="addLayer" cardinality="1..n" interface="org.argeo.suite.ui.SuiteLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
+   <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.ui.SuiteLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
 </scr:component>
