@@ -1,0 +1,23 @@
+Import-Package:\
+org.osgi.service.http.context,\
+javax.jcr.nodetype,\
+org.osgi.service.event,\
+org.argeo.suite.ui,\
+org.eclipse.swt,\
+org.eclipse.jface.viewers,\
+org.osgi.framework,\
+org.apache.xml.serializer,\
+org.eclipse.rap.rwt,\
+org.argeo.entity,\
+*
+
+Provide-Capability:\
+cms.datamodel; name=docbook; cnd=/org/argeo/docbook/docbook.cnd; abstract=true
+
+Service-Component:\
+OSGI-INF/fontsServlet.xml,\
+OSGI-INF/htmlServletContext.xml,\
+OSGI-INF/dbkServlet.xml,\
+OSGI-INF/documentUiProvider.xml,\
+OSGI-INF/wwwLayer.xml,\
+OSGI-INF/dbk4Converter.xml

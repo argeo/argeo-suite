@@ -1,0 +1,14 @@
+Bundle-ActivationPolicy: lazy
+
+Service-Component:\
+OSGI-INF/termsManager.xml,\
+OSGI-INF/maintenanceService.xml
+
+Import-Package:\
+javax.transaction,\
+org.osgi.service.useradmin,\
+javax.jcr.nodetype,\
+javax.jcr.security,\
+com.fasterxml.jackson.core,\
+org.argeo.entity,\
+*

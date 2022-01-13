@@ -7,20 +7,14 @@
 		<version>2.3-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>org.argeo.entity.core</artifactId>
-	<name>Entity Reference Implementation</name>
+	<artifactId>org.argeo.app.api</artifactId>
+	<name>Suite API</name>
 	<packaging>jar</packaging>
 	<dependencies>
-		<dependency>
-			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.app.api</artifactId>
-			<version>2.3-SNAPSHOT</version>
-		</dependency>
-
 		<!-- Argeo Commons -->
 		<dependency>
 			<groupId>org.argeo.commons</groupId>
-			<artifactId>org.argeo.cms.jcr</artifactId>
+			<artifactId>org.argeo.util</artifactId>
 			<version>${version.argeo-commons}</version>
 		</dependency>
 	</dependencies>

@@ -21,24 +21,24 @@
 	</properties>
 	<modules>
 		<!-- Entity Framework -->
-		<module>org.argeo.entity.api</module>
-		<module>org.argeo.entity.core</module>
-		<module>org.argeo.entity.ui</module>
+		<module>org.argeo.app.api</module>
+<!-- 		<module>org.argeo.entity.core</module> -->
+<!-- 		<module>org.argeo.entity.ui</module> -->
 
 		<!-- Argeo Suite -->
-		<module>org.argeo.suite.core</module>
-		<module>org.argeo.suite.ui</module>
-		<module>org.argeo.suite.ui.rap</module>
-		<module>org.argeo.suite.theme.default</module>
+		<module>org.argeo.app.core</module>
+		<module>org.argeo.app.ui</module>
+		<module>org.argeo.app.ui.rap</module>
+		<module>org.argeo.app.theme.default</module>
 
 		<!-- Functional areas -->
-		<module>org.argeo.people.ui</module>
-		<module>org.argeo.library.ui</module>
-		<module>org.argeo.geo.ui</module>
-		<module>org.argeo.publishing.ui</module>
-		<module>org.argeo.support.xforms</module>
-		<module>org.argeo.support.odk</module>
-		<module>org.argeo.support.geonames</module>
+<!-- 		<module>org.argeo.people.ui</module> -->
+<!-- 		<module>org.argeo.library.ui</module> -->
+<!-- 		<module>org.argeo.geo.ui</module> -->
+		<module>org.argeo.app.servlet.publish</module>
+<!-- 		<module>org.argeo.support.xforms</module> -->
+		<module>org.argeo.app.servlet.odk</module>
+<!-- 		<module>org.argeo.support.geonames</module> -->
 
 		<!-- Packaging -->
 		<module>dep</module>

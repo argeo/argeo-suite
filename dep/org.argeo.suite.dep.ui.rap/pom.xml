@@ -28,19 +28,19 @@
 		<!-- Entity Framework -->
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.entity.api</artifactId>
+			<artifactId>org.argeo.app.api</artifactId>
 			<version>2.3-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.entity.core</artifactId>
-			<version>2.3-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.entity.ui</artifactId>
-			<version>2.3-SNAPSHOT</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.argeo.suite</groupId> -->
+<!-- 			<artifactId>org.argeo.entity.core</artifactId> -->
+<!-- 			<version>2.3-SNAPSHOT</version> -->
+<!-- 		</dependency> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.argeo.suite</groupId> -->
+<!-- 			<artifactId>org.argeo.entity.ui</artifactId> -->
+<!-- 			<version>2.3-SNAPSHOT</version> -->
+<!-- 		</dependency> -->
 
 		<!-- Argeo Suite Icons -->
 		<dependency>
@@ -52,69 +52,69 @@
 		<!-- Argeo Suite -->
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.suite.core</artifactId>
+			<artifactId>org.argeo.app.core</artifactId>
 			<version>2.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.suite.ui</artifactId>
+			<artifactId>org.argeo.app.ui</artifactId>
 			<version>2.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.suite.theme.default</artifactId>
+			<artifactId>org.argeo.app.theme.default</artifactId>
 			<version>2.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.suite.ui.rap</artifactId>
+			<artifactId>org.argeo.app.ui.rap</artifactId>
 			<version>2.3-SNAPSHOT</version>
 		</dependency>
 
 		<!-- Argeo People -->
-		<dependency>
-			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.people.ui</artifactId>
-			<version>2.3-SNAPSHOT</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.argeo.suite</groupId> -->
+<!-- 			<artifactId>org.argeo.people.ui</artifactId> -->
+<!-- 			<version>2.3-SNAPSHOT</version> -->
+<!-- 		</dependency> -->
 
 		<!-- Argeo Library -->
-		<dependency>
-			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.library.ui</artifactId>
-			<version>2.3-SNAPSHOT</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.argeo.suite</groupId> -->
+<!-- 			<artifactId>org.argeo.library.ui</artifactId> -->
+<!-- 			<version>2.3-SNAPSHOT</version> -->
+<!-- 		</dependency> -->
 
 		<!-- Argeo Environment -->
-		<dependency>
-			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.geo.ui</artifactId>
-			<version>2.3-SNAPSHOT</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.argeo.suite</groupId> -->
+<!-- 			<artifactId>org.argeo.geo.ui</artifactId> -->
+<!-- 			<version>2.3-SNAPSHOT</version> -->
+<!-- 		</dependency> -->
 
 		<!-- Argeo Publishing -->
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.publishing.ui</artifactId>
+			<artifactId>org.argeo.app.servlet.publish</artifactId>
 			<version>2.3-SNAPSHOT</version>
 		</dependency>
 
 		<!-- Argeo Knowledge -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.argeo.suite</groupId> -->
+<!-- 			<artifactId>org.argeo.support.xforms</artifactId> -->
+<!-- 			<version>2.3-SNAPSHOT</version> -->
+<!-- 		</dependency> -->
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.support.xforms</artifactId>
+			<artifactId>org.argeo.app.servlet.odk</artifactId>
 			<version>2.3-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.support.odk</artifactId>
-			<version>2.3-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.support.geonames</artifactId>
-			<version>2.3-SNAPSHOT</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.argeo.suite</groupId> -->
+<!-- 			<artifactId>org.argeo.support.geonames</artifactId> -->
+<!-- 			<version>2.3-SNAPSHOT</version> -->
+<!-- 		</dependency> -->
 
 		<!-- PDFBox -->
 		<dependency>

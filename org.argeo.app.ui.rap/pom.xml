@@ -7,21 +7,23 @@
 		<version>2.3-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
-	<artifactId>org.argeo.entity.core</artifactId>
-	<name>Entity Reference Implementation</name>
+	<artifactId>org.argeo.app.ui.rap</artifactId>
+	<name>Suite UI RAP</name>
 	<packaging>jar</packaging>
 	<dependencies>
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
-			<artifactId>org.argeo.app.api</artifactId>
+			<artifactId>org.argeo.app.ui</artifactId>
 			<version>2.3-SNAPSHOT</version>
 		</dependency>
 
-		<!-- Argeo Commons -->
+		<!-- Eclipse E4 -->
 		<dependency>
-			<groupId>org.argeo.commons</groupId>
-			<artifactId>org.argeo.cms.jcr</artifactId>
-			<version>${version.argeo-commons}</version>
+			<groupId>org.argeo.tp</groupId>
+			<artifactId>argeo-tp-rap-e4</artifactId>
+			<version>${version.argeo-tp}</version>
+			<type>pom</type>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 </project>
