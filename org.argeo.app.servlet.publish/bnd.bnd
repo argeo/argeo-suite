@@ -10,13 +10,11 @@ org.eclipse.rap.rwt,\
 org.argeo.app.api,\
 *
 
-Provide-Capability:\
-cms.datamodel; name=docbook; cnd=/org/argeo/docbook/docbook.cnd; abstract=true
+Require-Capability:\
+cms.datamodel;filter:="(name=entity)",\
+cms.datamodel;filter:="(name=docbook)",\
 
 Service-Component:\
 OSGI-INF/fontsServlet.xml,\
 OSGI-INF/htmlServletContext.xml,\
 OSGI-INF/dbkServlet.xml,\
-OSGI-INF/documentUiProvider.xml,\
-OSGI-INF/wwwLayer.xml,\
-OSGI-INF/dbk4Converter.xml

@@ -10,7 +10,20 @@ OSGI-INF/adminLeadPane.xml,\
 OSGI-INF/termsEntryArea.xml,\
 OSGI-INF/termsLayer.xml,\
 OSGI-INF/dashboard.xml,\
-OSGI-INF/dashboardLayer.xml
+OSGI-INF/dashboardLayer.xml,\
+OSGI-INF/peopleEntryArea.xml,\
+OSGI-INF/peopleLayer.xml,\
+OSGI-INF/personUiProvider.xml,\
+OSGI-INF/contentEntryArea.xml,\
+OSGI-INF/contentLayer.xml,\
+OSGI-INF/documentsFolder.xml,\
+OSGI-INF/fsEntryArea.xml,\
+OSGI-INF/mapLayer.xml,\
+OSGI-INF/overviewMap.xml,\
+OSGI-INF/wwwLayer.xml,\
+OSGI-INF/documentUiProvider.xml,\
+
+
 
 Import-Package:\
 org.argeo.cms.ui.widgets,\

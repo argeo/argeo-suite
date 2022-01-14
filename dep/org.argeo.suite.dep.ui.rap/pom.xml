@@ -45,7 +45,7 @@
 		<!-- Argeo Suite Icons -->
 		<dependency>
 			<groupId>org.argeo.suite.icons</groupId>
-			<artifactId>org.argeo.suite.icons.default</artifactId>
+			<artifactId>org.argeo.app.icons.default</artifactId>
 			<version>${version.argeo-suite-icons}</version>
 		</dependency>
 

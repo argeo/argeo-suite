@@ -183,13 +183,18 @@ public class DbkServlet extends HttpServlet {
 		// TODO improve configuration and provisioning of DocBook XSL
 		String xslBase = System.getProperty("argeo.docbook.xsl");
 		if (xslBase == null) {
-			String defaultXslBase = "/opt/docbook-xsl";
+			// We need namespace aware XSL!
+			// Fedora (sudo dnf install docbook5-style-xsl)
+			String defaultXslBase = "/usr/share/sgml/docbook/xsl-ns-stylesheets";
 			if (!Files.exists(Paths.get(defaultXslBase))) {
-				throw new ServletException("System property argeo.docbook.xsl is not set and default location "
-						+ defaultXslBase + " does not exist.");
-			} else {
-				xslBase = defaultXslBase;
+				defaultXslBase = "/opt/docbook-xsl";
+				if (!Files.exists(Paths.get(defaultXslBase))) {
+					throw new ServletException("System property argeo.docbook.xsl is not set and default location "
+							+ defaultXslBase + " does not exist.");
+				}
 			}
+			xslBase = defaultXslBase;
+
 		}
 		String xsl = xslBase + "/html/docbook.xsl";
 

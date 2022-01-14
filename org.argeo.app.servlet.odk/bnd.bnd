@@ -1,9 +1,7 @@
 Require-Capability:\
 cms.datamodel;filter:="(name=entity)",\
-cms.datamodel;filter:="(name=xforms)"
-
-Provide-Capability:\
-cms.datamodel; name=odk; cnd=/org/argeo/support/odk/odk.cnd
+cms.datamodel;filter:="(name=xforms)",\
+cms.datamodel;filter:="(name=odk)",\
 
 Service-Component:\
 OSGI-INF/odkServletContext.xml,\

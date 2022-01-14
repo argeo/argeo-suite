@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
-   <implementation class="org.argeo.library.ui.ContentEntryArea"/>
+   <implementation class="org.argeo.app.ui.openlayers.OverviewMap"/>
+   <properties entry="config/overviewMap.properties"/>
    <service>
       <provide interface="org.argeo.cms.ui.CmsUiProvider"/>
    </service>
-   <properties entry="config/contentEntryArea.properties"/>
 </scr:component>
