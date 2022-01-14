@@ -70,10 +70,14 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	private String adminLeadPanePid;
 	private String loginScreenPid;
 
-	private String defaultLayerPid = "argeo.app.ui.dashboardLayer";
 
 	private String defaultUiName = "app";
 	private String adminUiName = "admin";
+	
+	// FIXME such default names make refactoring more dangerous
+	@Deprecated
+	private String defaultLayerPid = "argeo.suite.ui.dashboardLayer";
+	@Deprecated
 	private String defaultThemeId = "org.argeo.app.theme.default";
 
 	private Map<String, RankedObject<CmsUiProvider>> uiProvidersByPid = Collections.synchronizedMap(new HashMap<>());
