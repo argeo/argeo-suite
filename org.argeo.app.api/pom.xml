@@ -14,7 +14,12 @@
 		<!-- Argeo Commons -->
 		<dependency>
 			<groupId>org.argeo.commons</groupId>
-			<artifactId>org.argeo.api</artifactId>
+			<artifactId>org.argeo.api.acr</artifactId>
+			<version>${version.argeo-commons}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.argeo.commons</groupId>
+			<artifactId>org.argeo.api.cms</artifactId>
 			<version>${version.argeo-commons}</version>
 		</dependency>
 		<dependency>
