@@ -95,7 +95,7 @@ public class OdkManifestServlet extends HttpServlet {
 									messageDigest)) {
 								writeMediaFile(out, target, mimeType, charset);
 								writer.append("<hash>");
-								writer.append("md5sum:" + DigestUtils.encodeHexString(out.getMessageDigest().digest()));
+								writer.append("md5sum:" + DigestUtils.toHexString(out.getMessageDigest().digest()));
 								writer.append("</hash>");
 							}
 
