@@ -6,7 +6,6 @@ OSGI-INF/maintenanceService.xml,\
 OSGI-INF/dbk4Converter.xml,\
 
 Import-Package:\
-javax.transaction,\
 org.osgi.service.useradmin,\
 javax.jcr.nodetype,\
 javax.jcr.security,\
