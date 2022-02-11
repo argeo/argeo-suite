@@ -8,6 +8,7 @@ org.osgi.framework,\
 org.apache.xml.serializer,\
 org.eclipse.rap.rwt,\
 org.argeo.app.api,\
+javax.servlet.*;version="[3,5)",\
 *
 
 Require-Capability:\

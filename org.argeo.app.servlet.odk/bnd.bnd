@@ -13,4 +13,5 @@ OSGI-INF/odkManifestServlet.xml
 Import-Package:\
 org.osgi.service.http.context,\
 javax.jcr.nodetype,\
+javax.servlet.*;version="[3,5)",\
 *
