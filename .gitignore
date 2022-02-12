@@ -3,3 +3,4 @@
 **/generated/
 **/MANIFEST.MF
 **/.DS_Store
+/sdk.mk
