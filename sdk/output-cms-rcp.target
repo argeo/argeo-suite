@@ -3,7 +3,7 @@
 <target name="(output) CMS RCP">
 	<locations>
 		<location path="${project_loc:argeo-suite-unstable}/../output/a2/org.argeo.cms" type="Directory"/>
-		<location path="${project_loc:argeo-suite-unstable}/../output/a2/org.argeo.cms.rcp" type="Directory"/>
+		<location path="${project_loc:argeo-suite-unstable}/../output/a2/org.argeo.cms.eclipse.rcp" type="Directory"/>
 		<location path="${project_loc:argeo-suite-unstable}/../output/a2/org.argeo.tp.apache" type="Directory"/>
 		<location path="${project_loc:argeo-suite-unstable}/../output/a2/org.argeo.tp.eclipse.equinox" type="Directory"/>
 		<location path="${project_loc:argeo-suite-unstable}/../output/a2/org.argeo.tp.eclipse.rcp" type="Directory"/>
