@@ -3,6 +3,7 @@ package org.argeo.app.ui;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
+import org.argeo.api.cms.CmsContext;
 import org.argeo.api.cms.CmsView;
 import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -16,6 +17,7 @@ import org.eclipse.swt.widgets.Control;
 
 /** Provides a login screen. */
 public class DefaultLoginScreen implements CmsUiProvider {
+	private CmsContext cmsContext;
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
@@ -26,10 +28,14 @@ public class DefaultLoginScreen implements CmsUiProvider {
 		parent.setLayout(new GridLayout());
 		Composite loginArea = new Composite(parent, SWT.NONE);
 		loginArea.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
-		
-		CmsLogin cmsLogin = new CmsLogin(cmsView);
+
+		CmsLogin cmsLogin = new CmsLogin(cmsView, cmsContext);
 		cmsLogin.createUi(loginArea);
 		return cmsLogin.getCredentialsBlock();
+	}
+
+	public void setCmsContext(CmsContext cmsContext) {
+		this.cmsContext = cmsContext;
 	}
 
 }

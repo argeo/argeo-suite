@@ -5,4 +5,5 @@
    <service>
       <provide interface="org.argeo.cms.ui.CmsUiProvider"/>
    </service>
+   <reference bind="setCmsContext" cardinality="1..1" interface="org.argeo.api.cms.CmsContext" name="CmsContext" policy="static"/>
 </scr:component>
