@@ -62,8 +62,8 @@ public class OdkSubmissionServlet extends HttpServlet {
 //					"/" + EntityType.form.get() + "/" + EntityNames.SUBMISSIONS_BASE);
 			CmsSession cmsSession = RemoteAuthUtils.getCmsSession(request);
 
-			ClassLoader currentContextCl = Thread.currentThread().getContextClassLoader();
-			Thread.currentThread().setContextClassLoader(RemoteAuthUtils.class.getClassLoader());
+//			ClassLoader currentContextCl = Thread.currentThread().getContextClassLoader();
+//			Thread.currentThread().setContextClassLoader(CmsJcrUtils.class.getClassLoader());
 			Session adminSession = null;
 			try {
 				// TODO centralise at a deeper level
@@ -71,7 +71,7 @@ public class OdkSubmissionServlet extends HttpServlet {
 				SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
 			} finally {
 				Jcr.logout(adminSession);
-				Thread.currentThread().setContextClassLoader(currentContextCl);
+//				Thread.currentThread().setContextClassLoader(currentContextCl);
 			}
 
 			Node cmsSessionNode = SuiteUtils.getCmsSessionNode(session, cmsSession);
