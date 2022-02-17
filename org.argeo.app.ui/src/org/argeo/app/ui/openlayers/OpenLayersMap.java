@@ -127,12 +127,17 @@ public class OpenLayersMap extends Composite {
 					entityType = node.getProperty(EntityNames.ENTITY_TYPE).getString();
 					sb.append(", type:'").append(entityType).append("'");
 				}
+				enrichFeature(node, sb);
 				sb.append("})");
 			}
 		}
 		sb.append("]");
 		sb.append(" })");
 		return sb.toString();
+	}
+
+	protected void enrichFeature(Node node, StringBuffer sb) throws RepositoryException {
+
 	}
 
 	public void addPoints(List<Node> geoPoints) throws RepositoryException {
