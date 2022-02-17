@@ -70,10 +70,9 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	private String adminLeadPanePid;
 	private String loginScreenPid;
 
-
 	private String defaultUiName = "app";
 	private String adminUiName = "admin";
-	
+
 	// FIXME such default names make refactoring more dangerous
 	@Deprecated
 	private String defaultLayerPid = "argeo.suite.ui.dashboardLayer";
@@ -91,7 +90,6 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	private Map<String, SuiteUi> managedUis = new HashMap<>();
 
 	private Repository repository;
-
 
 	public void init(Map<String, Object> properties) {
 		if (log.isDebugEnabled())
@@ -141,8 +139,9 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	@Override
 	public CmsUi initUi(Object parent) {
-		Composite uiParent =(Composite) parent;
-		String uiName = uiParent.getData(UI_NAME_PROPERTY) != null ? uiParent.getData(UI_NAME_PROPERTY).toString() : null;
+		Composite uiParent = (Composite) parent;
+		String uiName = uiParent.getData(UI_NAME_PROPERTY) != null ? uiParent.getData(UI_NAME_PROPERTY).toString()
+				: null;
 		CmsView cmsView = CmsSwtUtils.getCmsView(uiParent);
 		if (cmsView == null)
 			throw new IllegalStateException("No CMS view is registered.");
@@ -162,6 +161,9 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	@Override
 	public String getThemeId(String uiName) {
+		String themeId = System.getProperty("org.argeo.app.theme.default");
+		if (themeId != null)
+			return themeId;
 		return defaultThemeId;
 	}
 
@@ -637,5 +639,4 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		this.repository = repository;
 	}
 
-	
 }

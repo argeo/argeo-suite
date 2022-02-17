@@ -4,4 +4,5 @@
    <service>
       <provide interface="org.argeo.api.cms.CmsTheme"/>
    </service>
+   <property name="themeId" type="String" value="org.argeo.app.theme.default"/>
 </scr:component>
