@@ -55,16 +55,6 @@ public class DelayedText {
 						public void run() {
 							synchronized (lock) {
 								delayedModifyListener.modifyText(timerModifyEvent);
-								// Bad approach: it is not a good idea to put a
-								// display.asyncExec in a lock...
-								// DelayedText.this.getDisplay().asyncExec(new
-								// Runnable() {
-								// @Override
-								// public void run() {
-								// delayedModifyListener.modifyText(timerModifyEvent);
-								// }
-								// }
-								// );
 							}
 							synchronized (timer) {
 								timer.timerTask = null;
@@ -88,7 +78,7 @@ public class DelayedText {
 
 	/**
 	 * Adds a modify text listener that will be delayed. If another Modify event
-	 * happens during the waiting delay, the older event will be canceled an a new
+	 * happens during the waiting delay, the older event will be cancelled an a new
 	 * one will be scheduled after another new delay.
 	 */
 	public void addDelayedModifyListener(ServerPushSession pushSession, ModifyListener listener) {
