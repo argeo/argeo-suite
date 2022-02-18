@@ -24,7 +24,8 @@ org.argeo.tp.jetty \
 org.argeo.tp.eclipse.equinox \
 org.argeo.tp.eclipse.rap \
 org.argeo.tp.jcr \
-org.argeo.cms
+org.argeo.cms \
+org.argeo.cms.eclipse.rap \
 
 clean:
 	rm -rf $(BUILD_BASE)
