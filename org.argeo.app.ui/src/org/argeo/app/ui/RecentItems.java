@@ -38,8 +38,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -177,19 +175,20 @@ public class RecentItems implements CmsUiProvider {
 			filterTxt.setLayoutData(EclipseUiUtils.fillWidth());
 
 			// final ServerPushSession pushSession = new ServerPushSession();
-			delayedText.addDelayedModifyListener(null, new ModifyListener() {
-				private static final long serialVersionUID = 5003010530960334977L;
-
-				public void modifyText(ModifyEvent event) {
-					delayedText.getText().getDisplay().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							refreshFilteredList();
-						}
-					});
-					// pushSession.stop();
-				}
-			});
+			delayedText.addListener((s) -> refreshFilteredList());
+//			delayedText.addDelayedModifyListener(null, new ModifyListener() {
+//				private static final long serialVersionUID = 5003010530960334977L;
+//
+//				public void modifyText(ModifyEvent event) {
+//					delayedText.getText().getDisplay().asyncExec(new Runnable() {
+//						@Override
+//						public void run() {
+//							refreshFilteredList();
+//						}
+//					});
+//					// pushSession.stop();
+//				}
+//			});
 
 			// Jump to the first item of the list using the down arrow
 			filterTxt.addKeyListener(new KeyListener() {
@@ -214,9 +213,9 @@ public class RecentItems implements CmsUiProvider {
 				}
 			});
 
-			parent.addDisposeListener((e) -> {
-				delayedText.close();
-			});
+//			parent.addDisposeListener((e) -> {
+//				delayedText.close();
+//			});
 		}
 
 		protected TableViewer createListPart(Composite parent, ILabelProvider labelProvider) {
