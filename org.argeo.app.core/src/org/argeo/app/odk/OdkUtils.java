@@ -13,12 +13,7 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
-import javax.jcr.Value;
 import javax.jcr.nodetype.NodeType;
-import javax.jcr.query.Query;
-import javax.jcr.query.QueryResult;
-import javax.jcr.query.Row;
-import javax.jcr.query.RowIterator;
 
 import org.argeo.api.cms.CmsLog;
 import org.argeo.app.api.EntityMimeType;
@@ -103,21 +98,21 @@ public class OdkUtils {
 						file.setProperty(Property.JCR_ENCODING, encoding);
 						Node target = file.getSession().getNodeByIdentifier(uuid);
 
-						if (target.isNodeType(NodeType.NT_QUERY)) {
-							Query query = target.getSession().getWorkspace().getQueryManager().getQuery(target);
-							query.setLimit(10);
-							QueryResult queryResult = query.execute();
-							RowIterator rit = queryResult.getRows();
-							while (rit.hasNext()) {
-								Row row = rit.nextRow();
-								for (Value value : row.getValues()) {
-									System.out.print(value.getString());
-									System.out.print(',');
-								}
-								System.out.print('\n');
-							}
-
-						}
+//						if (target.isNodeType(NodeType.NT_QUERY)) {
+//							Query query = target.getSession().getWorkspace().getQueryManager().getQuery(target);
+//							query.setLimit(10);
+//							QueryResult queryResult = query.execute();
+//							RowIterator rit = queryResult.getRows();
+//							while (rit.hasNext()) {
+//								Row row = rit.nextRow();
+//								for (Value value : row.getValues()) {
+//									System.out.print(value.getString());
+//									System.out.print(',');
+//								}
+//								System.out.print('\n');
+//							}
+//
+//						}
 
 						if (target.isNodeType(NodeType.MIX_REFERENCEABLE)) {
 							file.setProperty(Property.JCR_ID, target);
