@@ -13,6 +13,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
 /** {@link OdkForm} implementation based on an OSGi {@link Bundle} resource. */
+@Deprecated
 public class BundleResourceOdkForm implements OdkForm {
 	private String formId;
 	private String name;

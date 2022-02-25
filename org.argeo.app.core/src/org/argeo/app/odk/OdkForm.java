@@ -3,6 +3,7 @@ package org.argeo.app.odk;
 import java.io.InputStream;
 
 /** Abstraction of a single ODK form. */
+@Deprecated
 public interface OdkForm {
 	String getFormId();
 
