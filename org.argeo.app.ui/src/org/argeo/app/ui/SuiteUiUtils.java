@@ -25,7 +25,6 @@ import org.argeo.cms.ui.util.CmsLink;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.Jcr;
-import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -232,6 +231,14 @@ public class SuiteUiUtils {
 	public static Label addPicture(Composite parent, Node fileNode, Integer maxWidth, Node link)
 			throws RepositoryException {
 		Node content = fileNode.getNode(Node.JCR_CONTENT);
+
+//		try (InputStream in = JcrUtils.getFileAsStream(fileNode)) {
+//			BufferedImage img = ImageIO.read(in);
+//			System.out.println("width=" + img.getWidth() + ", height=" + img.getHeight());
+//		} catch (IOException e) {
+//			throw new RuntimeException(e);
+//		}
+
 		// TODO move it deeper in the middleware.
 		if (!content.isNodeType(EntityType.box.get())) {
 			if (content.getSession().hasPermission(content.getPath(), Session.ACTION_SET_PROPERTY)) {
@@ -337,7 +344,7 @@ public class SuiteUiUtils {
 	}
 
 	public static String toLink(Node node) {
-			return node != null ? "#" + CmsUiUtils.cleanPathForUrl(SuiteApp.nodeToState(node)) : null;
+		return node != null ? "#" + CmsUiUtils.cleanPathForUrl(SuiteApp.nodeToState(node)) : null;
 	}
 
 	public static Control addLink(Composite parent, String label, Node node, CmsStyle style)
