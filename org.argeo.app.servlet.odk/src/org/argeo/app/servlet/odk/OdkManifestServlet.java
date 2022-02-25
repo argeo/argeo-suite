@@ -155,13 +155,21 @@ public class OdkManifestServlet extends HttpServlet {
 				CsvWriter csvWriter = new CsvWriter(out, charset);
 				csvWriter.writeLine(columnNames);
 				RowIterator rit = queryResult.getRows();
-				while (rit.hasNext()) {
-					Row row = rit.nextRow();
-					Value[] values = row.getValues();
-					List<String> lst = new ArrayList<>();
-					for (Value value : values) {
-						lst.add(value.getString());
+				if (rit.hasNext()) {
+					while (rit.hasNext()) {
+						Row row = rit.nextRow();
+						Value[] values = row.getValues();
+						List<String> lst = new ArrayList<>();
+						for (Value value : values) {
+							lst.add(value.getString());
+						}
+						csvWriter.writeLine(lst);
 					}
+				} else {
+					// corner case of an empty initial database
+					List<String> lst = new ArrayList<>();
+					for (int i = 0; i < columnNames.length; i++)
+						lst.add("-");
 					csvWriter.writeLine(lst);
 				}
 			}
