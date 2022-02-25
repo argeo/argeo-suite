@@ -22,7 +22,6 @@ public class OdkFormServlet extends HttpServlet {
 	private static final long serialVersionUID = 7838305967987687370L;
 
 	private Repository repository;
-//	private Map<String, OdkForm> odkForms = Collections.synchronizedMap(new HashMap<>());
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -34,25 +33,9 @@ public class OdkFormServlet extends HttpServlet {
 		if (pathInfo.startsWith("//"))
 			pathInfo = pathInfo.substring(1);
 
-//		boolean oldApproach = false;
 		try {
-//			if (!oldApproach) {
 			String path = URLDecoder.decode(pathInfo, StandardCharsets.UTF_8);
 			session.exportDocumentView(path + "/" + OdkNames.H_HTML, resp.getOutputStream(), true, false);
-//			} else {
-//
-//				String fileName = FilenameUtils.getName(pathInfo);
-//				OdkForm form = odkForms.get(fileName);
-//				if (form == null)
-//					throw new IllegalArgumentException("No form named " + fileName + " was found");
-//
-//				byte[] buffer = new byte[1024];
-//				try (InputStream in = form.openStream(); OutputStream out = resp.getOutputStream();) {
-//					int bytesRead;
-//					while ((bytesRead = in.read(buffer)) != -1)
-//						out.write(buffer, 0, bytesRead);
-//				}
-//			}
 		} catch (RepositoryException e) {
 			e.printStackTrace();
 			// TODO error message
@@ -61,14 +44,6 @@ public class OdkFormServlet extends HttpServlet {
 			Jcr.logout(session);
 		}
 	}
-
-//	public void addForm(OdkForm odkForm) {
-//		odkForms.put(odkForm.getFileName(), odkForm);
-//	}
-//
-//	public void removeForm(OdkForm odkForm) {
-//		odkForms.remove(odkForm.getFileName());
-//	}
 
 	public void setRepository(Repository repository) {
 		this.repository = repository;

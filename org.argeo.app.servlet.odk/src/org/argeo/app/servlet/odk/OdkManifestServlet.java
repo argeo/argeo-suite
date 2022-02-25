@@ -91,21 +91,13 @@ public class OdkManifestServlet extends HttpServlet {
 
 							MessageDigest messageDigest = MessageDigest.getInstance(DigestUtils.MD5);
 							// TODO cache a temp file ?
-							try (DigestOutputStream out = new DigestOutputStream(new NullOutputStream(),
+							try (DigestOutputStream out = new DigestOutputStream(NullOutputStream.NULL_OUTPUT_STREAM,
 									messageDigest)) {
 								writeMediaFile(out, target, mimeType, charset);
 								writer.append("<hash>");
 								writer.append("md5sum:" + DigestUtils.toHexString(out.getMessageDigest().digest()));
 								writer.append("</hash>");
 							}
-
-//							try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-//								session.exportDocumentView(target.getPath(), out, true, false);
-//								String fileCsum = DigestUtils.digest(DigestUtils.MD5, out.toByteArray());
-//								writer.append("<hash>");
-//								writer.append("md5sum:" + fileCsum);
-//								writer.append("</hash>");
-//							}
 							writer.append("<downloadUrl>" + protocol + "://" + serverName
 									+ (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort)
 									+ "/api/odk/formManifest" + file.getPath() + "</downloadUrl>");
@@ -123,11 +115,6 @@ public class OdkManifestServlet extends HttpServlet {
 					Node target = node.getProperty(Property.JCR_ID).getNode();
 
 					writeMediaFile(resp.getOutputStream(), target, mimeType, charset);
-//					try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-//						session.exportDocumentView(target.getPath(), out, true, false);
-//						System.out.println(new String(out.toByteArray(), StandardCharsets.UTF_8));
-//						resp.getOutputStream().write(out.toByteArray());
-//					}
 				} else {
 					throw new IllegalArgumentException("Unsupported node " + node);
 				}

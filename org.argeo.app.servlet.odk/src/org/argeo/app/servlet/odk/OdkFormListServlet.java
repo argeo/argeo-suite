@@ -31,11 +31,6 @@ public class OdkFormListServlet extends HttpServlet {
 	private static final long serialVersionUID = 2706191315048423321L;
 	private final static CmsLog log = CmsLog.getLog(OdkFormListServlet.class);
 
-//	private Set<OdkForm> odkForms = Collections.synchronizedSet(new HashSet<>());
-
-//	private DateTimeFormatter versionFormatter = DateTimeFormatter.ofPattern("YYYY-MM-dd-HHmm")
-//			.withZone(ZoneId.from(ZoneOffset.UTC));
-
 	private Repository repository;
 
 	@Override
@@ -52,18 +47,13 @@ public class OdkFormListServlet extends HttpServlet {
 
 		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, CmsConstants.SYS_WORKSPACE),
 				new ServletHttpRequest(req));
-//		session = NodeUtils.openDataAdminSession(repository, NodeConstants.SYS_WORKSPACE);
 		Writer writer = resp.getWriter();
 		writer.append("<?xml version='1.0' encoding='UTF-8' ?>");
 		writer.append("<xforms xmlns=\"http://openrosa.org/xforms/xformsList\">");
-//		boolean oldApproach = false;
-//		if (!oldApproach) {
 		try {
 
 			Query query;
 			if (pathInfo == null) {
-//				query = session.getWorkspace().getQueryManager()
-//						.createQuery("SELECT * FROM [nt:unstructured]", Query.JCR_SQL2);
 				query = session.getWorkspace().getQueryManager()
 						.createQuery("SELECT * FROM [" + OrxListName.xform.get() + "]", Query.JCR_SQL2);
 			} else {
@@ -76,12 +66,6 @@ public class OdkFormListServlet extends HttpServlet {
 			QueryResult queryResult = query.execute();
 
 			NodeIterator nit = queryResult.getNodes();
-//				log.debug(session.getUserID());
-//				log.debug(session.getWorkspace().getName());
-//				NodeIterator nit = session.getRootNode().getNodes();
-//				while (nit.hasNext()) {
-//					log.debug(nit.nextNode());
-//				}
 			while (nit.hasNext()) {
 				StringBuilder sb = new StringBuilder();
 				Node node = nit.nextNode();
@@ -127,36 +111,8 @@ public class OdkFormListServlet extends HttpServlet {
 		} finally {
 			Jcr.logout(session);
 		}
-
-//		} else {
-//			for (OdkForm form : odkForms) {
-//				StringBuilder sb = new StringBuilder();
-//				sb.append("<xform>");
-//				sb.append("<formID>" + form.getFormId() + "</formID>");
-//				sb.append("<name>" + form.getName() + "</name>");
-//				sb.append("<version>" + form.getVersion() + "</version>");
-//				sb.append("<hash>" + form.getHash(null) + "</hash>");
-//				sb.append("<descriptionText>" + form.getDescription() + "</descriptionText>");
-//				sb.append("<downloadUrl>" + protocol + "://" + serverName
-//						+ (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort) + "/api/odk/form/"
-//						+ form.getFileName() + "</downloadUrl>");
-//				sb.append("</xform>");
-//				String str = sb.toString();
-//				if (log.isDebugEnabled())
-//					log.debug(str);
-//				writer.append(str);
-//			}
-//		}
 		writer.append("</xforms>");
 	}
-
-//	public void addForm(OdkForm odkForm) {
-//		odkForms.add(odkForm);
-//	}
-//
-//	public void removeForm(OdkForm odkForm) {
-//		odkForms.remove(odkForm);
-//	}
 
 	public void setRepository(Repository repository) {
 		this.repository = repository;
