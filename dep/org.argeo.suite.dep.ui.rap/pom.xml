@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.argeo.suite</groupId>
 		<artifactId>dep</artifactId>
-		<version>2.3.3</version>
+		<version>2.3-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>org.argeo.suite.dep.ui.rap</artifactId>
@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.app.api</artifactId>
-			<version>2.3.3</version>
+			<version>2.3-SNAPSHOT</version>
 		</dependency>
 <!-- 		<dependency> -->
 <!-- 			<groupId>org.argeo.suite</groupId> -->
@@ -53,22 +53,22 @@
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.app.core</artifactId>
-			<version>2.3.3</version>
+			<version>2.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.app.ui</artifactId>
-			<version>2.3.3</version>
+			<version>2.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.app.theme.default</artifactId>
-			<version>2.3.3</version>
+			<version>2.3-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.app.ui.rap</artifactId>
-			<version>2.3.3</version>
+			<version>2.3-SNAPSHOT</version>
 		</dependency>
 
 		<!-- Argeo People -->
@@ -96,7 +96,7 @@
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.app.servlet.publish</artifactId>
-			<version>2.3.3</version>
+			<version>2.3-SNAPSHOT</version>
 		</dependency>
 
 		<!-- Argeo Knowledge -->
@@ -108,7 +108,7 @@
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.app.servlet.odk</artifactId>
-			<version>2.3.3</version>
+			<version>2.3-SNAPSHOT</version>
 		</dependency>
 <!-- 		<dependency> -->
 <!-- 			<groupId>org.argeo.suite</groupId> -->
