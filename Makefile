@@ -30,4 +30,4 @@ org.argeo.cms.eclipse.rap \
 clean:
 	rm -rf $(BUILD_BASE)
 
-include  $(SDK_SRC_BASE)/sdk/osgi.mk
+include  $(SDK_SRC_BASE)/sdk/argeo-build/osgi.mk
