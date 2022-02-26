@@ -14,8 +14,8 @@
 	<properties>
 		<!-- Dependencies -->
 		<version.argeo-tp>2.1.27</version.argeo-tp>
-		<version.argeo-commons>2.3-SNAPSHOT</version.argeo-commons>
-		<version.argeo-suite-icons>2.3.1</version.argeo-suite-icons>
+		<version.argeo-commons>2.3.5</version.argeo-commons>
+		<version.argeo-suite-icons>2.3.2</version.argeo-suite-icons>
 		<git.rw />
 	</properties>
 	<dependencies>
