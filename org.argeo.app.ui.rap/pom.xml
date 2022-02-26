@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.argeo.suite</groupId>
 		<artifactId>argeo-suite</artifactId>
-		<version>2.3-SNAPSHOT</version>
+		<version>2.3.3</version>
 		<relativePath>..</relativePath>
 	</parent>
 	<artifactId>org.argeo.app.ui.rap</artifactId>
@@ -14,7 +14,7 @@
 		<dependency>
 			<groupId>org.argeo.suite</groupId>
 			<artifactId>org.argeo.app.ui</artifactId>
-			<version>2.3-SNAPSHOT</version>
+			<version>2.3.3</version>
 		</dependency>
 
 		<!-- Eclipse E4 -->
