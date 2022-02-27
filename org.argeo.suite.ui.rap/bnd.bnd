@@ -1,6 +1,0 @@
-Service-Component: OSGI-INF/cmsWebApp.xml
-
-Import-Package:\
-org.argeo.cms.web,\
-org.eclipse.rap.rwt.application,\
-*

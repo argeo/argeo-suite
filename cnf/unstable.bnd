@@ -1,4 +1,6 @@
-version.released=2.3.2
+MAJOR=2
+MINOR=3
+MICRO=3
 qualifier=.next
 
 category=org.argeo.suite

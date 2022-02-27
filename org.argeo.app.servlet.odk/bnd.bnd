@@ -1,0 +1,17 @@
+Require-Capability:\
+cms.datamodel;filter:="(name=entity)",\
+cms.datamodel;filter:="(name=xforms)",\
+cms.datamodel;filter:="(name=odk)",\
+
+Service-Component:\
+OSGI-INF/odkServletContext.xml,\
+OSGI-INF/odkFormListServlet.xml,\
+OSGI-INF/odkFormServlet.xml,\
+OSGI-INF/odkSubmissionServlet.xml,\
+OSGI-INF/odkManifestServlet.xml
+
+Import-Package:\
+org.osgi.service.http.context,\
+javax.jcr.nodetype,\
+javax.servlet.*;version="[3,5)",\
+*

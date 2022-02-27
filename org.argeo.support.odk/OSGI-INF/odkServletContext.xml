@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" name="ODK Servlet Context">
-   <implementation class="org.argeo.support.odk.servlet.OdkServletContext"/>
-   <service>
-      <provide interface="org.osgi.service.http.context.ServletContextHelper"/>
-   </service>
-   <property name="osgi.http.whiteboard.context.name" type="String" value="odkServletContext"/>
-   <property name="osgi.http.whiteboard.context.path" type="String" value="/api/odk"/>
-</scr:component>

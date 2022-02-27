@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" name="People Layer">
+   <implementation class="org.argeo.app.ui.DefaultEditionLayer"/>
+   <properties entry="config/peopleLayer.properties"/>
+   <service>
+      <provide interface="org.argeo.app.ui.SuiteLayer"/>
+   </service>
+   <reference bind="setEntryArea" cardinality="1..1" interface="org.argeo.cms.ui.CmsUiProvider" name="CmsUiProvider" policy="dynamic" target="(service.pid=argeo.people.ui.peopleEntryArea)"/>
+</scr:component>

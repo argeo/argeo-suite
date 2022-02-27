@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="Terms Layer">
+   <implementation class="org.argeo.app.ui.DefaultEditionLayer"/>
+   <service>
+      <provide interface="org.argeo.app.ui.SuiteLayer"/>
+   </service>
+   <properties entry="config/termsLayer.properties"/>
+   <reference bind="setEntryArea" cardinality="1..1" interface="org.argeo.cms.ui.CmsUiProvider" name="CmsUiProvider" policy="dynamic" target="(service.pid=argeo.suite.ui.termsEntryArea)"/>
+</scr:component>

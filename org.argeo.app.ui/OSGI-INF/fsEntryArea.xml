@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+   <implementation class="org.argeo.app.ui.library.DocumentsTreeUiProvider"/>
+   <service>
+      <provide interface="org.argeo.cms.ui.CmsUiProvider"/>
+   </service>
+   <properties entry="config/contentEntryArea.properties"/>
+   <reference bind="setNodeFileSystemProvider" cardinality="1..1" interface="java.nio.file.spi.FileSystemProvider" name="FileSystemProvider" policy="dynamic" target="(service.pid=org.argeo.api.fsProvider)"/>
+   <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="static" target="(cn=ego)"/>
+</scr:component>

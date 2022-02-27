@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" name="Suite Terms Manager">
-   <implementation class="org.argeo.suite.core.SuiteTermsManager"/>
-   <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="static" target="(cn=entity)"/>
-   <service>
-      <provide interface="org.argeo.entity.TermsManager"/>
-   </service>
-</scr:component>

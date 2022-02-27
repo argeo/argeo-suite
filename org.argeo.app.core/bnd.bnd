@@ -1,0 +1,22 @@
+Bundle-ActivationPolicy: lazy
+
+Service-Component:\
+OSGI-INF/termsManager.xml,\
+OSGI-INF/maintenanceService.xml,\
+OSGI-INF/dbk4Converter.xml,\
+
+Import-Package:\
+org.osgi.service.useradmin,\
+javax.jcr.nodetype,\
+javax.jcr.security,\
+com.fasterxml.jackson.core,\
+org.apache.jackrabbit.*;version="[1,4)",\
+*
+
+Require-Capability:\
+cms.datamodel;filter:="(name=entity)"
+
+Provide-Capability:\
+cms.datamodel; name=xforms; cnd=/org/argeo/app/xforms/xforms.cnd; abstract=true,\
+cms.datamodel; name=odk; cnd=/org/argeo/app/odk/odk.cnd; abstract=true,\
+cms.datamodel; name=docbook; cnd=/org/argeo/app/docbook/docbook.cnd; abstract=true,\
