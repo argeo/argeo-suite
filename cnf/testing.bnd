@@ -1,7 +1,7 @@
 MAJOR=2
 MINOR=1
-MICRO=23
-qualifier=.next
+MICRO=24
+qualifier=
 
 category=org.argeo.suite
 Bundle-RequiredExecutionEnvironment=JavaSE-11
