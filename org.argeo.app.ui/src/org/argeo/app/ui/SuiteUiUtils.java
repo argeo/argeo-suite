@@ -1,8 +1,10 @@
 package org.argeo.app.ui;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+import javax.imageio.ImageIO;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -232,13 +234,26 @@ public class SuiteUiUtils {
 			throws RepositoryException {
 		Node content = fileNode.getNode(Node.JCR_CONTENT);
 
-//		try (InputStream in = JcrUtils.getFileAsStream(fileNode)) {
-//			BufferedImage img = ImageIO.read(in);
-//			System.out.println("width=" + img.getWidth() + ", height=" + img.getHeight());
-//		} catch (IOException e) {
-//			throw new RuntimeException(e);
-//		}
+		boolean test = false;
+		if (test) {
+			try (InputStream in = JcrUtils.getFileAsStream(fileNode);
+			// OutputStream out = Files.newOutputStream(Paths.get("/home/mbaudier/tmp/" +
+			// fileNode.getName()))
+			) {
+				BufferedImage img = ImageIO.read(in);
+				System.out.println(fileNode.getName() + ": width=" + img.getWidth() + ", height=" + img.getHeight());
+//			IOUtils.copy(in, out);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
 
+			try (InputStream in = JcrUtils.getFileAsStream(fileNode);) {
+				ImageData imageData = new ImageData(in);
+				System.out.println(fileNode.getName() + ": width=" + imageData.width + ", height=" + imageData.height);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+		}
 		// TODO move it deeper in the middleware.
 		if (!content.isNodeType(EntityType.box.get())) {
 			if (content.getSession().hasPermission(content.getPath(), Session.ACTION_SET_PROPERTY)) {
