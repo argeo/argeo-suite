@@ -1,6 +1,8 @@
 package org.argeo.app.servlet.odk;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
@@ -21,11 +23,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.CmsSession;
 import org.argeo.app.core.SuiteUtils;
+import org.argeo.app.image.ImageProcessor;
 import org.argeo.app.odk.OrxType;
 import org.argeo.app.xforms.FormSubmissionListener;
-import org.argeo.api.cms.CmsLog;
 import org.argeo.cms.auth.RemoteAuthRequest;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.jcr.CmsJcrUtils;
@@ -82,7 +85,22 @@ public class OdkSubmissionServlet extends HttpServlet {
 							ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
 
 				} else {
-					Node fileNode = JcrUtils.copyStreamAsFile(submission, part.getName(), part.getInputStream());
+					Node fileNode;
+					if (part.getName().endsWith(".jpg")) {
+						// Fix metadata
+						Path temp = Files.createTempFile("image", ".jpg");
+						try {
+							ImageProcessor imageProcessor = new ImageProcessor(() -> part.getInputStream(),
+									() -> Files.newOutputStream(temp));
+							imageProcessor.process();
+							fileNode = JcrUtils.copyStreamAsFile(submission, part.getName(),
+									Files.newInputStream(temp));
+						} finally {
+							Files.deleteIfExists(temp);
+						}
+					} else {
+						fileNode = JcrUtils.copyStreamAsFile(submission, part.getName(), part.getInputStream());
+					}
 					String contentType = part.getContentType();
 					if (contentType != null) {
 						fileNode.addMixin(NodeType.MIX_MIMETYPE);
