@@ -321,7 +321,6 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			if (types.size() == 0)
 				throw new IllegalArgumentException("No type found for " + context + " (" + listTypes(context) + ")");
 			String type = types.iterator().next();
-			// FIXME deals with multiple types
 			if (!byType.containsKey(type))
 				throw new IllegalArgumentException("No component found for " + context + " with type " + type);
 			return byType.get(type).get();
