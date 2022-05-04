@@ -185,7 +185,7 @@ public class DbkServlet extends HttpServlet {
 		if (xslBase == null) {
 			// We need namespace aware XSL!
 			// Fedora (sudo dnf install docbook5-style-xsl)
-			String defaultXslBase = "/usr/share/sgml/docbook/xsl-ns-stylesheets";
+			String defaultXslBase = "/usr/share/xml/docbook/stylesheet/docbook-xsl-ns/";
 			if (!Files.exists(Paths.get(defaultXslBase))) {
 				defaultXslBase = "/opt/docbook-xsl";
 				if (!Files.exists(Paths.get(defaultXslBase))) {
