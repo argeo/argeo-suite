@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1{fill:#454545;stroke-linecap:round;stroke-linejoin:round;stroke-width:20px;}.cls-1,.cls-2{stroke:#454545;}.cls-2{fill:none;stroke-miterlimit:10;stroke-width:50px;}</style>
+  </defs>
+  <title>settings</title>
+  <g id="Plus">
+    <rect class="cls-1" height="44.41" width="43.85" x="228.54" y="59.66"/>
+    <rect class="cls-1" height="44.41" width="43.85" x="395.17" y="219.53"/>
+    <rect class="cls-1" height="44.41" width="43.85" x="228.54" y="397.17"/>
+    <rect class="cls-1" height="44.41" width="43.85" x="61.92" y="228.41"/>
+    <polygon class="cls-1" points="158.69 366.08 127.69 397.48 96.68 366.08 127.69 334.68 158.69 366.08"/>
+    <polygon class="cls-1" points="404.25 366.08 373.24 397.48 342.24 366.08 373.24 334.68 404.25 366.08"/>
+    <polygon class="cls-1" points="404.25 135.16 373.24 166.56 342.24 135.16 373.24 103.75 404.25 135.16"/>
+    <polygon class="cls-1" points="167.46 126.27 136.46 157.68 105.45 126.27 136.46 94.87 167.46 126.27"/>
+    <circle class="cls-2" cx="250.48" cy="250.61" r="126.5"/>
+  </g>
+</svg>

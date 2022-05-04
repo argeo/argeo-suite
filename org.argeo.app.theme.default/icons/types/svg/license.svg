@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" id="Layer_1" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1{fill:none;}.cls-1,.cls-2{stroke:#454545;stroke-miterlimit:10;stroke-width:30px;}.cls-2{fill:#f3964d;}</style>
+  </defs>
+  <title>license</title>
+  <rect class="cls-1" height="276.25" width="404.67" x="42.67" y="78.19"/>
+  <circle class="cls-2" cx="319.33" cy="217" r="79.67"/>
+  <polyline class="cls-2" points="362.63 274 362.63 452.69 318.61 407.19 276.28 452.69 276.28 274"/>
+  <line class="cls-1" x1="80.67" x2="196.31" y1="271" y2="271"/>
+  <line class="cls-1" x1="88.67" x2="186.67" y1="178" y2="178"/>
+</svg>

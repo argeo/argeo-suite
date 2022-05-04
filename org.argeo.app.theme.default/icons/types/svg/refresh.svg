@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" id="Layer_1" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1{fill:none;stroke:#f58430;stroke-miterlimit:10;stroke-width:64px;}.cls-2{fill:#f58430;}</style>
+  </defs>
+  <title>refresh</title>
+  <path class="cls-1" d="M395,365.3A189.26,189.26,0,0,1,246,437.72c-101.78,0-184.83-80.18-189.42-180.83"/>
+  <polygon class="cls-2" points="299.56 353.88 435.57 248.1 459.2 418.78 299.56 353.88"/>
+  <path class="cls-1" d="M96.88,118.68A189.29,189.29,0,0,1,246,46.26c102,0,185.18,80.53,189.45,181.47"/>
+  <polygon class="cls-2" points="192.34 130.1 56.33 235.88 32.7 65.2 192.34 130.1"/>
+</svg>

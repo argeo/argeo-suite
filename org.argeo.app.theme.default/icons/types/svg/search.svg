@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" id="Layer_1" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1{fill:#231f20;stroke-width:31px;}.cls-1,.cls-2{stroke:#454545;stroke-miterlimit:10;}.cls-2{fill:none;stroke-linecap:round;stroke-width:60px;}</style>
+  </defs>
+  <title>search</title>
+  <path class="cls-1" d="M173,40.34A133.52,133.52,0,1,0,306.47,173.85,133.52,133.52,0,0,0,173,40.34Zm0,252.12a118.61,118.61,0,1,1,118.6-118.61A118.6,118.6,0,0,1,173,292.46Z"/>
+  <line class="cls-2" x1="269.72" x2="432.42" y1="279.01" y2="441.72"/>
+</svg>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" id="Layer_1" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1{fill:#305d74;stroke:#305d74;}.cls-1,.cls-3{stroke-miterlimit:10;}.cls-2{fill:#fff;}.cls-3{fill:none;stroke:#fff;stroke-linecap:round;stroke-width:50px;}</style>
+  </defs>
+  <title>document</title>
+  <polygon class="cls-1" points="393.14 463.84 78.14 463.84 78.14 49 300.02 49 393.14 163.4 393.14 463.84"/>
+  <polygon class="cls-2" points="375.05 179.8 294.69 179.8 294.69 81.2 375.05 179.8"/>
+  <line class="cls-3" x1="127.68" x2="334.87" y1="270.73" y2="270.73"/>
+  <line class="cls-3" x1="127.68" x2="334.87" y1="391.27" y2="391.27"/>
+  <line class="cls-3" x1="132.18" x2="189.19" y1="157.12" y2="157.12"/>
+</svg>

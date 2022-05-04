@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1{fill:none;stroke:#f3964d;stroke-linecap:round;stroke-linejoin:round;stroke-width:20px;}.cls-2{fill:#f3964d;}</style>
+  </defs>
+  <title>descending</title>
+  <g id="Plus">
+    <line class="cls-1" x1="120" x2="120" y1="355.3" y2="98.84"/>
+    <polygon class="cls-2" points="157.9 344.21 120 409.84 82.1 344.21 157.9 344.21"/>
+    <line class="cls-1" x1="189" x2="407" y1="311.84" y2="311.84"/>
+    <line class="cls-1" x1="189" x2="371" y1="251.84" y2="251.84"/>
+    <line class="cls-1" x1="189" x2="319" y1="185.84" y2="185.84"/>
+    <line class="cls-1" x1="189" x2="271" y1="119.84" y2="119.84"/>
+  </g>
+</svg>

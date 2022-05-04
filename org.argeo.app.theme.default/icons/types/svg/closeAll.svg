@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" id="Layer_1" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1,.cls-2{fill:none;stroke-miterlimit:10;stroke-width:96px;}.cls-1{stroke:#58595b;}.cls-2{stroke:#ddd;}</style>
+  </defs>
+  <title>closeAll</title>
+  <line class="cls-1" x1="58.17" x2="375.94" y1="82.07" y2="399.84"/>
+  <line class="cls-1" x1="375.94" x2="58.17" y1="82.07" y2="399.84"/>
+  <line class="cls-2" x1="93.17" x2="410.94" y1="81.07" y2="398.84"/>
+  <line class="cls-2" x1="410.94" x2="93.17" y1="81.07" y2="398.84"/>
+  <line class="cls-1" x1="127.17" x2="444.94" y1="81.07" y2="398.84"/>
+  <line class="cls-1" x1="444.94" x2="127.17" y1="81.07" y2="398.84"/>
+</svg>

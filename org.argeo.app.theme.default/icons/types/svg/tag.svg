@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1{fill:none;stroke:#454545;stroke-linecap:round;stroke-miterlimit:10;stroke-width:44px;}</style>
+  </defs>
+  <title>tag</title>
+  <g id="Plus">
+    <line class="cls-1" x1="218.31" x2="183.35" y1="84.43" y2="401.51"/>
+    <line class="cls-1" x1="327.65" x2="292.69" y1="88.49" y2="405.57"/>
+    <line class="cls-1" x1="373.91" x2="134.88" y1="186" y2="186"/>
+    <line class="cls-1" x1="363.91" x2="124.88" y1="294" y2="294"/>
+  </g>
+</svg>

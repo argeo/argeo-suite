@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1{fill:#454545;}.cls-2,.cls-4{fill:none;stroke:#454545;stroke-miterlimit:10;stroke-width:20px;}.cls-3{fill:#fff;}.cls-4{stroke-linecap:round;}</style>
+  </defs>
+  <title>calendar</title>
+  <g id="Plus">
+    <rect class="cls-1" height="124" rx="12" ry="12" width="400" x="43.48" y="56.17"/>
+    <rect class="cls-2" height="391" rx="12" ry="12" width="391" x="48.98" y="54.67"/>
+    <rect class="cls-1" height="79" rx="12" ry="12" width="79" x="96.48" y="217.17"/>
+    <rect class="cls-1" height="79" rx="12" ry="12" width="79" x="206.48" y="217.17"/>
+    <rect class="cls-1" height="79" rx="12" ry="12" width="79" x="316.48" y="217.17"/>
+    <rect class="cls-1" height="79" rx="12" ry="12" width="79" x="96.48" y="327.17"/>
+    <rect class="cls-1" height="79" rx="12" ry="12" width="79" x="206.48" y="327.17"/>
+    <rect class="cls-1" height="79" rx="12" ry="12" width="79" x="316.48" y="327.17"/>
+    <circle class="cls-3" cx="135.98" cy="88.67" r="26.5"/>
+    <line class="cls-4" x1="135.48" x2="135.48" y1="14.17" y2="89.17"/>
+    <circle class="cls-3" cx="360.98" cy="88.67" r="26.5"/>
+    <line class="cls-4" x1="360.48" x2="360.48" y1="14.17" y2="89.17"/>
+  </g>
+</svg>
