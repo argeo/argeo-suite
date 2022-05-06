@@ -122,8 +122,9 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	public void destroy(Map<String, Object> properties) {
 		for (SuiteUi ui : managedUis.values())
-			if (!ui.isDisposed())
-				ui.dispose();
+			if (!ui.isDisposed()) {
+				ui.getDisplay().syncExec(() -> ui.dispose());
+			}
 		if (log.isDebugEnabled())
 			log.info("Argeo Suite App stopped");
 

@@ -11,8 +11,7 @@ org.argeo.app.core \
 org.argeo.app.servlet.odk \
 org.argeo.app.servlet.publish \
 org.argeo.app.ui \
-org.argeo.app.theme.default \
-org.argeo.app.ui.rap \
+org.argeo.app.theme.default
 
 A2_OUTPUT = $(SDK_BUILD_BASE)/a2
 A2_BASE = $(A2_OUTPUT)
