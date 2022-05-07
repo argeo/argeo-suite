@@ -6,7 +6,6 @@ Private-Package: *
 Export-Package: !*
 
 Import-Package:\
-org.argeo.app.ui.osgi,\
 org.argeo.cms.swt.osgi,\
 javax.servlet.*;version="[3,5)",\
 *
