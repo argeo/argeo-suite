@@ -26,6 +26,7 @@ OSGI-INF/documentUiProvider.xml,\
 
 
 Import-Package:\
+org.argeo.cms.osgi,\
 org.argeo.cms.ui.widgets,\
 org.eclipse.swt,\
 org.osgi.framework,\

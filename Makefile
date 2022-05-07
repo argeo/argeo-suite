@@ -21,7 +21,7 @@ org.argeo.tp \
 org.argeo.tp.apache \
 org.argeo.tp.jetty \
 org.argeo.tp.eclipse.equinox \
-org.argeo.tp.eclipse.rap \
+org.argeo.tp.eclipse.rwt \
 org.argeo.tp.jcr \
 org.argeo.tp.formats \
 org.argeo.tp.gis \
