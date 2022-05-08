@@ -17,6 +17,7 @@ import org.argeo.cms.ui.viewers.JcrVersionCmsEditable;
 import org.argeo.cms.ui.widgets.ScrolledPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
@@ -31,8 +32,14 @@ public class DocumentUiProvider implements CmsUiProvider {
 			// Title
 			parent.setLayout(CmsSwtUtils.noSpaceGridLayout());
 
-			CmsLink toHtml = new CmsLink("To HTML", "/html/dbk" + context.getPath()+"/index.html");
-			toHtml.createUiPart(parent, context);
+			Composite links = new Composite(parent, SWT.NONE);
+			FillLayout linksLayout = new FillLayout();
+			linksLayout.spacing = 2;
+			links.setLayout(linksLayout);
+			CmsLink toHtml = new CmsLink("to HTML", "/html/dbk" + context.getPath() + "/index.html");
+			toHtml.createUiPart(links, context);
+			CmsLink toPdf = new CmsLink("to PDF", "/html/dbk" + context.getPath() + "/index.pdf");
+			toPdf.createUiPart(links, context);
 
 			ScrolledPage page = new ScrolledPage(parent, SWT.NONE);
 			page.setLayoutData(CmsSwtUtils.fillAll());

@@ -1,9 +1,14 @@
 package org.argeo.app.servlet.publish;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -30,10 +35,13 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.sax.SAXResult;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.fop.apps.Fop;
+import org.apache.fop.apps.FopFactory;
 import org.apache.xalan.processor.TransformerFactoryImpl;
 import org.argeo.api.cms.CmsTheme;
 import org.argeo.app.docbook.DbkType;
@@ -55,7 +63,10 @@ public class DbkServlet extends HttpServlet {
 
 	private DocumentBuilderFactory documentBuilderFactory;
 	private TransformerFactory transformerFactory;
-	private Templates docBoookTemplates;
+	private Templates docBoookHtmlTemplates;
+
+	// FOP
+	private Templates docBoookFoTemplates;
 
 	private Map<String, CmsTheme> themes = Collections.synchronizedMap(new HashMap<>());
 
@@ -84,6 +95,14 @@ public class DbkServlet extends HttpServlet {
 			path = path.substring(0, path.length() - "/index.html".length());
 		}
 
+		boolean pdf = false;
+		if (path.toLowerCase().endsWith(".pdf")) {
+			pdf = true;
+			if (path.toLowerCase().endsWith("/index.pdf")) {
+				path = path.substring(0, path.length() - "/index.pdf".length());
+			}
+		}
+
 		Session session = null;
 		try {
 			session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), new ServletHttpRequest(req));
@@ -109,42 +128,62 @@ public class DbkServlet extends HttpServlet {
 					try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 						session.exportDocumentView(dbkNode.getPath(), out, true, false);
 						arr = out.toByteArray();
-//				System.out.println(new String(arr, StandardCharsets.UTF_8));
 					} catch (RepositoryException e) {
 						throw new JcrException(e);
 					}
 
-					try (InputStream in = new ByteArrayInputStream(arr);
-//					ByteArrayOutputStream out = new ByteArrayOutputStream();
-					) {
-
-						Result xmlOutput = new StreamResult(resp.getOutputStream());
+					try (InputStream in = new ByteArrayInputStream(arr);) {
 
 						DocumentBuilder docBuilder = documentBuilderFactory.newDocumentBuilder();
-//				Document doc = docBuilder.parse(new File(
-//						System.getProperty("user.home") + "/dev/git/gpl/argeo-qa/doc/platform/argeo-platform.dbk.xml"));
 						Document doc = docBuilder.parse(in);
 						Source xmlInput = new DOMSource(doc);
 
-						Transformer transformer = docBoookTemplates.newTransformer();
+						if (pdf) {
+							//String baseUri = req.getRequestURI();
+							FopFactory fopFactory = FopFactory.newInstance(URI.create(req.getRequestURL().toString()));
+							resp.setContentType("application/pdf");
 
-						// gather CSS
-						if (cmsTheme != null) {
-							StringBuilder sb = new StringBuilder();
-							for (String cssPath : cmsTheme.getWebCssPaths()) {
-								sb.append(req.getContextPath()).append(req.getServletPath()).append('/');
-								sb.append(themeId).append('/').append(cssPath).append(' ');
+							// DocBook to FO
+							byte[] foBytes;
+							try (ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+								Result xmlOutput = new StreamResult(out);
+								Transformer docBookTransformer = docBoookFoTemplates.newTransformer();
+								docBookTransformer.transform(xmlInput, xmlOutput);
+								foBytes = out.toByteArray();
 							}
-							// FIXME make it more generic
-							sb.append("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap")
-									.append(' ');
-							sb.append(
-									"https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;1,400&display=swap")
-									.append(' ');
-							if (sb.length() > 0)
-								transformer.setParameter("html.stylesheet", sb.toString());
+
+							// FO to PDF
+							try (InputStream foIn = new ByteArrayInputStream(foBytes)) {
+								Fop fop = fopFactory.newFop("application/pdf", resp.getOutputStream());
+								Transformer fopTransformer = transformerFactory.newTransformer(); // identity
+								Source src = new StreamSource(foIn);
+								Result fopResult = new SAXResult(fop.getDefaultHandler());
+								fopTransformer.transform(src, fopResult);
+							}
+
+						} else {
+							Result xmlOutput = new StreamResult(resp.getOutputStream());
+							resp.setContentType("text/html");
+							Transformer docBookTransformer = docBoookHtmlTemplates.newTransformer();
+
+							// gather CSS
+							if (cmsTheme != null) {
+								StringBuilder sb = new StringBuilder();
+								for (String cssPath : cmsTheme.getWebCssPaths()) {
+									sb.append(req.getContextPath()).append(req.getServletPath()).append('/');
+									sb.append(themeId).append('/').append(cssPath).append(' ');
+								}
+								// FIXME make it more generic
+								sb.append("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap")
+										.append(' ');
+								sb.append(
+										"https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,400;0,600;1,400&display=swap")
+										.append(' ');
+								if (sb.length() > 0)
+									docBookTransformer.setParameter("html.stylesheet", sb.toString());
+							}
+							docBookTransformer.transform(xmlInput, xmlOutput);
 						}
-						transformer.transform(xmlInput, xmlOutput);
 //				resp.getOutputStream().write(out.toByteArray());
 					} catch (Exception e) {
 						throw new ServletException("Cannot transform " + path, e);
@@ -196,7 +235,6 @@ public class DbkServlet extends HttpServlet {
 			xslBase = defaultXslBase;
 
 		}
-		String xsl = xslBase + "/html/docbook.xsl";
 
 		documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		documentBuilderFactory.setXIncludeAware(true);
@@ -206,14 +244,23 @@ public class DbkServlet extends HttpServlet {
 		// with DocBook stylesheets
 		transformerFactory = new TransformerFactoryImpl();
 
-		Source xslSource = new StreamSource(xsl);
+		String htmlXsl = xslBase + "/html/docbook.xsl";
+		docBoookHtmlTemplates = createDocBookTemplates(htmlXsl);
+		String foXsl = xslBase + "/fo/docbook.xsl";
+		docBoookFoTemplates = createDocBookTemplates(foXsl);
+	}
+
+	protected Templates createDocBookTemplates(String xsl) {
 		try {
-			docBoookTemplates = transformerFactory.newTemplates(xslSource);
-			if (docBoookTemplates == null)
-				throw new ServletException("Could not instantiate XSL " + xsl);
+			Source xslSource = new StreamSource(xsl);
+			Templates templates = transformerFactory.newTemplates(xslSource);
+			if (templates == null)
+				throw new IllegalStateException("Could not instantiate XSL " + xsl);
+			return templates;
 		} catch (TransformerConfigurationException e) {
-			throw new ServletException("Cannot instantiate XSL " + xsl, e);
+			throw new IllegalStateException("Cannot instantiate XSL " + xsl, e);
 		}
+
 	}
 
 	public void setRepository(Repository repository) {
@@ -228,4 +275,40 @@ public class DbkServlet extends HttpServlet {
 		themes.remove(theme.getThemeId());
 	}
 
+	public static void main(String[] args) throws Exception {
+		// Step 1: Construct a FopFactory by specifying a reference to the configuration
+		// file
+		// (reuse if you plan to render multiple documents!)
+		FopFactory fopFactory = FopFactory.newInstance(new File(".").toURI());
+
+		// Step 2: Set up output stream.
+		// Note: Using BufferedOutputStream for performance reasons (helpful with
+		// FileOutputStreams).
+		OutputStream out = new BufferedOutputStream(new FileOutputStream(new File(
+				System.getProperty("user.home") + "/dev/git/unstable/argeo-qa/doc/platform/argeo-platform-test.pdf")));
+
+		try {
+			// Step 3: Construct fop with desired output format
+			Fop fop = fopFactory.newFop("application/pdf", out);
+
+			// Step 4: Setup JAXP using identity transformer
+			TransformerFactory fopTransformerFactory = TransformerFactory.newInstance();
+			Transformer fopTransformer = fopTransformerFactory.newTransformer(); // identity transformer
+
+			// Step 5: Setup input and output for XSLT transformation
+			// Setup input stream
+			Source src = new StreamSource(new File(
+					System.getProperty("user.home") + "/dev/git/unstable/argeo-qa/doc/platform/argeo-platform.fo"));
+
+			// Resulting SAX events (the generated FO) must be piped through to FOP
+			Result res = new SAXResult(fop.getDefaultHandler());
+
+			// Step 6: Start XSLT transformation and FOP processing
+			fopTransformer.transform(src, res);
+
+		} finally {
+			// Clean-up
+			out.close();
+		}
+	}
 }
