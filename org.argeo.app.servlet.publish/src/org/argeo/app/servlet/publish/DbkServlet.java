@@ -143,23 +143,29 @@ public class DbkServlet extends HttpServlet {
 							FopFactory fopFactory = FopFactory.newInstance(URI.create(req.getRequestURL().toString()));
 							resp.setContentType("application/pdf");
 
-							// DocBook to FO
-							byte[] foBytes;
-							try (ByteArrayOutputStream out = new ByteArrayOutputStream();) {
-								Result xmlOutput = new StreamResult(out);
-								Transformer docBookTransformer = docBoookFoTemplates.newTransformer();
-								docBookTransformer.transform(xmlInput, xmlOutput);
-								foBytes = out.toByteArray();
-							}
-
-							// FO to PDF
-							try (InputStream foIn = new ByteArrayInputStream(foBytes)) {
-								Fop fop = fopFactory.newFop("application/pdf", resp.getOutputStream());
-								Transformer fopTransformer = transformerFactory.newTransformer(); // identity
-								Source src = new StreamSource(foIn);
-								Result fopResult = new SAXResult(fop.getDefaultHandler());
-								fopTransformer.transform(src, fopResult);
-							}
+//							// DocBook to FO
+//							byte[] foBytes;
+//							try (ByteArrayOutputStream out = new ByteArrayOutputStream();) {
+//								Result xmlOutput = new StreamResult(out);
+//								Transformer docBookTransformer = docBoookFoTemplates.newTransformer();
+//								docBookTransformer.transform(xmlInput, xmlOutput);
+//								foBytes = out.toByteArray();
+//							}
+//
+//							// FO to PDF
+//							try (InputStream foIn = new ByteArrayInputStream(foBytes)) {
+//								Fop fop = fopFactory.newFop("application/pdf", resp.getOutputStream());
+//								Transformer fopTransformer = transformerFactory.newTransformer(); // identity
+//								Source src = new StreamSource(foIn);
+//								Result fopResult = new SAXResult(fop.getDefaultHandler());
+//								fopTransformer.transform(src, fopResult);
+//							}
+//
+							
+							Fop fop = fopFactory.newFop("application/pdf", resp.getOutputStream());
+							Transformer docBookTransformer = docBoookFoTemplates.newTransformer();
+							Result fopResult = new SAXResult(fop.getDefaultHandler());
+							docBookTransformer.transform(xmlInput, fopResult);
 
 						} else {
 							Result xmlOutput = new StreamResult(resp.getOutputStream());
