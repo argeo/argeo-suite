@@ -94,47 +94,56 @@ public class EmailMigration {
 		}
 	}
 
-	protected void migrateFolders(Folder sourceFolder, Store targetStore) throws MessagingException, IOException {
-		folders: for (Folder folder : sourceFolder.list()) {
-			String folderName = folder.getName();
+	protected void migrateFolders(Folder sourceParentFolder, Store targetStore) throws MessagingException, IOException {
+		folders: for (Folder sourceFolder : sourceParentFolder.list()) {
+			String sourceFolderName = sourceFolder.getName();
 
-			String folderFullName = folder.getFullName();
+			String sourceFolderFullName = sourceFolder.getFullName();
+			char sourceFolderSeparator = sourceParentFolder.getSeparator();
+			char targetFolderSeparator = targetStore.getDefaultFolder().getSeparator();
+			String targetFolderFullName = sourceFolderFullName.replace(sourceFolderSeparator, targetFolderSeparator);
 
 			// GMail specific
-			if (folderFullName.equals("[Gmail]")) {
-				migrateFolders(folder, targetStore);
+			if (sourceFolderFullName.equals("[Gmail]")) {
+				migrateFolders(sourceFolder, targetStore);
 				continue folders;
 			}
-			if (folderFullName.startsWith("[Gmail]")) {
+			if (sourceFolderFullName.startsWith("[Gmail]")) {
+				String subFolderName = null;
 				// Make it configurable
-				switch (folderName) {
+				switch (sourceFolderName) {
 				case "All Mail":
 				case "Important":
 				case "Spam":
 					continue folders;
+				case "Sent Mail":
+					subFolderName = "Sent";
 				default:
 					// does nothing
 				}
-				folderFullName = folder.getName();
+				targetFolderFullName = subFolderName == null ? sourceFolder.getName() : subFolderName;
 			}
 
-			int messageCount = (folder.getType() & Folder.HOLDS_MESSAGES) != 0 ? folder.getMessageCount() : 0;
-			boolean hasSubFolders = (folder.getType() & Folder.HOLDS_FOLDERS) != 0 ? folder.list().length != 0 : false;
+			int messageCount = (sourceFolder.getType() & Folder.HOLDS_MESSAGES) != 0 ? sourceFolder.getMessageCount()
+					: 0;
+			boolean hasSubFolders = (sourceFolder.getType() & Folder.HOLDS_FOLDERS) != 0
+					? sourceFolder.list().length != 0
+					: false;
 			Folder targetFolder;
 			if (hasSubFolders) {// has sub-folders
 				if (messageCount == 0) {
-					targetFolder = targetStore.getFolder(folderFullName);
+					targetFolder = targetStore.getFolder(targetFolderFullName);
 					if (!targetFolder.exists()) {
 						targetFolder.create(Folder.HOLDS_FOLDERS);
 						logger.log(DEBUG, "Created HOLDS_FOLDERS folder " + targetFolder.getFullName());
 					}
 				} else {// also has messages
-					Folder parentFolder = targetStore.getFolder(folderFullName);
+					Folder parentFolder = targetStore.getFolder(targetFolderFullName);
 					if (!parentFolder.exists()) {
 						parentFolder.create(Folder.HOLDS_FOLDERS);
 						logger.log(DEBUG, "Created HOLDS_FOLDERS folder " + parentFolder.getFullName());
 					}
-					String miscFullName = folderFullName + "/_Misc";
+					String miscFullName = targetFolderFullName + targetFolderSeparator + "_Misc";
 					targetFolder = targetStore.getFolder(miscFullName);
 					if (!targetFolder.exists()) {
 						targetFolder.create(Folder.HOLDS_MESSAGES);
@@ -143,10 +152,10 @@ public class EmailMigration {
 				}
 			} else {// no sub-folders
 				if (messageCount == 0) { // empty
-					logger.log(DEBUG, "Skip empty folder " + folderFullName);
+					logger.log(DEBUG, "Skip empty folder " + targetFolderFullName);
 					continue folders;
 				}
-				targetFolder = targetStore.getFolder(folderFullName);
+				targetFolder = targetStore.getFolder(targetFolderFullName);
 				if (!targetFolder.exists()) {
 					targetFolder.create(Folder.HOLDS_MESSAGES);
 					logger.log(DEBUG, "Created HOLDS_MESSAGES folder " + targetFolder.getFullName());
@@ -158,20 +167,20 @@ public class EmailMigration {
 				targetFolder.open(Folder.READ_WRITE);
 				try {
 					long begin = System.currentTimeMillis();
-					folder.open(Folder.READ_ONLY);
-					migrateFolder(folder, targetFolder);
+					sourceFolder.open(Folder.READ_ONLY);
+					migrateFolder(sourceFolder, targetFolder);
 					long duration = System.currentTimeMillis() - begin;
-					logger.log(DEBUG, folderFullName + " - Migration of " + messageCount + " messages took "
+					logger.log(DEBUG, targetFolderFullName + " - Migration of " + messageCount + " messages took "
 							+ (duration / 1000) + " s (" + (duration / messageCount) + " ms per message)");
 				} finally {
-					folder.close();
+					sourceFolder.close();
 					targetFolder.close();
 				}
 			}
 
 			// recursive
 			if (hasSubFolders) {
-				migrateFolders(folder, targetStore);
+				migrateFolders(sourceFolder, targetStore);
 			}
 		}
 	}
@@ -231,8 +240,7 @@ public class EmailMigration {
 					Path file = baseDir.resolve(fileName);
 					savePartsAsFiles(msg.getContent(), file);
 				}
-			} 
-			else {
+			} else {
 				long begin = System.currentTimeMillis();
 				targetFolder = openMboxTargetFolder(sourceFolder, baseDir);
 				migrateFolder(sourceFolder, targetFolder);
