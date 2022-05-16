@@ -2,6 +2,7 @@
 <?pde version="3.8"?>
 <target name="(output) CMS RAP">
 	<locations>
+		<location path="${project_loc:argeo-suite-unstable}/../output/a2/org.argeo.tp.eclipse.rwt" type="Directory"/>
 		<location path="${project_loc:argeo-suite-unstable}/../output/a2/org.argeo.tp.eclipse.rap" type="Directory"/>
 		<location path="${project_loc:argeo-suite-unstable}/../output/a2/org.argeo.cms.eclipse.rap" type="Directory"/>
 		<location path="${project_loc:argeo-suite-unstable}/../output/a2/org.argeo.cms" type="Directory"/>
