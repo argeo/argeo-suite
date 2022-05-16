@@ -53,6 +53,8 @@ public class EmailMigration {
 	private String targetUsername;
 	private String targetPassword;
 
+	private boolean targetSupportDualTypeFolders = true;
+
 	public void process() throws MessagingException, IOException {
 //		Path baseDir = Paths.get(targetBaseDir).resolve(sourceUsername).resolve("mbox");
 
@@ -124,41 +126,52 @@ public class EmailMigration {
 				targetFolderFullName = subFolderName == null ? sourceFolder.getName() : subFolderName;
 			}
 
+			// nature of the source folder
 			int messageCount = (sourceFolder.getType() & Folder.HOLDS_MESSAGES) != 0 ? sourceFolder.getMessageCount()
 					: 0;
 			boolean hasSubFolders = (sourceFolder.getType() & Folder.HOLDS_FOLDERS) != 0
 					? sourceFolder.list().length != 0
 					: false;
+
 			Folder targetFolder;
-			if (hasSubFolders) {// has sub-folders
-				if (messageCount == 0) {
+			if (targetSupportDualTypeFolders) {
+				targetFolder = targetStore.getFolder(targetFolderFullName);
+				if (!targetFolder.exists()) {
+					targetFolder.create(Folder.HOLDS_FOLDERS | Folder.HOLDS_MESSAGES);
+					logger.log(DEBUG, "Created HOLDS_FOLDERS | HOLDS_MESSAGES folder " + targetFolder.getFullName());
+				}
+
+			} else {
+				if (hasSubFolders) {// has sub-folders
+					if (messageCount == 0) {
+						targetFolder = targetStore.getFolder(targetFolderFullName);
+						if (!targetFolder.exists()) {
+							targetFolder.create(Folder.HOLDS_FOLDERS);
+							logger.log(DEBUG, "Created HOLDS_FOLDERS folder " + targetFolder.getFullName());
+						}
+					} else {// also has messages
+						Folder parentFolder = targetStore.getFolder(targetFolderFullName);
+						if (!parentFolder.exists()) {
+							parentFolder.create(Folder.HOLDS_FOLDERS);
+							logger.log(DEBUG, "Created HOLDS_FOLDERS folder " + parentFolder.getFullName());
+						}
+						String miscFullName = targetFolderFullName + targetFolderSeparator + "_Misc";
+						targetFolder = targetStore.getFolder(miscFullName);
+						if (!targetFolder.exists()) {
+							targetFolder.create(Folder.HOLDS_MESSAGES);
+							logger.log(DEBUG, "Created HOLDS_MESSAGES folder " + targetFolder.getFullName());
+						}
+					}
+				} else {// no sub-folders
+					if (messageCount == 0) { // empty
+						logger.log(DEBUG, "Skip empty folder " + targetFolderFullName);
+						continue folders;
+					}
 					targetFolder = targetStore.getFolder(targetFolderFullName);
-					if (!targetFolder.exists()) {
-						targetFolder.create(Folder.HOLDS_FOLDERS);
-						logger.log(DEBUG, "Created HOLDS_FOLDERS folder " + targetFolder.getFullName());
-					}
-				} else {// also has messages
-					Folder parentFolder = targetStore.getFolder(targetFolderFullName);
-					if (!parentFolder.exists()) {
-						parentFolder.create(Folder.HOLDS_FOLDERS);
-						logger.log(DEBUG, "Created HOLDS_FOLDERS folder " + parentFolder.getFullName());
-					}
-					String miscFullName = targetFolderFullName + targetFolderSeparator + "_Misc";
-					targetFolder = targetStore.getFolder(miscFullName);
 					if (!targetFolder.exists()) {
 						targetFolder.create(Folder.HOLDS_MESSAGES);
 						logger.log(DEBUG, "Created HOLDS_MESSAGES folder " + targetFolder.getFullName());
 					}
-				}
-			} else {// no sub-folders
-				if (messageCount == 0) { // empty
-					logger.log(DEBUG, "Skip empty folder " + targetFolderFullName);
-					continue folders;
-				}
-				targetFolder = targetStore.getFolder(targetFolderFullName);
-				if (!targetFolder.exists()) {
-					targetFolder.create(Folder.HOLDS_MESSAGES);
-					logger.log(DEBUG, "Created HOLDS_MESSAGES folder " + targetFolder.getFullName());
 				}
 			}
 
