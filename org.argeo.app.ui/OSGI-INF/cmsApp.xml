@@ -11,4 +11,5 @@
    <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="dynamic" target="(cn=ego)"/>
    <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.ui.SuiteLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
    <reference bind="setCmsUserManager" cardinality="1..1" interface="org.argeo.cms.CmsUserManager" name="CmsUserManager" policy="static"/>
+   <reference bind="setCmsContext" cardinality="1..1" interface="org.argeo.api.cms.CmsContext" name="CmsContext" policy="static"/>
 </scr:component>
