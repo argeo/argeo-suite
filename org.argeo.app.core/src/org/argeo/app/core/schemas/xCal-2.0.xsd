@@ -1,0 +1,1489 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="urn:ietf:params:xml:ns:icalendar-2.0" xmlns:ns1="urn:ietf:params:xml:ns:icalendar-2.0">
+  <!-- 3.2 Property Parameters -->
+  <!-- 3.2.1 Alternate Text Representation -->
+  <xs:element name="altrep">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ns1:uri"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.2 Common Name -->
+  <xs:element name="cn">
+    <xs:complexType>
+      <xs:group ref="ns1:value-text"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.3 Calendar User Type -->
+  <xs:element name="cutype">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="text">
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="INDIVIDUAL"/>
+              <xs:enumeration value="GROUP"/>
+              <xs:enumeration value="RESOURCE"/>
+              <xs:enumeration value="ROOM"/>
+              <xs:enumeration value="UNKNOWN"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.4 Delegators -->
+  <xs:element name="delegated-from">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="ns1:cal-address"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.5 Delegatees -->
+  <xs:element name="delegated-to">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="ns1:cal-address"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.6 Directory Entry Reference -->
+  <xs:element name="dir">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ns1:uri"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.7 Inline Encoding -->
+  <xs:element name="encoding">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="text">
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="8BIT"/>
+              <xs:enumeration value="BASE64"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.8 Format Type -->
+  <xs:element name="fmttype">
+    <xs:complexType>
+      <xs:group ref="ns1:value-text"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.9 Free/Busy Time Type -->
+  <xs:element name="fbtype">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="text">
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="FREE"/>
+              <xs:enumeration value="BUSY"/>
+              <xs:enumeration value="BUSY-UNAVAILABLE"/>
+              <xs:enumeration value="BUSY-TENTATIVE"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.10 Language -->
+  <xs:element name="language">
+    <xs:complexType>
+      <xs:group ref="ns1:value-text"/>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.11 Group or List Membership -->
+  <xs:element name="member">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="ns1:cal-address"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.12 Participation Status -->
+  <xs:element name="partstat">
+    <xs:complexType>
+      <xs:choice>
+        <xs:group ref="ns1:type-partstat-event"/>
+        <xs:group ref="ns1:type-partstat-todo"/>
+        <xs:group ref="ns1:type-partstat-jour"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="type-partstat-event">
+    <xs:sequence>
+      <xs:element name="text">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="NEEDS-ACTION"/>
+            <xs:enumeration value="ACCEPTED"/>
+            <xs:enumeration value="DECLINED"/>
+            <xs:enumeration value="TENTATIVE"/>
+            <xs:enumeration value="DELEGATED"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="type-partstat-todo">
+    <xs:sequence>
+      <xs:element name="text">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="NEEDS-ACTION"/>
+            <xs:enumeration value="ACCEPTED"/>
+            <xs:enumeration value="DECLINED"/>
+            <xs:enumeration value="TENTATIVE"/>
+            <xs:enumeration value="DELEGATED"/>
+            <xs:enumeration value="COMPLETED"/>
+            <xs:enumeration value="IN-PROCESS"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="type-partstat-jour">
+    <xs:sequence>
+      <xs:element name="text">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="NEEDS-ACTION"/>
+            <xs:enumeration value="ACCEPTED"/>
+            <xs:enumeration value="DECLINED"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <!-- 3.2.13 Recurrence Identifier Range -->
+  <xs:element name="range">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="text">
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="THISANDFUTURE"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.14 Alarm Trigger Relationship -->
+  <xs:element name="related">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="text">
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="START"/>
+              <xs:enumeration value="END"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.15 Relationship Type -->
+  <xs:element name="reltype">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="text">
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="PARENT"/>
+              <xs:enumeration value="CHILD"/>
+              <xs:enumeration value="SIBLING"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.16 Participation Role -->
+  <xs:element name="role">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="text">
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="CHAIR"/>
+              <xs:enumeration value="REQ-PARTICIPANT"/>
+              <xs:enumeration value="OPT-PARTICIPANT"/>
+              <xs:enumeration value="NON-PARTICIPANT"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.17 RSVP Expectation -->
+  <xs:element name="rsvp" type="ns1:value-boolean"/>
+  <!-- 3.2.18 Sent By -->
+  <xs:element name="sent-by">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ns1:cal-address"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.2.19 Time Zone Identifier -->
+  <xs:group name="tzidparam">
+    <xs:sequence>
+      <xs:element name="tzid">
+        <xs:complexType>
+          <xs:group ref="ns1:value-text"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <!-- 3.3 Property Value Data Types -->
+  <!-- 3.3.1 BINARY -->
+  <xs:element name="binary" type="xs:string"/>
+  <!-- 3.3.2 BOOLEAN -->
+  <xs:complexType name="value-boolean">
+    <xs:sequence>
+      <xs:element ref="ns1:boolean"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="boolean" type="xs:boolean"/>
+  <!-- 3.3.3 CAL-ADDRESS -->
+  <xs:element name="cal-address" type="xs:anyURI"/>
+  <!-- 3.3.4 DATE -->
+  <xs:simpleType name="pattern-date">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d\d\d\d-\d\d-\d\d"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="date" type="ns1:pattern-date"/>
+  <!-- 3.3.5 DATE-TIME -->
+  <xs:simpleType name="pattern-date-time">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ?"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="date-time" type="ns1:pattern-date-time"/>
+  <!-- 3.3.6 DURATION -->
+  <xs:simpleType name="pattern-duration">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\+|-)?P(\d+W)|(\d+D)?(T(\d+H(\d+M)?(\d+S)?)|(\d+M(\d+S)?)|(\d+S))?"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:group name="value-duration">
+    <xs:sequence>
+      <xs:element name="duration" type="ns1:pattern-duration"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- 3.3.7 FLOAT -->
+  <xs:element name="float" type="xs:float"/>
+  <!-- 3.3.8 INTEGER -->
+  <xs:element name="integer" type="xs:integer"/>
+  <!-- 3.3.9 PERIOD -->
+  <xs:element name="period">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ns1:start"/>
+        <xs:choice>
+          <xs:element ref="ns1:end"/>
+          <xs:element name="duration" type="ns1:pattern-duration"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="start" type="ns1:pattern-date-time"/>
+  <xs:element name="end" type="ns1:pattern-date-time"/>
+  <!-- 3.3.10 RECUR -->
+  <xs:element name="recur">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ns1:freq"/>
+        <xs:choice minOccurs="0">
+          <xs:element ref="ns1:until"/>
+          <xs:element ref="ns1:count"/>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="ns1:interval"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:bysecond"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:byminute"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:byhour"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:byday"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:bymonthday"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:byyearday"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:byweekno"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:bymonth"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="ns1:bysetpos"/>
+        <xs:element minOccurs="0" ref="ns1:wkst"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="interval" type="xs:positiveInteger"/>
+  <xs:element name="wkst" type="ns1:type-weekday"/>
+  <xs:element name="freq">
+    <xs:simpleType>
+      <xs:restriction base="xs:token">
+        <xs:enumeration value="SECONDLY"/>
+        <xs:enumeration value="MINUTELY"/>
+        <xs:enumeration value="HOURLY"/>
+        <xs:enumeration value="DAILY"/>
+        <xs:enumeration value="WEEKLY"/>
+        <xs:enumeration value="MONTHLY"/>
+        <xs:enumeration value="YEARLY"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="until">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="ns1:date"/>
+        <xs:element ref="ns1:date-time"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="count" type="xs:positiveInteger"/>
+  <xs:element name="bysecond" type="xs:positiveInteger"/>
+  <xs:element name="byminute" type="xs:positiveInteger"/>
+  <xs:element name="byhour" type="xs:positiveInteger"/>
+  <xs:simpleType name="type-weekday">
+    <xs:restriction base="xs:token">
+      <xs:enumeration value="SU"/>
+      <xs:enumeration value="MO"/>
+      <xs:enumeration value="TU"/>
+      <xs:enumeration value="WE"/>
+      <xs:enumeration value="TH"/>
+      <xs:enumeration value="FR"/>
+      <xs:enumeration value="SA"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="byday">
+    <xs:simpleType>
+      <xs:union>
+        <xs:simpleType>
+          <xs:union memberTypes="xs:integer ns1:type-weekday"/>
+        </xs:simpleType>
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:length value="0"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:union>
+    </xs:simpleType>
+  </xs:element>
+  <xs:element name="bymonthday" type="xs:integer"/>
+  <xs:element name="byyearday" type="xs:integer"/>
+  <xs:element name="byweekno" type="xs:integer"/>
+  <xs:element name="bymonth" type="xs:positiveInteger"/>
+  <xs:element name="bysetpos" type="xs:integer"/>
+  <!-- 3.3.11 TEXT -->
+  <xs:group name="value-text">
+    <xs:sequence>
+      <xs:element name="text" type="xs:string"/>
+    </xs:sequence>
+  </xs:group>
+  <!-- 3.3.12 TIME -->
+  <xs:simpleType name="pattern-time">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="\d\d:\d\d:\d\dZ?"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="time" type="ns1:pattern-time"/>
+  <!-- 3.3.13 URI -->
+  <xs:element name="uri" type="xs:anyURI"/>
+  <!-- 3.3.14 UTC-OFFSET -->
+  <xs:element name="utc-offset">
+    <xs:simpleType>
+      <xs:restriction base="xs:string">
+        <xs:pattern value="(\+|-)\d\d:\d\d(:\d\d)?"/>
+      </xs:restriction>
+    </xs:simpleType>
+  </xs:element>
+  <!-- UNKNOWN -->
+  <xs:element name="unknown" type="xs:string"/>
+  <!-- 3.4 iCalendar Stream -->
+  <xs:element name="icalendar">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="ns1:vcalendar"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.6 Calendar Components -->
+  <xs:element name="vcalendar">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="ns1:type-calprops"/>
+        <xs:element ref="ns1:components"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="type-calprops">
+    <xs:sequence>
+      <xs:element name="properties">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="ns1:prodid"/>
+            <xs:element ref="ns1:version"/>
+            <xs:element ref="ns1:calscale"/>
+            <xs:element ref="ns1:method"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="components">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="ns1:vevent"/>
+        <xs:element ref="ns1:vtodo"/>
+        <xs:element ref="ns1:vjournal"/>
+        <xs:element ref="ns1:vfreebusy"/>
+        <xs:element ref="ns1:vtimezone"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.6.1 Event Component -->
+  <xs:element name="vevent">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="ns1:type-eventprop"/>
+        <xs:element minOccurs="0" name="components">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" ref="ns1:valarm"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="type-eventprop">
+    <xs:sequence>
+      <xs:element name="properties">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="ns1:dtstamp"/>
+            <xs:element ref="ns1:dtstart"/>
+            <xs:element ref="ns1:uid"/>
+            <xs:element ref="ns1:class"/>
+            <xs:element ref="ns1:created"/>
+            <xs:element ref="ns1:description"/>
+            <xs:element ref="ns1:geo"/>
+            <xs:element ref="ns1:last-modified"/>
+            <xs:element ref="ns1:location"/>
+            <xs:element ref="ns1:organizer"/>
+            <xs:element ref="ns1:priority"/>
+            <xs:element ref="ns1:sequence"/>
+            <xs:group ref="ns1:property-status-event"/>
+            <xs:element ref="ns1:summary"/>
+            <xs:element ref="ns1:transp"/>
+            <xs:element ref="ns1:url"/>
+            <xs:element ref="ns1:recurrence-id"/>
+            <xs:element ref="ns1:rrule"/>
+            <xs:choice>
+              <xs:element ref="ns1:dtend"/>
+              <xs:group ref="ns1:property-duration"/>
+            </xs:choice>
+            <xs:element ref="ns1:attach"/>
+            <xs:element ref="ns1:attendee"/>
+            <xs:element ref="ns1:categories"/>
+            <xs:element ref="ns1:comment"/>
+            <xs:element ref="ns1:contact"/>
+            <xs:element ref="ns1:exdate"/>
+            <xs:element ref="ns1:request-status"/>
+            <xs:element ref="ns1:related-to"/>
+            <xs:element ref="ns1:resources"/>
+            <xs:element ref="ns1:rdate"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <!-- 3.6.2 To-do Component -->
+  <xs:element name="vtodo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:group ref="ns1:type-todoprop"/>
+        <xs:element minOccurs="0" name="components">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element maxOccurs="unbounded" ref="ns1:valarm"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="type-todoprop">
+    <xs:sequence>
+      <xs:element name="properties">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="ns1:dtstamp"/>
+            <xs:element ref="ns1:uid"/>
+            <xs:element ref="ns1:class"/>
+            <xs:element ref="ns1:completed"/>
+            <xs:element ref="ns1:created"/>
+            <xs:element ref="ns1:description"/>
+            <xs:element ref="ns1:geo"/>
+            <xs:element ref="ns1:last-modified"/>
+            <xs:element ref="ns1:location"/>
+            <xs:element ref="ns1:organizer"/>
+            <xs:element ref="ns1:percent-complete"/>
+            <xs:element ref="ns1:priority"/>
+            <xs:element ref="ns1:recurrence-id"/>
+            <xs:element ref="ns1:sequence"/>
+            <xs:group ref="ns1:property-status-todo"/>
+            <xs:element ref="ns1:summary"/>
+            <xs:element ref="ns1:url"/>
+            <xs:element ref="ns1:rrule"/>
+            <xs:choice>
+              <xs:choice>
+                <xs:element ref="ns1:dtstart"/>
+                <xs:element ref="ns1:dtend"/>
+              </xs:choice>
+              <xs:choice>
+                <xs:element ref="ns1:dtstart"/>
+                <xs:group ref="ns1:property-duration"/>
+              </xs:choice>
+            </xs:choice>
+            <xs:element ref="ns1:attach"/>
+            <xs:element ref="ns1:attendee"/>
+            <xs:element ref="ns1:categories"/>
+            <xs:element ref="ns1:comment"/>
+            <xs:element ref="ns1:contact"/>
+            <xs:element ref="ns1:exdate"/>
+            <xs:element ref="ns1:request-status"/>
+            <xs:element ref="ns1:related-to"/>
+            <xs:element ref="ns1:resources"/>
+            <xs:element ref="ns1:rdate"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <!-- 3.6.3 Journal Component -->
+  <xs:element name="vjournal" type="ns1:type-jourprop"/>
+  <xs:complexType name="type-jourprop">
+    <xs:sequence>
+      <xs:element name="properties">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="ns1:dtstamp"/>
+            <xs:element ref="ns1:uid"/>
+            <xs:element ref="ns1:class"/>
+            <xs:element ref="ns1:created"/>
+            <xs:element ref="ns1:dtstart"/>
+            <xs:element ref="ns1:last-modified"/>
+            <xs:element ref="ns1:organizer"/>
+            <xs:element ref="ns1:recurrence-id"/>
+            <xs:element ref="ns1:sequence"/>
+            <xs:group ref="ns1:property-status-jour"/>
+            <xs:element ref="ns1:summary"/>
+            <xs:element ref="ns1:url"/>
+            <xs:element ref="ns1:rrule"/>
+            <xs:element ref="ns1:attach"/>
+            <xs:element ref="ns1:attendee"/>
+            <xs:element ref="ns1:categories"/>
+            <xs:element ref="ns1:comment"/>
+            <xs:element ref="ns1:contact"/>
+            <xs:element ref="ns1:description"/>
+            <xs:element ref="ns1:exdate"/>
+            <xs:element ref="ns1:related-to"/>
+            <xs:element ref="ns1:rdate"/>
+            <xs:element ref="ns1:request-status"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 3.6.4 Free/Busy Component -->
+  <xs:element name="vfreebusy" type="ns1:type-fbprop"/>
+  <xs:complexType name="type-fbprop">
+    <xs:sequence>
+      <xs:element name="properties">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="ns1:dtstamp"/>
+            <xs:element ref="ns1:uid"/>
+            <xs:element ref="ns1:contact"/>
+            <xs:element ref="ns1:dtstart"/>
+            <xs:element ref="ns1:dtend"/>
+            <xs:group ref="ns1:property-duration"/>
+            <xs:element ref="ns1:organizer"/>
+            <xs:element ref="ns1:url"/>
+            <xs:element ref="ns1:attendee"/>
+            <xs:element ref="ns1:comment"/>
+            <xs:element ref="ns1:freebusy"/>
+            <xs:element ref="ns1:request-status"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 3.6.5 Time Zone Component -->
+  <xs:element name="vtimezone">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="properties">
+          <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:group ref="ns1:property-tzid"/>
+              <xs:element ref="ns1:last-modified"/>
+              <xs:element ref="ns1:tzurl"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="components">
+          <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:choice>
+                <xs:element ref="ns1:standard"/>
+                <xs:element ref="ns1:daylight"/>
+              </xs:choice>
+              <xs:element ref="ns1:standard"/>
+              <xs:element ref="ns1:daylight"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="standard" type="ns1:type-tzprop"/>
+  <xs:element name="daylight" type="ns1:type-tzprop"/>
+  <xs:complexType name="type-tzprop">
+    <xs:sequence>
+      <xs:element name="properties">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="ns1:dtstart"/>
+            <xs:element ref="ns1:tzoffsetto"/>
+            <xs:element ref="ns1:tzoffsetfrom"/>
+            <xs:element ref="ns1:rrule"/>
+            <xs:element ref="ns1:comment"/>
+            <xs:element ref="ns1:rdate"/>
+            <xs:element ref="ns1:tzname"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <!-- 3.6.6 Alarm Component -->
+  <xs:element name="valarm">
+    <xs:complexType>
+      <xs:choice>
+        <xs:group ref="ns1:type-audioprop"/>
+        <xs:group ref="ns1:type-dispprop"/>
+        <xs:group ref="ns1:type-emailprop"/>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <xs:group name="type-audioprop">
+    <xs:sequence>
+      <xs:element name="properties">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="ns1:action"/>
+            <xs:element ref="ns1:trigger"/>
+            <xs:choice>
+              <xs:group ref="ns1:property-duration"/>
+              <xs:element ref="ns1:repeat"/>
+            </xs:choice>
+            <xs:element ref="ns1:attach"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="type-dispprop">
+    <xs:sequence>
+      <xs:element name="properties">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="ns1:action"/>
+            <xs:element ref="ns1:description"/>
+            <xs:element ref="ns1:trigger"/>
+            <xs:element ref="ns1:summary"/>
+            <xs:element ref="ns1:attendee"/>
+            <xs:choice>
+              <xs:group ref="ns1:property-duration"/>
+              <xs:element ref="ns1:repeat"/>
+            </xs:choice>
+            <xs:element ref="ns1:attach"/>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="type-emailprop">
+    <xs:sequence>
+      <xs:element name="properties">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="ns1:action"/>
+            <xs:element ref="ns1:description"/>
+            <xs:element ref="ns1:trigger"/>
+            <xs:choice>
+              <xs:group ref="ns1:property-duration"/>
+              <xs:element ref="ns1:repeat"/>
+            </xs:choice>
+          </xs:choice>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <!-- 3.7 Calendar Properties -->
+  <!-- 3.7.1 Calendar Scale -->
+  <xs:element name="calscale">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element name="text">
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="GREGORIAN"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.7.2 Method -->
+  <xs:element name="method">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:group ref="ns1:value-text"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.7.3 Product Identifier -->
+  <xs:element name="prodid">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:group ref="ns1:value-text"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.7.4 Version -->
+  <xs:element name="version">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element name="text">
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="2.0"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8 Component Properties -->
+  <!-- 3.8.1 Descriptive Component Properties -->
+  <!-- 3.8.1.1 Attachment -->
+  <xs:element name="attach">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="ns1:fmttype"/>
+              <xs:element ref="ns1:encoding"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:choice>
+          <xs:element ref="ns1:uri"/>
+          <xs:element ref="ns1:binary"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.1.2 Categories -->
+  <xs:element name="categories">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" ref="ns1:language"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:group maxOccurs="unbounded" ref="ns1:value-text"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.1.3 Classification -->
+  <xs:element name="class">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element name="text">
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="PUBLIC"/>
+              <xs:enumeration value="PRIVATE"/>
+              <xs:enumeration value="CONFIDENTIAL"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.1.4 Comment -->
+  <xs:element name="comment">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="ns1:altrep"/>
+              <xs:element ref="ns1:language"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:group ref="ns1:value-text"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.1.5 Description -->
+  <xs:element name="description">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="ns1:altrep"/>
+              <xs:element ref="ns1:language"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:group ref="ns1:value-text"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.1.6 Geographic Position -->
+  <xs:element name="geo">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ref="ns1:latitude"/>
+        <xs:element ref="ns1:longitude"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="latitude" type="xs:float"/>
+  <xs:element name="longitude" type="xs:float"/>
+  <!-- 3.8.1.7 Location -->
+  <xs:element name="location">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="ns1:altrep"/>
+              <xs:element ref="ns1:language"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:group ref="ns1:value-text"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.1.8 Percent Complete -->
+  <xs:element name="percent-complete">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ref="ns1:integer"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.1.9 Priority -->
+  <xs:element name="priority">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ref="ns1:integer"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.1.10 Resources -->
+  <xs:element name="resources">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="ns1:altrep"/>
+              <xs:element ref="ns1:language"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:group maxOccurs="unbounded" ref="ns1:value-text"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.1.11 Status -->
+  <xs:group name="property-status-event">
+    <xs:sequence>
+      <xs:element name="status">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="parameters">
+              <xs:complexType/>
+            </xs:element>
+            <xs:element name="text">
+              <xs:simpleType>
+                <xs:restriction base="xs:token">
+                  <xs:enumeration value="TENTATIVE"/>
+                  <xs:enumeration value="CONFIRMED"/>
+                  <xs:enumeration value="CANCELLED"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="property-status-todo">
+    <xs:sequence>
+      <xs:element name="status">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="parameters">
+              <xs:complexType/>
+            </xs:element>
+            <xs:element name="text">
+              <xs:simpleType>
+                <xs:restriction base="xs:token">
+                  <xs:enumeration value="NEEDS-ACTION"/>
+                  <xs:enumeration value="COMPLETED"/>
+                  <xs:enumeration value="IN-PROCESS"/>
+                  <xs:enumeration value="CANCELLED"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="property-status-jour">
+    <xs:sequence>
+      <xs:element name="status">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="parameters">
+              <xs:complexType/>
+            </xs:element>
+            <xs:element name="text">
+              <xs:simpleType>
+                <xs:restriction base="xs:token">
+                  <xs:enumeration value="DRAFT"/>
+                  <xs:enumeration value="FINAL"/>
+                  <xs:enumeration value="CANCELLED"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:element>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <!-- 3.8.1.12 Summary -->
+  <xs:element name="summary">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="ns1:altrep"/>
+              <xs:element ref="ns1:language"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:group ref="ns1:value-text"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.2 Date and Time Component Properties -->
+  <!-- 3.8.2.1 Date/Time Completed -->
+  <xs:element name="completed">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ref="ns1:date-time"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.2.2 Date/Time End -->
+  <xs:element name="dtend">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:group minOccurs="0" ref="ns1:tzidparam"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:choice>
+          <xs:element ref="ns1:date-time"/>
+          <xs:element ref="ns1:date"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.2.3 Date/Time Due -->
+  <xs:element name="due">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:group minOccurs="0" ref="ns1:tzidparam"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:choice>
+          <xs:element ref="ns1:date-time"/>
+          <xs:element ref="ns1:date"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.2.4 Date/Time Start -->
+  <xs:element name="dtstart">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:group minOccurs="0" ref="ns1:tzidparam"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:choice>
+          <xs:element ref="ns1:date-time"/>
+          <xs:element ref="ns1:date"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.2.5 Duration -->
+  <xs:group name="property-duration">
+    <xs:sequence>
+      <xs:element name="duration">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="parameters">
+              <xs:complexType/>
+            </xs:element>
+            <xs:group ref="ns1:value-duration"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <!-- 3.8.2.6 Free/Busy Time -->
+  <xs:element name="freebusy">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" ref="ns1:fbtype"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element maxOccurs="unbounded" ref="ns1:period"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.2.7 Time Transparency -->
+  <xs:element name="transp">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element name="text">
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="OPAQUE"/>
+              <xs:enumeration value="TRANSPARENT"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.3 Time Zone Component Properties -->
+  <!-- 3.8.3.1 Time Zone Identifier -->
+  <xs:group name="property-tzid">
+    <xs:sequence>
+      <xs:element name="tzid">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" name="parameters">
+              <xs:complexType/>
+            </xs:element>
+            <xs:group ref="ns1:value-text"/>
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <!-- 3.8.3.2 Time Zone Name -->
+  <xs:element name="tzname">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" ref="ns1:language"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:group ref="ns1:value-text"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.3.3 Time Zone Offset From -->
+  <xs:element name="tzoffsetfrom">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ref="ns1:utc-offset"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.3.4 Time Zone Offset To -->
+  <xs:element name="tzoffsetto">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ref="ns1:utc-offset"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.3.5 Time Zone URL -->
+  <xs:element name="tzurl">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ref="ns1:uri"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.4 Relationship Component Properties -->
+  <!-- 3.8.4.1 Attendee -->
+  <xs:element name="attendee">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="ns1:cutype"/>
+              <xs:element ref="ns1:member"/>
+              <xs:element ref="ns1:role"/>
+              <xs:element ref="ns1:partstat"/>
+              <xs:element ref="ns1:rsvp"/>
+              <xs:element ref="ns1:delegated-to"/>
+              <xs:element ref="ns1:delegated-from"/>
+              <xs:element ref="ns1:sent-by"/>
+              <xs:element ref="ns1:cn"/>
+              <xs:element ref="ns1:dir"/>
+              <xs:element ref="ns1:language"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="ns1:cal-address"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.4.2 Contact -->
+  <xs:element name="contact">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="ns1:altrep"/>
+              <xs:element ref="ns1:language"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:group ref="ns1:value-text"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.4.3 Organizer -->
+  <xs:element name="organizer">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:element ref="ns1:cn"/>
+              <xs:element ref="ns1:dir"/>
+              <xs:element ref="ns1:sent-by"/>
+              <xs:element ref="ns1:language"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="ns1:cal-address"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.4.4 Recurrence ID -->
+  <xs:element name="recurrence-id">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+              <xs:group ref="ns1:tzidparam"/>
+              <xs:element ref="ns1:range"/>
+            </xs:choice>
+          </xs:complexType>
+        </xs:element>
+        <xs:choice>
+          <xs:element ref="ns1:date-time"/>
+          <xs:element ref="ns1:date"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.4.5 Related-To -->
+  <xs:element name="related-to">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" ref="ns1:reltype"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:group ref="ns1:value-text"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.4.6 Uniform Resource Locator -->
+  <xs:element name="url">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ref="ns1:uri"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.4.7 Unique Identifier -->
+  <xs:element name="uid">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:group ref="ns1:value-text"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.5 Recurrence Component Properties -->
+  <!-- 3.8.5.1 Exception Date/Times -->
+  <xs:element name="exdate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:group minOccurs="0" ref="ns1:tzidparam"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:choice>
+          <xs:element maxOccurs="unbounded" ref="ns1:date-time"/>
+          <xs:element maxOccurs="unbounded" ref="ns1:date"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.5.2 Recurrence Date/Times -->
+  <xs:element name="rdate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:group minOccurs="0" ref="ns1:tzidparam"/>
+          </xs:complexType>
+        </xs:element>
+        <xs:choice>
+          <xs:element maxOccurs="unbounded" ref="ns1:date-time"/>
+          <xs:element maxOccurs="unbounded" ref="ns1:date"/>
+          <xs:element maxOccurs="unbounded" ref="ns1:period"/>
+        </xs:choice>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.5.3 Recurrence Rule -->
+  <xs:element name="rrule">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ref="ns1:recur"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.6 Alarm Component Properties -->
+  <!-- 3.8.6.1 Action -->
+  <xs:element name="action">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element name="text">
+          <xs:simpleType>
+            <xs:restriction base="xs:token">
+              <xs:enumeration value="AUDIO"/>
+              <xs:enumeration value="DISPLAY"/>
+              <xs:enumeration value="EMAIL"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.6.2 Repeat Count -->
+  <xs:element name="repeat">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ref="ns1:integer"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.6.3 Trigger -->
+  <xs:element name="trigger">
+    <xs:complexType>
+      <xs:choice>
+        <xs:sequence>
+          <xs:element minOccurs="0" name="parameters">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element minOccurs="0" ref="ns1:related"/>
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+          <xs:group ref="ns1:value-duration"/>
+        </xs:sequence>
+        <xs:sequence>
+          <xs:element minOccurs="0" name="parameters">
+            <xs:complexType/>
+          </xs:element>
+          <xs:element ref="ns1:date-time"/>
+        </xs:sequence>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.7 Change Management Component Properties -->
+  <!-- 3.8.7.1 Date/Time Created -->
+  <xs:element name="created">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ref="ns1:date-time"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.7.2 Date/Time Stamp -->
+  <xs:element name="dtstamp">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ref="ns1:date-time"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.7.3 Last Modified -->
+  <xs:element name="last-modified">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ref="ns1:date-time"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.7.4 Sequence Number -->
+  <xs:element name="sequence">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType/>
+        </xs:element>
+        <xs:element ref="ns1:integer"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <!-- 3.8.8 Miscellaneous Component Properties -->
+  <!-- 3.8.8.3 Request Status -->
+  <xs:element name="request-status">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="parameters">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element minOccurs="0" ref="ns1:language"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element ref="ns1:code"/>
+        <xs:element name="description" type="xs:string"/>
+        <xs:element minOccurs="0" ref="ns1:data"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="code" type="xs:string"/>
+  <xs:element name="data" type="xs:string"/>
+</xs:schema>
