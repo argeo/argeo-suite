@@ -97,9 +97,9 @@ public class PublishingApp extends AbstractCmsApp implements EventHandler {
 		Composite parent = (Composite) cmsUi;
 		parent.setLayout(new GridLayout());
 		if (landingPage != null)
-			landingPage.createUiPart(parent, null);
+			landingPage.createUiPart(parent, (Node) null);
 		else
-			defaultProvider.createUiPart(parent, null);
+			defaultProvider.createUiPart(parent, (Node) null);
 	}
 
 	@Override

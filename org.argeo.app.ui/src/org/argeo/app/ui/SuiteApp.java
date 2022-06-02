@@ -21,6 +21,12 @@ import javax.jcr.nodetype.NodeType;
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 
+import org.argeo.api.acr.Content;
+import org.argeo.api.acr.ContentRepository;
+import org.argeo.api.acr.ContentSession;
+import org.argeo.api.acr.spi.ProvidedSession;
+import org.argeo.api.cms.CmsConstants;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.CmsSession;
 import org.argeo.api.cms.CmsTheme;
 import org.argeo.api.cms.CmsUi;
@@ -30,15 +36,16 @@ import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.api.RankedObject;
 import org.argeo.app.core.SuiteUtils;
-import org.argeo.api.cms.CmsLog;
 import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
 import org.argeo.cms.jcr.CmsJcrUtils;
+import org.argeo.cms.jcr.acr.JcrContentProvider;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.dialogs.CmsFeedback;
 import org.argeo.cms.ui.CmsUiProvider;
+import org.argeo.cms.ux.CmsUxUtils;
 import org.argeo.eclipse.ui.specific.UiContext;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
@@ -89,6 +96,11 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	// TODO make more optimal or via CmsSession/CmsView
 	private Map<String, SuiteUi> managedUis = new HashMap<>();
 
+	// ACR
+	private ContentRepository contentRepository;
+	private JcrContentProvider jcrContentProvider;
+
+	// JCR
 	private Repository repository;
 
 	public void init(Map<String, Object> properties) {
@@ -178,6 +190,9 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			if (uiName == null)
 				throw new IllegalStateException("UI name should not be null");
 			CmsView cmsView = CmsSwtUtils.getCmsView(ui);
+
+			ContentSession contentSession = CmsUxUtils.getContentSession(contentRepository, cmsView);
+
 			CmsUiProvider headerUiProvider = findUiProvider(headerPid);
 			CmsUiProvider footerUiProvider = findUiProvider(footerPid);
 			CmsUiProvider leadPaneUiProvider;
@@ -207,17 +222,21 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				if (LOGIN.equals(state))
 					state = null;
 				CmsSession cmsSession = cmsView.getCmsSession();
-				if (ui.getUserDir() == null) {
+				if (ui.getUserDirNode() == null) {
 					// FIXME NPE on CMSSession when logging in from anonymous
 					if (cmsSession == null || cmsView.isAnonymous()) {
 						assert publicBasePath != null;
-						ui.initSessions(getRepository(), publicBasePath);
+						Content userDir = contentSession.get(CmsConstants.SYS_WORKSPACE + publicBasePath);
+						ui.setUserDir(userDir);
+//						ui.initSessions(getRepository(), publicBasePath);
 					} else {
 						Session adminSession = null;
 						try {
 							adminSession = CmsJcrUtils.openDataAdminSession(getRepository(), null);
-							Node userDir = SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
-							ui.initSessions(getRepository(), userDir.getPath());
+							Node userDirNode = SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
+							Content userDir = contentSession.get(CmsConstants.SYS_WORKSPACE + userDirNode.getPath());
+							ui.setUserDir(userDir);
+//							ui.initSessions(getRepository(), userDirNode.getPath());
 						} finally {
 							Jcr.logout(adminSession);
 						}
@@ -226,7 +245,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				initLocale(cmsSession);
 				context = stateToNode(ui, state);
 				if (context == null)
-					context = ui.getUserDir();
+					context = ui.getUserDirNode();
 
 				if (headerUiProvider != null)
 					refreshPart(headerUiProvider, ui.getHeader(), context);
@@ -417,7 +436,11 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				path = "/";
 			}
 		}
-		Session session = suiteUi.getSession(workspace);
+
+		ProvidedSession contentSession = (ProvidedSession) CmsUxUtils.getContentSession(contentRepository,
+				suiteUi.getCmsView());
+		Session session = jcrContentProvider.getJcrSession(contentSession, workspace);
+//		Session session = suiteUi.getSession(workspace);
 		if (session == null)
 			return null;
 		Node node = Jcr.getNode(session, path);
@@ -469,12 +492,12 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 						throw new IllegalArgumentException("No layer '" + layerId + "' available.");
 					Localized layerTitle = suiteLayer.getTitle();
 					// FIXME make sure we don't rebuild the work area twice
-					Composite workArea = ui.getCmsView().doAs(() -> ui.switchToLayer(layerId, ui.getUserDir()));
+					Composite workArea = ui.getCmsView().doAs(() -> ui.switchToLayer(layerId, ui.getUserDirNode()));
 					String title = null;
 					if (layerTitle != null)
 						title = layerTitle.lead();
 					Node nodeFromState = getNode(ui, event);
-					if (nodeFromState != null && nodeFromState.getPath().equals(ui.getUserDir().getPath())) {
+					if (nodeFromState != null && nodeFromState.getPath().equals(ui.getUserDirNode().getPath())) {
 						// default layer view is forced
 						String state = defaultLayerPid.equals(layerId) ? "~" : layerId;
 						ui.getCmsView().stateChanged(state, appTitle + title);
@@ -506,11 +529,16 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	}
 
 	private Node getNode(SuiteUi ui, Event event) {
+		ProvidedSession contentSession = (ProvidedSession) CmsUxUtils.getContentSession(contentRepository,
+				ui.getCmsView());
+
 		String nodePath = get(event, SuiteEvent.NODE_PATH);
 		if (nodePath != null && nodePath.equals(HOME_STATE))
-			return ui.getUserDir();
-		String workspaceName = get(event, SuiteEvent.WORKSPACE);
-		Session session = ui.getSession(workspaceName);
+			return ui.getUserDirNode();
+		String workspace = get(event, SuiteEvent.WORKSPACE);
+
+		Session session = jcrContentProvider.getJcrSession(contentSession, workspace);
+//		Session session = ui.getSession(workspace);
 		Node node;
 		if (nodePath == null) {
 			// look for a user
@@ -532,7 +560,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			else {
 				Session adminSession = null;
 				try {
-					adminSession = CmsJcrUtils.openDataAdminSession(getRepository(), workspaceName);
+					adminSession = CmsJcrUtils.openDataAdminSession(getRepository(), workspace);
 					SuiteUtils.getOrCreateUserNode(adminSession, userDn);
 				} finally {
 					Jcr.logout(adminSession);
@@ -632,12 +660,24 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		this.cmsUserManager = cmsUserManager;
 	}
 
-	public Repository getRepository() {
+	protected Repository getRepository() {
 		return repository;
 	}
 
 	public void setRepository(Repository repository) {
 		this.repository = repository;
+	}
+
+	protected ContentRepository getContentRepository() {
+		return contentRepository;
+	}
+
+	public void setContentRepository(ContentRepository contentRepository) {
+		this.contentRepository = contentRepository;
+	}
+
+	public void setJcrContentProvider(JcrContentProvider jcrContentProvider) {
+		this.jcrContentProvider = jcrContentProvider;
 	}
 
 }

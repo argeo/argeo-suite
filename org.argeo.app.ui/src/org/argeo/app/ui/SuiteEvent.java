@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.jcr.Node;
 
+import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsEvent;
 import org.argeo.jcr.Jcr;
 import org.osgi.service.useradmin.User;
@@ -14,13 +15,23 @@ public enum SuiteEvent implements CmsEvent {
 	openNewPart, refreshPart, switchLayer;
 
 	public final static String LAYER = "layer";
-//	public final static String NODE_ID = "nodeId";
-	public final static String NODE_PATH = "path";
 	public final static String USERNAME = "username";
+
+	// ACR
+	public final static String CONTENT_PATH = "contentPath";
+
+	// JCR
+	public final static String NODE_PATH = "path";
 	public final static String WORKSPACE = "workspace";
 
 	public String getTopicBase() {
 		return "argeo/suite/ui";
+	}
+
+	public static Map<String, Object> eventProperties(Content content) {
+		Map<String, Object> properties = new HashMap<>();
+		properties.put(CONTENT_PATH, content.getPath());
+		return properties;
 	}
 
 	public static Map<String, Object> eventProperties(Node node) {

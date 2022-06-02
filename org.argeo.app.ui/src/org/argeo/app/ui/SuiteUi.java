@@ -4,17 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.jcr.Node;
-import javax.jcr.Repository;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 
+import org.argeo.api.acr.Content;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.CmsUi;
 import org.argeo.api.cms.CmsView;
-import org.argeo.api.cms.CmsLog;
-import org.argeo.api.cms.CmsConstants;
 import org.argeo.cms.Localized;
+import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsSwtUtils;
-import org.argeo.jcr.Jcr;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -32,9 +29,9 @@ class SuiteUi extends Composite implements CmsUi {
 	private Composite sidePane;
 	private Composite dynamicArea;
 
-	private Session sysSession;
-	private Session homeSession;
-	private Node userDir;
+//	private Session sysSession;
+//	private Session homeSession;
+	private Content userDir;
 
 	private Map<String, SuiteLayer> layers = new HashMap<>();
 	private Map<String, Composite> workAreas = new HashMap<>();
@@ -123,7 +120,7 @@ class SuiteUi extends Composite implements CmsUi {
 		}
 		if (context == null) {
 			if (!cmsView.isAnonymous())
-				context = userDir;
+				context = getUserDirNode();
 		}
 		Composite toShow = getLayer(layerId, context);
 		if (toShow != null) {
@@ -180,8 +177,8 @@ class SuiteUi extends Composite implements CmsUi {
 
 	synchronized void logout() {
 		userDir = null;
-		Jcr.logout(sysSession);
-		Jcr.logout(homeSession);
+//		Jcr.logout(sysSession);
+//		Jcr.logout(homeSession);
 		currentLayerId = null;
 		workAreas.clear();
 	}
@@ -214,34 +211,40 @@ class SuiteUi extends Composite implements CmsUi {
 //		return sysSession;
 //	}
 //
-	synchronized void initSessions(Repository repository, String userDirPath) throws RepositoryException {
-		this.sysSession = repository.login();
-		this.homeSession = repository.login(CmsConstants.HOME_WORKSPACE);
-		userDir = sysSession.getNode(userDirPath);
-		addDisposeListener((e) -> {
-			Jcr.logout(sysSession);
-			Jcr.logout(homeSession);
-		});
+//	synchronized void initSessions(Repository repository, String userDirPath) throws RepositoryException {
+//		this.sysSession = repository.login();
+//		this.homeSession = repository.login(CmsConstants.HOME_WORKSPACE);
+//		userDir = sysSession.getNode(userDirPath);
+//		addDisposeListener((e) -> {
+//			Jcr.logout(sysSession);
+//			Jcr.logout(homeSession);
+//		});
+//	}
+
+	Node getUserDirNode() {
+		if (userDir == null)
+			return null;
+		return ((JcrContent) userDir).getJcrNode();
 	}
 
-	Node getUserDir() {
-		return userDir;
+	void setUserDir(Content userDir) {
+		this.userDir = userDir;
 	}
 
-	Session getSysSession() {
-		return sysSession;
-	}
+//	Session getSysSession() {
+//		return sysSession;
+//	}
 
-	Session getSession(String workspaceName) {
-		if (workspaceName == null)
-			return sysSession;
-		if (CmsConstants.SYS_WORKSPACE.equals(workspaceName))
-			return sysSession;
-		else if (CmsConstants.HOME_WORKSPACE.equals(workspaceName))
-			return homeSession;
-		else
-			throw new IllegalArgumentException("Unknown workspace " + workspaceName);
-	}
+//	Session getSession(String workspaceName) {
+//		if (workspaceName == null)
+//			return sysSession;
+//		if (CmsConstants.SYS_WORKSPACE.equals(workspaceName))
+//			return sysSession;
+//		else if (CmsConstants.HOME_WORKSPACE.equals(workspaceName))
+//			return homeSession;
+//		else
+//			throw new IllegalArgumentException("Unknown workspace " + workspaceName);
+//	}
 
 	public CmsView getCmsView() {
 		return cmsView;
