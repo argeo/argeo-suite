@@ -153,9 +153,10 @@ public class TabbedArea extends Composite {
 		Section previousSection = new Section(body, SWT.NONE, context);
 		build(previousSection, previousUiProvider, previousNode);
 		// previousSection.setLayoutData(CmsUiUtils.coverAll());
-		int index = currentIndex + 1;
-		sections.add(index, previousSection);
-		showTab(index);
+		int newIndex = currentIndex + 1;
+		sections.add(currentIndex, previousSection);
+//		sections.add(newIndex, previousSection);
+		showTab(newIndex);
 		refreshTabHeaders();
 		layout(true, true);
 	}
@@ -200,10 +201,10 @@ public class TabbedArea extends Composite {
 		refreshTabHeaders();
 		showTab(nextIndex);
 	}
-	
+
 	public void closeAllTabs() {
-		for(Section section:sections) {
-			section.dispose();			
+		for (Section section : sections) {
+			section.dispose();
 		}
 		sections.clear();
 		emptyState();
