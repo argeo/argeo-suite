@@ -1,5 +1,6 @@
 package org.argeo.app.ui.people;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.jcr.Node;
@@ -18,17 +19,25 @@ import org.argeo.cms.swt.Selected;
 import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.argeo.cms.swt.dialogs.CmsWizardDialog;
 import org.argeo.cms.swt.widgets.SwtHierarchicalPart;
+import org.argeo.cms.swt.widgets.SwtTabularPart;
 import org.argeo.cms.ui.CmsUiProvider;
+import org.argeo.cms.ux.widgets.HierarchicalPart;
+import org.argeo.cms.ux.widgets.TabularPart;
+import org.argeo.osgi.useradmin.HierarchyUnit;
+import org.argeo.osgi.useradmin.UserDirectory;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TreeItem;
+import org.osgi.service.useradmin.Role;
 import org.osgi.service.useradmin.User;
 
 /** Entry to the admin area. */
@@ -42,53 +51,64 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
 		parent.setLayout(new GridLayout());
 
-		List<User> orgs = cmsUserManager.listGroups(null, true, false);
+		SashForm sashForm = new SashForm(parent, SWT.VERTICAL);
+		CmsSwtUtils.fill(sashForm);
 
-		SwtHierarchicalPart tree = new SwtHierarchicalPart(parent, SWT.NONE) {
+		// MODEL
+		List<UserDirectory> directories = new ArrayList<>(cmsUserManager.getUserDirectories());
+		// List<User> orgs = cmsUserManager.listGroups(null, true, false);
+
+		// VIEW
+		HierarchicalPart directoriesView = new SwtHierarchicalPart(sashForm, SWT.NONE) {
 
 			@Override
 			protected void refreshRootItem(TreeItem item) {
 				int index = getTree().indexOf(item);
-				User org = (User) orgs.get(index);
-				item.setData(org);
-				item.setText(org.getName());
+				UserDirectory directory = (UserDirectory) directories.get(index);
+				item.setData(directory);
+				item.setText(directory.getBasePath());
 
-				item.setItemCount(10);
+				item.setItemCount(directory.getHierarchyChildCount());
 			}
 
 			@Override
 			protected void refreshItem(TreeItem parentItem, TreeItem item) {
-				String text = parentItem.getText() + " - " + parentItem.indexOf(item);
-				item.setText(text);
-				item.setItemCount(10);
+				int index = getTree().indexOf(item);
+				HierarchyUnit parent = (HierarchyUnit) parentItem.getData();
+				HierarchyUnit child = parent.getHierarchyChild(index);
+				item.setData(child);
+				item.setText(child.getHierarchyUnitName());
+				item.setItemCount(child.getHierarchyChildCount());
 			}
 
 			@Override
 			protected int getRootItemCount() {
-				return orgs.size();
+				return directories.size();
 			}
 
 		};
 
-//		final Tree tree = new Tree(parent, SWT.VIRTUAL | SWT.BORDER);
-//		tree.addListener(SWT.SetData, event -> {
-//			TreeItem item = (TreeItem) event.item;
-//			TreeItem parentItem = item.getParentItem();
-//			String text = null;
-//			if (parentItem == null) {
-//				int index = tree.indexOf(item);
-//				User org = (User) orgs.get(index);
-//				item.setData(org);
-//				text = org.getName();
-//			} else {
-//				text = parentItem.getText() + " - " + parentItem.indexOf(item);
-//			}
-//			item.setText(text);
-//			item.setItemCount(10);
-//		});
-//		tree.setItemCount(orgs.size());
-//		tree.setLayoutData(CmsSwtUtils.fillAll());
-		CmsSwtUtils.fill(tree);
+		TabularPart usersView = new SwtTabularPart(sashForm, SWT.NONE) {
+			List<? extends Role> roles;
+
+			@Override
+			protected void refreshItem(TableItem item) {
+				int index = getTable().indexOf(item);
+				User role = (User) roles.get(index);
+				item.setData(role);
+				item.setText(role.getName());
+			}
+
+			@Override
+			protected int getItemCount() {
+				HierarchyUnit hu = (HierarchyUnit) getInput();
+				if (hu == null)
+					return 0;
+				roles = hu.getRoles(null, false);
+				return roles.size();
+			}
+
+		};
 
 		Composite bottom = new Composite(parent, SWT.NONE);
 		bottom.setLayoutData(CmsSwtUtils.fillWidth());
@@ -102,26 +122,13 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 		ToolItem addItem = new ToolItem(bottomToolBar, SWT.FLAT);
 		addItem.setImage(SuiteIcon.add.getSmallIcon(theme));
 
-//		tree.addSelectionListener((Selected) (e) -> {
-//			User user = (User) e.item.getData();
-//			if (user != null) {
-//				CmsSwtUtils.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(),
-//						SuiteEvent.eventProperties(user));
-//				deleteItem.setEnabled(true);
-//			} else {
-//				deleteItem.setEnabled(false);
-//			}
-//		});
-//		tree.addListener(SWT.MouseDoubleClick, (e) -> {
-//			User user = (User) e.item.getData();
-//			if (user != null) {
-//				CmsSwtUtils.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(),
-//						SuiteEvent.eventProperties(user));
-//			}
-//
-//		});
+		// CONTROLLER
+		directoriesView.onSelected((o) -> {
+			HierarchyUnit hu = (HierarchyUnit) o;
+			usersView.setInput(hu);
+		});
 
-		tree.onSelected((o) -> {
+		usersView.onSelected((o) -> {
 			User user = (User) o;
 			if (user != null) {
 				cmsView.sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.eventProperties(user));
@@ -131,36 +138,12 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 			}
 		});
 
-		tree.onAction((o) -> {
+		usersView.onAction((o) -> {
 			User user = (User) o;
 			if (user != null) {
 				cmsView.sendEvent(SuiteEvent.openNewPart.topic(), SuiteEvent.eventProperties(user));
 			}
 		});
-
-//		tree.addSelectionListener(new SelectionListener() {
-//
-//			@Override
-//			public void widgetSelected(SelectionEvent e) {
-//				User user = (User) e.item.getData();
-//				if (user != null) {
-//					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(),
-//							SuiteEvent.eventProperties(user));
-//					deleteItem.setEnabled(true);
-//				} else {
-//					deleteItem.setEnabled(false);
-//				}
-//			}
-//
-//			@Override
-//			public void widgetDefaultSelected(SelectionEvent e) {
-//				User user = (User) e.item.getData();
-//				if (user != null) {
-//					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(),
-//							SuiteEvent.eventProperties(user));
-//				}
-//			}
-//		});
 
 		addItem.addSelectionListener((Selected) (e) -> {
 			// SuiteUtils.getOrCreateUserNode(adminSession, userDn);
@@ -172,15 +155,16 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 			}
 		});
 
-		tree.refresh();
+		directoriesView.refresh();
+		usersView.refresh();
 
-		return tree;
+		return sashForm;
 	}
 
-	private String getUserProperty(Object element, String key) {
-		Object value = ((User) element).getProperties().get(key);
-		return value != null ? value.toString() : null;
-	}
+//	private String getUserProperty(Object element, String key) {
+//		Object value = ((User) element).getProperties().get(key);
+//		return value != null ? value.toString() : null;
+//	}
 
 	public void setCmsUserManager(CmsUserManager cmsUserManager) {
 		this.cmsUserManager = cmsUserManager;
