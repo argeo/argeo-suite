@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-
+import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsTheme;
-import org.argeo.app.ui.widgets.TabbedArea;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtUtils;
+import org.argeo.cms.swt.acr.SwtUiProvider;
+import org.argeo.cms.swt.widgets.SwtTabbedArea;
 import org.argeo.cms.ui.CmsUiProvider;
-import org.argeo.jcr.JcrException;
 import org.argeo.util.LangUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -34,12 +32,12 @@ public class DefaultEditionLayer implements SuiteLayer {
 	private Localized title = null;
 
 	@Override
-	public Control createUi(Composite parent, Node context) throws RepositoryException {
+	public Control createUiPart(Composite parent, Content context) {
 		// TODO Factorize more, or split into more specialised classes?
 		if (entryArea != null) {
 			if (fixedEntryArea) {
 				FixedEditionArea editionArea = new FixedEditionArea(parent, parent.getStyle());
-				Control entryAreaC = entryArea.createUi(editionArea.getEntryArea(), context);
+				Control entryAreaC = entryArea.createUiPart(editionArea.getEntryArea(), context);
 				CmsSwtUtils.style(entryAreaC, SuiteStyle.entryArea);
 				if (this.defaultView != null) {
 					editionArea.getTabbedArea().view(defaultView, context);
@@ -47,7 +45,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 				return editionArea;
 			} else {
 				SashFormEditionArea editionArea = new SashFormEditionArea(parent, parent.getStyle());
-				entryArea.createUi(editionArea.getEntryArea(), context);
+				entryArea.createUiPart(editionArea.getEntryArea(), context);
 				if (this.defaultView != null) {
 					editionArea.getTabbedArea().view(defaultView, context);
 				}
@@ -56,30 +54,26 @@ public class DefaultEditionLayer implements SuiteLayer {
 		} else {
 			if (this.workArea != null) {
 				Composite area = new Composite(parent, SWT.NONE);
-				this.workArea.createUi(area, context);
+				this.workArea.createUiPart(area, context);
 				return area;
 			}
 			CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
-			TabbedArea tabbedArea = createTabbedArea(parent, theme);
+			SwtTabbedArea tabbedArea = createTabbedArea(parent, theme);
 			return tabbedArea;
 		}
 	}
 
 	@Override
-	public void view(CmsUiProvider uiProvider, Composite workAreaC, Node context) {
+	public void view(SwtUiProvider uiProvider, Composite workAreaC, Content context) {
 		if (workArea != null) {
-			try {
-				CmsSwtUtils.clear(workAreaC);
-				workArea.createUi(workAreaC, context);
-				workAreaC.layout(true, true);
-				return;
-			} catch (RepositoryException e) {
-				throw new JcrException("Cannot rebuild work area", e);
-			}
+			CmsSwtUtils.clear(workAreaC);
+			workArea.createUiPart(workAreaC, context);
+			workAreaC.layout(true, true);
+			return;
 		}
 
 		// tabbed area
-		TabbedArea tabbedArea = findTabbedArea(workAreaC);
+		SwtTabbedArea tabbedArea = findTabbedArea(workAreaC);
 		if (tabbedArea == null)
 			throw new IllegalArgumentException("Unsupported work area " + workAreaC.getClass().getName());
 		if (uiProvider == null) {
@@ -94,28 +88,28 @@ public class DefaultEditionLayer implements SuiteLayer {
 	}
 
 	@Override
-	public Node getCurrentContext(Composite workArea) {
-		TabbedArea tabbedArea = findTabbedArea(workArea);
+	public Content getCurrentContext(Composite workArea) {
+		SwtTabbedArea tabbedArea = findTabbedArea(workArea);
 		if (tabbedArea == null)
 			return null;
 		return tabbedArea.getCurrentContext();
 	}
 
-	private TabbedArea findTabbedArea(Composite workArea) {
-		TabbedArea tabbedArea = null;
+	private SwtTabbedArea findTabbedArea(Composite workArea) {
+		SwtTabbedArea tabbedArea = null;
 		if (workArea instanceof SashFormEditionArea) {
 			tabbedArea = ((SashFormEditionArea) workArea).getTabbedArea();
 		} else if (workArea instanceof FixedEditionArea) {
 			tabbedArea = ((FixedEditionArea) workArea).getTabbedArea();
-		} else if (workArea instanceof TabbedArea) {
-			tabbedArea = (TabbedArea) workArea;
+		} else if (workArea instanceof SwtTabbedArea) {
+			tabbedArea = (SwtTabbedArea) workArea;
 		}
 		return tabbedArea;
 	}
 
 	@Override
-	public void open(CmsUiProvider uiProvider, Composite workArea, Node context) {
-		TabbedArea tabbedArea = ((SashFormEditionArea) workArea).getTabbedArea();
+	public void open(SwtUiProvider uiProvider, Composite workArea, Content context) {
+		SwtTabbedArea tabbedArea = ((SashFormEditionArea) workArea).getTabbedArea();
 		tabbedArea.open(uiProvider, context);
 	}
 
@@ -176,8 +170,8 @@ public class DefaultEditionLayer implements SuiteLayer {
 		this.defaultView = defaultView;
 	}
 
-	TabbedArea createTabbedArea(Composite parent, CmsTheme theme) {
-		TabbedArea tabbedArea = new TabbedArea(parent, SWT.NONE);
+	SwtTabbedArea createTabbedArea(Composite parent, CmsTheme theme) {
+		SwtTabbedArea tabbedArea = new SwtTabbedArea(parent, SWT.NONE);
 		tabbedArea.setSingleTab(singleTab);
 		tabbedArea.setBodyStyle(SuiteStyle.mainTabBody.style());
 		tabbedArea.setTabStyle(SuiteStyle.mainTab.style());
@@ -190,7 +184,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 //	/** A work area based on an entry area and and a tabbed area. */
 	class SashFormEditionArea extends SashForm {
 		private static final long serialVersionUID = 2219125778722702618L;
-		private TabbedArea tabbedArea;
+		private SwtTabbedArea tabbedArea;
 		private Composite entryC;
 
 		SashFormEditionArea(Composite parent, int style) {
@@ -231,7 +225,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 			tabbedArea = createTabbedArea(editorC, theme);
 		}
 
-		TabbedArea getTabbedArea() {
+		SwtTabbedArea getTabbedArea() {
 			return tabbedArea;
 		}
 
@@ -243,7 +237,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 
 	class FixedEditionArea extends Composite {
 		private static final long serialVersionUID = -5525672639277322465L;
-		private TabbedArea tabbedArea;
+		private SwtTabbedArea tabbedArea;
 		private Composite entryC;
 
 		public FixedEditionArea(Composite parent, int style) {
@@ -274,7 +268,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 			tabbedArea = createTabbedArea(editorC, theme);
 		}
 
-		TabbedArea getTabbedArea() {
+		SwtTabbedArea getTabbedArea() {
 			return tabbedArea;
 		}
 

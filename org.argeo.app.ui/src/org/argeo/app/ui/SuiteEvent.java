@@ -21,7 +21,9 @@ public enum SuiteEvent implements CmsEvent {
 	public final static String CONTENT_PATH = "contentPath";
 
 	// JCR
+	@Deprecated
 	public final static String NODE_PATH = "path";
+	@Deprecated
 	public final static String WORKSPACE = "workspace";
 
 	public String getTopicBase() {
@@ -34,10 +36,13 @@ public enum SuiteEvent implements CmsEvent {
 		return properties;
 	}
 
+	@Deprecated
 	public static Map<String, Object> eventProperties(Node node) {
 		Map<String, Object> properties = new HashMap<>();
-		properties.put(NODE_PATH, Jcr.getPath(node));
-		properties.put(WORKSPACE, Jcr.getWorkspaceName(node));
+		String contentPath = '/'+ Jcr.getWorkspaceName(node)+ Jcr.getPath(node);
+		properties.put(CONTENT_PATH, contentPath);
+//		properties.put(NODE_PATH, Jcr.getPath(node));
+//		properties.put(WORKSPACE, Jcr.getWorkspaceName(node));
 		return properties;
 	}
 

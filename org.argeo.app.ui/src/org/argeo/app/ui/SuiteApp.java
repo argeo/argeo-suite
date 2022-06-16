@@ -41,6 +41,7 @@ import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
 import org.argeo.cms.jcr.CmsJcrUtils;
+import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.jcr.acr.JcrContentProvider;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.dialogs.CmsFeedback;
@@ -183,7 +184,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	@Override
 	public void refreshUi(CmsUi cmsUi, String state) {
 		try {
-			Node context = null;
+			Content context = null;
 			SuiteUi ui = (SuiteUi) cmsUi;
 
 			String uiName = Objects.toString(ui.getParent().getData(UI_NAME_PROPERTY), null);
@@ -276,7 +277,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	}
 
-	private void refreshPart(CmsUiProvider uiProvider, Composite part, Node context) {
+	private void refreshPart(CmsUiProvider uiProvider, Composite part, Content context) {
 		CmsSwtUtils.clear(part);
 		uiProvider.createUiPart(part, context);
 	}
@@ -293,9 +294,12 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		return layersByPid.get(pid).get();
 	}
 
-	private <T> T findByType(Map<String, RankedObject<T>> byType, Node context) {
-		if (context == null)
+	private <T> T findByType(Map<String, RankedObject<T>> byType, Content content) {
+		if (content == null)
 			throw new IllegalArgumentException("A node should be provided");
+		
+		if(content instanceof JcrContent) {
+		Node context = ((JcrContent)content).getJcrNode();
 		try {
 			// mixins
 			Set<String> types = new TreeSet<>();
@@ -347,6 +351,10 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		} catch (RepositoryException e) {
 			throw new IllegalStateException(e);
 		}
+		
+		}else {
+			throw new UnsupportedOperationException("Content "+content.getClass().getName()+" is not supported.");
+		}
 	}
 
 	private static String listTypes(Node context) {
@@ -397,7 +405,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			return;
 		}
 		SuiteUi suiteUi = (SuiteUi) cmsUi;
-		Node node = stateToNode(suiteUi, state);
+		Content node = stateToNode(suiteUi, state);
 		if (node == null) {
 			suiteUi.getCmsView().navigateTo(HOME_STATE);
 		} else {
@@ -407,44 +415,46 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	}
 
 	// TODO move it to an internal package?
-	static String nodeToState(Node node) {
-		return '/' + Jcr.getWorkspaceName(node) + Jcr.getPath(node);
+	static String nodeToState(Content node) {
+		return node.getPath();
 	}
 
-	private Node stateToNode(SuiteUi suiteUi, String state) {
+	private Content stateToNode(SuiteUi suiteUi, String state) {
 		if (suiteUi == null)
 			return null;
 		if (state == null || !state.startsWith("/"))
 			return null;
 
-		String path = state.substring(1);
-		String workspace;
-		if (path.equals("")) {
-			workspace = null;
-			path = "/";
-		} else {
-			int index = path.indexOf('/');
-			if (index == 0) {
-				log.error("Cannot interpret " + state);
-//				cmsView.navigateTo("~");
-				return null;
-			} else if (index > 0) {
-				workspace = path.substring(0, index);
-				path = path.substring(index);
-			} else {// index<0, assuming root node
-				workspace = path;
-				path = "/";
-			}
-		}
+		String path=state;
+//		String path = state.substring(1);
+//		String workspace;
+//		if (path.equals("")) {
+//			workspace = null;
+//			path = "/";
+//		} else {
+//			int index = path.indexOf('/');
+//			if (index == 0) {
+//				log.error("Cannot interpret " + state);
+////				cmsView.navigateTo("~");
+//				return null;
+//			} else if (index > 0) {
+//				workspace = path.substring(0, index);
+//				path = path.substring(index);
+//			} else {// index<0, assuming root node
+//				workspace = path;
+//				path = "/";
+//			}
+//		}
 
 		ProvidedSession contentSession = (ProvidedSession) CmsUxUtils.getContentSession(contentRepository,
 				suiteUi.getCmsView());
-		Session session = jcrContentProvider.getJcrSession(contentSession, workspace);
-//		Session session = suiteUi.getSession(workspace);
-		if (session == null)
-			return null;
-		Node node = Jcr.getNode(session, path);
-		return node;
+		return contentSession.get(path);
+//		Session session = jcrContentProvider.getJcrSession(contentSession, workspace);
+////		Session session = suiteUi.getSession(workspace);
+//		if (session == null)
+//			return null;
+//		Node node = Jcr.getNode(session, path);
+//		return node;
 	}
 
 	/*
@@ -466,23 +476,23 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 //			String currentLayerId = ui.getCurrentLayerId();
 //			SuiteLayer currentLayer = currentLayerId != null ? layersByPid.get(currentLayerId).get() : null;
 			if (SuiteUiUtils.isTopic(event, SuiteEvent.refreshPart)) {
-				Node node = getNode(ui, event);
+				Content node = getNode(ui, event);
 				if (node == null)
 					return;
 				CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
 				SuiteLayer layer = findByType(layersByType, node);
 				ui.switchToLayer(layer, node);
 				ui.getCmsView().runAs(() -> layer.view(uiProvider, ui.getCurrentWorkArea(), node));
-				ui.getCmsView().stateChanged(nodeToState(node), appTitle + Jcr.getTitle(node));
+				ui.getCmsView().stateChanged(nodeToState(node), appTitle + CmsUxUtils.getTitle(node));
 			} else if (SuiteUiUtils.isTopic(event, SuiteEvent.openNewPart)) {
-				Node node = getNode(ui, event);
+				Content node = getNode(ui, event);
 				if (node == null)
 					return;
 				CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
 				SuiteLayer layer = findByType(layersByType, node);
 				ui.switchToLayer(layer, node);
 				ui.getCmsView().runAs(() -> layer.open(uiProvider, ui.getCurrentWorkArea(), node));
-				ui.getCmsView().stateChanged(nodeToState(node), appTitle + Jcr.getTitle(node));
+				ui.getCmsView().stateChanged(nodeToState(node), appTitle + CmsUxUtils.getTitle(node));
 			} else if (SuiteUiUtils.isTopic(event, SuiteEvent.switchLayer)) {
 				String layerId = get(event, SuiteEvent.LAYER);
 				if (layerId != null) {
@@ -496,25 +506,25 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 					String title = null;
 					if (layerTitle != null)
 						title = layerTitle.lead();
-					Node nodeFromState = getNode(ui, event);
+					Content nodeFromState = getNode(ui, event);
 					if (nodeFromState != null && nodeFromState.getPath().equals(ui.getUserDirNode().getPath())) {
 						// default layer view is forced
 						String state = defaultLayerPid.equals(layerId) ? "~" : layerId;
 						ui.getCmsView().stateChanged(state, appTitle + title);
 						suiteLayer.view(null, workArea, nodeFromState);
 					} else {
-						Node layerCurrentContext = suiteLayer.getCurrentContext(workArea);
+						Content layerCurrentContext = suiteLayer.getCurrentContext(workArea);
 						if (layerCurrentContext != null) {
 							// layer was already showing a context so we set the state to it
 							ui.getCmsView().stateChanged(nodeToState(layerCurrentContext),
-									appTitle + Jcr.getTitle(layerCurrentContext));
+									appTitle + CmsUxUtils.getTitle(layerCurrentContext));
 						} else {
 							// no context was shown
 							ui.getCmsView().stateChanged(layerId, appTitle + title);
 						}
 					}
 				} else {
-					Node node = getNode(ui, event);
+					Content node = getNode(ui, event);
 					if (node != null) {
 						SuiteLayer layer = findByType(layersByType, node);
 						ui.getCmsView().runAs(() -> ui.switchToLayer(layer, node));
@@ -528,19 +538,21 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	}
 
-	private Node getNode(SuiteUi ui, Event event) {
+	private Content getNode(SuiteUi ui, Event event) {
 		ProvidedSession contentSession = (ProvidedSession) CmsUxUtils.getContentSession(contentRepository,
 				ui.getCmsView());
 
-		String nodePath = get(event, SuiteEvent.NODE_PATH);
-		if (nodePath != null && nodePath.equals(HOME_STATE))
-			return ui.getUserDirNode();
-		String workspace = get(event, SuiteEvent.WORKSPACE);
+		String path = get(event,SuiteEvent.CONTENT_PATH);
+		
+//		String nodePath = get(event, SuiteEvent.NODE_PATH);
+		if (path != null && path.equals(HOME_STATE))
+			return ui.getUserDir();
+//		String workspace = get(event, SuiteEvent.WORKSPACE);
 
-		Session session = jcrContentProvider.getJcrSession(contentSession, workspace);
-//		Session session = ui.getSession(workspace);
-		Node node;
-		if (nodePath == null) {
+//		Session session = jcrContentProvider.getJcrSession(contentSession, workspace);
+////		Session session = ui.getSession(workspace);
+		Content node;
+		if (path == null) {
 			// look for a user
 			String username = get(event, SuiteEvent.USERNAME);
 			if (username == null)
@@ -555,20 +567,22 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				throw new IllegalArgumentException("Badly formatted username", e);
 			}
 			String userNodePath = SuiteUtils.getUserNodePath(userDn);
-			if (Jcr.itemExists(session, userNodePath))
-				node = Jcr.getNode(session, userNodePath);
-			else {
-				Session adminSession = null;
-				try {
-					adminSession = CmsJcrUtils.openDataAdminSession(getRepository(), workspace);
-					SuiteUtils.getOrCreateUserNode(adminSession, userDn);
-				} finally {
-					Jcr.logout(adminSession);
-				}
-				node = Jcr.getNode(session, userNodePath);
-			}
+			// FIXME deal with home path
+			return null;
+//			if (Jcr.itemExists(session, userNodePath))
+//				node = Jcr.getNode(session, userNodePath);
+//			else {
+//				Session adminSession = null;
+//				try {
+//					adminSession = CmsJcrUtils.openDataAdminSession(getRepository(), workspace);
+//					SuiteUtils.getOrCreateUserNode(adminSession, userDn);
+//				} finally {
+//					Jcr.logout(adminSession);
+//				}
+//				node = Jcr.getNode(session, userNodePath);
+//			}
 		} else {
-			node = Jcr.getNode(session, nodePath);
+			node = contentSession.get(path);
 		}
 		return node;
 	}
@@ -648,7 +662,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			List<String> types = LangUtils.toStringList(properties.get(EntityConstants.TYPE));
 			for (String type : types) {
 				if (layersByType.containsKey(type)) {
-					if (layersByType.get(type).equals(new RankedObject<CmsUiProvider>(layer, properties))) {
+					if (layersByType.get(type).equals(new RankedObject<SuiteLayer>(layer, properties))) {
 						layersByType.remove(type);
 					}
 				}

@@ -3,14 +3,11 @@ package org.argeo.app.ui;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.jcr.Node;
-
 import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.CmsUi;
 import org.argeo.api.cms.CmsView;
 import org.argeo.cms.Localized;
-import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormLayout;
@@ -103,7 +100,7 @@ class SuiteUi extends Composite implements CmsUi {
 		return currentLayerId;
 	}
 
-	private Composite getLayer(String id, Node context) {
+	private Composite getLayer(String id, Content context) {
 		if (!layers.containsKey(id))
 			return null;
 		if (!workAreas.containsKey(id))
@@ -111,7 +108,7 @@ class SuiteUi extends Composite implements CmsUi {
 		return workAreas.get(id);
 	}
 
-	Composite switchToLayer(String layerId, Node context) {
+	Composite switchToLayer(String layerId, Content context) {
 		Composite current = null;
 		if (currentLayerId != null) {
 			current = getCurrentWorkArea();
@@ -143,7 +140,7 @@ class SuiteUi extends Composite implements CmsUi {
 		}
 	}
 
-	Composite switchToLayer(SuiteLayer layer, Node context) {
+	Composite switchToLayer(SuiteLayer layer, Content context) {
 		// TODO make it more robust
 		for (String layerId : layers.keySet()) {
 			SuiteLayer l = layers.get(layerId);
@@ -167,7 +164,7 @@ class SuiteUi extends Composite implements CmsUi {
 		}
 	}
 
-	protected Composite initLayer(String id, SuiteLayer layer, Node context) {
+	protected Composite initLayer(String id, SuiteLayer layer, Content context) {
 		Composite workArea = cmsView.doAs(() -> (Composite) layer.createUiPart(dynamicArea, context));
 		CmsSwtUtils.style(workArea, SuiteStyle.workArea);
 		workArea.setLayoutData(CmsSwtUtils.coverAll());
@@ -221,10 +218,15 @@ class SuiteUi extends Composite implements CmsUi {
 //		});
 //	}
 
-	Node getUserDirNode() {
+	@Deprecated
+	Content getUserDirNode() {
 		if (userDir == null)
 			return null;
-		return ((JcrContent) userDir).getJcrNode();
+		return userDir;
+	}
+
+	Content getUserDir() {
+		return userDir;
 	}
 
 	void setUserDir(Content userDir) {

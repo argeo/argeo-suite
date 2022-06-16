@@ -11,6 +11,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.commons.io.IOUtils;
+import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsEditable;
 import org.argeo.api.cms.CmsEvent;
 import org.argeo.api.cms.CmsStyle;
@@ -22,6 +23,7 @@ import org.argeo.app.api.SuiteRole;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
 import org.argeo.cms.auth.CurrentUser;
+import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsIcon;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.dialogs.LightweightDialog;
@@ -358,8 +360,13 @@ public class SuiteUiUtils {
 		return img;
 	}
 
+	public static String toLink(Content node) {
+		return node != null ? "#" + CmsSwtUtils.cleanPathForUrl(SuiteApp.nodeToState(node)) : null;
+	}
+
 	public static String toLink(Node node) {
-		return node != null ? "#" + CmsUiUtils.cleanPathForUrl(SuiteApp.nodeToState(node)) : null;
+		return node != null ? "#" + CmsSwtUtils.cleanPathForUrl(SuiteApp.nodeToState(JcrContent.nodeToContent(node)))
+				: null;
 	}
 
 	public static Control addLink(Composite parent, String label, Node node, CmsStyle style)

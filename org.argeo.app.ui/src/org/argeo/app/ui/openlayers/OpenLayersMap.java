@@ -272,8 +272,9 @@ public class OpenLayersMap extends Composite {
 				return null;
 			String path = arguments[0].toString();
 			Map<String, Object> properties = new HashMap<>();
-			properties.put(SuiteEvent.NODE_PATH, path);
-			properties.put(SuiteEvent.WORKSPACE, CmsConstants.SYS_WORKSPACE);
+//			properties.put(SuiteEvent.NODE_PATH, path);
+//			properties.put(SuiteEvent.WORKSPACE, CmsConstants.SYS_WORKSPACE);
+			properties.put(SuiteEvent.CONTENT_PATH, '/' + CmsConstants.SYS_WORKSPACE + path);
 			cmsView.sendEvent(SuiteEvent.refreshPart.topic(), properties);
 			return null;
 		}
