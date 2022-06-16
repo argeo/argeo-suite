@@ -8,10 +8,8 @@
    <properties entry="config/cmsApp.properties"/>
    <reference bind="addUiProvider" cardinality="0..n" interface="org.argeo.cms.ui.CmsUiProvider" name="CmsUiProvider" policy="dynamic" unbind="removeUiProvider"/>
    <reference bind="addTheme" cardinality="1..n" interface="org.argeo.api.cms.CmsTheme" name="CmsTheme" policy="dynamic" unbind="removeTheme"/>
-   <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="dynamic" target="(cn=ego)"/>
    <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.ui.SuiteLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
    <reference bind="setCmsUserManager" cardinality="1..1" interface="org.argeo.cms.CmsUserManager" name="CmsUserManager" policy="static"/>
    <reference bind="setCmsContext" cardinality="1..1" interface="org.argeo.api.cms.CmsContext" name="CmsContext" policy="static"/>
    <reference bind="setContentRepository" cardinality="1..1" interface="org.argeo.api.acr.ContentRepository" name="ContentRepository" policy="static"/>
-   <reference bind="setJcrContentProvider" cardinality="1..1" interface="org.argeo.cms.jcr.acr.JcrContentProvider" name="JcrContentProvider" policy="static"/>
 </scr:component>

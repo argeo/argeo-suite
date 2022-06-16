@@ -9,13 +9,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-
+import org.argeo.api.acr.Content;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.CmsView;
 import org.argeo.app.api.RankedObject;
 import org.argeo.app.core.SuiteUtils;
-import org.argeo.api.cms.CmsLog;
 import org.argeo.cms.Localized;
 import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -45,7 +43,7 @@ public class DefaultLeadPane implements CmsUiProvider {
 	private ClassLoader l10nClassLoader;
 
 	@Override
-	public Control createUi(Composite parent, Node node) throws RepositoryException {
+	public Control createUiPart(Composite parent, Content node)  {
 		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
 		parent.setLayout(CmsSwtUtils.noSpaceGridLayout());
 		Composite appLayersC = new Composite(parent, SWT.NONE);

@@ -5,5 +5,4 @@
       <provide interface="org.argeo.app.ui.SuiteLayer"/>
    </service>
    <properties entry="config/dashboardLayer.properties"/>
-   <reference bind="setEntryArea" cardinality="1..1" interface="org.argeo.cms.ui.CmsUiProvider" name="CmsUiProvider" policy="dynamic" target="(service.pid=argeo.suite.ui.recentItems)"/>
 </scr:component>

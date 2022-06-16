@@ -14,16 +14,13 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import javax.jcr.Node;
-import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentRepository;
-import org.argeo.api.acr.ContentSession;
 import org.argeo.api.acr.spi.ProvidedSession;
 import org.argeo.api.cms.CmsConstants;
 import org.argeo.api.cms.CmsLog;
@@ -42,13 +39,11 @@ import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
 import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.cms.jcr.acr.JcrContent;
-import org.argeo.cms.jcr.acr.JcrContentProvider;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.dialogs.CmsFeedback;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ux.CmsUxUtils;
 import org.argeo.eclipse.ui.specific.UiContext;
-import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
 import org.argeo.util.LangUtils;
 import org.eclipse.swt.SWT;
@@ -99,10 +94,10 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 	// ACR
 	private ContentRepository contentRepository;
-	private JcrContentProvider jcrContentProvider;
+//	private JcrContentProvider jcrContentProvider;
 
 	// JCR
-	private Repository repository;
+//	private Repository repository;
 
 	public void init(Map<String, Object> properties) {
 		if (log.isDebugEnabled())
@@ -192,7 +187,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 				throw new IllegalStateException("UI name should not be null");
 			CmsView cmsView = CmsSwtUtils.getCmsView(ui);
 
-			ContentSession contentSession = CmsUxUtils.getContentSession(contentRepository, cmsView);
+			ProvidedSession contentSession = (ProvidedSession) CmsUxUtils.getContentSession(contentRepository, cmsView);
 
 			CmsUiProvider headerUiProvider = findUiProvider(headerPid);
 			CmsUiProvider footerUiProvider = findUiProvider(footerPid);
@@ -231,16 +226,18 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 						ui.setUserDir(userDir);
 //						ui.initSessions(getRepository(), publicBasePath);
 					} else {
-						Session adminSession = null;
-						try {
-							adminSession = CmsJcrUtils.openDataAdminSession(getRepository(), null);
-							Node userDirNode = SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
-							Content userDir = contentSession.get(CmsConstants.SYS_WORKSPACE + userDirNode.getPath());
-							ui.setUserDir(userDir);
-//							ui.initSessions(getRepository(), userDirNode.getPath());
-						} finally {
-							Jcr.logout(adminSession);
-						}
+//						Session adminSession = null;
+//						try {
+//							adminSession = CmsJcrUtils.openDataAdminSession(getRepository(), null);
+//							Node userDirNode = SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
+//							Content userDir = contentSession.get(CmsConstants.SYS_WORKSPACE + userDirNode.getPath());
+//							ui.setUserDir(userDir);
+////							ui.initSessions(getRepository(), userDirNode.getPath());
+//						} finally {
+//							Jcr.logout(adminSession);
+//						}
+						Content userDir = contentSession.getSessionRunDir();
+						ui.setUserDir(userDir);
 					}
 				}
 				initLocale(cmsSession);
@@ -297,63 +294,64 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	private <T> T findByType(Map<String, RankedObject<T>> byType, Content content) {
 		if (content == null)
 			throw new IllegalArgumentException("A node should be provided");
-		
-		if(content instanceof JcrContent) {
-		Node context = ((JcrContent)content).getJcrNode();
-		try {
-			// mixins
-			Set<String> types = new TreeSet<>();
-			for (NodeType mixinType : context.getMixinNodeTypes()) {
-				String mixinTypeName = mixinType.getName();
-				if (byType.containsKey(mixinTypeName)) {
-					types.add(mixinTypeName);
+
+		if (content instanceof JcrContent) {
+			Node context = ((JcrContent) content).getJcrNode();
+			try {
+				// mixins
+				Set<String> types = new TreeSet<>();
+				for (NodeType mixinType : context.getMixinNodeTypes()) {
+					String mixinTypeName = mixinType.getName();
+					if (byType.containsKey(mixinTypeName)) {
+						types.add(mixinTypeName);
+					}
+					for (NodeType superType : mixinType.getDeclaredSupertypes()) {
+						if (byType.containsKey(superType.getName())) {
+							types.add(superType.getName());
+						}
+					}
 				}
-				for (NodeType superType : mixinType.getDeclaredSupertypes()) {
+				// primary node type
+				NodeType primaryType = context.getPrimaryNodeType();
+				String primaryTypeName = primaryType.getName();
+				if (byType.containsKey(primaryTypeName)) {
+					types.add(primaryTypeName);
+				}
+				for (NodeType superType : primaryType.getDeclaredSupertypes()) {
 					if (byType.containsKey(superType.getName())) {
 						types.add(superType.getName());
 					}
 				}
-			}
-			// primary node type
-			NodeType primaryType = context.getPrimaryNodeType();
-			String primaryTypeName = primaryType.getName();
-			if (byType.containsKey(primaryTypeName)) {
-				types.add(primaryTypeName);
-			}
-			for (NodeType superType : primaryType.getDeclaredSupertypes()) {
-				if (byType.containsKey(superType.getName())) {
-					types.add(superType.getName());
-				}
-			}
-			// entity type
-			if (context.isNodeType(EntityType.entity.get())) {
-				if (context.hasProperty(EntityNames.ENTITY_TYPE)) {
-					String entityTypeName = context.getProperty(EntityNames.ENTITY_TYPE).getString();
-					if (byType.containsKey(entityTypeName)) {
-						types.add(entityTypeName);
+				// entity type
+				if (context.isNodeType(EntityType.entity.get())) {
+					if (context.hasProperty(EntityNames.ENTITY_TYPE)) {
+						String entityTypeName = context.getProperty(EntityNames.ENTITY_TYPE).getString();
+						if (byType.containsKey(entityTypeName)) {
+							types.add(entityTypeName);
+						}
 					}
 				}
-			}
 
 //			if (context.getPath().equals("/")) {// root node
 //				types.add("nt:folder");
 //			}
-			if (CmsJcrUtils.isUserHome(context) && byType.containsKey("nt:folder")) {// home node
-				types.add("nt:folder");
+				if (CmsJcrUtils.isUserHome(context) && byType.containsKey("nt:folder")) {// home node
+					types.add("nt:folder");
+				}
+
+				if (types.size() == 0)
+					throw new IllegalArgumentException(
+							"No type found for " + context + " (" + listTypes(context) + ")");
+				String type = types.iterator().next();
+				if (!byType.containsKey(type))
+					throw new IllegalArgumentException("No component found for " + context + " with type " + type);
+				return byType.get(type).get();
+			} catch (RepositoryException e) {
+				throw new IllegalStateException(e);
 			}
 
-			if (types.size() == 0)
-				throw new IllegalArgumentException("No type found for " + context + " (" + listTypes(context) + ")");
-			String type = types.iterator().next();
-			if (!byType.containsKey(type))
-				throw new IllegalArgumentException("No component found for " + context + " with type " + type);
-			return byType.get(type).get();
-		} catch (RepositoryException e) {
-			throw new IllegalStateException(e);
-		}
-		
-		}else {
-			throw new UnsupportedOperationException("Content "+content.getClass().getName()+" is not supported.");
+		} else {
+			throw new UnsupportedOperationException("Content " + content.getClass().getName() + " is not supported.");
 		}
 	}
 
@@ -425,7 +423,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		if (state == null || !state.startsWith("/"))
 			return null;
 
-		String path=state;
+		String path = state;
 //		String path = state.substring(1);
 //		String workspace;
 //		if (path.equals("")) {
@@ -542,8 +540,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		ProvidedSession contentSession = (ProvidedSession) CmsUxUtils.getContentSession(contentRepository,
 				ui.getCmsView());
 
-		String path = get(event,SuiteEvent.CONTENT_PATH);
-		
+		String path = get(event, SuiteEvent.CONTENT_PATH);
+
 //		String nodePath = get(event, SuiteEvent.NODE_PATH);
 		if (path != null && path.equals(HOME_STATE))
 			return ui.getUserDir();
@@ -674,13 +672,13 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		this.cmsUserManager = cmsUserManager;
 	}
 
-	protected Repository getRepository() {
-		return repository;
-	}
-
-	public void setRepository(Repository repository) {
-		this.repository = repository;
-	}
+//	protected Repository getRepository() {
+//		return repository;
+//	}
+//
+//	public void setRepository(Repository repository) {
+//		this.repository = repository;
+//	}
 
 	protected ContentRepository getContentRepository() {
 		return contentRepository;
@@ -690,8 +688,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		this.contentRepository = contentRepository;
 	}
 
-	public void setJcrContentProvider(JcrContentProvider jcrContentProvider) {
-		this.jcrContentProvider = jcrContentProvider;
-	}
+//	public void setJcrContentProvider(JcrContentProvider jcrContentProvider) {
+//		this.jcrContentProvider = jcrContentProvider;
+//	}
 
 }

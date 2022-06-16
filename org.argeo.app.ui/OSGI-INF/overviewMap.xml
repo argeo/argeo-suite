@@ -5,4 +5,5 @@
    <service>
       <provide interface="org.argeo.cms.ui.CmsUiProvider"/>
    </service>
+   <reference bind="setJcrContentProvider" cardinality="1..1" interface="org.argeo.cms.jcr.acr.JcrContentProvider" name="JcrContentProvider" policy="static"/>
 </scr:component>

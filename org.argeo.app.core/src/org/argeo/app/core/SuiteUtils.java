@@ -28,7 +28,7 @@ public class SuiteUtils {
 		return EntityType.user.basePath() + '/' + uid;
 	}
 
-	public static Node getOrCreateUserNode(Session adminSession, LdapName userDn) {
+	private static Node getOrCreateUserNode(Session adminSession, LdapName userDn) {
 		try {
 			Node usersBase = adminSession.getNode(EntityType.user.basePath());
 			String uid = userDn.getRdn(userDn.size() - 1).getValue().toString();

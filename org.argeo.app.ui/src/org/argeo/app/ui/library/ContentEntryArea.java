@@ -10,11 +10,14 @@ import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.query.Query;
 
+import org.argeo.api.acr.Content;
+import org.argeo.api.cms.CmsConstants;
 import org.argeo.api.cms.CmsTheme;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.ui.SuiteEvent;
 import org.argeo.app.ui.SuiteIcon;
 import org.argeo.app.ui.widgets.TreeOrSearchArea;
+import org.argeo.cms.jcr.acr.JcrContentProvider;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.jcr.Jcr;
@@ -34,9 +37,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 public class ContentEntryArea implements CmsUiProvider {
+	private JcrContentProvider jcrContentProvider;
 
 	@Override
-	public Control createUi(Composite parent, Node context) throws RepositoryException {
+	public Control createUiPart(Composite parent, Content context) {
 		CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
 
 		parent.setLayout(new GridLayout());
@@ -98,13 +102,18 @@ public class ContentEntryArea implements CmsUiProvider {
 		});
 
 		ui.getTreeViewer().setContentProvider(new SpacesContentProvider());
-		ui.getTreeViewer().setInput(context.getSession());
+		Session session = jcrContentProvider.getJcrSession(context, CmsConstants.SYS_WORKSPACE);
+		ui.getTreeViewer().setInput(session);
 		return ui;
 	}
 
 	protected boolean isLeaf(Node node) {
 		return Jcr.isNodeType(node, EntityType.entity.get()) || Jcr.isNodeType(node, EntityType.document.get())
 				|| Jcr.isNodeType(node, NodeType.NT_FILE);
+	}
+
+	public void setJcrContentProvider(JcrContentProvider jcrContentProvider) {
+		this.jcrContentProvider = jcrContentProvider;
 	}
 
 	class Ui extends TreeOrSearchArea {

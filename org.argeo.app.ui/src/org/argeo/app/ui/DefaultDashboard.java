@@ -1,8 +1,6 @@
 package org.argeo.app.ui;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-
+import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsView;
 import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -17,7 +15,7 @@ import org.eclipse.swt.widgets.Label;
 public class DefaultDashboard implements CmsUiProvider {
 
 	@Override
-	public Control createUi(Composite parent, Node context) throws RepositoryException {
+	public Control createUiPart(Composite parent, Content context) {
 		parent.setLayout(new GridLayout());
 		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
 		if (cmsView.isAnonymous())

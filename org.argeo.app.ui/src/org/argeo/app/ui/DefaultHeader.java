@@ -2,9 +2,7 @@ package org.argeo.app.ui;
 
 import java.util.Map;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-
+import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsTheme;
 import org.argeo.api.cms.CmsView;
 import org.argeo.cms.Localized;
@@ -29,7 +27,7 @@ public class DefaultHeader implements CmsUiProvider {
 	private Localized title = null;
 
 	@Override
-	public Control createUi(Composite parent, Node context) throws RepositoryException {
+	public Control createUiPart(Composite parent, Content context)  {
 		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
 		CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
 

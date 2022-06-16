@@ -1,8 +1,6 @@
 package org.argeo.app.ui;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-
+import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsContext;
 import org.argeo.api.cms.CmsView;
 import org.argeo.cms.auth.CurrentUser;
@@ -20,7 +18,7 @@ public class DefaultLoginScreen implements CmsUiProvider {
 	private CmsContext cmsContext;
 
 	@Override
-	public Control createUi(Composite parent, Node context) throws RepositoryException {
+	public Control createUiPart(Composite parent, Content context) {
 		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
 		if (!cmsView.isAnonymous())
 			throw new IllegalStateException(CurrentUser.getUsername() + " is already logged in");
