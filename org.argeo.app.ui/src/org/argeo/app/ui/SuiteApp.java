@@ -1,6 +1,7 @@
 package org.argeo.app.ui;
 
 import static org.argeo.api.cms.CmsView.CMS_VIEW_UID_PROPERTY;
+import static org.argeo.cms.acr.ContentUtils.SLASH;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NodeType;
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
+import javax.xml.namespace.QName;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentRepository;
@@ -37,6 +39,8 @@ import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
+import org.argeo.cms.acr.CmsContentRepository;
+import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -45,6 +49,8 @@ import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ux.CmsUxUtils;
 import org.argeo.eclipse.ui.specific.UiContext;
 import org.argeo.jcr.JcrException;
+import org.argeo.osgi.useradmin.LdapNameUtils;
+import org.argeo.osgi.useradmin.UserDirectory;
 import org.argeo.util.LangUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -351,7 +357,22 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			}
 
 		} else {
-			throw new UnsupportedOperationException("Content " + content.getClass().getName() + " is not supported.");
+
+			List<QName> objectClasses = content.getTypes();
+			Set<String> types = new TreeSet<>();
+			for (QName cc : objectClasses) {
+				String type = cc.getPrefix() + ":" + cc.getLocalPart();
+				if (byType.containsKey(type))
+					types.add(type);
+			}
+			if (types.size() == 0)
+				throw new IllegalArgumentException("No type found for " + content + " (" + objectClasses + ")");
+			String type = types.iterator().next();
+			if (!byType.containsKey(type))
+				throw new IllegalArgumentException("No component found for " + content + " with type " + type);
+			return byType.get(type).get();
+			// throw new UnsupportedOperationException("Content " +
+			// content.getClass().getName() + " is not supported.");
 		}
 	}
 
@@ -558,15 +579,19 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			User user = cmsUserManager.getUser(username);
 			if (user == null)
 				return null;
-			LdapName userDn;
-			try {
-				userDn = new LdapName(user.getName());
-			} catch (InvalidNameException e) {
-				throw new IllegalArgumentException("Badly formatted username", e);
-			}
-			String userNodePath = SuiteUtils.getUserNodePath(userDn);
+			UserDirectory userDirectory = cmsUserManager.getUserDirectory(user);
+			path = CmsContentRepository.DIRECTORY_BASE + SLASH + userDirectory.getBasePath() + SLASH
+					+ LdapNameUtils.toRevertPath(username, userDirectory.getBasePath());
+			node = contentSession.get(path);
+//			LdapName userDn;
+//			try {
+//				userDn = new LdapName(user.getName());
+//			} catch (InvalidNameException e) {
+//				throw new IllegalArgumentException("Badly formatted username", e);
+//			}
+//			String userNodePath = SuiteUtils.getUserNodePath(userDn);
 			// FIXME deal with home path
-			return null;
+//			return null;
 //			if (Jcr.itemExists(session, userNodePath))
 //				node = Jcr.getNode(session, userNodePath);
 //			else {

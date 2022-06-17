@@ -7,6 +7,7 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.argeo.api.acr.Content;
+import org.argeo.api.acr.ContentRepository;
 import org.argeo.api.cms.CmsTheme;
 import org.argeo.api.cms.CmsView;
 import org.argeo.app.ui.SuiteEvent;
@@ -44,6 +45,8 @@ import org.osgi.service.useradmin.User;
 public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 
 	private CmsUserManager cmsUserManager;
+
+	private ContentRepository contentRepository;
 
 	@Override
 	public Control createUiPart(Composite parent, Content context) {
@@ -173,6 +176,10 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
 		return createUiPart(parent, JcrContent.nodeToContent(context));
+	}
+
+	public void setContentRepository(ContentRepository contentRepository) {
+		this.contentRepository = contentRepository;
 	}
 
 }
