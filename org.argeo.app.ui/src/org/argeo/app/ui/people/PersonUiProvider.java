@@ -34,12 +34,12 @@ public class PersonUiProvider implements CmsUiProvider {
 		User user = context.adapt(User.class);
 
 		if (user instanceof Group) {
-			String cn = context.getName().getLocalPart().split("=")[1];
+			String cn = context.getName().getLocalPart();
 			Text cnT = SuiteUiUtils.addFormLine(main, "uid", getUserProperty(user, LdapAttrs.uid.name()));
 			cnT.setText(cn);
 
 		} else {
-			String uid = context.getName().getLocalPart().split("=")[1];
+			String uid = context.getName().getLocalPart();
 
 //		Text givenName = new Text(main, SWT.SINGLE);
 //		givenName.setText(getUserProperty(user, LdapAttrs.givenName.name()));

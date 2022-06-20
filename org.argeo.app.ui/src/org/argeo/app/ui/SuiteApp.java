@@ -17,8 +17,6 @@ import java.util.TreeSet;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NodeType;
-import javax.naming.InvalidNameException;
-import javax.naming.ldap.LdapName;
 import javax.xml.namespace.QName;
 
 import org.argeo.api.acr.Content;
@@ -34,13 +32,11 @@ import org.argeo.app.api.EntityConstants;
 import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.api.RankedObject;
-import org.argeo.app.core.SuiteUtils;
 import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
 import org.argeo.cms.acr.CmsContentRepository;
-import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -49,7 +45,6 @@ import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ux.CmsUxUtils;
 import org.argeo.eclipse.ui.specific.UiContext;
 import org.argeo.jcr.JcrException;
-import org.argeo.osgi.useradmin.LdapNameUtils;
 import org.argeo.osgi.useradmin.UserDirectory;
 import org.argeo.util.LangUtils;
 import org.eclipse.swt.SWT;
@@ -580,8 +575,8 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			if (user == null)
 				return null;
 			UserDirectory userDirectory = cmsUserManager.getUserDirectory(user);
-			path = CmsContentRepository.DIRECTORY_BASE + SLASH + userDirectory.getBasePath() + SLASH
-					+ LdapNameUtils.toRevertPath(username, userDirectory.getBasePath());
+			path = CmsContentRepository.DIRECTORY_BASE + SLASH + userDirectory.getGlobalId() + SLASH
+					+ userDirectory.getRolePath(user);
 			node = contentSession.get(path);
 //			LdapName userDn;
 //			try {

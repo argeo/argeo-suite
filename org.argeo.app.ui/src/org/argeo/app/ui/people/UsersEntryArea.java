@@ -26,6 +26,7 @@ import org.argeo.cms.ux.widgets.HierarchicalPart;
 import org.argeo.cms.ux.widgets.TabularPart;
 import org.argeo.osgi.useradmin.HierarchyUnit;
 import org.argeo.osgi.useradmin.UserDirectory;
+import org.argeo.util.LangUtils;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
@@ -69,19 +70,23 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 				int index = getTree().indexOf(item);
 				UserDirectory directory = (UserDirectory) directories.get(index);
 				item.setData(directory);
-				item.setText(directory.getBasePath());
+				item.setText(directory.getGlobalId());
 
-				item.setItemCount(directory.getHierarchyChildCount());
+				item.setItemCount(LangUtils.size(directory.getRootHierarchyUnits()));
 			}
 
 			@Override
 			protected void refreshItem(TreeItem parentItem, TreeItem item) {
 				int index = getTree().indexOf(item);
-				HierarchyUnit parent = (HierarchyUnit) parentItem.getData();
-				HierarchyUnit child = parent.getHierarchyChild(index);
+				Iterable<HierarchyUnit> children;
+				if (parentItem.getData() instanceof UserDirectory)
+					children = ((UserDirectory) parentItem.getData()).getRootHierarchyUnits();
+				else
+					children = ((HierarchyUnit) parentItem.getData()).getDirectHierachyUnits();
+				HierarchyUnit child = LangUtils.getAt(children, index);
 				item.setData(child);
 				item.setText(child.getHierarchyUnitName());
-				item.setItemCount(child.getHierarchyChildCount());
+				item.setItemCount(LangUtils.size(child.getDirectHierachyUnits()));
 			}
 
 			@Override
@@ -107,7 +112,7 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 				HierarchyUnit hu = (HierarchyUnit) getInput();
 				if (hu == null)
 					return 0;
-				roles = hu.getRoles(null, false);
+				roles = hu.getHierarchyUnitRoles(null, false);
 				return roles.size();
 			}
 
@@ -127,8 +132,9 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 
 		// CONTROLLER
 		directoriesView.onSelected((o) -> {
-			HierarchyUnit hu = (HierarchyUnit) o;
-			usersView.setInput(hu);
+			if (o instanceof HierarchyUnit) {
+				usersView.setInput((HierarchyUnit) o);
+			}
 		});
 
 		usersView.onSelected((o) -> {
