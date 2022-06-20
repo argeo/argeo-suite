@@ -70,7 +70,7 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 				int index = getTree().indexOf(item);
 				UserDirectory directory = (UserDirectory) directories.get(index);
 				item.setData(directory);
-				item.setText(directory.getGlobalId());
+				item.setText(directory.getName());
 
 				item.setItemCount(LangUtils.size(directory.getRootHierarchyUnits()));
 			}
