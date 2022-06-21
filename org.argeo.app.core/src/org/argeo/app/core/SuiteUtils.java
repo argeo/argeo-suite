@@ -10,7 +10,6 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.security.Privilege;
-import javax.naming.ldap.LdapName;
 import javax.security.auth.x500.X500Principal;
 
 import org.argeo.api.acr.Content;
@@ -21,6 +20,7 @@ import org.argeo.app.api.EntityType;
 import org.argeo.app.api.SuiteRole;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.acr.CmsContentRepository;
+import org.argeo.cms.auth.RoleNameUtils;
 import org.argeo.jackrabbit.security.JackrabbitSecurityUtils;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
@@ -39,15 +39,16 @@ public class SuiteUtils {
 	}
 
 	@Deprecated
-	public static String getUserNodePath(LdapName userDn) {
-		String uid = userDn.getRdn(userDn.size() - 1).getValue().toString();
+	public static String getUserNodePath(String userDn) {
+		String uid = RoleNameUtils.getLastRdnValue(userDn);
 		return EntityType.user.basePath() + '/' + uid;
 	}
 
-	private static Node getOrCreateUserNode(Session adminSession, LdapName userDn) {
+	@Deprecated
+	private static Node getOrCreateUserNode(Session adminSession, String userDn) {
 		try {
 			Node usersBase = adminSession.getNode(EntityType.user.basePath());
-			String uid = userDn.getRdn(userDn.size() - 1).getValue().toString();
+			String uid = RoleNameUtils.getLastRdnValue(userDn);
 			Node userNode;
 			if (!usersBase.hasNode(uid)) {
 				userNode = usersBase.addNode(uid, NodeType.NT_UNSTRUCTURED);
@@ -83,7 +84,7 @@ public class SuiteUtils {
 	@Deprecated
 	public static Node getOrCreateCmsSessionNode(Session adminSession, CmsSession cmsSession) {
 		try {
-			LdapName userDn = cmsSession.getUserDn();
+			String userDn = cmsSession.getUserDn();
 //			String uid = userDn.get(userDn.size() - 1);
 			Node userNode = getOrCreateUserNode(adminSession, userDn);
 //			if (!usersBase.hasNode(uid)) {

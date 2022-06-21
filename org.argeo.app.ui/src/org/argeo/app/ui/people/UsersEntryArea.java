@@ -15,6 +15,8 @@ import org.argeo.app.ui.SuiteEvent;
 import org.argeo.app.ui.SuiteIcon;
 import org.argeo.app.ui.dialogs.NewUserWizard;
 import org.argeo.cms.CmsUserManager;
+import org.argeo.cms.auth.CmsRole;
+import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.Selected;
@@ -31,8 +33,6 @@ import org.argeo.osgi.useradmin.Organization;
 import org.argeo.osgi.useradmin.Person;
 import org.argeo.osgi.useradmin.UserDirectory;
 import org.argeo.util.LangUtils;
-import org.argeo.util.naming.LdapAttrs;
-import org.argeo.util.naming.LdapObjs;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
@@ -46,7 +46,6 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TreeItem;
-import org.osgi.service.useradmin.Group;
 import org.osgi.service.useradmin.Role;
 import org.osgi.service.useradmin.User;
 
@@ -79,24 +78,35 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 			protected void refreshRootItem(TreeItem item) {
 				int index = getTree().indexOf(item);
 				UserDirectory directory = (UserDirectory) directories.get(index);
-				item.setData(directory);
+				List<HierarchyUnit> visible = new ArrayList<>();
+//				item.setData(directory);
 				item.setText(directory.getName());
-
-				item.setItemCount(LangUtils.size(directory.getRootHierarchyUnits(true)));
+//				if (CmsRole.userAdmin.implied(CurrentUser.getCmsSession().getSubject(), directory.getGlobalId())) {
+//					visible.addAll(directory.getRootHierarchyUnits(true));
+//					
+//				} else {
+				for (HierarchyUnit hu : directory.getDirectHierarchyUnits(true)) {
+					if (CurrentUser.implies(CmsRole.userAdmin, hu.getContext())) {
+						visible.add(hu);
+					}
+				}
+//				}
+				item.setData(visible);
+				item.setItemCount(visible.size());
 			}
 
 			@Override
 			protected void refreshItem(TreeItem parentItem, TreeItem item) {
 				int index = getTree().indexOf(item);
 				Iterable<HierarchyUnit> children;
-				if (parentItem.getData() instanceof UserDirectory)
-					children = ((UserDirectory) parentItem.getData()).getRootHierarchyUnits(true);
+				if (parentItem.getData() instanceof Iterable)
+					children = (Iterable<HierarchyUnit>) parentItem.getData();
 				else
-					children = ((HierarchyUnit) parentItem.getData()).getFunctionalHierachyUnits();
+					children = ((HierarchyUnit) parentItem.getData()).getDirectHierachyUnits(true);
 				HierarchyUnit child = LangUtils.getAt(children, index);
 				item.setData(child);
 				item.setText(child.getHierarchyUnitName());
-				item.setItemCount(LangUtils.size(child.getFunctionalHierachyUnits()));
+				item.setItemCount(LangUtils.size(child.getDirectHierachyUnits(true)));
 			}
 
 			@Override
@@ -134,9 +144,12 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 				HierarchyUnit hu = (HierarchyUnit) getInput();
 				if (hu == null)
 					return 0;
-				for (HierarchyUnit directChild : hu.getDirectHierachyUnits()) {
+				for (HierarchyUnit directChild : hu.getDirectHierachyUnits(false)) {
 					if (!directChild.isFunctional()) {
-						roles.addAll(directChild.getHierarchyUnitRoles(null, false));
+						for (Role r : directChild.getHierarchyUnitRoles(null, false)) {
+							if (r instanceof Person || r instanceof Organization)
+								roles.add(r);
+						}
 					}
 				}
 				// roles = hu.getHierarchyUnitRoles(null, false);
