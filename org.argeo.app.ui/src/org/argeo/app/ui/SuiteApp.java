@@ -32,6 +32,7 @@ import org.argeo.app.api.EntityConstants;
 import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.api.RankedObject;
+import org.argeo.app.core.SuiteUtils;
 import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.LocaleUtils;
@@ -574,10 +575,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			User user = cmsUserManager.getUser(username);
 			if (user == null)
 				return null;
-			UserDirectory userDirectory = cmsUserManager.getUserDirectory(user);
-			path = CmsContentRepository.DIRECTORY_BASE + SLASH + userDirectory.getGlobalId() + SLASH
-					+ userDirectory.getRolePath(user);
-			node = contentSession.get(path);
+			node = SuiteUtils.roleToContent(cmsUserManager, contentSession, user);
 //			LdapName userDn;
 //			try {
 //				userDn = new LdapName(user.getName());
