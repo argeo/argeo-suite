@@ -27,10 +27,10 @@ import org.argeo.cms.swt.widgets.SwtTabularPart;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ux.widgets.HierarchicalPart;
 import org.argeo.cms.ux.widgets.TabularPart;
-import org.argeo.osgi.useradmin.HierarchyUnit;
 import org.argeo.osgi.useradmin.UserDirectory;
 import org.argeo.util.LangUtils;
 import org.argeo.util.directory.FunctionalGroup;
+import org.argeo.util.directory.HierarchyUnit;
 import org.argeo.util.directory.Organization;
 import org.argeo.util.directory.Person;
 import org.eclipse.jface.window.Window;
@@ -144,9 +144,10 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 				HierarchyUnit hu = (HierarchyUnit) getInput();
 				if (hu == null)
 					return 0;
+				UserDirectory ud = (UserDirectory) hu.getDirectory();
 				for (HierarchyUnit directChild : hu.getDirectHierachyUnits(false)) {
 					if (!directChild.isFunctional()) {
-						for (Role r : directChild.getHierarchyUnitRoles(null, false)) {
+						for (Role r : ud.getHierarchyUnitRoles(directChild, null, false)) {
 							if (r instanceof Person || r instanceof Organization)
 								roles.add(r);
 						}
