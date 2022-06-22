@@ -1,7 +1,6 @@
 package org.argeo.app.ui;
 
 import static org.argeo.api.cms.CmsView.CMS_VIEW_UID_PROPERTY;
-import static org.argeo.cms.acr.ContentUtils.SLASH;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -32,12 +31,11 @@ import org.argeo.app.api.EntityConstants;
 import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.api.RankedObject;
-import org.argeo.app.core.SuiteUtils;
 import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
-import org.argeo.cms.acr.CmsContentRepository;
+import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -46,7 +44,6 @@ import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ux.CmsUxUtils;
 import org.argeo.eclipse.ui.specific.UiContext;
 import org.argeo.jcr.JcrException;
-import org.argeo.osgi.useradmin.UserDirectory;
 import org.argeo.util.LangUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -575,7 +572,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 			User user = cmsUserManager.getUser(username);
 			if (user == null)
 				return null;
-			node = SuiteUtils.roleToContent(cmsUserManager, contentSession, user);
+			node = ContentUtils.roleToContent(cmsUserManager, contentSession, user);
 //			LdapName userDn;
 //			try {
 //				userDn = new LdapName(user.getName());

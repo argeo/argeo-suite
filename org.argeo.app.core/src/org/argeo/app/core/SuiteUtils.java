@@ -1,7 +1,5 @@
 package org.argeo.app.core;
 
-import static org.argeo.cms.acr.ContentUtils.SLASH;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,32 +10,18 @@ import javax.jcr.nodetype.NodeType;
 import javax.jcr.security.Privilege;
 import javax.security.auth.x500.X500Principal;
 
-import org.argeo.api.acr.Content;
-import org.argeo.api.acr.ContentSession;
 import org.argeo.api.cms.CmsConstants;
 import org.argeo.api.cms.CmsSession;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.api.SuiteRole;
-import org.argeo.cms.CmsUserManager;
-import org.argeo.cms.acr.CmsContentRepository;
 import org.argeo.cms.auth.RoleNameUtils;
 import org.argeo.jackrabbit.security.JackrabbitSecurityUtils;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
-import org.argeo.osgi.useradmin.UserDirectory;
 import org.argeo.util.naming.LdapAttrs;
-import org.osgi.service.useradmin.Role;
 
 /** Utilities around the Argeo Suite APIs. */
 public class SuiteUtils {
-	public static Content roleToContent(CmsUserManager userManager, ContentSession contentSession, Role role) {
-		UserDirectory userDirectory = userManager.getDirectory(role);
-		String path = CmsContentRepository.DIRECTORY_BASE + SLASH + userDirectory.getName() + SLASH
-				+ userDirectory.getRolePath(role);
-		Content content = contentSession.get(path);
-		return content;
-	}
-
 	@Deprecated
 	public static String getUserNodePath(String userDn) {
 		String uid = RoleNameUtils.getLastRdnValue(userDn);
