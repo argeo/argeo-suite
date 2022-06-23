@@ -1,5 +1,7 @@
 package org.argeo.app.ui.people;
 
+import static org.argeo.cms.auth.UserAdminUtils.getProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,7 @@ import javax.jcr.RepositoryException;
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentRepository;
 import org.argeo.api.acr.ContentSession;
+import org.argeo.api.cms.ux.CmsIcon;
 import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.ui.SuiteEvent;
 import org.argeo.app.ui.SuiteIcon;
@@ -16,6 +19,7 @@ import org.argeo.app.ui.dialogs.NewUserWizard;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.auth.CmsRole;
 import org.argeo.cms.auth.CurrentUser;
+import org.argeo.cms.auth.UserAdminUtils;
 import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -30,20 +34,16 @@ import org.argeo.cms.ux.widgets.HierarchicalPart;
 import org.argeo.cms.ux.widgets.TabularPart;
 import org.argeo.osgi.useradmin.UserDirectory;
 import org.argeo.util.LangUtils;
-import org.argeo.util.directory.FunctionalGroup;
 import org.argeo.util.directory.HierarchyUnit;
-import org.argeo.util.directory.Organization;
-import org.argeo.util.directory.Person;
+import org.argeo.util.naming.LdapAttrs;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TreeItem;
@@ -121,23 +121,27 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 			List<Role> roles = new ArrayList<>();
 
 			@Override
-			protected void refreshItem(TableItem item) {
-				int index = getTable().indexOf(item);
-				User role = (User) roles.get(index);
-				item.setData(role);
-				item.setText(role.getName());
-				Image icon;
-				if (role instanceof Organization) {
-					icon = theme.getSmallIcon(SuiteIcon.organisation);
-				} else if (role instanceof FunctionalGroup) {
-					icon = theme.getSmallIcon(SuiteIcon.group);
-				} else if (role instanceof Person) {
-					icon = theme.getSmallIcon(SuiteIcon.person);
-				} else {
-					icon = null;
-				}
-				item.setImage(icon);
+			protected Object getData(int row) {
+				return roles.get(row);
 			}
+//			@Override
+//			protected void refreshItem(TableItem item) {
+//				int index = getTable().indexOf(item);
+//				User role = (User) roles.get(index);
+//				item.setData(role);
+//				item.setText(role.getName());
+//				Image icon;
+//				if (role instanceof Organization) {
+//					icon = theme.getSmallIcon(SuiteIcon.organisation);
+//				} else if (role instanceof FunctionalGroup) {
+//					icon = theme.getSmallIcon(SuiteIcon.group);
+//				} else if (role instanceof Person) {
+//					icon = theme.getSmallIcon(SuiteIcon.person);
+//				} else {
+//					icon = null;
+//				}
+//				item.setImage(icon);
+//			}
 
 			@Override
 			protected int getItemCount() {
@@ -149,8 +153,8 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 				for (HierarchyUnit directChild : hu.getDirectHierachyUnits(false)) {
 					if (!directChild.isFunctional()) {
 						for (Role r : ud.getHierarchyUnitRoles(directChild, null, false)) {
-							if (r instanceof Person || r instanceof Organization)
-								roles.add(r);
+							// if (r instanceof Person || r instanceof Organization)
+							roles.add(r);
 						}
 					}
 				}
@@ -159,14 +163,40 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 			}
 
 		};
-		usersView.addColumn(new Column<User>() {
+		usersView.addColumn(new Column<Role>() {
 
 			@Override
-			public String getText(User model) {
-				return model.toString();
+			public String getText(Role role) {
+				String txt = getProperty(role, LdapAttrs.o);
+				if (txt != null && !txt.equals(""))
+					return txt;
+				txt = getProperty(role, LdapAttrs.cn);
+				if (txt != null && !txt.equals(""))
+					return txt;
+				txt = UserAdminUtils.getUserDisplayName(role);
+				return txt;
 			}
-		});
 
+			@Override
+			public CmsIcon getIcon(Role role) {
+				String txt = getProperty(role, LdapAttrs.o);
+				if (txt != null && !txt.equals(""))
+					return SuiteIcon.organisation;
+				txt = getProperty(role, LdapAttrs.uid);
+				if (txt != null && !txt.equals(""))
+					return SuiteIcon.person;
+				return SuiteIcon.group;
+			}
+
+			@Override
+			public int getWidth() {
+				return 300;
+			}
+
+		});
+		usersView.addColumn((Column<Role>) (role) -> getProperty(role, LdapAttrs.mail));
+
+		// toolbar
 		Composite bottom = new Composite(parent, SWT.NONE);
 		bottom.setLayoutData(CmsSwtUtils.fillWidth());
 		bottom.setLayout(CmsSwtUtils.noSpaceGridLayout());
@@ -180,6 +210,7 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 		addItem.setImage(theme.getSmallIcon(SuiteIcon.add));
 
 		sashForm.setWeights(new int[] { 30, 70 });
+
 		// CONTROLLER
 		directoriesView.onSelected((o) -> {
 			if (o instanceof HierarchyUnit) {
@@ -220,8 +251,8 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 		return sashForm;
 	}
 
-//	private String getUserProperty(Object element, String key) {
-//		Object value = ((User) element).getProperties().get(key);
+//	static String getProperty(Role role, LdapAttrs attr) {
+//		Object value = role.getProperties().get(attr.name());
 //		return value != null ? value.toString() : null;
 //	}
 
