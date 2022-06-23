@@ -11,7 +11,7 @@ import java.util.TreeMap;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsLog;
-import org.argeo.api.cms.CmsView;
+import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.api.RankedObject;
 import org.argeo.app.core.SuiteUtils;
 import org.argeo.cms.Localized;

@@ -2,7 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" name="Argeo Suite Default Theme">
    <implementation class="org.argeo.cms.swt.osgi.BundleSvgTheme"/>
    <service>
-      <provide interface="org.argeo.api.cms.CmsTheme"/>
+      <provide interface="org.argeo.api.cms.ux.CmsTheme"/>
    </service>
    <property name="themeId" type="String" value="org.argeo.app.theme.default"/>
 </scr:component>

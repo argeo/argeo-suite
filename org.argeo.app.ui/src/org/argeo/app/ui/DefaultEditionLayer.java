@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.argeo.api.acr.Content;
-import org.argeo.api.cms.CmsTheme;
 import org.argeo.cms.Localized;
+import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.argeo.cms.swt.widgets.SwtTabbedArea;
@@ -57,7 +57,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 				this.workArea.createUiPart(area, context);
 				return area;
 			}
-			CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
+			CmsSwtTheme theme = CmsSwtUtils.getCmsTheme(parent);
 			SwtTabbedArea tabbedArea = createTabbedArea(parent, theme);
 			return tabbedArea;
 		}
@@ -170,13 +170,13 @@ public class DefaultEditionLayer implements SuiteLayer {
 		this.defaultView = defaultView;
 	}
 
-	SwtTabbedArea createTabbedArea(Composite parent, CmsTheme theme) {
+	SwtTabbedArea createTabbedArea(Composite parent, CmsSwtTheme theme) {
 		SwtTabbedArea tabbedArea = new SwtTabbedArea(parent, SWT.NONE);
 		tabbedArea.setSingleTab(singleTab);
 		tabbedArea.setBodyStyle(SuiteStyle.mainTabBody.style());
 		tabbedArea.setTabStyle(SuiteStyle.mainTab.style());
 		tabbedArea.setTabSelectedStyle(SuiteStyle.mainTabSelected.style());
-		tabbedArea.setCloseIcon(SuiteIcon.close.getSmallIcon(theme));
+		tabbedArea.setCloseIcon(theme.getSmallIcon(SuiteIcon.close));
 		tabbedArea.setLayoutData(CmsSwtUtils.fillAll());
 		return tabbedArea;
 	}
@@ -189,7 +189,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 
 		SashFormEditionArea(Composite parent, int style) {
 			super(parent, SWT.HORIZONTAL);
-			CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
+			CmsSwtTheme theme = CmsSwtUtils.getCmsTheme(parent);
 
 			Composite editorC;
 			if (SWT.RIGHT_TO_LEFT == (style & SWT.RIGHT_TO_LEFT)) {// arabic, hebrew, etc.
@@ -242,7 +242,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 
 		public FixedEditionArea(Composite parent, int style) {
 			super(parent, style);
-			CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
+			CmsSwtTheme theme = CmsSwtUtils.getCmsTheme(parent);
 
 			setLayout(CmsSwtUtils.noSpaceGridLayout(2));
 

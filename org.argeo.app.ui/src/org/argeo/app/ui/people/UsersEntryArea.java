@@ -9,8 +9,7 @@ import javax.jcr.RepositoryException;
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentRepository;
 import org.argeo.api.acr.ContentSession;
-import org.argeo.api.cms.CmsTheme;
-import org.argeo.api.cms.CmsView;
+import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.ui.SuiteEvent;
 import org.argeo.app.ui.SuiteIcon;
 import org.argeo.app.ui.dialogs.NewUserWizard;
@@ -18,6 +17,7 @@ import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.auth.CmsRole;
 import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.jcr.acr.JcrContent;
+import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.Selected;
 import org.argeo.cms.swt.acr.SwtUiProvider;
@@ -25,6 +25,7 @@ import org.argeo.cms.swt.dialogs.CmsWizardDialog;
 import org.argeo.cms.swt.widgets.SwtHierarchicalPart;
 import org.argeo.cms.swt.widgets.SwtTabularPart;
 import org.argeo.cms.ui.CmsUiProvider;
+import org.argeo.cms.ux.widgets.Column;
 import org.argeo.cms.ux.widgets.HierarchicalPart;
 import org.argeo.cms.ux.widgets.TabularPart;
 import org.argeo.osgi.useradmin.UserDirectory;
@@ -58,7 +59,7 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 
 	@Override
 	public Control createUiPart(Composite parent, Content context) {
-		CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
+		CmsSwtTheme theme = CmsSwtUtils.getCmsTheme(parent);
 		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
 		parent.setLayout(new GridLayout());
 
@@ -127,11 +128,11 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 				item.setText(role.getName());
 				Image icon;
 				if (role instanceof Organization) {
-					icon = SuiteIcon.organisation.getSmallIcon(theme);
+					icon = theme.getSmallIcon(SuiteIcon.organisation);
 				} else if (role instanceof FunctionalGroup) {
-					icon = SuiteIcon.group.getSmallIcon(theme);
+					icon = theme.getSmallIcon(SuiteIcon.group);
 				} else if (role instanceof Person) {
-					icon = SuiteIcon.person.getSmallIcon(theme);
+					icon = theme.getSmallIcon(SuiteIcon.person);
 				} else {
 					icon = null;
 				}
@@ -158,6 +159,13 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 			}
 
 		};
+		usersView.addColumn(new Column<User>() {
+
+			@Override
+			public String getText(User model) {
+				return model.toString();
+			}
+		});
 
 		Composite bottom = new Composite(parent, SWT.NONE);
 		bottom.setLayoutData(CmsSwtUtils.fillWidth());
@@ -167,10 +175,11 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 		ToolItem deleteItem = new ToolItem(bottomToolBar, SWT.FLAT);
 		deleteItem.setEnabled(false);
 //		CmsUiUtils.style(deleteItem, SuiteStyle.recentItems);
-		deleteItem.setImage(SuiteIcon.delete.getSmallIcon(theme));
+		deleteItem.setImage(theme.getSmallIcon(SuiteIcon.delete));
 		ToolItem addItem = new ToolItem(bottomToolBar, SWT.FLAT);
-		addItem.setImage(SuiteIcon.add.getSmallIcon(theme));
+		addItem.setImage(theme.getSmallIcon(SuiteIcon.add));
 
+		sashForm.setWeights(new int[] { 30, 70 });
 		// CONTROLLER
 		directoriesView.onSelected((o) -> {
 			if (o instanceof HierarchyUnit) {

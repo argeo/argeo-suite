@@ -3,7 +3,7 @@ package org.argeo.app.ui.docbook;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.argeo.api.cms.CmsEditable;
+import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.widgets.TextStyles;
 import org.eclipse.swt.SWT;

@@ -3,7 +3,7 @@ package org.argeo.app.ui.docbook;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import org.argeo.api.cms.CmsEditable;
+import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.app.docbook.DbkType;
 import org.argeo.app.docbook.DbkUtils;
 import org.argeo.cms.swt.CmsSwtUtils;

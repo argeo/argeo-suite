@@ -2,12 +2,12 @@ package org.argeo.app.ui.forms;
 
 import javax.jcr.Item;
 
-import org.argeo.api.cms.CmsTheme;
+import org.argeo.api.cms.ux.CmsIcon;
 import org.argeo.app.api.Term;
 import org.argeo.app.api.TermsManager;
 import org.argeo.app.api.Typology;
 import org.argeo.cms.Localized;
-import org.argeo.cms.swt.CmsIcon;
+import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.viewers.EditablePart;
 import org.argeo.cms.ui.widgets.ContextOverlay;
@@ -36,8 +36,8 @@ public abstract class AbstractTermsPart extends StyledControl implements Editabl
 	private Color highlightColor;
 	private Composite highlight;
 
-	protected final CmsTheme theme;
-	
+	protected final CmsSwtTheme theme;
+
 	public AbstractTermsPart(Composite parent, int style, Item item, TermsManager termsManager, String typology) {
 		super(parent, style, item);
 		if (item == null)
@@ -110,21 +110,21 @@ public abstract class AbstractTermsPart extends StyledControl implements Editabl
 
 	protected void styleDelete(ToolItem deleteItem) {
 		if (deleteIcon != null)
-			deleteItem.setImage(deleteIcon.getSmallIcon(theme));
+			deleteItem.setImage(theme.getSmallIcon(deleteIcon));
 		else
 			deleteItem.setText("-");
 	}
 
 	protected void styleCancel(ToolItem cancelItem) {
 		if (cancelIcon != null)
-			cancelItem.setImage(cancelIcon.getSmallIcon(theme));
+			cancelItem.setImage(theme.getSmallIcon(cancelIcon));
 		else
 			cancelItem.setText("X");
 	}
 
 	protected void styleAdd(ToolItem addItem) {
 		if (addIcon != null)
-			addItem.setImage(addIcon.getSmallIcon(theme));
+			addItem.setImage(theme.getSmallIcon(addIcon));
 		else
 			addItem.setText("+");
 	}

@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.jcr.Node;
 
-import org.argeo.api.cms.CmsEditable;
+import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.app.docbook.DbkMsg;
 import org.argeo.app.docbook.DbkUtils;
 import org.argeo.cms.swt.CmsSwtUtils;

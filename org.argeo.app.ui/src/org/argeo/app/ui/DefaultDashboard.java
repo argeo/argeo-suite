@@ -1,7 +1,7 @@
 package org.argeo.app.ui;
 
 import org.argeo.api.acr.Content;
-import org.argeo.api.cms.CmsView;
+import org.argeo.api.cms.ux.CmsView;
 import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;

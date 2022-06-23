@@ -3,10 +3,10 @@ package org.argeo.app.ui;
 import java.util.Map;
 
 import org.argeo.api.acr.Content;
-import org.argeo.api.cms.CmsTheme;
-import org.argeo.api.cms.CmsView;
+import org.argeo.api.cms.ux.CmsView;
 import org.argeo.cms.Localized;
 import org.argeo.cms.auth.CurrentUser;
+import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.eclipse.swt.SWT;
@@ -27,9 +27,9 @@ public class DefaultHeader implements CmsUiProvider {
 	private Localized title = null;
 
 	@Override
-	public Control createUiPart(Composite parent, Content context)  {
+	public Control createUiPart(Composite parent, Content context) {
 		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
-		CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
+		CmsSwtTheme theme = CmsSwtUtils.getCmsTheme(parent);
 
 		parent.setLayout(CmsSwtUtils.noSpaceGridLayout(new GridLayout(3, true)));
 
@@ -63,7 +63,7 @@ public class DefaultHeader implements CmsUiProvider {
 			userL.setText(CurrentUser.getDisplayName());
 			Button logoutB = new Button(end, SWT.FLAT);
 //			CmsUiUtils.style(logoutB, SuiteStyle.header);
-			logoutB.setImage(SuiteIcon.logout.getSmallIcon(theme));
+			logoutB.setImage(theme.getSmallIcon(SuiteIcon.logout));
 			logoutB.addSelectionListener(new SelectionAdapter() {
 				private static final long serialVersionUID = 7116760083964201233L;
 

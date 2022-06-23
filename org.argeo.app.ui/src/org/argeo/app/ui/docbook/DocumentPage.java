@@ -6,7 +6,7 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 
-import org.argeo.api.cms.CmsEditable;
+import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.app.docbook.DbkType;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;

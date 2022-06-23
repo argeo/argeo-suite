@@ -12,9 +12,9 @@ import javax.jcr.Repository;
 import javax.jcr.Session;
 
 import org.argeo.api.cms.CmsApp;
-import org.argeo.api.cms.CmsUi;
 import org.argeo.app.ui.SuiteApp;
 import org.argeo.api.cms.CmsLog;
+import org.argeo.api.cms.ux.CmsUi;
 import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.jcr.Jcr;

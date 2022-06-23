@@ -5,12 +5,12 @@ import java.util.Set;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import org.argeo.api.cms.CmsTheme;
 import org.argeo.app.api.SuiteRole;
 import org.argeo.app.ui.SuiteEvent;
 import org.argeo.app.ui.SuiteIcon;
 import org.argeo.app.ui.dialogs.NewUserWizard;
 import org.argeo.cms.CmsUserManager;
+import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.Selected;
 import org.argeo.cms.swt.dialogs.CmsWizardDialog;
@@ -43,7 +43,7 @@ public class PeopleEntryArea implements CmsUiProvider {
 
 	@Override
 	public Control createUi(Composite parent, Node context) throws RepositoryException {
-		CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
+		CmsSwtTheme theme = CmsSwtUtils.getCmsTheme(parent);
 		parent.setLayout(new GridLayout());
 		TableViewer usersViewer = new TableViewer(parent);
 		usersViewer.setContentProvider(new UsersContentProvider());
@@ -100,9 +100,9 @@ public class PeopleEntryArea implements CmsUiProvider {
 		ToolItem deleteItem = new ToolItem(bottomToolBar, SWT.FLAT);
 		deleteItem.setEnabled(false);
 //		CmsUiUtils.style(deleteItem, SuiteStyle.recentItems);
-		deleteItem.setImage(SuiteIcon.delete.getSmallIcon(theme));
+		deleteItem.setImage(theme.getSmallIcon(SuiteIcon.delete));
 		ToolItem addItem = new ToolItem(bottomToolBar, SWT.FLAT);
-		addItem.setImage(SuiteIcon.add.getSmallIcon(theme));
+		addItem.setImage(theme.getSmallIcon(SuiteIcon.add));
 		usersViewer.addDoubleClickListener(new IDoubleClickListener() {
 
 			@Override

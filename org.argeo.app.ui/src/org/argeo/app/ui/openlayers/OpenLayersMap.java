@@ -13,11 +13,11 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.apache.commons.io.IOUtils;
-import org.argeo.api.cms.CmsView;
 import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.ui.SuiteEvent;
 import org.argeo.api.cms.CmsLog;
+import org.argeo.api.cms.ux.CmsView;
 import org.argeo.api.cms.CmsConstants;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.eclipse.swt.SWT;

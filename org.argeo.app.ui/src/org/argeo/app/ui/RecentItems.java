@@ -15,10 +15,10 @@ import javax.jcr.observation.EventListener;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
 
-import org.argeo.api.cms.CmsTheme;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.core.XPathUtils;
 import org.argeo.app.ui.widgets.DelayedText;
+import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.eclipse.ui.EclipseUiUtils;
@@ -53,7 +53,7 @@ public class RecentItems implements CmsUiProvider {
 	private final static int SEARCH_TEXT_DELAY = 800;
 	private final static int SEARCH_DEFAULT_LIMIT = 100;
 
-	private CmsTheme theme;
+	private CmsSwtTheme theme;
 
 	private String entityType;
 
@@ -96,9 +96,9 @@ public class RecentItems implements CmsUiProvider {
 		ToolItem deleteItem = new ToolItem(bottomToolBar, SWT.FLAT);
 		deleteItem.setEnabled(false);
 //		CmsUiUtils.style(deleteItem, SuiteStyle.recentItems);
-		deleteItem.setImage(SuiteIcon.delete.getSmallIcon(theme));
+		deleteItem.setImage(theme.getSmallIcon(SuiteIcon.delete));
 		ToolItem addItem = new ToolItem(bottomToolBar, SWT.FLAT);
-		addItem.setImage(SuiteIcon.add.getSmallIcon(theme));
+		addItem.setImage(theme.getSmallIcon(SuiteIcon.add));
 		entityViewer.getViewer().addDoubleClickListener(new IDoubleClickListener() {
 
 			@Override

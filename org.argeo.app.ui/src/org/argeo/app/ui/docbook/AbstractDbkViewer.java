@@ -16,9 +16,9 @@ import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.argeo.api.cms.Cms2DSize;
-import org.argeo.api.cms.CmsEditable;
 import org.argeo.api.cms.CmsLog;
+import org.argeo.api.cms.ux.Cms2DSize;
+import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.app.docbook.DbkAttr;
 import org.argeo.app.docbook.DbkType;
 import org.argeo.app.docbook.DbkUtils;

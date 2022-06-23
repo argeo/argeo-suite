@@ -1,6 +1,6 @@
 package org.argeo.app.ui.publish;
 
-import org.argeo.api.cms.CmsStyle;
+import org.argeo.api.cms.ux.CmsStyle;
 
 /** Publishing styles. */
 public enum PublishingStyle implements CmsStyle {

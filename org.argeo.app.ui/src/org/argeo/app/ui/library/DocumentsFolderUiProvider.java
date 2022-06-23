@@ -6,7 +6,7 @@ import java.nio.file.spi.FileSystemProvider;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
-import org.argeo.api.cms.CmsView;
+import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.ui.SuiteEvent;
 import org.argeo.cms.fs.CmsFsUtils;
 import org.argeo.cms.swt.CmsSwtUtils;

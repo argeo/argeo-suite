@@ -1,6 +1,6 @@
 package org.argeo.app.ui;
 
-import static org.argeo.api.cms.CmsView.CMS_VIEW_UID_PROPERTY;
+import static org.argeo.api.cms.ux.CmsView.CMS_VIEW_UID_PROPERTY;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -24,9 +24,9 @@ import org.argeo.api.acr.spi.ProvidedSession;
 import org.argeo.api.cms.CmsConstants;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.CmsSession;
-import org.argeo.api.cms.CmsTheme;
-import org.argeo.api.cms.CmsUi;
-import org.argeo.api.cms.CmsView;
+import org.argeo.api.cms.ux.CmsTheme;
+import org.argeo.api.cms.ux.CmsUi;
+import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.api.EntityConstants;
 import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;

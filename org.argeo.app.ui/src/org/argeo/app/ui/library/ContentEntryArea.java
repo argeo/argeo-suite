@@ -12,12 +12,12 @@ import javax.jcr.query.Query;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsConstants;
-import org.argeo.api.cms.CmsTheme;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.ui.SuiteEvent;
 import org.argeo.app.ui.SuiteIcon;
 import org.argeo.app.ui.widgets.TreeOrSearchArea;
 import org.argeo.cms.jcr.acr.JcrContentProvider;
+import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.jcr.Jcr;
@@ -41,7 +41,7 @@ public class ContentEntryArea implements CmsUiProvider {
 
 	@Override
 	public Control createUiPart(Composite parent, Content context) {
-		CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
+		CmsSwtTheme theme = CmsSwtUtils.getCmsTheme(parent);
 
 		parent.setLayout(new GridLayout());
 		Ui ui = new Ui(parent, SWT.NONE);
@@ -62,15 +62,15 @@ public class ContentEntryArea implements CmsUiProvider {
 				Node node = (Node) element;
 				Image icon;
 				if (Jcr.isNodeType(node, NodeType.NT_FOLDER)) {
-					icon = SuiteIcon.folder.getSmallIcon(theme);
+					icon = theme.getSmallIcon(SuiteIcon.folder);
 				} else if (Jcr.isNodeType(node, NodeType.NT_FILE)) {
 					// TODO check recognized document types
-					icon = SuiteIcon.document.getSmallIcon(theme);
+					icon = theme.getSmallIcon(SuiteIcon.document);
 				} else if (Jcr.isNodeType(node, EntityType.document.get())) {
-					icon = SuiteIcon.document.getSmallIcon(theme);
+					icon = theme.getSmallIcon(SuiteIcon.document);
 				} else {
 					if (!isLeaf(node))
-						icon = SuiteIcon.folder.getSmallIcon(theme);
+						icon = theme.getSmallIcon(SuiteIcon.folder);
 					else
 						icon = null;
 				}

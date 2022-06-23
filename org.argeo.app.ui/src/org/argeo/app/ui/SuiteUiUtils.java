@@ -12,11 +12,11 @@ import javax.jcr.Session;
 
 import org.apache.commons.io.IOUtils;
 import org.argeo.api.acr.Content;
-import org.argeo.api.cms.CmsEditable;
 import org.argeo.api.cms.CmsEvent;
-import org.argeo.api.cms.CmsStyle;
-import org.argeo.api.cms.CmsTheme;
-import org.argeo.api.cms.CmsView;
+import org.argeo.api.cms.ux.CmsEditable;
+import org.argeo.api.cms.ux.CmsIcon;
+import org.argeo.api.cms.ux.CmsStyle;
+import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.api.SuiteRole;
@@ -24,7 +24,7 @@ import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
 import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.jcr.acr.JcrContent;
-import org.argeo.cms.swt.CmsIcon;
+import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.dialogs.LightweightDialog;
 import org.argeo.cms.ui.util.CmsLink;
@@ -404,11 +404,11 @@ public class SuiteUiUtils {
 
 	public static Button createLayerButton(Composite parent, String layer, Localized msg, CmsIcon icon,
 			ClassLoader l10nClassLoader) {
-		CmsTheme theme = CmsSwtUtils.getCmsTheme(parent);
+		CmsSwtTheme theme = CmsSwtUtils.getCmsTheme(parent);
 		Button button = new Button(parent, SWT.PUSH);
 		CmsSwtUtils.style(button, SuiteStyle.leadPane);
 		if (icon != null)
-			button.setImage(icon.getBigIcon(theme));
+			button.setImage(theme.getBigIcon(icon));
 		button.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, false));
 		// button.setToolTipText(msg.lead());
 		if (msg != null) {

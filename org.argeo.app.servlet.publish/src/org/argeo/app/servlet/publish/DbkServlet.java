@@ -43,7 +43,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.xalan.processor.TransformerFactoryImpl;
-import org.argeo.api.cms.CmsTheme;
+import org.argeo.api.cms.ux.CmsTheme;
 import org.argeo.app.docbook.DbkType;
 import org.argeo.app.docbook.DbkUtils;
 import org.argeo.cms.auth.RemoteAuthUtils;

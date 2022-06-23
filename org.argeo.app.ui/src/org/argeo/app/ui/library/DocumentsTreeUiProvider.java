@@ -8,9 +8,9 @@ import javax.jcr.Node;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 
-import org.argeo.api.cms.CmsView;
 import org.argeo.app.ui.SuiteEvent;
 import org.argeo.api.cms.CmsConstants;
+import org.argeo.api.cms.ux.CmsView;
 import org.argeo.cms.fs.CmsFsUtils;
 import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.cms.swt.CmsSwtUtils;

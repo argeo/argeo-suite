@@ -4,8 +4,8 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NodeType;
 
-import org.argeo.api.cms.CmsEditable;
-import org.argeo.api.cms.CmsView;
+import org.argeo.api.cms.ux.CmsEditable;
+import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.docbook.DbkType;
 import org.argeo.app.ui.docbook.AbstractDbkViewer;
 import org.argeo.app.ui.docbook.DocumentTextEditor;

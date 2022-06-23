@@ -5,8 +5,8 @@ import java.util.Map;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsLog;
-import org.argeo.api.cms.CmsUi;
-import org.argeo.api.cms.CmsView;
+import org.argeo.api.cms.ux.CmsUi;
+import org.argeo.api.cms.ux.CmsView;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.eclipse.swt.SWT;
