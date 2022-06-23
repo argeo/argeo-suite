@@ -1,7 +1,9 @@
 package org.argeo.app.api;
 
+import org.argeo.util.naming.QNamed;
+
 /** Types related to entities. */
-public enum EntityType implements JcrName {
+public enum EntityType implements JcrName,QNamed {
 	// entity
 	entity, local, relatedTo,
 	// structure
@@ -17,14 +19,22 @@ public enum EntityType implements JcrName {
 	// ldap
 	person, user;
 
+	
+	
 	@Override
-	public String getPrefix() {
-		return prefix();
-	}
-
-	public static String prefix() {
+	public String getDefaultPrefix() {
+		// TODO Auto-generated method stub
 		return "entity";
 	}
+
+	@Override
+	public String getPrefix() {
+		return getDefaultPrefix();
+	}
+
+//	public static String prefix() {
+//		return "entity";
+//	}
 
 	public String basePath() {
 		return '/' + name();
@@ -32,11 +42,11 @@ public enum EntityType implements JcrName {
 
 	@Override
 	public String getNamespace() {
-		return namespace();
+		return  "http://www.argeo.org/ns/entity";
 	}
 
-	public static String namespace() {
-		return "http://www.argeo.org/ns/entity";
-	}
+//	public static String namespace() {
+//		return "http://www.argeo.org/ns/entity";
+//	}
 
 }

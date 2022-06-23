@@ -351,7 +351,7 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 
 		} else {
 
-			List<QName> objectClasses = content.getTypes();
+			List<QName> objectClasses = content.getContentClasses();
 			Set<String> types = new TreeSet<>();
 			for (QName cc : objectClasses) {
 				String type = cc.getPrefix() + ":" + cc.getLocalPart();

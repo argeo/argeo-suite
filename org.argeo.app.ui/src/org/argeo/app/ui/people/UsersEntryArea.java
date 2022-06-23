@@ -1,7 +1,5 @@
 package org.argeo.app.ui.people;
 
-import static org.argeo.cms.auth.UserAdminUtils.getProperty;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +15,7 @@ import org.argeo.app.ui.SuiteEvent;
 import org.argeo.app.ui.SuiteIcon;
 import org.argeo.app.ui.dialogs.NewUserWizard;
 import org.argeo.cms.CmsUserManager;
+import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.auth.CmsRole;
 import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.auth.UserAdminUtils;
@@ -36,6 +35,7 @@ import org.argeo.osgi.useradmin.UserDirectory;
 import org.argeo.util.LangUtils;
 import org.argeo.util.directory.HierarchyUnit;
 import org.argeo.util.naming.LdapAttrs;
+import org.argeo.util.naming.LdapObjs;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
@@ -64,7 +64,6 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 		parent.setLayout(new GridLayout());
 
 		ContentSession contentSession = contentRepository.get();
-
 		SashForm sashForm = new SashForm(parent, SWT.VERTICAL);
 		CmsSwtUtils.fill(sashForm);
 
@@ -118,7 +117,7 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 		};
 
 		TabularPart usersView = new SwtTabularPart(sashForm, SWT.NONE) {
-			List<Role> roles = new ArrayList<>();
+			List<Content> roles = new ArrayList<>();
 
 			@Override
 			protected Object getData(int row) {
@@ -153,8 +152,10 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 				for (HierarchyUnit directChild : hu.getDirectHierachyUnits(false)) {
 					if (!directChild.isFunctional()) {
 						for (Role r : ud.getHierarchyUnitRoles(directChild, null, false)) {
+							Content content = ContentUtils.roleToContent(cmsUserManager, contentSession, r);
 							// if (r instanceof Person || r instanceof Organization)
-							roles.add(r);
+							if (content.hasContentClass(LdapObjs.inetOrgPerson.qName(), LdapObjs.organization.qName()))
+								roles.add(content);
 						}
 					}
 				}
@@ -163,29 +164,30 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 			}
 
 		};
-		usersView.addColumn(new Column<Role>() {
+		usersView.addColumn(new Column<Content>() {
 
 			@Override
-			public String getText(Role role) {
-				String txt = getProperty(role, LdapAttrs.o);
-				if (txt != null && !txt.equals(""))
-					return txt;
-				txt = getProperty(role, LdapAttrs.cn);
-				if (txt != null && !txt.equals(""))
-					return txt;
-				txt = UserAdminUtils.getUserDisplayName(role);
-				return txt;
+			public String getText(Content role) {
+				if (role.isContentClass(LdapObjs.inetOrgPerson.qName()))
+					return UserAdminUtils.getUserDisplayName(role.adapt(User.class));
+				else if (role.isContentClass(LdapObjs.organization.qName()))
+					return role.attr(LdapAttrs.o.qName());
+				else if (role.isContentClass(LdapObjs.groupOfNames.qName()))
+					return role.attr(LdapAttrs.cn.qName());
+				else
+					return null;
 			}
 
 			@Override
-			public CmsIcon getIcon(Role role) {
-				String txt = getProperty(role, LdapAttrs.o);
-				if (txt != null && !txt.equals(""))
-					return SuiteIcon.organisation;
-				txt = getProperty(role, LdapAttrs.uid);
-				if (txt != null && !txt.equals(""))
+			public CmsIcon getIcon(Content role) {
+				if (role.isContentClass(LdapObjs.inetOrgPerson.qName()))
 					return SuiteIcon.person;
-				return SuiteIcon.group;
+				else if (role.isContentClass(LdapObjs.organization.qName()))
+					return SuiteIcon.organisation;
+				else if (role.isContentClass(LdapObjs.groupOfNames.qName()))
+					return SuiteIcon.group;
+				else
+					return null;
 			}
 
 			@Override
@@ -194,7 +196,7 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 			}
 
 		});
-		usersView.addColumn((Column<Role>) (role) -> getProperty(role, LdapAttrs.mail));
+		usersView.addColumn((Column<Content>) (role) -> role.attr(LdapAttrs.mail.qName()));
 
 		// toolbar
 		Composite bottom = new Composite(parent, SWT.NONE);
@@ -219,7 +221,7 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 		});
 
 		usersView.onSelected((o) -> {
-			User user = (User) o;
+			Content user = (Content) o;
 			if (user != null) {
 				cmsView.sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.eventProperties(user));
 				deleteItem.setEnabled(true);
@@ -229,7 +231,7 @@ public class UsersEntryArea implements SwtUiProvider, CmsUiProvider {
 		});
 
 		usersView.onAction((o) -> {
-			User user = (User) o;
+			Content user = (Content) o;
 			if (user != null) {
 				cmsView.sendEvent(SuiteEvent.openNewPart.topic(), SuiteEvent.eventProperties(user));
 			}
