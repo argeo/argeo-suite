@@ -9,7 +9,7 @@ import org.argeo.app.api.Typology;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
-import org.argeo.cms.swt.EditablePart;
+import org.argeo.cms.swt.SwtEditablePart;
 import org.argeo.cms.swt.widgets.ContextOverlay;
 import org.argeo.cms.ui.widgets.StyledControl;
 import org.eclipse.swt.SWT;
@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolItem;
 
 /** Common logic between single and mutliple terms editable part. */
-public abstract class AbstractTermsPart extends StyledControl implements EditablePart {
+public abstract class AbstractTermsPart extends StyledControl implements SwtEditablePart {
 	private static final long serialVersionUID = -5497097995341927710L;
 	protected final TermsManager termsManager;
 	protected final Typology typology;

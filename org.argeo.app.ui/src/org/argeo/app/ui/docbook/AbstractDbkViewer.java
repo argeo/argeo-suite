@@ -23,7 +23,7 @@ import org.argeo.app.docbook.DbkAttr;
 import org.argeo.app.docbook.DbkType;
 import org.argeo.app.docbook.DbkUtils;
 import org.argeo.cms.swt.CmsSwtUtils;
-import org.argeo.cms.swt.EditablePart;
+import org.argeo.cms.swt.SwtEditablePart;
 import org.argeo.cms.ui.viewers.AbstractPageViewer;
 import org.argeo.cms.ui.viewers.NodePart;
 import org.argeo.cms.ui.viewers.PropertyPart;
@@ -273,7 +273,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		return sectionTitle;
 	}
 
-	protected void updateContent(EditablePart part) throws RepositoryException {
+	protected void updateContent(SwtEditablePart part) throws RepositoryException {
 		if (part instanceof SectionPart) {
 			SectionPart sectionPart = (SectionPart) part;
 			Node partNode = sectionPart.getNode();
@@ -317,7 +317,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 	// OVERRIDDEN FROM PARENT VIEWER
 	@Override
-	protected void save(EditablePart part) throws RepositoryException {
+	protected void save(SwtEditablePart part) throws RepositoryException {
 		if (part instanceof EditableText) {
 			EditableText et = (EditableText) part;
 			if (!et.getEditable())
@@ -362,7 +362,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		}
 	}
 
-	protected void saveLine(EditablePart part, String line) {
+	protected void saveLine(SwtEditablePart part, String line) {
 		if (part instanceof NodePart) {
 			saveLine(((NodePart) part).getNode(), line);
 		} else if (part instanceof PropertyPart) {
@@ -378,7 +378,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 	}
 
 	@Override
-	protected void prepare(EditablePart part, Object caretPosition) {
+	protected void prepare(SwtEditablePart part, Object caretPosition) {
 		Control control = part.getControl();
 		if (control instanceof Text) {
 			Text text = (Text) control;
@@ -614,7 +614,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		}
 	}
 
-	protected synchronized void upload(EditablePart part) {
+	protected synchronized void upload(SwtEditablePart part) {
 		try {
 			if (part instanceof SectionPart) {
 				SectionPart sectionPart = (SectionPart) part;
@@ -936,14 +936,14 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		public void mouseDoubleClick(MouseEvent e) {
 			if (e.button == 1) {
 				Control source = (Control) e.getSource();
-				EditablePart composite = findDataParent(source);
+				SwtEditablePart composite = findDataParent(source);
 				Point point = new Point(e.x, e.y);
 				if (composite instanceof DbkImg) {
 					if (getCmsEditable().canEdit()) {
 						if (getCmsEditable().isEditing() && !(getEdited() instanceof DbkImg)) {
 							if (source == mainSection)
 								return;
-							EditablePart part = findDataParent(source);
+							SwtEditablePart part = findDataParent(source);
 							upload(part);
 						} else {
 							getCmsEditable().startEditing();
@@ -972,7 +972,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		public void mouseDown(MouseEvent e) {
 			if (getCmsEditable().isEditing()) {
 				if (e.button == 3) {
-					EditablePart composite = findDataParent((Control) e.getSource());
+					SwtEditablePart composite = findDataParent((Control) e.getSource());
 					if (styledTools != null) {
 						List<String> styles = getAvailableStyles(composite);
 						styledTools.show(composite, new Point(e.x, e.y), styles);
@@ -986,7 +986,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 		}
 	}
 
-	protected List<String> getAvailableStyles(EditablePart editablePart) {
+	protected List<String> getAvailableStyles(SwtEditablePart editablePart) {
 		return new ArrayList<>();
 	}
 

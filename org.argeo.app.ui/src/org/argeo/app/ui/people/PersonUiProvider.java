@@ -9,7 +9,7 @@ import org.argeo.app.ui.SuiteMsg;
 import org.argeo.app.ui.SuiteUiUtils;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.swt.CmsSwtUtils;
-import org.argeo.cms.swt.widgets.SwtSection;
+import org.argeo.cms.swt.acr.SwtSection;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.util.naming.LdapAttrs;
 import org.eclipse.swt.SWT;

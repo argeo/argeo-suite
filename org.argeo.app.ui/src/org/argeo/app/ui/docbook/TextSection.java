@@ -4,7 +4,7 @@ import javax.jcr.Node;
 
 import org.argeo.app.docbook.DbkType;
 import org.argeo.cms.swt.CmsSwtUtils;
-import org.argeo.cms.swt.EditablePart;
+import org.argeo.cms.swt.SwtEditablePart;
 import org.argeo.cms.ui.viewers.Section;
 import org.argeo.cms.ui.widgets.TextStyles;
 import org.eclipse.swt.SWT;

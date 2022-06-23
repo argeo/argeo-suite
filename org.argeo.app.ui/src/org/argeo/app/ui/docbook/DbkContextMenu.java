@@ -9,7 +9,7 @@ import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.app.docbook.DbkMsg;
 import org.argeo.app.docbook.DbkUtils;
 import org.argeo.cms.swt.CmsSwtUtils;
-import org.argeo.cms.swt.EditablePart;
+import org.argeo.cms.swt.SwtEditablePart;
 import org.argeo.cms.swt.MouseDown;
 import org.argeo.cms.ui.viewers.NodePart;
 import org.argeo.cms.ui.viewers.Section;
@@ -46,7 +46,7 @@ class DbkContextMenu {
 		shell.addShellListener(new ToolsShellListener());
 	}
 
-	void show(EditablePart editablePart, Point location, List<String> availableStyles) {
+	void show(SwtEditablePart editablePart, Point location, List<String> availableStyles) {
 		if (shell.isVisible())
 			shell.setVisible(false);
 		CmsSwtUtils.clear(shell);
@@ -201,9 +201,9 @@ class DbkContextMenu {
 
 	class StyledToolMouseListener extends MouseAdapter {
 		private static final long serialVersionUID = 8516297091549329043L;
-		private EditablePart editablePart;
+		private SwtEditablePart editablePart;
 
-		public StyledToolMouseListener(EditablePart editablePart) {
+		public StyledToolMouseListener(SwtEditablePart editablePart) {
 			super();
 			this.editablePart = editablePart;
 		}

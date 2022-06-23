@@ -9,7 +9,7 @@ import org.argeo.api.cms.CmsLog;
 import org.argeo.app.api.Term;
 import org.argeo.app.api.TermsManager;
 import org.argeo.cms.swt.CmsSwtUtils;
-import org.argeo.cms.swt.EditablePart;
+import org.argeo.cms.swt.SwtEditablePart;
 import org.argeo.cms.swt.MouseDoubleClick;
 import org.argeo.cms.swt.MouseDown;
 import org.argeo.cms.swt.Selected;
@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
-/** {@link EditablePart} for multiple terms. */
+/** {@link SwtEditablePart} for multiple terms. */
 public class MultiTermsPart extends AbstractTermsPart {
 	private static final long serialVersionUID = -4961135649177920808L;
 	private final static CmsLog log = CmsLog.getLog(MultiTermsPart.class);
