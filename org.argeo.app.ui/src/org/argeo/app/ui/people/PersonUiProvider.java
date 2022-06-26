@@ -116,7 +116,10 @@ public class PersonUiProvider implements CmsUiProvider {
 		EditableText text = new EditableText(parent, SWT.SINGLE | SWT.FLAT);
 		text.setLayoutData(CmsSwtUtils.fillWidth());
 		text.setStyle(SuiteStyle.simpleInput);
-		text.setText(context.attr(attr.qName()));
+		String txt = context.attr(attr.qName());
+		if (txt == null) // FIXME understand why email is not found in IPA
+			txt = "";
+		text.setText(txt);
 		text.setMouseListener(new MouseAdapter() {
 
 			@Override

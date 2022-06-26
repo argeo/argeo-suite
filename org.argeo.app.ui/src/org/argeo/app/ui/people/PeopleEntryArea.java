@@ -34,6 +34,7 @@ import org.argeo.cms.ux.widgets.DefaultTabularPart;
 import org.argeo.cms.ux.widgets.HierarchicalPart;
 import org.argeo.osgi.useradmin.UserDirectory;
 import org.argeo.util.directory.HierarchyUnit;
+import org.argeo.util.directory.ldap.IpaUtils;
 import org.argeo.util.naming.LdapAttrs;
 import org.argeo.util.naming.LdapObjs;
 import org.eclipse.jface.window.Window;
@@ -84,13 +85,18 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 				List<HierarchyUnit> visible = new ArrayList<>();
 				if (parent != null) {
 					for (HierarchyUnit hu : parent.getDirectHierarchyUnits(true)) {
-						if (CurrentUser.implies(CmsRole.userAdmin, hu.getContext())) {
+						if (CurrentUser.implies(CmsRole.userAdmin, hu.getContext()) //
+						) // IPA
+						{
 							visible.add(hu);
 						}
 					}
 				} else {
 					for (UserDirectory directory : cmsUserManager.getUserDirectories()) {
-						if (CurrentUser.implies(CmsRole.userAdmin, directory.getContext())) {
+						if (CurrentUser.implies(CmsRole.userAdmin, directory.getContext()) //
+								|| CurrentUser.implies(CmsRole.userAdmin,
+										IpaUtils.IPA_ACCOUNTS_RDN + "," + directory.getContext())) // IPA
+						{
 							visible.add(directory);
 						}
 
@@ -114,13 +120,24 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 			protected List<Content> asList(HierarchyUnit hu) {
 				List<Content> roles = new ArrayList<>();
 				UserDirectory ud = (UserDirectory) hu.getDirectory();
-				for (HierarchyUnit directChild : hu.getDirectHierarchyUnits(false)) {
-					if (!directChild.isFunctional()) {
-						for (Role r : ud.getHierarchyUnitRoles(directChild, null, false)) {
-							Content content = ContentUtils.roleToContent(cmsUserManager, contentSession, r);
-							// if (r instanceof Person || r instanceof Organization)
-							if (content.hasContentClass(LdapObjs.inetOrgPerson.qName(), LdapObjs.organization.qName()))
-								roles.add(content);
+				if (ud.getRealm().isPresent()) {
+					for (Role r : ud.getHierarchyUnitRoles(ud, null, true)) {
+						Content content = ContentUtils.roleToContent(cmsUserManager, contentSession, r);
+						// if (r instanceof Person || r instanceof Organization)
+						if (content.hasContentClass(LdapObjs.inetOrgPerson.qName(), LdapObjs.organization.qName()))
+							roles.add(content);
+					}
+
+				} else {
+					for (HierarchyUnit directChild : hu.getDirectHierarchyUnits(false)) {
+						if (!directChild.isFunctional()) {
+							for (Role r : ud.getHierarchyUnitRoles(directChild, null, false)) {
+								Content content = ContentUtils.roleToContent(cmsUserManager, contentSession, r);
+								// if (r instanceof Person || r instanceof Organization)
+								if (content.hasContentClass(LdapObjs.inetOrgPerson.qName(),
+										LdapObjs.organization.qName()))
+									roles.add(content);
+							}
 						}
 					}
 				}
