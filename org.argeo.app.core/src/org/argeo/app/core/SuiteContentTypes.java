@@ -21,6 +21,8 @@ public enum SuiteContentTypes {
 	//
 //	XCAL_2_0("xcal", "urn:ietf:params:xml:ns:icalendar-2.0", "xCal-2.0.xsd", null),
 	//
+	XHTML_1_1("h", "http://www.w3.org/1999/xhtml", null, "https://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd"),
+	//
 	// ODK
 	//
 	JR("jr", "http://openrosa.org/javarosa", null, null),
