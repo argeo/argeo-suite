@@ -24,7 +24,7 @@ public class SuiteMaintenanceService extends AbstractMaintenanceService {
 
 		for (SuiteContentTypes types : SuiteContentTypes.values()) {
 			contentRepository.registerTypes(types.getDefaultPrefix(), types.getNamespace(),
-					types.getResource().toExternalForm());
+					types.getResource() != null ? types.getResource().toExternalForm() : null);
 		}
 	}
 
