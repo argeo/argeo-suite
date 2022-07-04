@@ -62,6 +62,16 @@ public class PersonUiProvider implements CmsUiProvider {
 				if (roles.contains(role))
 					radio.setSelection(true);
 			}
+
+//			Composite facetsSection = new Composite(main, SWT.NONE);
+//			facetsSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
+//			facetsSection.setLayout(new GridLayout());
+//			if (context.hasContentClass(LdapObjs.groupOfNames.qName())) {
+//				String[] members = context.attr(LdapAttrs.member.qName()).split("\n");
+//				for (String member : members) {
+//					new Label(facetsSection, SWT.NONE).setText(member);
+//				}
+//			}
 		}
 
 //		if (user instanceof Group) {
