@@ -10,7 +10,6 @@ import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.acr.SwtTabbedArea;
 import org.argeo.cms.swt.acr.SwtUiProvider;
-import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.util.LangUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
@@ -22,9 +21,9 @@ import org.osgi.framework.wiring.BundleWiring;
 
 /** An app layer based on an entry area and an editor area. */
 public class DefaultEditionLayer implements SuiteLayer {
-	private CmsUiProvider entryArea;
-	private CmsUiProvider defaultView;
-	private CmsUiProvider workArea;
+	private SwtUiProvider entryArea;
+	private SwtUiProvider defaultView;
+	private SwtUiProvider workArea;
 	private List<String> weights = new ArrayList<>();
 	private boolean startMaximized = false;
 	private boolean fixedEntryArea = false;
@@ -158,15 +157,15 @@ public class DefaultEditionLayer implements SuiteLayer {
 
 	}
 
-	public void setEntryArea(CmsUiProvider entryArea) {
+	public void setEntryArea(SwtUiProvider entryArea) {
 		this.entryArea = entryArea;
 	}
 
-	public void setWorkArea(CmsUiProvider workArea) {
+	public void setWorkArea(SwtUiProvider workArea) {
 		this.workArea = workArea;
 	}
 
-	public void setDefaultView(CmsUiProvider defaultView) {
+	public void setDefaultView(SwtUiProvider defaultView) {
 		this.defaultView = defaultView;
 	}
 
