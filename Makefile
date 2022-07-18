@@ -1,7 +1,11 @@
 include sdk.mk
-.PHONY: clean all osgi
+.PHONY: clean all osgi move-swt
 
-all: osgi
+all: move-swt
+
+move-swt: osgi
+	mkdir -p $(A2_OUTPUT)/swt/$(A2_CATEGORY)
+	mv -v $(A2_OUTPUT)/$(A2_CATEGORY)/org.argeo.app*.ui.$(MAJOR).$(MINOR).jar $(A2_OUTPUT)/swt/$(A2_CATEGORY)
 
 A2_CATEGORY = org.argeo.suite
 
@@ -28,7 +32,8 @@ org.argeo.tp.jcr \
 org.argeo.tp.formats \
 org.argeo.tp.gis \
 org.argeo.cms \
-org.argeo.cms.eclipse.rap \
+swt/org.argeo.cms \
+swt/rap/org.argeo.cms \
 
 clean:
 	rm -rf $(BUILD_BASE)
