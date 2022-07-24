@@ -22,6 +22,7 @@ import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentRepository;
 import org.argeo.api.acr.spi.ProvidedSession;
 import org.argeo.api.cms.CmsConstants;
+import org.argeo.api.cms.CmsEventSubscriber;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.CmsSession;
 import org.argeo.api.cms.ux.CmsTheme;
@@ -48,12 +49,10 @@ import org.argeo.util.LangUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.osgi.framework.Constants;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventHandler;
 import org.osgi.service.useradmin.User;
 
 /** The Argeo Suite App. */
-public class SuiteApp extends AbstractCmsApp implements EventHandler {
+public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 	private final static CmsLog log = CmsLog.getLog(SuiteApp.class);
 
 	public final static String PUBLIC_BASE_PATH_PROPERTY = "publicBasePath";
@@ -99,6 +98,10 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 //	private Repository repository;
 
 	public void init(Map<String, Object> properties) {
+		for (SuiteEvent event : SuiteEvent.values()) {
+			getCmsContext().getCmsEventBus().addEventSubscriber(event.topic(), this);
+		}
+
 		if (log.isDebugEnabled())
 			log.info("Argeo Suite App started");
 
@@ -474,83 +477,84 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 	 */
 
 	@Override
-	public void handleEvent(Event event) {
+	public void onEvent(String topic, Map<String, Object> event) {
 
 		// Specific UI related events
 		SuiteUi ui = getRelatedUi(event);
 		if (ui == null)
 			return;
-		try {
-			String appTitle = "";
-			if (ui.getTitle() != null)
-				appTitle = ui.getTitle().lead() + " - ";
+		ui.getCmsView().runAs(() -> {
+			try {
+				String appTitle = "";
+				if (ui.getTitle() != null)
+					appTitle = ui.getTitle().lead() + " - ";
 
 //			String currentLayerId = ui.getCurrentLayerId();
 //			SuiteLayer currentLayer = currentLayerId != null ? layersByPid.get(currentLayerId).get() : null;
-			if (SuiteUiUtils.isTopic(event, SuiteEvent.refreshPart)) {
-				Content node = getNode(ui, event);
-				if (node == null)
-					return;
-				CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
-				SuiteLayer layer = findByType(layersByType, node);
-				ui.switchToLayer(layer, node);
-				ui.getCmsView().runAs(() -> layer.view(uiProvider, ui.getCurrentWorkArea(), node));
-				ui.getCmsView().stateChanged(nodeToState(node), appTitle + CmsUxUtils.getTitle(node));
-			} else if (SuiteUiUtils.isTopic(event, SuiteEvent.openNewPart)) {
-				Content node = getNode(ui, event);
-				if (node == null)
-					return;
-				CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
-				SuiteLayer layer = findByType(layersByType, node);
-				ui.switchToLayer(layer, node);
-				ui.getCmsView().runAs(() -> layer.open(uiProvider, ui.getCurrentWorkArea(), node));
-				ui.getCmsView().stateChanged(nodeToState(node), appTitle + CmsUxUtils.getTitle(node));
-			} else if (SuiteUiUtils.isTopic(event, SuiteEvent.switchLayer)) {
-				String layerId = get(event, SuiteEvent.LAYER);
-				if (layerId != null) {
+				if (SuiteUiUtils.isTopic(topic, SuiteEvent.refreshPart)) {
+					Content node = getNode(ui, event);
+					if (node == null)
+						return;
+					CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
+					SuiteLayer layer = findByType(layersByType, node);
+					ui.switchToLayer(layer, node);
+					layer.view(uiProvider, ui.getCurrentWorkArea(), node);
+					ui.getCmsView().stateChanged(nodeToState(node), appTitle + CmsUxUtils.getTitle(node));
+				} else if (SuiteUiUtils.isTopic(topic, SuiteEvent.openNewPart)) {
+					Content node = getNode(ui, event);
+					if (node == null)
+						return;
+					CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
+					SuiteLayer layer = findByType(layersByType, node);
+					ui.switchToLayer(layer, node);
+					layer.open(uiProvider, ui.getCurrentWorkArea(), node);
+					ui.getCmsView().stateChanged(nodeToState(node), appTitle + CmsUxUtils.getTitle(node));
+				} else if (SuiteUiUtils.isTopic(topic, SuiteEvent.switchLayer)) {
+					String layerId = get(event, SuiteEvent.LAYER);
+					if (layerId != null) {
 //					ui.switchToLayer(layerId, ui.getUserDir());
-					SuiteLayer suiteLayer = findLayer(layerId);
-					if (suiteLayer == null)
-						throw new IllegalArgumentException("No layer '" + layerId + "' available.");
-					Localized layerTitle = suiteLayer.getTitle();
-					// FIXME make sure we don't rebuild the work area twice
-					Composite workArea = ui.getCmsView().doAs(() -> ui.switchToLayer(layerId, ui.getUserDirNode()));
-					String title = null;
-					if (layerTitle != null)
-						title = layerTitle.lead();
-					Content nodeFromState = getNode(ui, event);
-					if (nodeFromState != null && nodeFromState.getPath().equals(ui.getUserDirNode().getPath())) {
-						// default layer view is forced
-						String state = defaultLayerPid.equals(layerId) ? "~" : layerId;
-						ui.getCmsView().stateChanged(state, appTitle + title);
-						suiteLayer.view(null, workArea, nodeFromState);
-					} else {
-						Content layerCurrentContext = suiteLayer.getCurrentContext(workArea);
-						if (layerCurrentContext != null) {
-							// layer was already showing a context so we set the state to it
-							ui.getCmsView().stateChanged(nodeToState(layerCurrentContext),
-									appTitle + CmsUxUtils.getTitle(layerCurrentContext));
+						SuiteLayer suiteLayer = findLayer(layerId);
+						if (suiteLayer == null)
+							throw new IllegalArgumentException("No layer '" + layerId + "' available.");
+						Localized layerTitle = suiteLayer.getTitle();
+						// FIXME make sure we don't rebuild the work area twice
+						Composite workArea = ui.switchToLayer(layerId, ui.getUserDirNode());
+						String title = null;
+						if (layerTitle != null)
+							title = layerTitle.lead();
+						Content nodeFromState = getNode(ui, event);
+						if (nodeFromState != null && nodeFromState.getPath().equals(ui.getUserDirNode().getPath())) {
+							// default layer view is forced
+							String state = defaultLayerPid.equals(layerId) ? "~" : layerId;
+							ui.getCmsView().stateChanged(state, appTitle + title);
+							suiteLayer.view(null, workArea, nodeFromState);
 						} else {
-							// no context was shown
-							ui.getCmsView().stateChanged(layerId, appTitle + title);
+							Content layerCurrentContext = suiteLayer.getCurrentContext(workArea);
+							if (layerCurrentContext != null) {
+								// layer was already showing a context so we set the state to it
+								ui.getCmsView().stateChanged(nodeToState(layerCurrentContext),
+										appTitle + CmsUxUtils.getTitle(layerCurrentContext));
+							} else {
+								// no context was shown
+								ui.getCmsView().stateChanged(layerId, appTitle + title);
+							}
+						}
+					} else {
+						Content node = getNode(ui, event);
+						if (node != null) {
+							SuiteLayer layer = findByType(layersByType, node);
+							ui.switchToLayer(layer, node);
 						}
 					}
-				} else {
-					Content node = getNode(ui, event);
-					if (node != null) {
-						SuiteLayer layer = findByType(layersByType, node);
-						ui.getCmsView().runAs(() -> ui.switchToLayer(layer, node));
-					}
 				}
-			}
-		} catch (Exception e) {
-			log.error("Cannot handle event " + event, e);
+			} catch (Exception e) {
+				log.error("Cannot handle event " + event, e);
 //			CmsView.getCmsView(ui).exception(e);
-		}
-
+			}
+		});
 	}
 
-	private Content getNode(SuiteUi ui, Event event) {
+	private Content getNode(SuiteUi ui, Map<String, Object> event) {
 		ProvidedSession contentSession = (ProvidedSession) CmsUxUtils.getContentSession(contentRepository,
 				ui.getCmsView());
 
@@ -600,12 +604,12 @@ public class SuiteApp extends AbstractCmsApp implements EventHandler {
 		return node;
 	}
 
-	private SuiteUi getRelatedUi(Event event) {
-		return managedUis.get(get(event, CMS_VIEW_UID_PROPERTY));
+	private SuiteUi getRelatedUi(Map<String, Object> eventProperties) {
+		return managedUis.get(get(eventProperties, CMS_VIEW_UID_PROPERTY));
 	}
 
-	public static String get(Event event, String key) {
-		Object value = event.getProperty(key);
+	public static String get(Map<String, Object> eventProperties, String key) {
+		Object value = eventProperties.get(key);
 		if (value == null)
 			return null;
 //			throw new IllegalArgumentException("Property " + key + " must be set");

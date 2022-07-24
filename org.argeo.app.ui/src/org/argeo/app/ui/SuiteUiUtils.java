@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -45,7 +46,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.osgi.service.event.Event;
 
 /** UI utilities related to the APAF project. */
 public class SuiteUiUtils {
@@ -398,8 +398,9 @@ public class SuiteUiUtils {
 		return coworker;
 	}
 
-	public static boolean isTopic(Event event, CmsEvent cmsEvent) {
-		return event.getTopic().equals(cmsEvent.topic());
+	public static boolean isTopic(String topic, CmsEvent cmsEvent) {
+		Objects.requireNonNull(topic);
+		return topic.equals(cmsEvent.topic());
 	}
 
 	public static Button createLayerButton(Composite parent, String layer, Localized msg, CmsIcon icon,

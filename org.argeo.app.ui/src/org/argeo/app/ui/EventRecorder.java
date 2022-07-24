@@ -1,11 +1,12 @@
 package org.argeo.app.ui;
 
+import java.util.Map;
+
+import org.argeo.api.cms.CmsEventSubscriber;
 import org.argeo.api.cms.CmsLog;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventHandler;
 
 /** Record UI events. */
-public class EventRecorder implements EventHandler {
+public class EventRecorder implements CmsEventSubscriber {
 	private final static CmsLog log = CmsLog.getLog(EventRecorder.class);
 
 	public void init() {
@@ -17,9 +18,9 @@ public class EventRecorder implements EventHandler {
 	}
 
 	@Override
-	public void handleEvent(Event event) {
+	public void onEvent(String topic, Map<String, Object> properties) {
 		if (log.isTraceEnabled())
-			log.trace(event);
+			log.trace(topic + ": " + properties);
 
 	}
 

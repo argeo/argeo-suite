@@ -3,7 +3,6 @@
    <implementation class="org.argeo.app.ui.SuiteApp"/>
    <service>
       <provide interface="org.argeo.api.cms.CmsApp"/>
-      <provide interface="org.osgi.service.event.EventHandler"/>
    </service>
    <properties entry="config/cmsApp.properties"/>
    <reference bind="addUiProvider" cardinality="0..n" interface="org.argeo.cms.ui.CmsUiProvider" name="CmsUiProvider" policy="dynamic" unbind="removeUiProvider"/>

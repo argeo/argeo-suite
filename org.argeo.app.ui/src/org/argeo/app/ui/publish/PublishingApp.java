@@ -12,9 +12,9 @@ import javax.jcr.Repository;
 import javax.jcr.Session;
 
 import org.argeo.api.cms.CmsApp;
-import org.argeo.app.ui.SuiteApp;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.ux.CmsUi;
+import org.argeo.app.ui.SuiteApp;
 import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.jcr.Jcr;
@@ -23,14 +23,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.osgi.framework.Constants;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventHandler;
 
 /**
  * A {@link CmsApp} dedicated to publishing, typically a public or internal web
  * site.
  */
-public class PublishingApp extends AbstractCmsApp implements EventHandler {
+public class PublishingApp extends AbstractCmsApp {
 	private final static CmsLog log = CmsLog.getLog(PublishingApp.class);
 
 	private String pid;
@@ -114,12 +112,6 @@ public class PublishingApp extends AbstractCmsApp implements EventHandler {
 
 	public void setLandingPage(CmsUiProvider landingPage) {
 		this.landingPage = landingPage;
-	}
-
-	@Override
-	public void handleEvent(Event event) {
-		// TODO listen to some events
-
 	}
 
 	public Repository getRepository() {
