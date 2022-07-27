@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -48,13 +49,15 @@ import org.argeo.util.LangUtils;
 public class FopServlet extends HttpServlet {
 	private static final long serialVersionUID = 6906020513498289335L;
 
+	private final static String PROP_ARGEO_FO_XSL = "argeo.fo.xsl";
+
 	private ContentRepository contentRepository;
 
 	private DocumentBuilderFactory documentBuilderFactory;
 	private TransformerFactory transformerFactory;
 	private Templates foTemplates;
 
-	private String xslUrl;
+	private URL xslUrl;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -71,13 +74,16 @@ public class FopServlet extends HttpServlet {
 		xmlInput.setSystemId(req.getRequestURI());
 
 		// dev only
-		try (InputStream in = new URL(xslUrl).openStream()) {
-			Source xslSource = new StreamSource(in);
-			foTemplates = transformerFactory.newTemplates(xslSource);
-			if (foTemplates == null)
-				throw new IllegalStateException("Could not instantiate XSL " + xslUrl);
-		} catch (TransformerConfigurationException | IOException e) {
-			throw new IllegalStateException("Cannot instantiate XSL " + xslUrl, e);
+		final boolean DEV = false;
+		if (DEV) {
+			try (InputStream in = xslUrl.openStream()) {
+				Source xslSource = new StreamSource(in);
+				foTemplates = transformerFactory.newTemplates(xslSource);
+				if (foTemplates == null)
+					throw new IllegalStateException("Could not instantiate XSL " + xslUrl);
+			} catch (TransformerConfigurationException | IOException e) {
+				throw new IllegalStateException("Cannot instantiate XSL " + xslUrl, e);
+			}
 		}
 
 		URIResolver uriResolver = (href, base) -> {
@@ -137,6 +143,14 @@ public class FopServlet extends HttpServlet {
 
 	}
 
+	@Override
+	public void init() throws ServletException {
+//		for (Enumeration<String> it = getServletConfig().getInitParameterNames(); it.hasMoreElements();)
+//			System.out.println(it.nextElement());
+//		for (String str : getServletContext().getResourcePaths("/"))
+//			System.out.println(str);
+	}
+
 	public void start(Map<String, Object> properties) {
 		documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		documentBuilderFactory.setXIncludeAware(true);
@@ -146,13 +160,17 @@ public class FopServlet extends HttpServlet {
 		// with DocBook stylesheets
 		transformerFactory = new TransformerFactoryImpl();
 //		transformerFactory = TransformerFactory.newDefaultInstance();
+		try {
+			String xslStr = LangUtils.get(properties, PROP_ARGEO_FO_XSL);
+			Objects.requireNonNull(xslStr);
+			xslUrl = new URL(xslStr);
+			try (InputStream in = xslUrl.openStream()) {
+				Source xslSource = new StreamSource(in);
+				foTemplates = transformerFactory.newTemplates(xslSource);
+				if (foTemplates == null)
+					throw new IllegalStateException("Could not instantiate XSL " + xslUrl);
+			}
 
-		xslUrl = LangUtils.get(properties, "argeo.fo.xsl");
-		try (InputStream in = new URL(xslUrl).openStream()) {
-			Source xslSource = new StreamSource(in);
-			foTemplates = transformerFactory.newTemplates(xslSource);
-			if (foTemplates == null)
-				throw new IllegalStateException("Could not instantiate XSL " + xslUrl);
 		} catch (TransformerConfigurationException | IOException e) {
 			throw new IllegalStateException("Cannot instantiate XSL " + xslUrl, e);
 		}
