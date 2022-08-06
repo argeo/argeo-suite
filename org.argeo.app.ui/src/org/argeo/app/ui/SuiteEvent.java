@@ -27,7 +27,7 @@ public enum SuiteEvent implements CmsEvent {
 	public final static String WORKSPACE = "workspace";
 
 	public String getTopicBase() {
-		return "argeo/suite/ui";
+		return "argeo.suite.ui";
 	}
 
 	public static Map<String, Object> eventProperties(Content content) {
@@ -39,7 +39,7 @@ public enum SuiteEvent implements CmsEvent {
 	@Deprecated
 	public static Map<String, Object> eventProperties(Node node) {
 		Map<String, Object> properties = new HashMap<>();
-		String contentPath = '/'+ Jcr.getWorkspaceName(node)+ Jcr.getPath(node);
+		String contentPath = '/' + Jcr.getWorkspaceName(node) + Jcr.getPath(node);
 		properties.put(CONTENT_PATH, contentPath);
 //		properties.put(NODE_PATH, Jcr.getPath(node));
 //		properties.put(WORKSPACE, Jcr.getWorkspaceName(node));
