@@ -1,0 +1,6 @@
+Import-Package: \
+org.argeo.cms.acr.fs,\
+*
+
+Service-Component:\
+OSGI-INF/srvContentProvider.xml,\
