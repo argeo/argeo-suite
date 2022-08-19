@@ -41,8 +41,8 @@ public class SuiteUtils {
 				userNode.setProperty(LdapAttrs.distinguishedName.property(), userDn.toString());
 				userNode.setProperty(LdapAttrs.uid.property(), uid);
 				adminSession.save();
-				JackrabbitSecurityUtils.denyPrivilege(adminSession, userNode.getPath(), SuiteRole.coworker.dn(),
-						Privilege.JCR_READ);
+//				JackrabbitSecurityUtils.denyPrivilege(adminSession, userNode.getPath(), SuiteRole.coworker.dn(),
+//						Privilege.JCR_READ);
 				JcrUtils.addPrivilege(adminSession, userNode.getPath(), new X500Principal(userDn.toString()).getName(),
 						Privilege.JCR_READ);
 				JcrUtils.addPrivilege(adminSession, userNode.getPath(), CmsConstants.ROLE_USER_ADMIN,

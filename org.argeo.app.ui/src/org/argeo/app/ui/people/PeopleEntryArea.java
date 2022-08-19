@@ -85,7 +85,7 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 				List<HierarchyUnit> visible = new ArrayList<>();
 				if (parent != null) {
 					for (HierarchyUnit hu : parent.getDirectHierarchyUnits(true)) {
-						if (CurrentUser.implies(CmsRole.userAdmin, hu.getContext()) //
+						if (CurrentUser.implies(CmsRole.userAdmin, hu.getBase()) //
 						) // IPA
 						{
 							visible.add(hu);
@@ -93,9 +93,9 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 					}
 				} else {
 					for (UserDirectory directory : cmsUserManager.getUserDirectories()) {
-						if (CurrentUser.implies(CmsRole.userAdmin, directory.getContext()) //
+						if (CurrentUser.implies(CmsRole.userAdmin, directory.getBase()) //
 								|| CurrentUser.implies(CmsRole.userAdmin,
-										IpaUtils.IPA_ACCOUNTS_RDN + "," + directory.getContext())) // IPA
+										IpaUtils.IPA_ACCOUNTS_RDN + "," + directory.getBase())) // IPA
 						{
 							visible.add(directory);
 						}
