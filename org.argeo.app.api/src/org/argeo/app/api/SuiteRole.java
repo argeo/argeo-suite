@@ -42,6 +42,6 @@ public enum SuiteRole implements SystemRole {
 	@Deprecated
 	public String dn() {
 		return new StringBuilder(LdapAttrs.cn.name()).append("=").append(getRolePrefix()).append(".").append(name())
-				.append(",").append(CmsConstants.ROLES_BASEDN).toString();
+				.append(",").append(CmsConstants.SYSTEM_ROLES_BASEDN).toString();
 	}
 }
