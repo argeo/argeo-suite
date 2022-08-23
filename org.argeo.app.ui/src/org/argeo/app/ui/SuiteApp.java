@@ -224,7 +224,8 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 					// FIXME NPE on CMSSession when logging in from anonymous
 					if (cmsSession == null || cmsView.isAnonymous()) {
 						assert publicBasePath != null;
-						Content userDir = contentSession.get(CmsConstants.SYS_WORKSPACE + publicBasePath);
+						Content userDir = contentSession
+								.get(ContentUtils.SLASH + CmsConstants.SYS_WORKSPACE + publicBasePath);
 						ui.setUserDir(userDir);
 //						ui.initSessions(getRepository(), publicBasePath);
 					} else {
