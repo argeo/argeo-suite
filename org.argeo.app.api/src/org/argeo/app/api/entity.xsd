@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:entity="http://www.argeo.org/ns/entity"
-	targetNamespace="http://www.argeo.org/ns/entity">
-
-	<xs:attribute name="date" type="xs:date" />
-</xs:schema>

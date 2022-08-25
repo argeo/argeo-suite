@@ -16,14 +16,12 @@ import org.argeo.maintenance.AbstractMaintenanceService;
 
 /** Initialises an Argeo Suite backend. */
 public class SuiteMaintenanceService extends AbstractMaintenanceService {
-	private ProvidedRepository contentRepository;
-
 	@Override
 	public void init() {
 		super.init();
 
 		for (SuiteContentTypes types : SuiteContentTypes.values()) {
-			contentRepository.registerTypes(types.getDefaultPrefix(), types.getNamespace(),
+			getContentRepository().registerTypes(types.getDefaultPrefix(), types.getNamespace(),
 					types.getResource() != null ? types.getResource().toExternalForm() : null);
 		}
 	}
@@ -47,10 +45,6 @@ public class SuiteMaintenanceService extends AbstractMaintenanceService {
 				Privilege.JCR_ALL);
 		// JcrUtils.addPrivilege(adminSession, "/", SuiteRole.coworker.dn(),
 		// Privilege.JCR_READ);
-	}
-
-	public void setContentRepository(ProvidedRepository contentRepository) {
-		this.contentRepository = contentRepository;
 	}
 
 }

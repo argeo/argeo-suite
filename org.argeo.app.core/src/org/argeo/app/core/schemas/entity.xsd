@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	elementFormDefault="qualified"
+	targetNamespace="http://www.argeo.org/ns/entity"
+	xmlns:entity="http://www.argeo.org/ns/entity">
+
+	<xs:attribute name="date" type="xs:date" />
+
+	<xs:element name="local">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:any minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+			<xs:anyAttribute />
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
