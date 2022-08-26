@@ -4,7 +4,6 @@ import java.util.function.Supplier;
 
 /** Can be applied to {@link Enum}s in order to generate prefixed names. */
 @FunctionalInterface
-@Deprecated
 public interface JcrName extends Supplier<String> {
 	String name();
 
