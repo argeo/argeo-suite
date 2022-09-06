@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	elementFormDefault="qualified"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
 	targetNamespace="http://www.argeo.org/ns/entity"
 	xmlns:entity="http://www.argeo.org/ns/entity">
 
@@ -9,9 +9,11 @@
 	<xs:element name="local">
 		<xs:complexType>
 			<xs:sequence>
-				<xs:any minOccurs="0" maxOccurs="unbounded" />
+				<xs:any minOccurs="0" maxOccurs="unbounded"
+					namespace="##local" processContents="lax" />
 			</xs:sequence>
-			<xs:anyAttribute />
+			<xs:anyAttribute namespace="##any"
+				processContents="lax" />
 		</xs:complexType>
 	</xs:element>
 </xs:schema>
