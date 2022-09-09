@@ -4,6 +4,6 @@
    <service>
       <provide interface="org.argeo.app.ui.SuiteLayer"/>
    </service>
-   <reference bind="setEntryArea" cardinality="1..1" interface="org.argeo.cms.ui.CmsUiProvider" name="CmsUiProvider" policy="dynamic" target="(service.pid=argeo.library.ui.contentEntryArea)"/>
+   <reference bind="setEntryArea" cardinality="1..1" interface="org.argeo.cms.swt.acr.SwtUiProvider" policy="dynamic" target="(service.pid=argeo.library.ui.contentEntryArea)"/>
    <properties entry="config/contentLayer.properties"/>
 </scr:component>

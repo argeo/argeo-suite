@@ -35,6 +35,8 @@ public enum SuiteContentTypes {
 	//
 	ODK("odk", "http://www.opendatakit.org/xforms", null, null),
 	//
+	WGS84("geo", "http://www.w3.org/2003/01/geo/wgs84_pos#", null, null),
+	//
 	;
 
 	private final static String RESOURCE_BASE = "/org/argeo/app/core/schemas/";

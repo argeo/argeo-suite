@@ -16,4 +16,22 @@
 				processContents="lax" />
 		</xs:complexType>
 	</xs:element>
+
+	<xs:element name="terms">
+		<xs:complexType>
+			<xs:sequence minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="entity:term"></xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="term">
+		<xs:complexType>
+			<xs:sequence minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref="entity:term"></xs:element>
+			</xs:sequence>
+			<xs:anyAttribute namespace="##any"
+				processContents="lax" />
+		</xs:complexType>
+	</xs:element>
 </xs:schema>

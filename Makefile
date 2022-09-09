@@ -14,6 +14,7 @@ org.argeo.app.api \
 org.argeo.app.core \
 org.argeo.app.servlet.odk \
 org.argeo.app.servlet.publish \
+org.argeo.app.ux \
 org.argeo.app.ui \
 org.argeo.app.theme.default \
 org.argeo.app.profile.acr.fs \

@@ -22,6 +22,8 @@ OSGI-INF/mapLayer.xml,\
 OSGI-INF/overviewMap.xml,\
 OSGI-INF/wwwLayer.xml,\
 OSGI-INF/documentUiProvider.xml,\
+OSGI-INF/publishEntryArea.xml,\
+OSGI-INF/publishUiProvider.xml,\
 
 
 
