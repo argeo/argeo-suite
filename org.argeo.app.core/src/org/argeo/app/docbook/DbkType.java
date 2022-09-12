@@ -1,9 +1,10 @@
 package org.argeo.app.docbook;
 
 import org.argeo.app.api.JcrName;
+import org.argeo.util.naming.QNamed;
 
 /** Supported DocBook elements */
-public enum DbkType implements JcrName {
+public enum DbkType implements JcrName, QNamed {
 	book, article, section,
 	//
 	info, title, para,
@@ -19,6 +20,7 @@ public enum DbkType implements JcrName {
 		return prefix();
 	}
 
+	@Deprecated
 	public static String prefix() {
 		return "dbk";
 	}
@@ -30,6 +32,11 @@ public enum DbkType implements JcrName {
 
 	public static String namespace() {
 		return "http://docbook.org/ns/docbook";
+	}
+
+	@Override
+	public String getDefaultPrefix() {
+		return "dbk";
 	}
 
 }

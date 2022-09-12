@@ -46,8 +46,7 @@ public class ContentEntryArea implements SwtUiProvider {
 		contentPart.onSelected((o) -> {
 			Content c = (Content) o;
 			log.debug(c.getPath());
-			// cmsView.sendEvent(SuiteEvent.refreshPart.topic(),
-			// SuiteEvent.eventProperties(c));
+			cmsView.sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.eventProperties(c));
 		});
 		return view;
 	}
