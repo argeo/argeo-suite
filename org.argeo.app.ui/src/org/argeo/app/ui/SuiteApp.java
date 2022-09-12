@@ -40,8 +40,8 @@ import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsSwtUtils;
+import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.argeo.cms.swt.dialogs.CmsFeedback;
-import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ux.CmsUxUtils;
 import org.argeo.eclipse.ui.specific.UiContext;
 import org.argeo.jcr.JcrException;
@@ -80,8 +80,8 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 	@Deprecated
 	private String defaultThemeId = "org.argeo.app.theme.default";
 
-	private Map<String, RankedObject<CmsUiProvider>> uiProvidersByPid = Collections.synchronizedMap(new HashMap<>());
-	private Map<String, RankedObject<CmsUiProvider>> uiProvidersByType = Collections.synchronizedMap(new HashMap<>());
+	private Map<String, RankedObject<SwtUiProvider>> uiProvidersByPid = Collections.synchronizedMap(new HashMap<>());
+	private Map<String, RankedObject<SwtUiProvider>> uiProvidersByType = Collections.synchronizedMap(new HashMap<>());
 	private Map<String, RankedObject<SuiteLayer>> layersByPid = Collections.synchronizedSortedMap(new TreeMap<>());
 	private Map<String, RankedObject<SuiteLayer>> layersByType = Collections.synchronizedSortedMap(new TreeMap<>());
 
@@ -191,9 +191,9 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 
 			ProvidedSession contentSession = (ProvidedSession) CmsUxUtils.getContentSession(contentRepository, cmsView);
 
-			CmsUiProvider headerUiProvider = findUiProvider(headerPid);
-			CmsUiProvider footerUiProvider = findUiProvider(footerPid);
-			CmsUiProvider leadPaneUiProvider;
+			SwtUiProvider headerUiProvider = findUiProvider(headerPid);
+			SwtUiProvider footerUiProvider = findUiProvider(footerPid);
+			SwtUiProvider leadPaneUiProvider;
 			if (adminUiName.equals(uiName)) {
 				leadPaneUiProvider = findUiProvider(adminLeadPanePid);
 			} else {
@@ -277,12 +277,12 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 
 	}
 
-	private void refreshPart(CmsUiProvider uiProvider, Composite part, Content context) {
+	private void refreshPart(SwtUiProvider uiProvider, Composite part, Content context) {
 		CmsSwtUtils.clear(part);
 		uiProvider.createUiPart(part, context);
 	}
 
-	private CmsUiProvider findUiProvider(String pid) {
+	private SwtUiProvider findUiProvider(String pid) {
 		if (!uiProvidersByPid.containsKey(pid))
 			return null;
 		return uiProvidersByPid.get(pid).get();
@@ -496,7 +496,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 					Content node = getNode(ui, event);
 					if (node == null)
 						return;
-					CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
+					SwtUiProvider uiProvider = findByType(uiProvidersByType, node);
 					SuiteLayer layer = findByType(layersByType, node);
 					ui.switchToLayer(layer, node);
 					layer.view(uiProvider, ui.getCurrentWorkArea(), node);
@@ -505,7 +505,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 					Content node = getNode(ui, event);
 					if (node == null)
 						return;
-					CmsUiProvider uiProvider = findByType(uiProvidersByType, node);
+					SwtUiProvider uiProvider = findByType(uiProvidersByType, node);
 					SuiteLayer layer = findByType(layersByType, node);
 					ui.switchToLayer(layer, node);
 					layer.open(uiProvider, ui.getCurrentWorkArea(), node);
@@ -622,7 +622,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 	 * Dependency injection.
 	 */
 
-	public void addUiProvider(CmsUiProvider uiProvider, Map<String, Object> properties) {
+	public void addUiProvider(SwtUiProvider uiProvider, Map<String, Object> properties) {
 		if (properties.containsKey(Constants.SERVICE_PID)) {
 			String pid = (String) properties.get(Constants.SERVICE_PID);
 			RankedObject.putIfHigherRank(uiProvidersByPid, pid, uiProvider, properties);
@@ -634,11 +634,11 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		}
 	}
 
-	public void removeUiProvider(CmsUiProvider uiProvider, Map<String, Object> properties) {
+	public void removeUiProvider(SwtUiProvider uiProvider, Map<String, Object> properties) {
 		if (properties.containsKey(Constants.SERVICE_PID)) {
 			String pid = (String) properties.get(Constants.SERVICE_PID);
 			if (uiProvidersByPid.containsKey(pid)) {
-				if (uiProvidersByPid.get(pid).equals(new RankedObject<CmsUiProvider>(uiProvider, properties))) {
+				if (uiProvidersByPid.get(pid).equals(new RankedObject<SwtUiProvider>(uiProvider, properties))) {
 					uiProvidersByPid.remove(pid);
 				}
 			}
@@ -647,7 +647,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 			List<String> types = LangUtils.toStringList(properties.get(EntityConstants.TYPE));
 			for (String type : types) {
 				if (uiProvidersByType.containsKey(type)) {
-					if (uiProvidersByType.get(type).equals(new RankedObject<CmsUiProvider>(uiProvider, properties))) {
+					if (uiProvidersByType.get(type).equals(new RankedObject<SwtUiProvider>(uiProvider, properties))) {
 						uiProvidersByType.remove(type);
 					}
 				}

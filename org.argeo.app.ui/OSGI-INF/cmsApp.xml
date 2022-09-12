@@ -5,7 +5,8 @@
       <provide interface="org.argeo.api.cms.CmsApp"/>
    </service>
    <properties entry="config/cmsApp.properties"/>
-   <reference bind="addUiProvider" cardinality="0..n" interface="org.argeo.cms.ui.CmsUiProvider" name="CmsUiProvider" policy="dynamic" unbind="removeUiProvider"/>
+   <reference bind="addUiProvider" cardinality="0..n" interface="org.argeo.cms.ui.CmsUiProvider" policy="dynamic" unbind="removeUiProvider"/>
+  <reference bind="addUiProvider" cardinality="0..n" interface="org.argeo.cms.swt.acr.SwtUiProvider" policy="dynamic" unbind="removeUiProvider"/>
    <reference bind="addTheme" cardinality="1..n" interface="org.argeo.api.cms.ux.CmsTheme" name="CmsTheme" policy="dynamic" unbind="removeTheme"/>
    <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.ui.SuiteLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
    <reference bind="setCmsUserManager" cardinality="1..1" interface="org.argeo.cms.CmsUserManager" name="CmsUserManager" policy="static"/>
