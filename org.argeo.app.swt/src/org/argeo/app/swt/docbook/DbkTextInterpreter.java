@@ -9,16 +9,20 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
 import org.argeo.api.acr.Content;
 import org.argeo.app.docbook.DbkType;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 /** Based on HTML with a few Wiki-like shortcuts. */
 public class DbkTextInterpreter implements TextInterpreter {
@@ -95,15 +99,12 @@ public class DbkTextInterpreter implements TextInterpreter {
 	@Override
 	public String raw(Content node) {
 		if (isDbk(node, para) || isDbk(node, title)) {
-			Source source = node.adapt(Source.class);
-
-			StringWriter stringWriter = new StringWriter();
-			Result result = new StreamResult(stringWriter);
-
-			try {
+			try (StringWriter stringWriter = new StringWriter()) {
+				Source source = node.adapt(Source.class);
+				Result result = new StreamResult(stringWriter);
 				transformerFactory.newTransformer().transform(source, result);
 				return stringWriter.toString();
-			} catch (TransformerException e) {
+			} catch (TransformerException | IOException e) {
 				throw new RuntimeException("Could not convert " + node + " to XML", e);
 			}
 
@@ -168,6 +169,27 @@ public class DbkTextInterpreter implements TextInterpreter {
 //	}
 
 	private void readAsSimpleHtml(Content node, StringBuilder sb) {
+		DOMResult result = new DOMResult();
+		try {
+			Source source = node.adapt(Source.class);
+			transformerFactory.newTransformer().transform(source, result);
+		} catch (TransformerException e) {
+			throw new RuntimeException("Could not convert " + node + " to XML", e);
+		}
+
+		NodeList nl = result.getNode().getChildNodes();
+		for (int i = 0; i < nl.getLength(); i++) {
+			Node n = nl.item(i);
+//			if (n instanceof Text) {
+//				Text text = (Text) n;
+//				sb.append(text.getTextContent());
+//			} else 
+				if (n instanceof Element) {
+				Element elem = (Element) n;
+				sb.append(elem.getTextContent());
+			}
+		}
+
 //		NodeIterator nit = node.getNodes();
 //		while (nit.hasNext()) {
 //			Node child = nit.nextNode();
