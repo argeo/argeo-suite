@@ -6,6 +6,7 @@ import static org.argeo.app.docbook.DbkType.para;
 import java.util.Optional;
 
 import org.argeo.api.acr.Content;
+import org.argeo.api.cms.ux.Cms2DSize;
 import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.app.docbook.DbkAttr;
 import org.argeo.app.docbook.DbkType;
@@ -17,23 +18,28 @@ import org.argeo.cms.swt.acr.SwtSectionPart;
 import org.argeo.cms.swt.widgets.EditableText;
 import org.argeo.cms.swt.widgets.StyledControl;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 public class DocBookViewer extends AbstractPageViewer {
 
 	private TextInterpreter textInterpreter = new DbkTextInterpreter();
+	private DbkImageManager imageManager;
 
 	private TextSection mainSection;
 
 	private boolean showMainTitle = true;
 
+	private Integer maxMediaWidth = null;
 	private String defaultSectionStyle;
 
 	public DocBookViewer(Composite parent, int style, Content item, CmsEditable cmsEditable) {
 		super(parent, style, cmsEditable);
+		imageManager = new DbkImageManager(item);
+
 		for (Content child : item) {
-			if (child.hasContentClass(DbkType.article.qName())) {
+			if (child.hasContentClass(DbkType.article)) {
 				if (mainSection != null)
 					throw new IllegalStateException("Main section already created");
 				mainSection = new TextSection(parent, 0, child);
@@ -61,7 +67,7 @@ public class DocBookViewer extends AbstractPageViewer {
 	protected void refreshTextSection(TextSection section) {
 		Content sectionContent = section.getContent();
 		// Style
-		Optional<String> roleAttr = sectionContent.get(DbkAttr.role.qName(), String.class);
+		Optional<String> roleAttr = sectionContent.get(DbkAttr.role, String.class);
 		String style = roleAttr.orElse(section.getDefaultTextStyle());
 		if (style != null)
 			CmsSwtUtils.style(section, style);
@@ -80,17 +86,36 @@ public class DocBookViewer extends AbstractPageViewer {
 			}
 		}
 
+		boolean processingSubSections = false;
 		for (Content child : section.getContent()) {
-			if (child.hasContentClass(DbkType.section.qName())) {
+			if (child.hasContentClass(DbkType.section)) {
+				processingSubSections = true;
 				TextSection childSection = new TextSection(section, 0, child);
-				childSection.setLayoutData(CmsSwtUtils.fillAll());
+				childSection.setLayoutData(CmsSwtUtils.fillWidth());
 				refreshTextSection(childSection);
-			} else if (child.hasContentClass(DbkType.para.qName())) {
-				Paragraph para = new Paragraph(section, 0, child);
-				para.setLayoutData(CmsSwtUtils.fillWidth());
-				updateContent(para);
+			} else {
+				if (processingSubSections)
+					throw new IllegalStateException(child + " is below a subsection");
+				SwtSectionPart sectionPart = null;
+				if (child.hasContentClass(DbkType.para)) {
+					sectionPart = newParagraph(section, child);
+				} else if (child.hasContentClass(DbkType.mediaobject)) {
+					if (child.hasChild(DbkType.imageobject)) {
+						sectionPart = newImg(section, child);
+					} else if (child.hasChild(DbkType.videoobject)) {
+						sectionPart = newVideo(section, child);
+					} else {
+						throw new IllegalArgumentException("Unsupported media object " + child);
+					}
+				} else if (isDbk(child, DbkType.title)) {
+					// already managed
+					// TODO check that it is first?
+				} else {
+					throw new IllegalArgumentException("Unsupported type for " + child);
+				}
+				if (sectionPart != null && sectionPart instanceof Control)
+					((Control) sectionPart).setLayoutData(CmsSwtUtils.fillWidth());
 			}
-
 		}
 	}
 
@@ -118,14 +143,12 @@ public class DocBookViewer extends AbstractPageViewer {
 					paragraph.setText(textInterpreter.readSimpleHtml(partContent));
 				// paragraph.setText(textInterpreter.readSimpleHtml(partContent));
 
-//			} else if (part instanceof DbkImg) {
-//				DbkImg editableImage = (DbkImg) part;
-//				// imageManager.load(partNode, part.getControl(),
-//				// editableImage.getPreferredImageSize());
-//			} else if (part instanceof DbkVideo) {
-//				DbkVideo video = (DbkVideo) part;
-//				video.load(part.getControl());
-//			}
+			} else if (part instanceof DbkImg) {
+				DbkImg editableImage = (DbkImg) part;
+//				imageManager.load(partContent, part.getControl(), editableImage.getPreferredImageSize());
+			} else if (part instanceof DbkVideo) {
+				DbkVideo video = (DbkVideo) part;
+				video.load(part.getControl());
 			}
 		} else if (part instanceof DbkSectionTitle) {
 			DbkSectionTitle title = (DbkSectionTitle) part;
@@ -138,6 +161,15 @@ public class DocBookViewer extends AbstractPageViewer {
 		}
 	}
 
+	protected Paragraph newParagraph(TextSection parent, Content node) {
+		Paragraph paragraph = new Paragraph(parent, parent.getStyle(), node);
+		updateContent(paragraph);
+		paragraph.setLayoutData(CmsSwtUtils.fillWidth());
+		paragraph.setMouseListener(getMouseListener());
+		paragraph.setFocusListener(getFocusListener());
+		return paragraph;
+	}
+
 	protected DbkSectionTitle newSectionTitle(TextSection parent, Content titleNode) {
 		int style = parent.getStyle();
 		Composite titleParent = newSectionHeader(parent);
@@ -148,6 +180,41 @@ public class DocBookViewer extends AbstractPageViewer {
 		title.setMouseListener(getMouseListener());
 		title.setFocusListener(getFocusListener());
 		return title;
+	}
+
+	protected DbkImg newImg(TextSection parent, Content node) {
+		DbkImg img = new DbkImg(parent, parent.getStyle(), node, imageManager);
+		GridData imgGd;
+		if (maxMediaWidth != null) {
+			imgGd = new GridData(SWT.CENTER, SWT.FILL, false, false);
+			imgGd.widthHint = maxMediaWidth;
+			img.setPreferredSize(new Cms2DSize(maxMediaWidth, 0));
+		} else {
+			imgGd = CmsSwtUtils.grabWidth(SWT.CENTER, SWT.DEFAULT);
+		}
+		img.setLayoutData(imgGd);
+		updateContent(img);
+		img.setMouseListener(getMouseListener());
+		img.setFocusListener(getFocusListener());
+		return img;
+	}
+
+	protected DbkVideo newVideo(TextSection parent, Content node) {
+		DbkVideo video = new DbkVideo(parent, getCmsEditable().canEdit() ? SWT.NONE : SWT.READ_ONLY, node);
+		GridData gd;
+		if (maxMediaWidth != null) {
+			gd = new GridData(SWT.CENTER, SWT.FILL, false, false);
+			// TODO, manage size
+//				gd.widthHint = maxMediaWidth;
+//				gd.heightHint = (int) (gd.heightHint * 0.5625);
+		} else {
+			gd = new GridData(SWT.CENTER, SWT.FILL, false, false);
+//				gd.widthHint = video.getWidth();
+//				gd.heightHint = video.getHeight();
+		}
+		video.setLayoutData(gd);
+		updateContent(video);
+		return video;
 	}
 
 	/**
@@ -175,6 +242,10 @@ public class DocBookViewer extends AbstractPageViewer {
 
 	public void setDefaultSectionStyle(String defaultSectionStyle) {
 		this.defaultSectionStyle = defaultSectionStyle;
+	}
+
+	public void setMaxMediaWidth(Integer maxMediaWidth) {
+		this.maxMediaWidth = maxMediaWidth;
 	}
 
 	@Override

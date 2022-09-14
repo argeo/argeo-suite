@@ -8,6 +8,21 @@ public class DbkAcrUtils {
 		return content.isContentClass(type.qName());
 	}
 
+	public static String getMediaFileref(Content node) {
+		Content mediadata;
+		if (node.hasChild(DbkType.imageobject)) {
+			mediadata = node.child(DbkType.imageobject).child(DbkType.imagedata);
+		} else {
+			mediadata = node.child(DbkType.videoobject).child(DbkType.videodata);
+		}
+
+		if (mediadata.containsKey(DbkAttr.fileref)) {
+			return mediadata.attr(DbkAttr.fileref);
+		} else {
+			return null;
+		}
+	}
+
 	/** singleton */
 	private DbkAcrUtils() {
 	}

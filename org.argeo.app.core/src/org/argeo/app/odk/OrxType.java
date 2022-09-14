@@ -1,26 +1,18 @@
 package org.argeo.app.odk;
 
-import org.argeo.app.api.JcrName;
+import org.argeo.api.acr.QNamed;
 
 /** Types related to the http://openrosa.org/xforms/xformsList namespace. */
-public enum OrxType implements JcrName {
+public enum OrxType implements QNamed {
 	submission, xml_submission_file;
 
 	@Override
-	public String getPrefix() {
-		return prefix();
-	}
-
-	public static String prefix() {
+	public String getDefaultPrefix() {
 		return "orx";
 	}
 
 	@Override
 	public String getNamespace() {
-		return namespace();
-	}
-
-	public static String namespace() {
 		return "http://openrosa.org/xforms";
 	}
 
