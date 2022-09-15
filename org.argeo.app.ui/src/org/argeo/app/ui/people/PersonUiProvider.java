@@ -16,7 +16,6 @@ import org.argeo.cms.swt.widgets.EditableText;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.util.naming.LdapAttrs;
 import org.argeo.util.naming.LdapObjs;
-import org.argeo.util.naming.QNamed;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -121,7 +120,7 @@ public class PersonUiProvider implements CmsUiProvider {
 		return main;
 	}
 
-	private void addFormLine(SwtSection parent, Localized msg, Content context, QNamed attr) {
+	private void addFormLine(SwtSection parent, Localized msg, Content context, LdapAttrs attr) {
 		SuiteUiUtils.addFormLabel(parent, msg.lead());
 		EditableText text = new EditableText(parent, SWT.SINGLE | SWT.FLAT);
 		text.setLayoutData(CmsSwtUtils.fillWidth());
