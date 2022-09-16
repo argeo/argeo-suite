@@ -9,7 +9,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 import org.argeo.api.acr.Content;
-import org.argeo.api.acr.CrName;
+import org.argeo.api.acr.DName;
 import org.argeo.api.acr.spi.ProvidedContent;
 import org.argeo.api.cms.ux.Cms2DSize;
 import org.argeo.api.cms.ux.CmsImageManager;
@@ -124,7 +124,7 @@ public class DbkImageManager extends AcrSwtImageManager {
 
 	protected Content getMediaFolder() {
 		// TODO check edition status
-		Content mediaFolder = baseFolder.anyOrAddChild( EntityNames.MEDIA,CrName.collection.qName());
+		Content mediaFolder = baseFolder.anyOrAddChild(EntityNames.MEDIA, DName.collection.qName());
 		return mediaFolder;
 	}
 }
