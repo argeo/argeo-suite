@@ -1,0 +1,23 @@
+package org.argeo.app.ui.people;
+
+import org.argeo.api.acr.Content;
+import org.argeo.cms.CmsUserManager;
+import org.argeo.cms.swt.acr.SwtUiProvider;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
+
+public class GroupUiProvider implements SwtUiProvider {
+	private CmsUserManager cmsUserManager;
+
+	@Override
+	public Control createUiPart(Composite parent, Content context) {
+		new Label(parent, 0).setText("Group " + context);
+		return null;
+	}
+
+	public void setCmsUserManager(CmsUserManager cmsUserManager) {
+		this.cmsUserManager = cmsUserManager;
+	}
+
+}

@@ -12,8 +12,8 @@ import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.acr.SwtSection;
+import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.argeo.cms.swt.widgets.EditableText;
-import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.util.naming.LdapAttrs;
 import org.argeo.util.naming.LdapObjs;
 import org.eclipse.swt.SWT;
@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Text;
 import org.osgi.service.useradmin.User;
 
 /** Edit a suite user. */
-public class PersonUiProvider implements CmsUiProvider {
+public class PersonUiProvider implements SwtUiProvider {
 	private String[] availableRoles;
 	private CmsUserManager cmsUserManager;
 

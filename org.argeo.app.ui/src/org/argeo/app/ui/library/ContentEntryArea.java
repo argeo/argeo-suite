@@ -8,7 +8,7 @@ import org.argeo.app.api.EntityType;
 import org.argeo.app.ui.SuiteEvent;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.acr.SwtUiProvider;
-import org.argeo.cms.swt.widgets.SwtHierarchicalPart;
+import org.argeo.cms.swt.widgets.SwtTreeView;
 import org.argeo.cms.ux.acr.ContentHierarchicalPart;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -39,7 +39,7 @@ public class ContentEntryArea implements SwtUiProvider {
 		};
 		contentPart.setInput(rootContent);
 
-		SwtHierarchicalPart<Content> view = new SwtHierarchicalPart<>(parent, 0, contentPart);
+		SwtTreeView<Content> view = new SwtTreeView<>(parent, 0, contentPart);
 		view.setLayoutData(CmsSwtUtils.fillAll());
 
 		contentPart.setInput(rootContent);

@@ -25,8 +25,8 @@ import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.Selected;
 import org.argeo.cms.swt.acr.SwtUiProvider;
-import org.argeo.cms.swt.widgets.SwtHierarchicalPart;
-import org.argeo.cms.swt.widgets.SwtTabularPart;
+import org.argeo.cms.swt.widgets.SwtTableView;
+import org.argeo.cms.swt.widgets.SwtTreeView;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.ux.widgets.AbstractHierarchicalPart;
 import org.argeo.cms.ux.widgets.Column;
@@ -97,7 +97,10 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 								|| CurrentUser.implies(CmsRole.userAdmin,
 										IpaUtils.IPA_ACCOUNTS_RDN + "," + directory.getBase())) // IPA
 						{
-							visible.add(directory);
+							// we do not show the base level
+							for (HierarchyUnit hu : directory.getDirectHierarchyUnits(true)) {
+								visible.add(hu);
+							}
 						}
 
 					}
@@ -110,9 +113,13 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 				return model.getHierarchyUnitName();
 			}
 
+			@Override
+			public CmsIcon getIcon(HierarchyUnit model) {
+				return SuiteIcon.group;
+			}
+
 		};
-		SwtHierarchicalPart<HierarchyUnit> directoriesView = new SwtHierarchicalPart<>(sashForm, SWT.NONE,
-				hierarchyPart);
+		SwtTreeView<HierarchyUnit> directoriesView = new SwtTreeView<>(sashForm, SWT.NONE, hierarchyPart);
 
 		DefaultTabularPart<HierarchyUnit, Content> usersPart = new DefaultTabularPart<>() {
 
@@ -178,7 +185,7 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 		});
 		usersPart.addColumn((Column<Content>) (role) -> role.attr(LdapAttrs.mail.qName()));
 
-		SwtTabularPart<HierarchyUnit, Content> usersView = new SwtTabularPart<>(sashForm, SWT.NONE, usersPart);
+		SwtTableView<HierarchyUnit, Content> usersView = new SwtTableView<>(sashForm, SWT.NONE, usersPart);
 
 		// toolbar
 		Composite bottom = new Composite(parent, SWT.NONE);
@@ -198,7 +205,10 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 		// CONTROLLER
 		hierarchyPart.onSelected((o) -> {
 			if (o instanceof HierarchyUnit) {
-				usersPart.setInput((HierarchyUnit) o);
+				HierarchyUnit hierarchyUnit = (HierarchyUnit) o;
+				usersPart.setInput(hierarchyUnit);
+				cmsView.sendEvent(SuiteEvent.refreshPart.topic(),
+						SuiteEvent.eventProperties(ContentUtils.hierarchyUnitToContent(contentSession, hierarchyUnit)));
 			}
 		});
 

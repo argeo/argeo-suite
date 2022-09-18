@@ -80,6 +80,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 	@Deprecated
 	private String defaultThemeId = "org.argeo.app.theme.default";
 
+	// TODO use QName as key for byType
 	private Map<String, RankedObject<SwtUiProvider>> uiProvidersByPid = Collections.synchronizedMap(new HashMap<>());
 	private Map<String, RankedObject<SwtUiProvider>> uiProvidersByType = Collections.synchronizedMap(new HashMap<>());
 	private Map<String, RankedObject<SuiteLayer>> layersByPid = Collections.synchronizedSortedMap(new TreeMap<>());
@@ -362,8 +363,9 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 				if (byType.containsKey(type))
 					types.add(type);
 			}
-			if (types.size() == 0)
+			if (types.size() == 0) {
 				throw new IllegalArgumentException("No type found for " + content + " (" + objectClasses + ")");
+			}
 			String type = types.iterator().next();
 			if (!byType.containsKey(type))
 				throw new IllegalArgumentException("No component found for " + content + " with type " + type);
@@ -549,8 +551,8 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 					}
 				}
 			} catch (Exception e) {
-				log.error("Cannot handle event " + event, e);
-//			CmsView.getCmsView(ui).exception(e);
+				CmsFeedback.show("Cannot handle event " + event, e);
+//				log.error("Cannot handle event " + event, e);
 			}
 		});
 	}

@@ -14,6 +14,8 @@ OSGI-INF/dashboardLayer.xml,\
 OSGI-INF/peopleEntryArea.xml,\
 OSGI-INF/peopleLayer.xml,\
 OSGI-INF/personUiProvider.xml,\
+OSGI-INF/groupUiProvider.xml,\
+OSGI-INF/hierarchyUnitUiProvider.xml,\
 OSGI-INF/contentEntryArea.xml,\
 OSGI-INF/contentLayer.xml,\
 OSGI-INF/documentsFolder.xml,\
