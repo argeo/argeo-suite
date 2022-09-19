@@ -115,7 +115,13 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 
 			@Override
 			public CmsIcon getIcon(HierarchyUnit model) {
-				return SuiteIcon.group;
+				Content content = ContentUtils.hierarchyUnitToContent(contentSession, model);
+				if (content.hasContentClass(LdapObjs.organization.qName()))
+					return SuiteIcon.organisation;
+				else if (content.hasContentClass(LdapObjs.posixGroup.qName()))
+					return SuiteIcon.group;
+				else
+					return SuiteIcon.people;
 			}
 
 		};
@@ -167,7 +173,9 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 
 			@Override
 			public CmsIcon getIcon(Content role) {
-				if (role.isContentClass(LdapObjs.inetOrgPerson.qName()))
+				if (role.hasContentClass(LdapObjs.posixAccount.qName()))
+					return SuiteIcon.user;
+				else if (role.isContentClass(LdapObjs.inetOrgPerson.qName()))
 					return SuiteIcon.person;
 				else if (role.isContentClass(LdapObjs.organization.qName()))
 					return SuiteIcon.organisation;
