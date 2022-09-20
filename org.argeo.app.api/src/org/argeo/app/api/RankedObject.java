@@ -101,7 +101,7 @@ public class RankedObject<T> {
 				return rankedObject;
 			} else if (current.getRank() == rankedObject.getRank()) {
 				log.error("Already " + key + " by " + current.get().getClass().getName() + " with rank "
-						+ rankedObject.getRank() + ", ignoring " + rankedObject.getClass().getName());
+						+ rankedObject.getRank() + ", ignoring " + rankedObject.get().getClass().getName());
 				return null;
 			} else {
 				return null;
