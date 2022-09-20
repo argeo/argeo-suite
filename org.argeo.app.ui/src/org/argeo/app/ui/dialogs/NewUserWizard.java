@@ -2,14 +2,13 @@ package org.argeo.app.ui.dialogs;
 
 import static org.argeo.eclipse.ui.EclipseUiUtils.isEmpty;
 
-import javax.jcr.Node;
-
 import org.argeo.app.ui.SuiteMsg;
 import org.argeo.app.ui.SuiteUiUtils;
+import org.argeo.cms.swt.dialogs.CmsFeedback;
+import org.argeo.cms.swt.widgets.SwtGuidedFormPage;
+import org.argeo.cms.ux.widgets.AbstractGuidedForm;
 import org.argeo.eclipse.ui.EclipseUiUtils;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.jface.wizard.WizardPage;
+import org.argeo.util.directory.HierarchyUnit;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -19,20 +18,20 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
 /** Ask first & last name. Update the passed node on finish */
-public class NewUserWizard extends Wizard {
+public class NewUserWizard extends AbstractGuidedForm {
 	// private final static Log log = LogFactory.getLog(NewPersonWizard.class);
 
 	// Context
-	private Node person;
-
+//	private Node person;
+	private HierarchyUnit hierarchyUnit;
 	// This page widgets
 	protected Text lastNameTxt;
 	protected Text firstNameTxt;
 	// private Button useDistinctDisplayNameBtn;
 	// private Text displayNameTxt;
 
-	public NewUserWizard(Node person) {
-		this.person = person;
+	public NewUserWizard(HierarchyUnit hierarchyUnit) {
+		this.hierarchyUnit = hierarchyUnit;
 	}
 
 	@Override
@@ -43,7 +42,7 @@ public class NewUserWizard extends Wizard {
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot add page to wizard", e);
 		}
-		setWindowTitle(SuiteMsg.personWizardWindowTitle.lead());
+		setFormTitle(SuiteMsg.personWizardWindowTitle.lead());
 	}
 
 	/**
@@ -57,8 +56,9 @@ public class NewUserWizard extends Wizard {
 		// String displayName = displayNameTxt.getText();
 		// boolean useDistinct = useDistinctDisplayNameBtn.getSelection();
 		if (EclipseUiUtils.isEmpty(lastName) && EclipseUiUtils.isEmpty(firstName)) {
-			MessageDialog.openError(getShell(), "Non-valid information",
-					"Please enter at least a name that is not empty.");
+//			MessageDialog.openError(getShell(), "Non-valid information",
+//					"Please enter at least a name that is not empty.");
+			CmsFeedback.show("Please enter at least a name that is not empty.");
 			return false;
 		} else {
 //			ConnectJcrUtils.setJcrProperty(person, PEOPLE_LAST_NAME, PropertyType.STRING, lastName);
@@ -84,8 +84,7 @@ public class NewUserWizard extends Wizard {
 			return true;
 	}
 
-	protected class MainInfoPage extends WizardPage {
-		private static final long serialVersionUID = 1L;
+	protected class MainInfoPage extends SwtGuidedFormPage {
 
 		public MainInfoPage(String pageName) {
 			super(pageName);
@@ -135,7 +134,7 @@ public class NewUserWizard extends Wizard {
 
 				@Override
 				public void modifyText(ModifyEvent event) {
-					getContainer().updateButtons();
+					getView().updateButtons();
 				}
 			};
 
@@ -144,7 +143,7 @@ public class NewUserWizard extends Wizard {
 			// displayNameTxt.addModifyListener(ml);
 
 			// Don't forget this.
-			setControl(firstNameTxt);
+			// setControl(firstNameTxt);
 			firstNameTxt.setFocus();
 		}
 	}

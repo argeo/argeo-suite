@@ -254,7 +254,7 @@ public class DocumentsUiService {
 				}
 			}
 		} catch (Exception e) {
-			CmsFeedback.show("Cannot import files to " + currFolderPath,e);
+			CmsFeedback.error("Cannot import files to " + currFolderPath,e);
 		}
 		return false;
 	}

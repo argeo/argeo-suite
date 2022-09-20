@@ -70,6 +70,18 @@ public class RankedObject<T> {
 		return object.getClass().getName() + " with rank " + rank;
 	}
 
+	public static <K, T> boolean hasHigherRank(Map<K, RankedObject<T>> map, K key, Map<String, Object> properties) {
+		if (!map.containsKey(key))
+			return true;
+		RankedObject<T> rankedObject = new RankedObject<>(null, properties);
+		RankedObject<T> current = map.get(key);
+		return current.getRank() < rankedObject.getRank();
+	}
+
+	/**
+	 * @return the {@link RankedObject}, or <code>null</code> if the current one was
+	 *         kept
+	 */
 	public static <K, T> RankedObject<T> putIfHigherRank(Map<K, RankedObject<T>> map, K key, T object,
 			Map<String, Object> properties) {
 		RankedObject<T> rankedObject = new RankedObject<>(object, properties);
@@ -81,14 +93,18 @@ public class RankedObject<T> {
 			return rankedObject;
 		} else {
 			RankedObject<T> current = map.get(key);
-			if (current.getRank() <= rankedObject.getRank()) {
+			if (current.getRank() < rankedObject.getRank()) {
 				map.put(key, rankedObject);
-				if (log.isTraceEnabled())
-					log.trace("Replaced " + key + " by " + object.getClass().getName() + " with rank "
+				if (log.isDebugEnabled())
+					log.debug("Replaced " + key + " by " + object.getClass().getName() + " with rank "
 							+ rankedObject.getRank());
 				return rankedObject;
+			} else if (current.getRank() == rankedObject.getRank()) {
+				log.error("Already " + key + " by " + current.get().getClass().getName() + " with rank "
+						+ rankedObject.getRank() + ", ignoring " + rankedObject.getClass().getName());
+				return null;
 			} else {
-				return current;
+				return null;
 			}
 		}
 
