@@ -6,7 +6,7 @@ import org.argeo.api.cms.ux.CmsIcon;
 public enum SuiteIcon implements CmsIcon {
 	add, save, close, closeAll, search, delete, logout, dashboard,
 	// people
-	people, group, person, organisation,
+	people, group, person, organisation, addressBook, users,
 	// library
 	documents, document, folder,
 	// admin and settings

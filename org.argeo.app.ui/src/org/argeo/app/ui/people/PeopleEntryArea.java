@@ -118,9 +118,9 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 				if (content.hasContentClass(LdapObjs.organization.qName()))
 					return SuiteIcon.organisation;
 				else if (content.hasContentClass(LdapObjs.posixGroup.qName()))
-					return SuiteIcon.group;
+					return SuiteIcon.users;
 				else
-					return SuiteIcon.people;
+					return SuiteIcon.addressBook;
 			}
 
 		};
