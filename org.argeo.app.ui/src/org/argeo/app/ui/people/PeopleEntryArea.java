@@ -13,14 +13,12 @@ import org.argeo.api.cms.ux.CmsIcon;
 import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.ui.SuiteEvent;
 import org.argeo.app.ui.SuiteIcon;
-import org.argeo.app.ui.dialogs.NewUserWizard;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.auth.CmsRole;
 import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.auth.UserAdminUtils;
 import org.argeo.cms.jcr.acr.JcrContent;
-import org.argeo.cms.jface.dialog.CmsWizardDialog;
 import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.Selected;
@@ -40,7 +38,6 @@ import org.argeo.util.directory.ldap.IpaUtils;
 import org.argeo.util.naming.LdapAttrs;
 import org.argeo.util.naming.LdapObjs;
 import org.eclipse.jface.window.Window;
-import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridData;
@@ -240,8 +237,9 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 		});
 
 		addItem.addSelectionListener((Selected) (e) -> {
-			// SuiteUtils.getOrCreateUserNode(adminSession, userDn);
-			GuidedForm wizard = new NewUserWizard(null);
+			HierarchyUnit hierarchyUnit = usersPart.getInput();
+			Content huContent = ContentUtils.hierarchyUnitToContent(contentSession, hierarchyUnit);
+			GuidedForm wizard = new NewUserForm(cmsUserManager, huContent);
 			SwtGuidedFormDialog dialog = new SwtGuidedFormDialog(parent.getShell(), wizard);
 			// WizardDialog dialog = new WizardDialog(shell, wizard);
 			if (dialog.open() == Window.OK) {

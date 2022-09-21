@@ -11,8 +11,10 @@ public interface SuiteLayer extends SwtUiProvider {
 		title, icon, weights, startMaximized, singleTab, fixedEntryArea;
 	}
 
+	String getId();
+
 	void view(SwtUiProvider uiProvider, Composite workArea, Content context);
-	
+
 	Content getCurrentContext(Composite workArea);
 
 	default void open(SwtUiProvider uiProvider, Composite workArea, Content context) {

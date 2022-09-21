@@ -5,5 +5,5 @@
    <service>
       <provide interface="org.argeo.app.ui.SuiteLayer"/>
    </service>
-   <reference bind="setEntryArea" cardinality="1..1" interface="org.argeo.cms.ui.CmsUiProvider" name="CmsUiProvider" policy="dynamic" target="(service.pid=argeo.people.ui.peopleEntryArea)"/>
+   <reference bind="setEntryArea" cardinality="1..1" interface="org.argeo.cms.swt.acr.SwtUiProvider" name="CmsUiProvider" policy="dynamic" target="(service.pid=argeo.people.ui.peopleEntryArea)"/>
 </scr:component>

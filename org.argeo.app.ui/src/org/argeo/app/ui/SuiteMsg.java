@@ -30,5 +30,9 @@ public enum SuiteMsg implements Localized {
 	// Generic
 	label, aCustomLabel, description, value, name, primary, add, save, pickup,
 	// Tag
-	confirmNewTag, cannotCreateTag;
+	confirmNewTag, cannotCreateTag,
+	// Feddback messages
+	allFieldsMustBeSet,
+	//
+	;
 }

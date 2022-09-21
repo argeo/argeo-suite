@@ -144,8 +144,9 @@ class SuiteUi extends Composite implements CmsUi {
 		// TODO make it more robust
 		for (String layerId : layers.keySet()) {
 			SuiteLayer l = layers.get(layerId);
-			if (layer == l) {
+			if (layer.getId().equals(l.getId())) {
 				switchToLayer(layerId, context);
+				return;
 			}
 		}
 		throw new IllegalArgumentException("Layer is not registered.");

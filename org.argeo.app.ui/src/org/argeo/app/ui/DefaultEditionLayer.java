@@ -17,10 +17,12 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.wiring.BundleWiring;
 
 /** An app layer based on an entry area and an editor area. */
 public class DefaultEditionLayer implements SuiteLayer {
+	private String id;
 	private SwtUiProvider entryArea;
 	private SwtUiProvider defaultView;
 	private SwtUiProvider workArea;
@@ -117,7 +119,15 @@ public class DefaultEditionLayer implements SuiteLayer {
 		return title;
 	}
 
+	@Override
+	public String getId() {
+		return id;
+	}
+
 	public void init(BundleContext bundleContext, Map<String, Object> properties) {
+		String pid = (String) properties.get(Constants.SERVICE_PID);
+		id = pid;
+
 		weights = LangUtils.toStringList(properties.get(Property.weights.name()));
 		startMaximized = properties.containsKey(Property.startMaximized.name())
 				&& "true".equals(properties.get(Property.startMaximized.name()));

@@ -2,7 +2,6 @@ package org.argeo.app.ui;
 
 import static org.argeo.api.cms.ux.CmsView.CMS_VIEW_UID_PROPERTY;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -659,27 +658,39 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		}
 	}
 
+//	public void addLayer(SuiteLayer layer, Map<String, Object> properties) {
+//		if (!properties.containsKey(Constants.SERVICE_PID))
+//			throw new IllegalArgumentException("A layer must have an ID");
+//		String pid = (String) properties.get(Constants.SERVICE_PID);
+//		List<String> types = properties.containsKey(EntityConstants.TYPE)
+//				? LangUtils.toStringList(properties.get(EntityConstants.TYPE))
+//				: new ArrayList<>();
+//		if (types.isEmpty()) {
+//			RankedObject.putIfHigherRank(layersByPid, pid, layer, properties);
+//		} else {
+//			if (layersByPid.containsKey(pid)) {
+//				RankedObject<SuiteLayer> current = layersByPid.get(pid);
+//				List<String> currentTypes = current.getProperties().containsKey(EntityConstants.TYPE)
+//						? LangUtils.toStringList(current.getProperties().get(EntityConstants.TYPE))
+//						: new ArrayList<>();
+//				if (!types.containsAll(currentTypes)) {
+//					throw new IllegalArgumentException("Higher-ranked layer " + pid + " contains only types " + types
+//							+ ", while it must override all " + currentTypes);
+//				}
+//			}
+//			RankedObject.putIfHigherRank(layersByPid, pid, layer, properties);
+//			for (String type : types)
+//				RankedObject.putIfHigherRank(layersByType, type, layer, properties);
+//		}
+//	}
+
 	public void addLayer(SuiteLayer layer, Map<String, Object> properties) {
-		if (!properties.containsKey(Constants.SERVICE_PID))
-			throw new IllegalArgumentException("A layer must have an ID");
-		String pid = (String) properties.get(Constants.SERVICE_PID);
-		List<String> types = properties.containsKey(EntityConstants.TYPE)
-				? LangUtils.toStringList(properties.get(EntityConstants.TYPE))
-				: new ArrayList<>();
-		if (types.isEmpty()) {
+		if (properties.containsKey(Constants.SERVICE_PID)) {
+			String pid = (String) properties.get(Constants.SERVICE_PID);
 			RankedObject.putIfHigherRank(layersByPid, pid, layer, properties);
-		} else {
-			if (layersByPid.containsKey(pid)) {
-				RankedObject<SuiteLayer> current = layersByPid.get(pid);
-				List<String> currentTypes = current.getProperties().containsKey(EntityConstants.TYPE)
-						? LangUtils.toStringList(current.getProperties().get(EntityConstants.TYPE))
-						: new ArrayList<>();
-				if (!types.containsAll(currentTypes)) {
-					throw new IllegalArgumentException("Higher-ranked layer " + pid + " contains only types " + types
-							+ ", while it must override all " + currentTypes);
-				}
-			}
-			RankedObject.putIfHigherRank(layersByPid, pid, layer, properties);
+		}
+		if (properties.containsKey(EntityConstants.TYPE)) {
+			List<String> types = LangUtils.toStringList(properties.get(EntityConstants.TYPE));
 			for (String type : types)
 				RankedObject.putIfHigherRank(layersByType, type, layer, properties);
 		}

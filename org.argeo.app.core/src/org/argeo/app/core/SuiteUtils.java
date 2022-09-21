@@ -1,6 +1,7 @@
 package org.argeo.app.core;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.jcr.Node;
@@ -9,7 +10,9 @@ import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.security.Privilege;
 import javax.security.auth.x500.X500Principal;
+import javax.xml.namespace.QName;
 
+import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsConstants;
 import org.argeo.api.cms.CmsSession;
 import org.argeo.app.api.EntityType;
@@ -17,6 +20,7 @@ import org.argeo.cms.auth.RoleNameUtils;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.util.naming.LdapAttrs;
+import org.argeo.util.naming.LdapObjs;
 
 /** Utilities around the Argeo Suite APIs. */
 public class SuiteUtils {
@@ -96,11 +100,6 @@ public class SuiteUtils {
 		}
 	}
 
-	/** Singleton. */
-	private SuiteUtils() {
-
-	}
-
 	public static Set<String> extractRoles(String[] semiColArr) {
 		Set<String> res = new HashSet<>();
 		// TODO factorize and make it more robust
@@ -121,4 +120,33 @@ public class SuiteUtils {
 		return res;
 	}
 
+	synchronized static public long findNextId(Content hierarchyUnit, QName cclass) {
+		if (!hierarchyUnit.hasContentClass(LdapObjs.posixGroup.qName())) 
+			throw new IllegalArgumentException(hierarchyUnit + " is not a POSIX group");
+		
+		long min = hierarchyUnit.get(LdapAttrs.gidNumber.qName(), Long.class).orElseThrow();
+		long currentMax = 0l;
+		for (Content childHu : hierarchyUnit) {
+			if (!childHu.hasContentClass(LdapObjs.organizationalUnit.qName()))
+				continue;
+			// FIXME filter out functional hierarchy unit
+			for (Content role : childHu) {
+				if (role.hasContentClass(cclass)) {
+
+					if (LdapObjs.posixAccount.qName().equals(cclass)) {
+						Long id = role.get(LdapAttrs.uidNumber.qName(), Long.class).orElseThrow();
+						if (id > currentMax)
+							currentMax = id;
+					}
+				}
+			}
+		}
+		if (currentMax == 0l)
+			return min;
+		return currentMax + 1;
+	}
+
+	/** Singleton. */
+	private SuiteUtils() {
+	}
 }
