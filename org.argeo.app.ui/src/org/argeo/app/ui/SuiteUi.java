@@ -5,16 +5,15 @@ import java.util.Map;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsLog;
-import org.argeo.api.cms.ux.CmsUi;
-import org.argeo.api.cms.ux.CmsView;
 import org.argeo.cms.Localized;
+import org.argeo.cms.swt.CmsSwtUi;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 
 /** The view for the default ergonomics of Argeo Suite. */
-class SuiteUi extends Composite implements CmsUi {
+class SuiteUi extends CmsSwtUi {
 	private static final long serialVersionUID = 6207018859086689108L;
 	private final static CmsLog log = CmsLog.getLog(SuiteUi.class);
 
@@ -34,11 +33,11 @@ class SuiteUi extends Composite implements CmsUi {
 	private Map<String, Composite> workAreas = new HashMap<>();
 	private String currentLayerId = null;
 
-	private CmsView cmsView;
+	private boolean loginScreen = false;
+//	private String postLoginState;
 
 	public SuiteUi(Composite parent, int style) {
 		super(parent, style);
-		cmsView = CmsSwtUtils.getCmsView(parent);
 		this.setLayout(CmsSwtUtils.noSpaceGridLayout());
 
 		header = new Composite(this, SWT.NONE);
@@ -116,7 +115,7 @@ class SuiteUi extends Composite implements CmsUi {
 				return current;
 		}
 		if (context == null) {
-			if (!cmsView.isAnonymous())
+			if (!getCmsView().isAnonymous())
 				context = getUserDirNode();
 		}
 		Composite toShow = getLayer(layerId, context);
@@ -166,7 +165,7 @@ class SuiteUi extends Composite implements CmsUi {
 	}
 
 	protected Composite initLayer(String id, SuiteLayer layer, Content context) {
-		Composite workArea = cmsView.doAs(() -> (Composite) layer.createUiPart(dynamicArea, context));
+		Composite workArea = getCmsView().doAs(() -> (Composite) layer.createUiPart(dynamicArea, context));
 		CmsSwtUtils.style(workArea, SuiteStyle.workArea);
 		workArea.setLayoutData(CmsSwtUtils.coverAll());
 		workAreas.put(id, workArea);
@@ -249,10 +248,6 @@ class SuiteUi extends Composite implements CmsUi {
 //			throw new IllegalArgumentException("Unknown workspace " + workspaceName);
 //	}
 
-	public CmsView getCmsView() {
-		return cmsView;
-	}
-
 	public Localized getTitle() {
 		return title;
 	}
@@ -260,5 +255,21 @@ class SuiteUi extends Composite implements CmsUi {
 	public void setTitle(Localized title) {
 		this.title = title;
 	}
+
+	public boolean isLoginScreen() {
+		return loginScreen;
+	}
+
+	public void setLoginScreen(boolean loginScreen) {
+		this.loginScreen = loginScreen;
+	}
+
+//	public String getPostLoginState() {
+//		return postLoginState;
+//	}
+//
+//	public void setPostLoginState(String postLoginState) {
+//		this.postLoginState = postLoginState;
+//	}
 
 }

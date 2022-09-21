@@ -209,6 +209,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 
 			if (cmsView.isAnonymous() && publicBasePath == null) {// internal app, must login
 				ui.logout();
+				ui.setLoginScreen(true);
 				if (headerUiProvider != null)
 					refreshPart(headerUiProvider, ui.getHeader(), context);
 				ui.refreshBelowHeader(false);
@@ -220,6 +221,12 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 			} else {
 				if (LOGIN.equals(state))
 					state = null;
+				if (ui.isLoginScreen()) {
+//					if (state == null)
+//						state = ui.getPostLoginState();
+					ui.setLoginScreen(false);
+//					ui.setPostLoginState(null);
+				}
 				CmsSession cmsSession = cmsView.getCmsSession();
 				if (ui.getUserDirNode() == null) {
 					// FIXME NPE on CMSSession when logging in from anonymous
@@ -423,6 +430,11 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 			return;
 		}
 		SuiteUi suiteUi = (SuiteUi) cmsUi;
+		if (suiteUi.isLoginScreen()) {
+//			suiteUi.setPostLoginState(state);
+			return;
+		}
+
 		Content node = stateToNode(suiteUi, state);
 		if (node == null) {
 			suiteUi.getCmsView().navigateTo(HOME_STATE);
@@ -551,7 +563,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 					}
 				}
 			} catch (Exception e) {
-				CmsFeedback.error("Cannot handle event " + event, e);
+				CmsFeedback.error("Cannot handle event " + topic + " " + event, e);
 //				log.error("Cannot handle event " + event, e);
 			}
 		});
