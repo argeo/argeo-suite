@@ -5,4 +5,5 @@
       <provide interface="org.argeo.api.cms.ux.CmsTheme"/>
    </service>
    <property name="themeId" type="String" value="org.argeo.app.theme.default"/>
+   <property name="smallIconSize" type="String" value="24"/>
 </scr:component>
