@@ -10,6 +10,8 @@ import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -61,17 +63,27 @@ public class DefaultHeader implements CmsUiProvider {
 			Label userL = new Label(end, SWT.NONE);
 			CmsSwtUtils.style(userL, SuiteStyle.header);
 			userL.setText(CurrentUser.getDisplayName());
-			Button logoutB = new Button(end, SWT.FLAT);
-//			CmsUiUtils.style(logoutB, SuiteStyle.header);
-			logoutB.setImage(theme.getSmallIcon(SuiteIcon.logout));
-			logoutB.addSelectionListener(new SelectionAdapter() {
-				private static final long serialVersionUID = 7116760083964201233L;
+//			Button logoutB = new Button(end, SWT.FLAT);
+//			logoutB.setImage(theme.getSmallIcon(SuiteIcon.logout));
+//			logoutB.addSelectionListener(new SelectionAdapter() {
+//				private static final long serialVersionUID = 7116760083964201233L;
+//
+//				@Override
+//				public void widgetSelected(SelectionEvent e) {
+//					cmsView.logout();
+//				}
+//
+//			});
+			Label logOutL = new Label(end, 0);
+			logOutL.setImage(theme.getSmallIcon(SuiteIcon.logout));
+			logOutL.addMouseListener(new MouseAdapter() {
+				private static final long serialVersionUID = 6908266850511460799L;
 
 				@Override
-				public void widgetSelected(SelectionEvent e) {
+				public void mouseDown(MouseEvent e) {
 					cmsView.logout();
 				}
-
+				
 			});
 		} else {
 			end.setLayout(new GridLayout(1, false));
