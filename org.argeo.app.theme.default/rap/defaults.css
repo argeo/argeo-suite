@@ -19,26 +19,19 @@ Sash:hover {
   background-color: #5882b5;
 }
 
-TreeItem{
-	background-color:#fff;
-}
-
-
 Tree-Cell {
-    padding: 3px 0px 0px;
+    padding: 3px 3px 0px;
+    spacing: 3px;
 }
 
 Table-Cell {
-    padding: 3px 0px 0px;
+    padding: 3px 3px 0px;
+    spacing: 5px;
 }
 
 Tree-RowOverlay:selected {
 	color:#fff;
 	background-color:#5882b5;
-}
-
-TableItem{
-	background-color:#fff;
 }
 
 Table-RowOverlay:selected {
