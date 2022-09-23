@@ -4,8 +4,9 @@
    <service>
       <provide interface="org.argeo.cms.swt.acr.SwtUiProvider"/>
    </service>
-   <properties entry="config/personUiProvider.properties"/>
+   <property name="service.ranking" type="Integer" value="-1000"/>
    <property name="availableRoles" type="String">
    </property>
+   <properties entry="config/personUiProvider.properties"/>
    <reference bind="setCmsUserManager" cardinality="1..1" interface="org.argeo.cms.CmsUserManager" name="CmsUserManager" policy="static"/>
 </scr:component>

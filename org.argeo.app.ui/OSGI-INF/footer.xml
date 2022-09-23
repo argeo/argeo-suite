@@ -2,7 +2,8 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" immediate="false" name="Default Suite Footer">
    <implementation class="org.argeo.app.ui.DefaultFooter"/>
    <service>
-      <provide interface="org.argeo.cms.ui.CmsUiProvider"/>
+      <provide interface="org.argeo.cms.swt.acr.SwtUiProvider"/>
    </service>
+   <property name="service.ranking" type="Integer" value="-1000"/>
    <properties entry="config/footer.properties"/>
 </scr:component>

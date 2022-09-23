@@ -5,6 +5,7 @@
       <provide interface="org.argeo.cms.swt.acr.SwtUiProvider"/>
    </service>
    <properties entry="config/peopleEntryArea.properties"/>
+   <property name="service.ranking" type="Integer" value="-1000"/>
    <reference bind="setCmsUserManager" cardinality="1..1" interface="org.argeo.cms.CmsUserManager" name="CmsUserManager" policy="static"/>
    <reference bind="setContentRepository" cardinality="1..1" interface="org.argeo.api.acr.ContentRepository" name="ContentRepository" policy="static"/>
 </scr:component>

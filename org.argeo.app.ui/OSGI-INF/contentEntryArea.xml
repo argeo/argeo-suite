@@ -4,5 +4,6 @@
    <service>
       <provide interface="org.argeo.cms.swt.acr.SwtUiProvider"/>
    </service>
+   <property name="service.ranking" type="Integer" value="-1000"/>
    <properties entry="config/contentEntryArea.properties"/>
 </scr:component>

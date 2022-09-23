@@ -16,28 +16,28 @@ public class RankedObject<T> {
 
 	private T object;
 	private Map<String, Object> properties;
-	private final Long rank;
+	private final int rank;
 
 	public RankedObject(T object, Map<String, Object> properties) {
 		this(object, properties, extractRanking(properties));
 	}
 
-	public RankedObject(T object, Map<String, Object> properties, Long rank) {
+	public RankedObject(T object, Map<String, Object> properties, int rank) {
 		super();
 		this.object = object;
 		this.properties = properties;
 		this.rank = rank;
 	}
 
-	private static Long extractRanking(Map<String, Object> properties) {
+	private static int extractRanking(Map<String, Object> properties) {
 		if (properties == null)
-			return 0l;
+			return 0;
 		if (properties.containsKey(SERVICE_RANKING))
-			return Long.valueOf(properties.get(SERVICE_RANKING).toString());
+			return (Integer) properties.get(SERVICE_RANKING);
 //		else if (properties.containsKey(SERVICE_ID))
 //			return (Long) properties.get(SERVICE_ID);
 		else
-			return 0l;
+			return 0;
 	}
 
 	public T get() {
@@ -48,7 +48,7 @@ public class RankedObject<T> {
 		return properties;
 	}
 
-	public Long getRank() {
+	public int getRank() {
 		return rank;
 	}
 
@@ -62,7 +62,7 @@ public class RankedObject<T> {
 		if (!(obj instanceof RankedObject))
 			return false;
 		RankedObject<?> other = (RankedObject<?>) obj;
-		return rank.equals(other.rank) && object.equals(other.object);
+		return rank == other.rank && object.equals(other.object);
 	}
 
 	@Override

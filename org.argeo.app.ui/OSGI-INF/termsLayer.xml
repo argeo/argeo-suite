@@ -4,6 +4,7 @@
    <service>
       <provide interface="org.argeo.app.ui.SuiteLayer"/>
    </service>
+   <property name="service.ranking" type="Integer" value="-1000"/>
    <properties entry="config/termsLayer.properties"/>
-   <reference bind="setEntryArea" cardinality="1..1" interface="org.argeo.cms.ui.CmsUiProvider" name="CmsUiProvider" policy="dynamic" target="(service.pid=argeo.suite.ui.termsEntryArea)"/>
+   <reference bind="setEntryArea" cardinality="1..1" interface="org.argeo.cms.swt.acr.SwtUiProvider" name="CmsUiProvider" policy="dynamic" target="(service.pid=argeo.suite.ui.termsEntryArea)"/>
 </scr:component>

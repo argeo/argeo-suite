@@ -3,7 +3,8 @@
    <implementation class="org.argeo.app.ui.DefaultLoginScreen"/>
    <properties entry="config/loginScreen.properties"/>
    <service>
-      <provide interface="org.argeo.cms.ui.CmsUiProvider"/>
+      <provide interface="org.argeo.cms.swt.acr.SwtUiProvider"/>
    </service>
+   <property name="service.ranking" type="Integer" value="-1000"/>
    <reference bind="setCmsContext" cardinality="1..1" interface="org.argeo.api.cms.CmsContext" name="CmsContext" policy="static"/>
 </scr:component>
