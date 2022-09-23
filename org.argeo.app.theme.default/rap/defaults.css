@@ -3,7 +3,9 @@ Label,
 Text,
 Tree,
 Table,
-Button
+Button,
+TreeColumn,
+TableColumn,
 {
 	font: 16px sans-serif;
 }
