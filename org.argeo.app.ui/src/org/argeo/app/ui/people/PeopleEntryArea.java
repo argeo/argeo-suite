@@ -109,7 +109,7 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 
 			@Override
 			public String getText(HierarchyUnit model) {
-				return model.getHierarchyUnitName();
+				return model.getHierarchyUnitLabel(CurrentUser.locale());
 			}
 
 			@Override
@@ -177,7 +177,7 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 				else if (role.isContentClass(LdapObjs.inetOrgPerson.qName()))
 					return SuiteIcon.person;
 				else if (role.isContentClass(LdapObjs.organization.qName()))
-					return SuiteIcon.organisation;
+					return SuiteIcon.organisationContact;
 				else if (role.isContentClass(LdapObjs.groupOfNames.qName()))
 					return SuiteIcon.group;
 				else
