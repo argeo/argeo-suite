@@ -43,7 +43,7 @@ public class DefaultLeadPane implements CmsUiProvider {
 	private ClassLoader l10nClassLoader;
 
 	@Override
-	public Control createUiPart(Composite parent, Content node)  {
+	public Control createUiPart(Composite parent, Content node) {
 		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
 		parent.setLayout(CmsSwtUtils.noSpaceGridLayout());
 		Composite appLayersC = new Composite(parent, SWT.NONE);
@@ -72,7 +72,7 @@ public class DefaultLeadPane implements CmsUiProvider {
 		}
 
 //		boolean isAdmin = cmsView.doAs(() -> CurrentUser.isInRole(NodeConstants.ROLE_USER_ADMIN));
-		Set<String> userRoles = cmsView.doAs(() -> CurrentUser.roles());
+		// Set<String> userRoles = cmsView.doAs(() -> CurrentUser.roles());
 		Button first = null;
 		layers: for (String layerDef : defaultLayers) {
 			layerDef = layerDef.trim();
@@ -83,10 +83,21 @@ public class DefaultLeadPane implements CmsUiProvider {
 			Set<String> layerRoles = SuiteUtils.extractRoles(semiColArr);
 			if (layers.containsKey(layerId)) {
 				if (!layerRoles.isEmpty()) {
-					Set<String> intersection = new HashSet<String>(layerRoles);
-					intersection.retainAll(userRoles);
-					if (intersection.isEmpty())
+					boolean authorized = false;
+					authorized = cmsView.doAs(() -> {
+						for (String layerRole : layerRoles) {
+							if (CurrentUser.implies(layerRole, null)) {
+								return true;
+							}
+						}
+						return false;
+					});
+					if (!authorized)
 						continue layers;// skip unauthorized layer
+//					Set<String> intersection = new HashSet<String>(layerRoles);
+//					intersection.retainAll(userRoles);
+//					if (intersection.isEmpty())
+//						continue layers;// skip unauthorized layer
 				}
 				RankedObject<SuiteLayer> layerObj = layers.get(layerId);
 
