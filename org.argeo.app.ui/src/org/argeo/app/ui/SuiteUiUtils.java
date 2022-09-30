@@ -393,10 +393,10 @@ public class SuiteUiUtils {
 		return lbl;
 	}
 
-	public static boolean isCoworker(CmsView cmsView) {
-		boolean coworker = cmsView.doAs(() -> CurrentUser.isInRole(SuiteRole.coworker.dn()));
-		return coworker;
-	}
+//	public static boolean isCoworker(CmsView cmsView) {
+//		boolean coworker = cmsView.doAs(() -> CurrentUser.isInRole(SuiteRole.coworker.dn()));
+//		return coworker;
+//	}
 
 	public static boolean isTopic(String topic, CmsEvent cmsEvent) {
 		Objects.requireNonNull(topic);
