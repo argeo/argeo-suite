@@ -84,11 +84,14 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 				List<HierarchyUnit> visible = new ArrayList<>();
 				if (parent != null) {
 					for (HierarchyUnit hu : parent.getDirectHierarchyUnits(true)) {
-						if (CurrentUser.implies(CmsRole.userAdmin, hu.getBase()) //
-						) // IPA
-						{
-							visible.add(hu);
-						}
+						// if parent was visible, it is visible
+						// TODO restrict more?
+
+//						if (CurrentUser.implies(CmsRole.userAdmin, hu.getBase()) //
+//						) // IPA
+//						{
+						visible.add(hu);
+//						}
 					}
 				} else {
 					for (UserDirectory directory : cmsUserManager.getUserDirectories()) {
@@ -96,8 +99,10 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 								|| CurrentUser.implies(CmsRole.userAdmin,
 										IpaUtils.IPA_ACCOUNTS_RDN + "," + directory.getBase())) // IPA
 						{
-							// we do not show the base level
-							for (HierarchyUnit hu : directory.getDirectHierarchyUnits(true)) {
+							// TODO show base level
+						}
+						for (HierarchyUnit hu : directory.getDirectHierarchyUnits(true)) {
+							if (CurrentUser.implies(CmsRole.userAdmin, hu.getBase())) {
 								visible.add(hu);
 							}
 						}
