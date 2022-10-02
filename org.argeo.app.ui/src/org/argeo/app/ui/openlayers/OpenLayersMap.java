@@ -179,7 +179,8 @@ public class OpenLayersMap extends Composite {
 						+ ",name: '" + name + "'}));";
 				toExecute.append(toEvaluate);
 			}
-			System.out.println(toExecute);
+			if (log.isTraceEnabled())
+				log.trace(toExecute);
 			browser.execute(toExecute.toString());
 		}
 	}
