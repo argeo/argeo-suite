@@ -14,5 +14,9 @@ public enum SuiteIcon implements CmsIcon {
 	// admin and settings
 	settings, user,
 	// misc
-	task, tag, location, inbox, map;
+	task, tag, location, inbox, map,
+	// actions
+	openUserMenu,
+	//
+	;
 }

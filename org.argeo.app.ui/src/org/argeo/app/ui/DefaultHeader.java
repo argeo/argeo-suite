@@ -75,7 +75,7 @@ public class DefaultHeader implements CmsUiProvider {
 //
 //			});
 			Label logOutL = new Label(end, 0);
-			logOutL.setImage(theme.getSmallIcon(SuiteIcon.logout));
+			logOutL.setImage(theme.getSmallIcon(SuiteIcon.openUserMenu));
 			logOutL.addMouseListener(new MouseAdapter() {
 				private static final long serialVersionUID = 6908266850511460799L;
 
@@ -83,7 +83,7 @@ public class DefaultHeader implements CmsUiProvider {
 				public void mouseDown(MouseEvent e) {
 					cmsView.logout();
 				}
-				
+
 			});
 		} else {
 			end.setLayout(new GridLayout(1, false));
