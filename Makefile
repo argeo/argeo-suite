@@ -35,6 +35,7 @@ org.argeo.tp.jcr \
 org.argeo.tp.formats \
 org.argeo.tp.gis \
 org.argeo.cms \
+org.argeo.cms.jcr \
 swt/org.argeo.cms \
 swt/rap/org.argeo.cms \
 
