@@ -1,11 +1,7 @@
 include sdk.mk
-.PHONY: clean all osgi move-swt
+.PHONY: clean all osgi
 
-all: move-swt
-
-move-swt: osgi
-	mkdir -p $(A2_OUTPUT)/swt/$(A2_CATEGORY)
-	mv -v $(A2_OUTPUT)/$(A2_CATEGORY)/org.argeo.app*.ui.$(MAJOR).$(MINOR).jar $(A2_OUTPUT)/swt/$(A2_CATEGORY)
+all: osgi
 
 A2_CATEGORY = org.argeo.suite
 
