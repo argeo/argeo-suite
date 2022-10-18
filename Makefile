@@ -10,11 +10,11 @@ org.argeo.app.api \
 org.argeo.app.core \
 org.argeo.app.servlet.odk \
 org.argeo.app.servlet.publish \
-org.argeo.app.swt \
-org.argeo.app.ui \
 org.argeo.app.theme.default \
 org.argeo.app.profile.acr.fs \
 org.argeo.app.profile.acr.jcr \
+swt/org.argeo.app.swt \
+swt/org.argeo.app.ui \
 
 A2_OUTPUT = $(SDK_BUILD_BASE)/a2
 A2_BASE = $(A2_OUTPUT)
