@@ -33,6 +33,7 @@ org.argeo.tp.gis \
 org.argeo.cms \
 org.argeo.cms.jcr \
 swt/org.argeo.cms \
+swt/org.argeo.cms.jcr \
 swt/rap/org.argeo.cms \
 
 clean:
