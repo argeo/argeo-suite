@@ -1,6 +1,10 @@
 Service-Component:\
 OSGI-INF/cmsTheme.xml
 
+Private-Package: *
+
+Export-Package: !*
+
 Import-Package:\
 org.argeo.cms.swt.osgi,\
 javax.servlet.*;version="[3,5)",\

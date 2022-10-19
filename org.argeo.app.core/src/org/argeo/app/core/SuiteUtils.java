@@ -1,6 +1,7 @@
 package org.argeo.app.core;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.jcr.Node;
@@ -8,30 +9,32 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.security.Privilege;
-import javax.naming.ldap.LdapName;
 import javax.security.auth.x500.X500Principal;
+import javax.xml.namespace.QName;
 
+import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsConstants;
 import org.argeo.api.cms.CmsSession;
 import org.argeo.app.api.EntityType;
-import org.argeo.app.api.SuiteRole;
-import org.argeo.jackrabbit.security.JackrabbitSecurityUtils;
+import org.argeo.cms.auth.RoleNameUtils;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.util.naming.LdapAttrs;
+import org.argeo.util.naming.LdapObjs;
 
 /** Utilities around the Argeo Suite APIs. */
 public class SuiteUtils {
-
-	public static String getUserNodePath(LdapName userDn) {
-		String uid = userDn.getRdn(userDn.size() - 1).getValue().toString();
+	@Deprecated
+	public static String getUserNodePath(String userDn) {
+		String uid = RoleNameUtils.getLastRdnValue(userDn);
 		return EntityType.user.basePath() + '/' + uid;
 	}
 
-	public static Node getOrCreateUserNode(Session adminSession, LdapName userDn) {
+	@Deprecated
+	private static Node getOrCreateUserNode(Session adminSession, String userDn) {
 		try {
 			Node usersBase = adminSession.getNode(EntityType.user.basePath());
-			String uid = userDn.getRdn(userDn.size() - 1).getValue().toString();
+			String uid = RoleNameUtils.getLastRdnValue(userDn);
 			Node userNode;
 			if (!usersBase.hasNode(uid)) {
 				userNode = usersBase.addNode(uid, NodeType.NT_UNSTRUCTURED);
@@ -40,8 +43,8 @@ public class SuiteUtils {
 				userNode.setProperty(LdapAttrs.distinguishedName.property(), userDn.toString());
 				userNode.setProperty(LdapAttrs.uid.property(), uid);
 				adminSession.save();
-				JackrabbitSecurityUtils.denyPrivilege(adminSession, userNode.getPath(), SuiteRole.coworker.dn(),
-						Privilege.JCR_READ);
+//				JackrabbitSecurityUtils.denyPrivilege(adminSession, userNode.getPath(), SuiteRole.coworker.dn(),
+//						Privilege.JCR_READ);
 				JcrUtils.addPrivilege(adminSession, userNode.getPath(), new X500Principal(userDn.toString()).getName(),
 						Privilege.JCR_READ);
 				JcrUtils.addPrivilege(adminSession, userNode.getPath(), CmsConstants.ROLE_USER_ADMIN,
@@ -55,6 +58,7 @@ public class SuiteUtils {
 		}
 	}
 
+	@Deprecated
 	public static Node getCmsSessionNode(Session session, CmsSession cmsSession) {
 		try {
 			return session.getNode(getUserNodePath(cmsSession.getUserDn()) + '/' + cmsSession.getUuid().toString());
@@ -63,9 +67,10 @@ public class SuiteUtils {
 		}
 	}
 
+	@Deprecated
 	public static Node getOrCreateCmsSessionNode(Session adminSession, CmsSession cmsSession) {
 		try {
-			LdapName userDn = cmsSession.getUserDn();
+			String userDn = cmsSession.getUserDn();
 //			String uid = userDn.get(userDn.size() - 1);
 			Node userNode = getOrCreateUserNode(adminSession, userDn);
 //			if (!usersBase.hasNode(uid)) {
@@ -95,11 +100,6 @@ public class SuiteUtils {
 		}
 	}
 
-	/** Singleton. */
-	private SuiteUtils() {
-
-	}
-
 	public static Set<String> extractRoles(String[] semiColArr) {
 		Set<String> res = new HashSet<>();
 		// TODO factorize and make it more robust
@@ -120,4 +120,33 @@ public class SuiteUtils {
 		return res;
 	}
 
+	synchronized static public long findNextId(Content hierarchyUnit, QName cclass) {
+		if (!hierarchyUnit.hasContentClass(LdapObjs.posixGroup.qName())) 
+			throw new IllegalArgumentException(hierarchyUnit + " is not a POSIX group");
+		
+		long min = hierarchyUnit.get(LdapAttrs.gidNumber.qName(), Long.class).orElseThrow();
+		long currentMax = 0l;
+		for (Content childHu : hierarchyUnit) {
+			if (!childHu.hasContentClass(LdapObjs.organizationalUnit.qName()))
+				continue;
+			// FIXME filter out functional hierarchy unit
+			for (Content role : childHu) {
+				if (role.hasContentClass(cclass)) {
+
+					if (LdapObjs.posixAccount.qName().equals(cclass)) {
+						Long id = role.get(LdapAttrs.uidNumber.qName(), Long.class).orElseThrow();
+						if (id > currentMax)
+							currentMax = id;
+					}
+				}
+			}
+		}
+		if (currentMax == 0l)
+			return min;
+		return currentMax + 1;
+	}
+
+	/** Singleton. */
+	private SuiteUtils() {
+	}
 }

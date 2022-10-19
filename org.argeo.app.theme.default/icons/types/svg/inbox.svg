@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1{fill:none;stroke:#f3964d;stroke-linecap:round;stroke-linejoin:round;stroke-width:33px;}.cls-2{fill:#f3964d;}</style>
+  </defs>
+  <title>inbox</title>
+  <g id="Plus">
+    <line class="cls-1" x1="253.73" x2="253.73" y1="231.53" y2="69.07"/>
+    <polygon class="cls-2" points="303.1 217.08 253.73 302.57 204.37 217.08 303.1 217.08"/>
+    <line class="cls-1" x1="114.73" x2="114.73" y1="226.82" y2="404.82"/>
+    <line class="cls-1" x1="392.73" x2="392.73" y1="404.82" y2="226.82"/>
+    <line class="cls-1" x1="114.73" x2="392.73" y1="404.82" y2="404.82"/>
+  </g>
+</svg>

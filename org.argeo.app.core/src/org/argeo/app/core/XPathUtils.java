@@ -78,7 +78,6 @@ public class XPathUtils {
 	 * @param propertyName
 	 * @param calendar       the reference date
 	 * @param lowerOrGreater "&lt;", "&gt;" TODO validate "&gt;="
-	 * @return
 	 * @throws RepositoryException
 	 */
 	public static String getPropertyDateComparaison(String propertyName, Calendar cal, String lowerOrGreater)

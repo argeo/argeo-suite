@@ -1,19 +1,47 @@
 package org.argeo.app.api;
 
+import javax.xml.namespace.QName;
+
+import org.argeo.api.acr.ContentName;
+import org.argeo.api.acr.CrName;
 import org.argeo.api.cms.CmsConstants;
-import org.argeo.util.naming.Distinguished;
+import org.argeo.cms.auth.SystemRole;
 import org.argeo.util.naming.LdapAttrs;
 
-/** Office specific roles used in the code */
-public enum SuiteRole implements Distinguished {
-	coworker, manager;
+/** Standard suite system roles. */
+public enum SuiteRole implements SystemRole {
+	/** An external person who has read access to part of the information. */
+	observer,
+	/** An active coworker. */
+	coworker,
+	/** Someone who is allowed validate and publish information. */
+	publisher,
+	/** Someone with manager status within an organisation. Does not necessarily give more rights. */
+	manager,
+	//
+	;
 
-	public String getRolePrefix() {
+	private final static String QUALIFIER = "app.";
+
+	private final ContentName name;
+
+	SuiteRole() {
+		name = new ContentName(CrName.ROLE_NAMESPACE_URI, QUALIFIER + name());
+	}
+
+	@Override
+	public QName getName() {
+		return name;
+	}
+
+	@Deprecated
+	private String getRolePrefix() {
 		return "org.argeo.suite";
 	}
 
+	@Deprecated
 	public String dn() {
 		return new StringBuilder(LdapAttrs.cn.name()).append("=").append(getRolePrefix()).append(".").append(name())
-				.append(",").append(CmsConstants.ROLES_BASEDN).toString();
+				.append(",").append(CmsConstants.SYSTEM_ROLES_BASEDN).toString();
 	}
 }

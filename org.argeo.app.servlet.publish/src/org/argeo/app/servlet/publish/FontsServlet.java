@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.IOUtils;
-import org.argeo.api.cms.CmsTheme;
+import org.argeo.api.cms.ux.CmsTheme;
 
 /** Serves fonts locally. */
 public class FontsServlet extends HttpServlet {

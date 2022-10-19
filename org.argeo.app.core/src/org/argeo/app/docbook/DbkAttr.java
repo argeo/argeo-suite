@@ -1,7 +1,9 @@
 package org.argeo.app.docbook;
 
+import org.argeo.api.acr.QNamed;
+
 /** Supported DocBook attributes. */
-public enum DbkAttr {
+public enum DbkAttr implements QNamed.Unqualified {
 	role,
 	//
 	fileref, contentwidth, contentdepth

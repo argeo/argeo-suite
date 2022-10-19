@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
+   <implementation class="org.argeo.app.ui.publish.PublishEntryArea"/>
+   <service>
+      <provide interface="org.argeo.cms.swt.acr.SwtUiProvider"/>
+   </service>
+   <property name="service.ranking" type="Integer" value="-1000"/>
+   <properties entry="config/publishEntryArea.properties"/>
+</scr:component>

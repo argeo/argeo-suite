@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" id="Layer_1" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1{fill:#35987a;}.cls-2{fill:#fff;}.cls-3{fill:#007f00;stroke:#fff;stroke-linecap:round;stroke-miterlimit:10;stroke-width:50px;}</style>
+  </defs>
+  <title>task</title>
+  <rect class="cls-1" height="435.25" width="345.2" x="61" y="24.75"/>
+  <circle class="cls-2" cx="130" cy="133" r="24"/>
+  <line class="cls-3" x1="206" x2="335" y1="133" y2="133"/>
+  <line class="cls-3" x1="205" x2="334.67" y1="245" y2="244.93"/>
+  <line class="cls-3" x1="209" x2="334.67" y1="352" y2="352.24"/>
+  <circle class="cls-2" cx="130" cy="240" r="24"/>
+  <circle class="cls-2" cx="130" cy="352" r="24"/>
+</svg>

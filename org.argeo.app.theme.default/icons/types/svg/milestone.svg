@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" id="Layer_1" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1{fill:#49bac5;}.cls-2{fill:none;stroke:#fff;stroke-linecap:round;stroke-linejoin:round;stroke-width:40px;}</style>
+  </defs>
+  <title>milestone</title>
+  <rect class="cls-1" height="337.48" rx="11" ry="11" width="337.48" x="81" y="83.52"/>
+  <path class="cls-1" d="M407.48,94.52V410H92V94.52H407.48m0-22H92a22,22,0,0,0-22,22V410a22,22,0,0,0,22,22H407.48a22,22,0,0,0,22-22V94.52a22,22,0,0,0-22-22Z"/>
+  <polyline class="cls-2" points="156.1 285.83 239.74 343.74 341.07 158.77"/>
+</svg>

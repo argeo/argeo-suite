@@ -16,28 +16,28 @@ public class RankedObject<T> {
 
 	private T object;
 	private Map<String, Object> properties;
-	private final Long rank;
+	private final int rank;
 
 	public RankedObject(T object, Map<String, Object> properties) {
 		this(object, properties, extractRanking(properties));
 	}
 
-	public RankedObject(T object, Map<String, Object> properties, Long rank) {
+	public RankedObject(T object, Map<String, Object> properties, int rank) {
 		super();
 		this.object = object;
 		this.properties = properties;
 		this.rank = rank;
 	}
 
-	private static Long extractRanking(Map<String, Object> properties) {
+	private static int extractRanking(Map<String, Object> properties) {
 		if (properties == null)
-			return 0l;
+			return 0;
 		if (properties.containsKey(SERVICE_RANKING))
-			return Long.valueOf(properties.get(SERVICE_RANKING).toString());
+			return (Integer) properties.get(SERVICE_RANKING);
 //		else if (properties.containsKey(SERVICE_ID))
 //			return (Long) properties.get(SERVICE_ID);
 		else
-			return 0l;
+			return 0;
 	}
 
 	public T get() {
@@ -48,7 +48,7 @@ public class RankedObject<T> {
 		return properties;
 	}
 
-	public Long getRank() {
+	public int getRank() {
 		return rank;
 	}
 
@@ -62,7 +62,7 @@ public class RankedObject<T> {
 		if (!(obj instanceof RankedObject))
 			return false;
 		RankedObject<?> other = (RankedObject<?>) obj;
-		return rank.equals(other.rank) && object.equals(other.object);
+		return rank == other.rank && object.equals(other.object);
 	}
 
 	@Override
@@ -70,6 +70,18 @@ public class RankedObject<T> {
 		return object.getClass().getName() + " with rank " + rank;
 	}
 
+	public static <K, T> boolean hasHigherRank(Map<K, RankedObject<T>> map, K key, Map<String, Object> properties) {
+		if (!map.containsKey(key))
+			return true;
+		RankedObject<T> rankedObject = new RankedObject<>(null, properties);
+		RankedObject<T> current = map.get(key);
+		return current.getRank() < rankedObject.getRank();
+	}
+
+	/**
+	 * @return the {@link RankedObject}, or <code>null</code> if the current one was
+	 *         kept
+	 */
 	public static <K, T> RankedObject<T> putIfHigherRank(Map<K, RankedObject<T>> map, K key, T object,
 			Map<String, Object> properties) {
 		RankedObject<T> rankedObject = new RankedObject<>(object, properties);
@@ -81,14 +93,18 @@ public class RankedObject<T> {
 			return rankedObject;
 		} else {
 			RankedObject<T> current = map.get(key);
-			if (current.getRank() <= rankedObject.getRank()) {
+			if (current.getRank() < rankedObject.getRank()) {
 				map.put(key, rankedObject);
-				if (log.isTraceEnabled())
-					log.trace("Replaced " + key + " by " + object.getClass().getName() + " with rank "
+				if (log.isDebugEnabled())
+					log.debug("Replaced " + key + " by " + object.getClass().getName() + " with rank "
 							+ rankedObject.getRank());
 				return rankedObject;
+			} else if (current.getRank() == rankedObject.getRank()) {
+				log.error("Already " + key + " by " + current.get().getClass().getName() + " with rank "
+						+ rankedObject.getRank() + ", ignoring " + rankedObject.get().getClass().getName());
+				return null;
 			} else {
-				return current;
+				return null;
 			}
 		}
 

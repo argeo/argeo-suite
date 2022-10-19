@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" id="Layer_1" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1{fill:#fff;}.cls-2{fill:#35987a;}.cls-3,.cls-4,.cls-5,.cls-6{fill:none;}.cls-3,.cls-4{stroke:#35987a;stroke-linecap:round;stroke-width:49px;}.cls-3,.cls-5,.cls-6{stroke-miterlimit:10;}.cls-4{stroke-linejoin:round;}.cls-5,.cls-6{stroke:#000;}.cls-5{stroke-width:51px;}.cls-6{stroke-width:9px;}</style>
+  </defs>
+  <title>project-01</title>
+  <rect class="cls-1" height="382.19" rx="13.5" ry="13.5" width="317" x="67.5" y="56.34"/>
+  <path class="cls-2" d="M371,69.84V425H81V69.84H371m0-27H81a27,27,0,0,0-27,27V425a27,27,0,0,0,27,27H371a27,27,0,0,0,27-27V69.84a27,27,0,0,0-27-27Z"/>
+  <line class="cls-3" x1="132.5" x2="321.5" y1="132" y2="132"/>
+  <line class="cls-4" x1="132.5" x2="308.5" y1="248.5" y2="248.5"/>
+  <line class="cls-5" x1="309.73" x2="480.45" y1="337.71" y2="125.58"/>
+  <polygon class="cls-6" points="287.3 331.2 321.68 358.04 267.58 389.45 287.3 331.2"/>
+  <line class="cls-4" x1="128.5" x2="238.5" y1="360.5" y2="360.5"/>
+</svg>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1,.cls-2,.cls-4,.cls-6,.cls-8{fill:none;}.cls-1,.cls-7,.cls-8{stroke:#f3964d;}.cls-1,.cls-2,.cls-8{stroke-linecap:round;}.cls-1,.cls-2{stroke-linejoin:round;}.cls-1,.cls-7{stroke-width:20px;}.cls-2,.cls-4,.cls-6{stroke:#454545;}.cls-2,.cls-4{stroke-width:5px;}.cls-3{fill:#f3964d;}.cls-4,.cls-6,.cls-7,.cls-8{stroke-miterlimit:10;}.cls-5{fill:#6ac59a;}.cls-6{stroke-width:4px;}.cls-7{fill:#fff;}.cls-8{stroke-width:9px;}</style>
+  </defs>
+  <title>timeLine</title>
+  <g id="Plus">
+    <line class="cls-1" x1="55" x2="441" y1="422.36" y2="422.36"/>
+    <line class="cls-2" x1="62.5" x2="221.5" y1="216.34" y2="94.38"/>
+    <line class="cls-2" x1="221.5" x2="391.5" y1="94.86" y2="157.86"/>
+    <circle class="cls-3" cx="129" cy="166.36" r="20"/>
+    <circle class="cls-3" cx="222" cy="95.36" r="20"/>
+    <circle class="cls-3" cx="392" cy="158.36" r="20"/>
+    <line class="cls-4" x1="209" x2="55" y1="260.36" y2="382.36"/>
+    <line class="cls-1" x1="55" x2="55" y1="59.36" y2="422.36"/>
+    <circle class="cls-5" cx="116" cy="334.36" r="20"/>
+    <line class="cls-6" x1="209" x2="300" y1="260.36" y2="321.36"/>
+    <circle class="cls-5" cx="209" cy="260.36" r="20"/>
+    <line class="cls-4" x1="300" x2="407" y1="321.36" y2="246.36"/>
+    <circle class="cls-5" cx="300" cy="321.36" r="20"/>
+    <circle class="cls-5" cx="407" cy="246.36" r="20"/>
+    <circle class="cls-7" cx="417.83" cy="385.36" r="51"/>
+    <line class="cls-8" x1="417.83" x2="417.83" y1="387.36" y2="343.36"/>
+    <line class="cls-8" x1="417.33" x2="442.33" y1="387.86" y2="387.86"/>
+    <polyline class="cls-3" points="23.92 60.86 54.33 30.46 84.73 60.86"/>
+  </g>
+</svg>

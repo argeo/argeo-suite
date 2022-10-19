@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="Dashboard Layer">
+   <implementation class="org.argeo.app.ui.DefaultEditionLayer"/>
+   <service>
+      <provide interface="org.argeo.app.ui.SuiteLayer"/>
+   </service>
+   <property name="service.ranking" type="Integer" value="-1000"/>
+   <properties entry="config/dashboardLayer.properties"/>
+</scr:component>

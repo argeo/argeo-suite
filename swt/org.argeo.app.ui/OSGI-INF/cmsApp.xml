@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" name="Argeo Suite App">
+   <implementation class="org.argeo.app.ui.SuiteApp"/>
+   <service>
+      <provide interface="org.argeo.api.cms.CmsApp"/>
+   </service>
+   <properties entry="config/cmsApp.properties"/>
+   <reference bind="addUiProvider" cardinality="0..n" interface="org.argeo.cms.swt.acr.SwtUiProvider" policy="dynamic" unbind="removeUiProvider"/>
+   <reference bind="addTheme" cardinality="1..n" interface="org.argeo.api.cms.ux.CmsTheme" name="CmsTheme" policy="dynamic" unbind="removeTheme"/>
+   <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.ui.SuiteLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
+   <reference bind="setCmsUserManager" cardinality="1..1" interface="org.argeo.cms.CmsUserManager" name="CmsUserManager" policy="static"/>
+   <reference bind="setCmsContext" cardinality="1..1" interface="org.argeo.api.cms.CmsContext" name="CmsContext" policy="static"/>
+   <reference bind="setContentRepository" cardinality="1..1" interface="org.argeo.api.acr.ContentRepository" name="ContentRepository" policy="static"/>
+</scr:component>
