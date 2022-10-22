@@ -17,13 +17,10 @@ import org.argeo.api.cms.CmsEvent;
 import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.api.cms.ux.CmsIcon;
 import org.argeo.api.cms.ux.CmsStyle;
-import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
-import org.argeo.app.api.SuiteRole;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
-import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -381,7 +378,9 @@ public class SuiteUiUtils {
 		Label lbl = new Label(parent, SWT.NONE);
 		CmsSwtUtils.markup(lbl);
 		StringBuilder txt = new StringBuilder();
-		txt.append("<a class='" + plainCssAnchorClass + "'");
+		txt.append("<a");
+		if (plainCssAnchorClass != null)
+			txt.append(" class='" + plainCssAnchorClass + "'");
 		txt.append(" href='").append(url).append("'");
 		if (newWindow) {
 			txt.append(" target='blank_'");
