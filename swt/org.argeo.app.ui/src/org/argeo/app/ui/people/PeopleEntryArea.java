@@ -152,7 +152,7 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 								Content content = ContentUtils.roleToContent(cmsUserManager, contentSession, r);
 								// if (r instanceof Person || r instanceof Organization)
 								if (content.hasContentClass(LdapObjs.inetOrgPerson.qName(),
-										LdapObjs.organization.qName()))
+										LdapObjs.organization.qName(), LdapObjs.groupOfNames.qName()))
 									roles.add(content);
 							}
 						}
