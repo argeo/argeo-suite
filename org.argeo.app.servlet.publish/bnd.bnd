@@ -9,6 +9,7 @@ org.osgi.framework,\
 org.apache.xml.serializer,\
 org.eclipse.rap.rwt,\
 org.argeo.app.api,\
+org.argeo.cms.acr.xml,\
 javax.servlet.*;version="[3,5)",\
 *
 
