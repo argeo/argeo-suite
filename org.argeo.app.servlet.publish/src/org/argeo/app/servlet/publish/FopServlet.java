@@ -43,6 +43,7 @@ import org.argeo.api.acr.ContentRepository;
 import org.argeo.api.acr.ContentSession;
 import org.argeo.app.geo.GeoUtils;
 import org.argeo.app.geo.GpxUtils;
+import org.argeo.cms.acr.xml.XmlNormalizer;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.servlet.ServletHttpRequest;
 import org.argeo.util.LangUtils;
@@ -77,12 +78,9 @@ public class FopServlet extends HttpServlet {
 		boolean pdf = ".pdf".equals(ext);
 		ContentSession session = RemoteAuthUtils.doAs(() -> contentRepository.get(), new ServletHttpRequest(req));
 		Content content = session.get(path);
-		Source xmlInput = content.adapt(Source.class);
-		String systemId = req.getRequestURL().toString();
-		xmlInput.setSystemId(systemId);
 
 		// dev only
-		final boolean DEV = true;
+		final boolean DEV = false;
 		if (DEV) {
 			try (InputStream in = xslUrl.openStream()) {
 				Source xslSource = new StreamSource(in);
@@ -92,7 +90,14 @@ public class FopServlet extends HttpServlet {
 			} catch (TransformerConfigurationException | IOException e) {
 				throw new IllegalStateException("Cannot instantiate XSL " + xslUrl, e);
 			}
+
+			Source xmlInput = content.adapt(Source.class);
+			XmlNormalizer.print(xmlInput,0);
 		}
+
+		Source xmlInput = content.adapt(Source.class);
+		String systemId = req.getRequestURL().toString();
+		xmlInput.setSystemId(systemId);
 
 		URIResolver uriResolver = (href, base) -> {
 			try {
@@ -115,7 +120,7 @@ public class FopServlet extends HttpServlet {
 									StreamSource res = new StreamSource(new StringReader(writer.toString()));
 									return res;
 								}
-							} 
+							}
 						} else {
 							throw new UnsupportedOperationException(geoExt + " is not supported");
 						}
@@ -124,8 +129,8 @@ public class FopServlet extends HttpServlet {
 			} catch (IOException e) {
 				throw new RuntimeException("Cannot process " + href);
 			}
-			
-			String p = href.startsWith("/")?href:path+'/'+href;
+
+			String p = href.startsWith("/") ? href : path + '/' + href;
 			Content subContent = session.get(p);
 			return subContent.adapt(Source.class);
 		};
