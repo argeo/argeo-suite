@@ -129,7 +129,7 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 			}
 
 		};
-		SwtTreeView<HierarchyUnit> directoriesView = new SwtTreeView<>(sashForm, SWT.NONE, hierarchyPart);
+		SwtTreeView<HierarchyUnit> directoriesView = new SwtTreeView<>(sashForm, SWT.BORDER, hierarchyPart);
 
 		DefaultTabularPart<HierarchyUnit, Content> usersPart = new DefaultTabularPart<>() {
 
@@ -197,7 +197,7 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 		});
 		usersPart.addColumn((Column<Content>) (role) -> role.attr(LdapAttrs.mail.qName()));
 
-		SwtTableView<HierarchyUnit, Content> usersView = new SwtTableView<>(sashForm, SWT.NONE, usersPart);
+		SwtTableView<HierarchyUnit, Content> usersView = new SwtTableView<>(sashForm, SWT.BORDER, usersPart);
 
 		// toolbar
 		Composite bottom = new Composite(parent, SWT.NONE);
