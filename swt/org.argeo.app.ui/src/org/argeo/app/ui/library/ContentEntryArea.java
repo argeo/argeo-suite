@@ -5,7 +5,7 @@ import org.argeo.api.acr.spi.ProvidedContent;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.api.EntityType;
-import org.argeo.app.ui.SuiteEvent;
+import org.argeo.app.ui.SuiteUxEvent;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.argeo.cms.swt.widgets.SwtTreeView;
@@ -46,7 +46,7 @@ public class ContentEntryArea implements SwtUiProvider {
 		contentPart.onSelected((o) -> {
 			Content c = (Content) o;
 			log.debug(c.getPath());
-			cmsView.sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.eventProperties(c));
+			cmsView.sendEvent(SuiteUxEvent.refreshPart.topic(), SuiteUxEvent.eventProperties(c));
 		});
 		return view;
 	}

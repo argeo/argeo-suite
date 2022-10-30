@@ -12,7 +12,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 
-/** The view for the default ergonomics of Argeo Suite. */
+/** The view for the default UX of Argeo Suite. */
 class SuiteUi extends CmsSwtUi {
 	private static final long serialVersionUID = 6207018859086689108L;
 	private final static CmsLog log = CmsLog.getLog(SuiteUi.class);
@@ -25,8 +25,6 @@ class SuiteUi extends CmsSwtUi {
 	private Composite sidePane;
 	private Composite dynamicArea;
 
-//	private Session sysSession;
-//	private Session homeSession;
 	private Content userDir;
 
 	private Map<String, SuiteLayer> layers = new HashMap<>();
@@ -34,7 +32,6 @@ class SuiteUi extends CmsSwtUi {
 	private String currentLayerId = null;
 
 	private boolean loginScreen = false;
-//	private String postLoginState;
 
 	public SuiteUi(Composite parent, int style) {
 		super(parent, style);
@@ -116,13 +113,12 @@ class SuiteUi extends CmsSwtUi {
 		}
 		if (context == null) {
 			if (!getCmsView().isAnonymous())
-				context = getUserDirNode();
+				context = getUserDir();
 		}
 		Composite toShow = getLayer(layerId, context);
 		if (toShow != null) {
 			currentLayerId = layerId;
 			if (!isDisposed()) {
-//				getDisplay().syncExec(() -> {
 				if (!toShow.isDisposed()) {
 					toShow.moveAbove(null);
 				} else {
@@ -131,7 +127,6 @@ class SuiteUi extends CmsSwtUi {
 					toShow.moveAbove(null);
 				}
 				dynamicArea.layout(true, true);
-//				});
 			}
 			return toShow;
 		} else {
@@ -174,8 +169,6 @@ class SuiteUi extends CmsSwtUi {
 
 	synchronized void logout() {
 		userDir = null;
-//		Jcr.logout(sysSession);
-//		Jcr.logout(homeSession);
 		currentLayerId = null;
 		workAreas.clear();
 	}
@@ -204,27 +197,6 @@ class SuiteUi extends CmsSwtUi {
 		return belowHeader;
 	}
 
-//	Session getSysSession() {
-//		return sysSession;
-//	}
-//
-//	synchronized void initSessions(Repository repository, String userDirPath) throws RepositoryException {
-//		this.sysSession = repository.login();
-//		this.homeSession = repository.login(CmsConstants.HOME_WORKSPACE);
-//		userDir = sysSession.getNode(userDirPath);
-//		addDisposeListener((e) -> {
-//			Jcr.logout(sysSession);
-//			Jcr.logout(homeSession);
-//		});
-//	}
-
-	@Deprecated
-	Content getUserDirNode() {
-		if (userDir == null)
-			return null;
-		return userDir;
-	}
-
 	Content getUserDir() {
 		return userDir;
 	}
@@ -232,21 +204,6 @@ class SuiteUi extends CmsSwtUi {
 	void setUserDir(Content userDir) {
 		this.userDir = userDir;
 	}
-
-//	Session getSysSession() {
-//		return sysSession;
-//	}
-
-//	Session getSession(String workspaceName) {
-//		if (workspaceName == null)
-//			return sysSession;
-//		if (CmsConstants.SYS_WORKSPACE.equals(workspaceName))
-//			return sysSession;
-//		else if (CmsConstants.HOME_WORKSPACE.equals(workspaceName))
-//			return homeSession;
-//		else
-//			throw new IllegalArgumentException("Unknown workspace " + workspaceName);
-//	}
 
 	public Localized getTitle() {
 		return title;
@@ -263,13 +220,4 @@ class SuiteUi extends CmsSwtUi {
 	public void setLoginScreen(boolean loginScreen) {
 		this.loginScreen = loginScreen;
 	}
-
-//	public String getPostLoginState() {
-//		return postLoginState;
-//	}
-//
-//	public void setPostLoginState(String postLoginState) {
-//		this.postLoginState = postLoginState;
-//	}
-
 }

@@ -15,7 +15,7 @@ import javax.jcr.RepositoryException;
 import org.apache.commons.io.IOUtils;
 import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
-import org.argeo.app.ui.SuiteEvent;
+import org.argeo.app.ui.SuiteUxEvent;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.ux.CmsView;
 import org.argeo.api.cms.CmsConstants;
@@ -275,8 +275,8 @@ public class OpenLayersMap extends Composite {
 			Map<String, Object> properties = new HashMap<>();
 //			properties.put(SuiteEvent.NODE_PATH, path);
 //			properties.put(SuiteEvent.WORKSPACE, CmsConstants.SYS_WORKSPACE);
-			properties.put(SuiteEvent.CONTENT_PATH, '/' + CmsConstants.SYS_WORKSPACE + path);
-			cmsView.sendEvent(SuiteEvent.refreshPart.topic(), properties);
+			properties.put(SuiteUxEvent.CONTENT_PATH, '/' + CmsConstants.SYS_WORKSPACE + path);
+			cmsView.sendEvent(SuiteUxEvent.refreshPart.topic(), properties);
 			return null;
 		}
 	}

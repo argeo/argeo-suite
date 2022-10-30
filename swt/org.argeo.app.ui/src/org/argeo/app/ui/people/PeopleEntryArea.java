@@ -11,7 +11,7 @@ import org.argeo.api.acr.ContentRepository;
 import org.argeo.api.acr.ContentSession;
 import org.argeo.api.cms.ux.CmsIcon;
 import org.argeo.api.cms.ux.CmsView;
-import org.argeo.app.ui.SuiteEvent;
+import org.argeo.app.ui.SuiteUxEvent;
 import org.argeo.app.ui.SuiteIcon;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.acr.ContentUtils;
@@ -219,15 +219,15 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 			if (o instanceof HierarchyUnit) {
 				HierarchyUnit hierarchyUnit = (HierarchyUnit) o;
 				usersPart.setInput(hierarchyUnit);
-				cmsView.sendEvent(SuiteEvent.refreshPart.topic(),
-						SuiteEvent.eventProperties(ContentUtils.hierarchyUnitToContent(contentSession, hierarchyUnit)));
+				cmsView.sendEvent(SuiteUxEvent.refreshPart.topic(),
+						SuiteUxEvent.eventProperties(ContentUtils.hierarchyUnitToContent(contentSession, hierarchyUnit)));
 			}
 		});
 
 		usersPart.onSelected((o) -> {
 			Content user = (Content) o;
 			if (user != null) {
-				cmsView.sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.eventProperties(user));
+				cmsView.sendEvent(SuiteUxEvent.refreshPart.topic(), SuiteUxEvent.eventProperties(user));
 				deleteItem.setEnabled(true);
 			} else {
 				deleteItem.setEnabled(false);
@@ -237,7 +237,7 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 		usersPart.onAction((o) -> {
 			Content user = (Content) o;
 			if (user != null) {
-				cmsView.sendEvent(SuiteEvent.openNewPart.topic(), SuiteEvent.eventProperties(user));
+				cmsView.sendEvent(SuiteUxEvent.openNewPart.topic(), SuiteUxEvent.eventProperties(user));
 			}
 		});
 

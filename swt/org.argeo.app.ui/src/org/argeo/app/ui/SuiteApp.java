@@ -99,7 +99,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 //	private Repository repository;
 
 	public void init(Map<String, Object> properties) {
-		for (SuiteEvent event : SuiteEvent.values()) {
+		for (SuiteUxEvent event : SuiteUxEvent.values()) {
 			getCmsContext().getCmsEventBus().addEventSubscriber(event.topic(), this);
 		}
 
@@ -222,31 +222,17 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 				if (LOGIN.equals(state))
 					state = null;
 				if (ui.isLoginScreen()) {
-//					if (state == null)
-//						state = ui.getPostLoginState();
 					ui.setLoginScreen(false);
-//					ui.setPostLoginState(null);
 				}
 				CmsSession cmsSession = cmsView.getCmsSession();
-				if (ui.getUserDirNode() == null) {
+				if (ui.getUserDir() == null) {
 					// FIXME NPE on CMSSession when logging in from anonymous
 					if (cmsSession == null || cmsView.isAnonymous()) {
 						assert publicBasePath != null;
 						Content userDir = contentSession
 								.get(ContentUtils.SLASH + CmsConstants.SYS_WORKSPACE + publicBasePath);
 						ui.setUserDir(userDir);
-//						ui.initSessions(getRepository(), publicBasePath);
 					} else {
-//						Session adminSession = null;
-//						try {
-//							adminSession = CmsJcrUtils.openDataAdminSession(getRepository(), null);
-//							Node userDirNode = SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
-//							Content userDir = contentSession.get(CmsConstants.SYS_WORKSPACE + userDirNode.getPath());
-//							ui.setUserDir(userDir);
-////							ui.initSessions(getRepository(), userDirNode.getPath());
-//						} finally {
-//							Jcr.logout(adminSession);
-//						}
 						Content userDir = contentSession.getSessionRunDir();
 						ui.setUserDir(userDir);
 					}
@@ -254,7 +240,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 				initLocale(cmsSession);
 				context = stateToNode(ui, state);
 				if (context == null)
-					context = ui.getUserDirNode();
+					context = ui.getUserDir();
 
 				if (headerUiProvider != null)
 					refreshPart(headerUiProvider, ui.getHeader(), context);
@@ -343,9 +329,6 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 					}
 				}
 
-//			if (context.getPath().equals("/")) {// root node
-//				types.add("nt:folder");
-//			}
 				if (CmsJcrUtils.isUserHome(context) && byType.containsKey("nt:folder")) {// home node
 					types.add("nt:folder");
 				}
@@ -362,7 +345,6 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 			}
 
 		} else {
-
 			List<QName> objectClasses = content.getContentClasses();
 			Set<String> types = new TreeSet<>();
 			for (QName cc : objectClasses) {
@@ -377,8 +359,6 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 			if (!byType.containsKey(type))
 				throw new IllegalArgumentException("No component found for " + content + " with type " + type);
 			return byType.get(type).get();
-			// throw new UnsupportedOperationException("Content " +
-			// content.getClass().getName() + " is not supported.");
 		}
 	}
 
@@ -423,15 +403,14 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 				}
 				Map<String, Object> properties = new HashMap<>();
 				String layerId = HOME_STATE.equals(state) ? defaultLayerPid : state;
-				properties.put(SuiteEvent.LAYER, layerId);
-				properties.put(SuiteEvent.NODE_PATH, HOME_STATE);
-				ui.getCmsView().sendEvent(SuiteEvent.switchLayer.topic(), properties);
+				properties.put(SuiteUxEvent.LAYER, layerId);
+				properties.put(SuiteUxEvent.CONTENT_PATH, HOME_STATE);
+				ui.getCmsView().sendEvent(SuiteUxEvent.switchLayer.topic(), properties);
 			}
 			return;
 		}
 		SuiteUi suiteUi = (SuiteUi) cmsUi;
 		if (suiteUi.isLoginScreen()) {
-//			suiteUi.setPostLoginState(state);
 			return;
 		}
 
@@ -439,8 +418,8 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		if (node == null) {
 			suiteUi.getCmsView().navigateTo(HOME_STATE);
 		} else {
-			suiteUi.getCmsView().sendEvent(SuiteEvent.switchLayer.topic(), SuiteEvent.eventProperties(node));
-			suiteUi.getCmsView().sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.eventProperties(node));
+			suiteUi.getCmsView().sendEvent(SuiteUxEvent.switchLayer.topic(), SuiteUxEvent.eventProperties(node));
+			suiteUi.getCmsView().sendEvent(SuiteUxEvent.refreshPart.topic(), SuiteUxEvent.eventProperties(node));
 		}
 	}
 
@@ -456,35 +435,10 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 			return null;
 
 		String path = state;
-//		String path = state.substring(1);
-//		String workspace;
-//		if (path.equals("")) {
-//			workspace = null;
-//			path = "/";
-//		} else {
-//			int index = path.indexOf('/');
-//			if (index == 0) {
-//				log.error("Cannot interpret " + state);
-////				cmsView.navigateTo("~");
-//				return null;
-//			} else if (index > 0) {
-//				workspace = path.substring(0, index);
-//				path = path.substring(index);
-//			} else {// index<0, assuming root node
-//				workspace = path;
-//				path = "/";
-//			}
-//		}
 
 		ProvidedSession contentSession = (ProvidedSession) CmsUxUtils.getContentSession(contentRepository,
 				suiteUi.getCmsView());
 		return contentSession.get(path);
-//		Session session = jcrContentProvider.getJcrSession(contentSession, workspace);
-////		Session session = suiteUi.getSession(workspace);
-//		if (session == null)
-//			return null;
-//		Node node = Jcr.getNode(session, path);
-//		return node;
 	}
 
 	/*
@@ -504,9 +458,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 				if (ui.getTitle() != null)
 					appTitle = ui.getTitle().lead() + " - ";
 
-//			String currentLayerId = ui.getCurrentLayerId();
-//			SuiteLayer currentLayer = currentLayerId != null ? layersByPid.get(currentLayerId).get() : null;
-				if (SuiteUiUtils.isTopic(topic, SuiteEvent.refreshPart)) {
+				if (SuiteUiUtils.isTopic(topic, SuiteUxEvent.refreshPart)) {
 					Content node = getNode(ui, event);
 					if (node == null)
 						return;
@@ -515,7 +467,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 					ui.switchToLayer(layer, node);
 					layer.view(uiProvider, ui.getCurrentWorkArea(), node);
 					ui.getCmsView().stateChanged(nodeToState(node), appTitle + CmsUxUtils.getTitle(node));
-				} else if (SuiteUiUtils.isTopic(topic, SuiteEvent.openNewPart)) {
+				} else if (SuiteUiUtils.isTopic(topic, SuiteUxEvent.openNewPart)) {
 					Content node = getNode(ui, event);
 					if (node == null)
 						return;
@@ -524,28 +476,27 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 					ui.switchToLayer(layer, node);
 					layer.open(uiProvider, ui.getCurrentWorkArea(), node);
 					ui.getCmsView().stateChanged(nodeToState(node), appTitle + CmsUxUtils.getTitle(node));
-				} else if (SuiteUiUtils.isTopic(topic, SuiteEvent.switchLayer)) {
-					String layerId = get(event, SuiteEvent.LAYER);
+				} else if (SuiteUiUtils.isTopic(topic, SuiteUxEvent.switchLayer)) {
+					String layerId = get(event, SuiteUxEvent.LAYER);
 					if (layerId != null) {
-//					ui.switchToLayer(layerId, ui.getUserDir());
 						SuiteLayer suiteLayer = findLayer(layerId);
 						if (suiteLayer == null)
 							throw new IllegalArgumentException("No layer '" + layerId + "' available.");
 						Localized layerTitle = suiteLayer.getTitle();
 						// FIXME make sure we don't rebuild the work area twice
-						Composite workArea = ui.switchToLayer(layerId, ui.getUserDirNode());
+						Composite workArea = ui.switchToLayer(layerId, ui.getUserDir());
 						String title = null;
 						if (layerTitle != null)
 							title = layerTitle.lead();
 						Content nodeFromState = getNode(ui, event);
-						if (nodeFromState != null && nodeFromState.getPath().equals(ui.getUserDirNode().getPath())) {
+						if (nodeFromState != null && nodeFromState.getPath().equals(ui.getUserDir().getPath())) {
 							// default layer view is forced
 							String state = defaultLayerPid.equals(layerId) ? "~" : layerId;
 							ui.getCmsView().stateChanged(state, appTitle + title);
 							suiteLayer.view(null, workArea, nodeFromState);
 						} else {
 							Content layerCurrentContext = suiteLayer.getCurrentContext(workArea);
-							if (layerCurrentContext != null) {
+							if (layerCurrentContext != null && !layerCurrentContext.equals(ui.getUserDir())) {
 								// layer was already showing a context so we set the state to it
 								ui.getCmsView().stateChanged(nodeToState(layerCurrentContext),
 										appTitle + CmsUxUtils.getTitle(layerCurrentContext));
@@ -573,46 +524,20 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		ProvidedSession contentSession = (ProvidedSession) CmsUxUtils.getContentSession(contentRepository,
 				ui.getCmsView());
 
-		String path = get(event, SuiteEvent.CONTENT_PATH);
+		String path = get(event, SuiteUxEvent.CONTENT_PATH);
 
-//		String nodePath = get(event, SuiteEvent.NODE_PATH);
 		if (path != null && path.equals(HOME_STATE))
 			return ui.getUserDir();
-//		String workspace = get(event, SuiteEvent.WORKSPACE);
-
-//		Session session = jcrContentProvider.getJcrSession(contentSession, workspace);
-////		Session session = ui.getSession(workspace);
 		Content node;
 		if (path == null) {
 			// look for a user
-			String username = get(event, SuiteEvent.USERNAME);
+			String username = get(event, SuiteUxEvent.USERNAME);
 			if (username == null)
 				return null;
 			User user = cmsUserManager.getUser(username);
 			if (user == null)
 				return null;
 			node = ContentUtils.roleToContent(cmsUserManager, contentSession, user);
-//			LdapName userDn;
-//			try {
-//				userDn = new LdapName(user.getName());
-//			} catch (InvalidNameException e) {
-//				throw new IllegalArgumentException("Badly formatted username", e);
-//			}
-//			String userNodePath = SuiteUtils.getUserNodePath(userDn);
-			// FIXME deal with home path
-//			return null;
-//			if (Jcr.itemExists(session, userNodePath))
-//				node = Jcr.getNode(session, userNodePath);
-//			else {
-//				Session adminSession = null;
-//				try {
-//					adminSession = CmsJcrUtils.openDataAdminSession(getRepository(), workspace);
-//					SuiteUtils.getOrCreateUserNode(adminSession, userDn);
-//				} finally {
-//					Jcr.logout(adminSession);
-//				}
-//				node = Jcr.getNode(session, userNodePath);
-//			}
 		} else {
 			node = contentSession.get(path);
 		}
@@ -627,7 +552,6 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		Object value = eventProperties.get(key);
 		if (value == null)
 			return null;
-//			throw new IllegalArgumentException("Property " + key + " must be set");
 		return value.toString();
 
 	}
@@ -670,32 +594,6 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		}
 	}
 
-//	public void addLayer(SuiteLayer layer, Map<String, Object> properties) {
-//		if (!properties.containsKey(Constants.SERVICE_PID))
-//			throw new IllegalArgumentException("A layer must have an ID");
-//		String pid = (String) properties.get(Constants.SERVICE_PID);
-//		List<String> types = properties.containsKey(EntityConstants.TYPE)
-//				? LangUtils.toStringList(properties.get(EntityConstants.TYPE))
-//				: new ArrayList<>();
-//		if (types.isEmpty()) {
-//			RankedObject.putIfHigherRank(layersByPid, pid, layer, properties);
-//		} else {
-//			if (layersByPid.containsKey(pid)) {
-//				RankedObject<SuiteLayer> current = layersByPid.get(pid);
-//				List<String> currentTypes = current.getProperties().containsKey(EntityConstants.TYPE)
-//						? LangUtils.toStringList(current.getProperties().get(EntityConstants.TYPE))
-//						: new ArrayList<>();
-//				if (!types.containsAll(currentTypes)) {
-//					throw new IllegalArgumentException("Higher-ranked layer " + pid + " contains only types " + types
-//							+ ", while it must override all " + currentTypes);
-//				}
-//			}
-//			RankedObject.putIfHigherRank(layersByPid, pid, layer, properties);
-//			for (String type : types)
-//				RankedObject.putIfHigherRank(layersByType, type, layer, properties);
-//		}
-//	}
-
 	public void addLayer(SuiteLayer layer, Map<String, Object> properties) {
 		if (properties.containsKey(Constants.SERVICE_PID)) {
 			String pid = (String) properties.get(Constants.SERVICE_PID);
@@ -733,14 +631,6 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		this.cmsUserManager = cmsUserManager;
 	}
 
-//	protected Repository getRepository() {
-//		return repository;
-//	}
-//
-//	public void setRepository(Repository repository) {
-//		this.repository = repository;
-//	}
-
 	protected ContentRepository getContentRepository() {
 		return contentRepository;
 	}
@@ -748,9 +638,4 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 	public void setContentRepository(ContentRepository contentRepository) {
 		this.contentRepository = contentRepository;
 	}
-
-//	public void setJcrContentProvider(JcrContentProvider jcrContentProvider) {
-//		this.jcrContentProvider = jcrContentProvider;
-//	}
-
 }

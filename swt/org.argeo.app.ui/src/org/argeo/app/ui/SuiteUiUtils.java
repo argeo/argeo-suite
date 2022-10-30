@@ -419,7 +419,7 @@ public class SuiteUiUtils {
 			lbl.setText(txt);
 			lbl.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));
 		}
-		CmsSwtUtils.sendEventOnSelect(button, SuiteEvent.switchLayer.topic(), SuiteEvent.LAYER, layer);
+		CmsSwtUtils.sendEventOnSelect(button, SuiteUxEvent.switchLayer.topic(), SuiteUxEvent.LAYER, layer);
 		return button;
 	}
 

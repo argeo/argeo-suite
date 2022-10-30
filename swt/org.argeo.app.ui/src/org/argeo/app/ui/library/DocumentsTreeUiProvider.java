@@ -8,7 +8,7 @@ import javax.jcr.Node;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 
-import org.argeo.app.ui.SuiteEvent;
+import org.argeo.app.ui.SuiteUxEvent;
 import org.argeo.api.cms.CmsConstants;
 import org.argeo.api.cms.ux.CmsView;
 import org.argeo.cms.fs.CmsFsUtils;
@@ -46,7 +46,7 @@ public class DocumentsTreeUiProvider implements CmsUiProvider {
 				if (Files.isDirectory(newSelected)) {
 					Node folderNode = cmsView.doAs(() -> CmsFsUtils.getNode(repository, newSelected));
 					parent.addDisposeListener((e1) -> Jcr.logout(folderNode));
-					cmsView.sendEvent(SuiteEvent.refreshPart.topic(), SuiteEvent.eventProperties(folderNode));
+					cmsView.sendEvent(SuiteUxEvent.refreshPart.topic(), SuiteUxEvent.eventProperties(folderNode));
 				}
 			}
 		});
@@ -59,7 +59,7 @@ public class DocumentsTreeUiProvider implements CmsUiProvider {
 				if (Files.isDirectory(newSelected)) {
 					Node folderNode = cmsView.doAs(() -> CmsFsUtils.getNode(repository, newSelected));
 					parent.addDisposeListener((e1) -> Jcr.logout(folderNode));
-					cmsView.sendEvent(SuiteEvent.openNewPart.topic(), SuiteEvent.eventProperties(folderNode));
+					cmsView.sendEvent(SuiteUxEvent.openNewPart.topic(), SuiteUxEvent.eventProperties(folderNode));
 				}
 			}
 		});
