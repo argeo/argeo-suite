@@ -459,7 +459,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 					appTitle = ui.getTitle().lead() + " - ";
 
 				if (SuiteUiUtils.isTopic(topic, SuiteUxEvent.refreshPart)) {
-					Content node = getNode(ui, event);
+					Content node = getContentFromEvent(ui, event);
 					if (node == null)
 						return;
 					SwtUiProvider uiProvider = findByType(uiProvidersByType, node);
@@ -468,7 +468,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 					layer.view(uiProvider, ui.getCurrentWorkArea(), node);
 					ui.getCmsView().stateChanged(nodeToState(node), appTitle + CmsUxUtils.getTitle(node));
 				} else if (SuiteUiUtils.isTopic(topic, SuiteUxEvent.openNewPart)) {
-					Content node = getNode(ui, event);
+					Content node = getContentFromEvent(ui, event);
 					if (node == null)
 						return;
 					SwtUiProvider uiProvider = findByType(uiProvidersByType, node);
@@ -488,7 +488,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 						String title = null;
 						if (layerTitle != null)
 							title = layerTitle.lead();
-						Content nodeFromState = getNode(ui, event);
+						Content nodeFromState = getContentFromEvent(ui, event);
 						if (nodeFromState != null && nodeFromState.getPath().equals(ui.getUserDir().getPath())) {
 							// default layer view is forced
 							String state = defaultLayerPid.equals(layerId) ? "~" : layerId;
@@ -506,7 +506,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 							}
 						}
 					} else {
-						Content node = getNode(ui, event);
+						Content node = getContentFromEvent(ui, event);
 						if (node != null) {
 							SuiteLayer layer = findByType(layersByType, node);
 							ui.switchToLayer(layer, node);
@@ -520,7 +520,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		});
 	}
 
-	private Content getNode(SuiteUi ui, Map<String, Object> event) {
+	protected Content getContentFromEvent(SuiteUi ui, Map<String, Object> event) {
 		ProvidedSession contentSession = (ProvidedSession) CmsUxUtils.getContentSession(contentRepository,
 				ui.getCmsView());
 
