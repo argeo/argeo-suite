@@ -526,7 +526,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 
 		String path = get(event, SuiteUxEvent.CONTENT_PATH);
 
-		if (path != null && path.equals(HOME_STATE))
+		if (path != null && (path.equals(HOME_STATE) || path.equals("")))
 			return ui.getUserDir();
 		Content node;
 		if (path == null) {
