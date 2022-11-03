@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?>
+<target name="(output) Suite RCP">
+	<locations>
+		<location path="${project_loc:argeo-suite-unstable}/../output/a2/org.argeo.cms.jcr" type="Directory"/>
+		<location path="${project_loc:argeo-suite-unstable}/../output/a2/swt/org.argeo.cms.jcr" type="Directory"/>
+		<location path="${project_loc:argeo-suite-unstable}/../output/a2/org.argeo.suite" type="Directory"/>
+		<location path="${project_loc:argeo-suite-unstable}/../output/a2/swt/org.argeo.suite" type="Directory"/>
+		<location type="Target" uri="file:${project_loc:argeo-tp-unstable}/sdk/output-argeo-tp-backend.target"/>
+		<location type="Target" uri="file:${project_loc:argeo-suite-unstable}/sdk/output-cms-rcp.target"/>
+	</locations>
+</target>
