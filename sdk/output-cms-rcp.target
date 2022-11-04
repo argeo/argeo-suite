@@ -2,9 +2,9 @@
 <?pde version="3.8"?>
 <target name="(output) CMS RCP">
 	<locations>
-		<location path="${project_loc:argeo-suite-unstable}/../output/a2/org.argeo.cms" type="Directory"/>
-		<location path="${project_loc:argeo-suite-unstable}/../output/a2/swt/org.argeo.cms" type="Directory"/>
-		<location path="${project_loc:argeo-suite-unstable}/../output/a2/swt/rcp/org.argeo.cms" type="Directory"/>
-		<location type="Target" uri="file:${project_loc:argeo-tp-unstable}/sdk/output-argeo-tp-swt.target"/>
+		<location path="${project_loc:argeo-suite}/../output/a2/org.argeo.cms" type="Directory"/>
+		<location path="${project_loc:argeo-suite}/../output/a2/swt/org.argeo.cms" type="Directory"/>
+		<location path="${project_loc:argeo-suite}/../output/a2/swt/rcp/org.argeo.cms" type="Directory"/>
+		<location type="Target" uri="file:${project_loc:argeo-tp}/sdk/output-argeo-tp-swt.target"/>
 	</locations>
 </target>
