@@ -49,10 +49,8 @@ public class PersonUiProvider implements SwtUiProvider {
 			addFormLine(main, SuiteMsg.email, context, LdapAttrs.mail);
 
 			Composite rolesSection = new Composite(main, SWT.NONE);
-			// rolesSection.setText("Roles");
 			rolesSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 			rolesSection.setLayout(new GridLayout());
-			// new Label(rolesSection, SWT.NONE).setText("Roles:");
 			List<String> roles = Arrays.asList(cmsUserManager.getUserRoles(user.getName()));
 			for (String role : roles) {
 				// new Label(rolesSection, SWT.NONE).setText(role);

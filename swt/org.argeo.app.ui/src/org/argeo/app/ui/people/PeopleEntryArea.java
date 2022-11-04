@@ -11,8 +11,8 @@ import org.argeo.api.acr.ContentRepository;
 import org.argeo.api.acr.ContentSession;
 import org.argeo.api.cms.ux.CmsIcon;
 import org.argeo.api.cms.ux.CmsView;
-import org.argeo.app.ui.SuiteUxEvent;
 import org.argeo.app.ui.SuiteIcon;
+import org.argeo.app.ui.SuiteUxEvent;
 import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.auth.CmsRole;
@@ -33,8 +33,8 @@ import org.argeo.cms.ux.widgets.DefaultTabularPart;
 import org.argeo.cms.ux.widgets.GuidedForm;
 import org.argeo.cms.ux.widgets.HierarchicalPart;
 import org.argeo.osgi.useradmin.UserDirectory;
+import org.argeo.util.directory.Directory;
 import org.argeo.util.directory.HierarchyUnit;
-import org.argeo.util.directory.ldap.IpaUtils;
 import org.argeo.util.naming.LdapAttrs;
 import org.argeo.util.naming.LdapObjs;
 import org.eclipse.jface.window.Window;
@@ -83,23 +83,15 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 			public List<HierarchyUnit> getChildren(HierarchyUnit parent) {
 				List<HierarchyUnit> visible = new ArrayList<>();
 				if (parent != null) {
+					if (parent instanceof Directory) // do no show children of the directories
+						return visible;
 					for (HierarchyUnit hu : parent.getDirectHierarchyUnits(true)) {
-						// if parent was visible, it is visible
-						// TODO restrict more?
-
-//						if (CurrentUser.implies(CmsRole.userAdmin, hu.getBase()) //
-//						) // IPA
-//						{
 						visible.add(hu);
-//						}
 					}
 				} else {
 					for (UserDirectory directory : cmsUserManager.getUserDirectories()) {
-						if (CurrentUser.implies(CmsRole.userAdmin, directory.getBase()) //
-								|| CurrentUser.implies(CmsRole.userAdmin,
-										IpaUtils.IPA_ACCOUNTS_RDN + "," + directory.getBase())) // IPA
-						{
-							// TODO show base level
+						if (CurrentUser.implies(CmsRole.userAdmin, directory.getBase())) {
+							visible.add(directory);
 						}
 						for (HierarchyUnit hu : directory.getDirectHierarchyUnits(true)) {
 							if (CurrentUser.implies(CmsRole.userAdmin, hu.getBase())) {
@@ -219,8 +211,8 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 			if (o instanceof HierarchyUnit) {
 				HierarchyUnit hierarchyUnit = (HierarchyUnit) o;
 				usersPart.setInput(hierarchyUnit);
-				cmsView.sendEvent(SuiteUxEvent.refreshPart.topic(),
-						SuiteUxEvent.eventProperties(ContentUtils.hierarchyUnitToContent(contentSession, hierarchyUnit)));
+				cmsView.sendEvent(SuiteUxEvent.refreshPart.topic(), SuiteUxEvent
+						.eventProperties(ContentUtils.hierarchyUnitToContent(contentSession, hierarchyUnit)));
 			}
 		});
 
