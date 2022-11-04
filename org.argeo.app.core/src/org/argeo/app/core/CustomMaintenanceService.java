@@ -25,7 +25,7 @@ public abstract class CustomMaintenanceService extends AbstractMaintenanceServic
 	}
 
 	protected String getTypologiesLoadBase() {
-		return "/sys/terms";
+		return "";
 	}
 
 	protected void loadTypologies(Node customBaseNode) throws RepositoryException, IOException {
@@ -44,8 +44,10 @@ public abstract class CustomMaintenanceService extends AbstractMaintenanceServic
 		try {
 //			if (termsBase.hasNode(name))
 //				return;
-
-			String termsLoadPath = getTypologiesLoadBase() + '/' + name + ".xml";
+			String typologiesLoadBase = getTypologiesLoadBase();
+			if (typologiesLoadBase.contains("/") && !typologiesLoadBase.endsWith("/"))
+				typologiesLoadBase = typologiesLoadBase + "/";
+			String termsLoadPath = typologiesLoadBase + name + ".xml";
 			URL termsUrl = getClass().getClassLoader().getResource(termsLoadPath);
 			if (termsUrl == null)
 				throw new IllegalArgumentException("Terms '" + name + "' not found.");
