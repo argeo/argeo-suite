@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.argeo.api.acr.Content;
+import org.argeo.api.acr.ldap.LdapAttrs;
+import org.argeo.api.acr.ldap.LdapObjs;
 import org.argeo.app.ui.SuiteMsg;
 import org.argeo.app.ui.SuiteStyle;
 import org.argeo.app.ui.SuiteUiUtils;
@@ -14,8 +16,6 @@ import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.acr.SwtSection;
 import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.argeo.cms.swt.widgets.EditableText;
-import org.argeo.util.naming.LdapAttrs;
-import org.argeo.util.naming.LdapObjs;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;

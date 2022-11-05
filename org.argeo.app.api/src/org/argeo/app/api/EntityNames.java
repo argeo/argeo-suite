@@ -1,6 +1,6 @@
 package org.argeo.app.api;
 
-import org.argeo.util.naming.LdapAttrs;
+import org.argeo.api.acr.ldap.LdapAttrs;
 
 /** Constants used to name entity structures. */
 public interface EntityNames {

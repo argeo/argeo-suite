@@ -13,14 +13,14 @@ import javax.security.auth.x500.X500Principal;
 import javax.xml.namespace.QName;
 
 import org.argeo.api.acr.Content;
+import org.argeo.api.acr.ldap.LdapAttrs;
+import org.argeo.api.acr.ldap.LdapObjs;
 import org.argeo.api.cms.CmsConstants;
 import org.argeo.api.cms.CmsSession;
 import org.argeo.app.api.EntityType;
 import org.argeo.cms.auth.RoleNameUtils;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
-import org.argeo.util.naming.LdapAttrs;
-import org.argeo.util.naming.LdapObjs;
 
 /** Utilities around the Argeo Suite APIs. */
 public class SuiteUtils {

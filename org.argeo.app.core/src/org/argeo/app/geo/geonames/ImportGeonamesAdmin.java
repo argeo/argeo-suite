@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.argeo.util.CsvParser;
-import org.argeo.util.CsvWriter;
+import org.argeo.cms.util.CsvParser;
+import org.argeo.cms.util.CsvWriter;
 
 /** Import GeoNames administrative division from the main table. */
 public class ImportGeonamesAdmin {

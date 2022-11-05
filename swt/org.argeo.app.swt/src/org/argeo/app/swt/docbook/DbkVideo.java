@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.argeo.api.acr.Content;
+import org.argeo.api.acr.ldap.NamingUtils;
 import org.argeo.api.acr.spi.ProvidedContent;
 import org.argeo.app.docbook.DbkAcrUtils;
 import org.argeo.app.docbook.DbkAttr;
@@ -16,7 +17,6 @@ import org.argeo.cms.swt.acr.SwtSection;
 import org.argeo.cms.swt.acr.SwtSectionPart;
 import org.argeo.cms.swt.widgets.StyledControl;
 import org.argeo.cms.ux.acr.ContentPart;
-import org.argeo.util.naming.NamingUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.SelectionEvent;

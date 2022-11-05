@@ -18,10 +18,10 @@ import javax.jcr.nodetype.NodeType;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.app.api.EntityMimeType;
 import org.argeo.app.api.EntityType;
+import org.argeo.cms.util.DigestUtils;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.jcr.JcrxApi;
-import org.argeo.util.DigestUtils;
 
 /** Utilities around ODK. */
 public class OdkUtils {

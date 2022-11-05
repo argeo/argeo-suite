@@ -10,7 +10,7 @@ import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.acr.SwtTabbedArea;
 import org.argeo.cms.swt.acr.SwtUiProvider;
-import org.argeo.util.LangUtils;
+import org.argeo.cms.util.LangUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridLayout;
