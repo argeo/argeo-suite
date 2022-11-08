@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.argeo.api.acr.Content;
+import org.argeo.api.acr.QNamed;
 import org.argeo.api.acr.ldap.LdapAttrs;
 import org.argeo.api.acr.ldap.LdapObjs;
 import org.argeo.app.api.SuiteRole;
@@ -34,6 +35,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.osgi.service.useradmin.User;
 
@@ -63,7 +65,7 @@ public class PersonUiProvider implements SwtUiProvider {
 
 			SwtSection rolesSection = new SwtSection(main, SWT.NONE);
 			rolesSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
-			rolesSection.setLayout(new GridLayout());
+			rolesSection.setLayout(new GridLayout(2, false));
 			List<String> roles = Arrays.asList(cmsUserManager.getUserRoles(user.getName()));
 			addRoleCheckBox(rolesSection, SuiteMsg.coworkerRole, SuiteRole.coworker, roleContext, roles);
 			addRoleCheckBox(rolesSection, SuiteMsg.publisherRole, SuiteRole.publisher, roleContext, roles);
@@ -115,16 +117,18 @@ public class PersonUiProvider implements SwtUiProvider {
 		return main;
 	}
 
-	private void addFormLine(SwtSection parent, Localized msg, Content context, LdapAttrs attr) {
+	private void addFormLine(SwtSection parent, Localized msg, Content content, QNamed attr) {
 		SuiteUiUtils.addFormLabel(parent, msg.lead());
 		EditableText text = new EditableText(parent, SWT.SINGLE | SWT.FLAT);
 		text.setLayoutData(CmsSwtUtils.fillWidth());
 		text.setStyle(SuiteStyle.simpleInput);
-		String txt = context.attr(attr.qName());
+		String txt = content.attr(attr);
 		if (txt == null) // FIXME understand why email is not found in IPA
 			txt = "";
 		text.setText(txt);
 		text.setMouseListener(new MouseAdapter() {
+
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void mouseDoubleClick(MouseEvent e) {
@@ -132,6 +136,8 @@ public class PersonUiProvider implements SwtUiProvider {
 				text.startEditing();
 				text.setText(currentTxt);
 				((Text) text.getControl()).addSelectionListener(new SelectionListener() {
+
+					private static final long serialVersionUID = 1L;
 
 					@Override
 					public void widgetSelected(SelectionEvent e) {
@@ -153,7 +159,6 @@ public class PersonUiProvider implements SwtUiProvider {
 	private void addRoleCheckBox(SwtSection parent, Localized msg, SystemRole systemRole, String roleContext,
 			List<String> roles) {
 		Button radio = new Button(parent, SWT.CHECK);
-		radio.setText(msg.lead());
 		radio.setSelection(false);
 		roles: for (String dn : roles) {
 			if (systemRole.implied(dn, roleContext)) {
@@ -161,10 +166,13 @@ public class PersonUiProvider implements SwtUiProvider {
 				break roles;
 			}
 		}
-		if (CurrentUser.implies(CmsRole.userAdmin, roleContext))
-			radio.setEnabled(true);
+
+		if (systemRole.equals(CmsRole.userAdmin))
+			radio.setEnabled(CurrentUser.implies(CmsRole.groupAdmin, roleContext));
 		else
-			radio.setEnabled(false);
+			radio.setEnabled(CurrentUser.implies(CmsRole.userAdmin, roleContext));
+
+		new Label(parent, 0).setText(msg.lead());
 
 	}
 

@@ -16,7 +16,6 @@ import org.argeo.app.core.SuiteUtils;
 import org.argeo.app.ui.SuiteMsg;
 import org.argeo.app.ui.SuiteUiUtils;
 import org.argeo.cms.CmsUserManager;
-import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.swt.dialogs.CmsFeedback;
 import org.argeo.cms.swt.widgets.SwtGuidedFormPage;
 import org.argeo.cms.ux.widgets.AbstractGuidedForm;
@@ -49,7 +48,7 @@ public class NewUserForm extends AbstractGuidedForm {
 	@Override
 	public void addPages() {
 		try {
-			MainInfoPage page = new MainInfoPage("Main page");
+			MainInfoPage page = new MainInfoPage("main");
 			addPage(page);
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot add page to wizard", e);
