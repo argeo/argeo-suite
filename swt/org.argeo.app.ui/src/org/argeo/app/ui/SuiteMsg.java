@@ -9,6 +9,8 @@ public enum SuiteMsg implements Localized {
 	firstName, lastName, salutation, email, personWizardWindowTitle, personWizardPageTitle,
 	// NewOrgWizard
 	orgWizardWindowTitle, orgWizardPageTitle, legalName, legalForm, vatId,
+	// Roles
+	userAdminRole, groupAdminRole, publisherRole, coworkerRole,
 	// ContextAddressComposite
 	chooseAnOrganisation, street, streetComplement, zipCode, city, state, country, geopoint,
 	// FilteredOrderableEntityTable
@@ -31,7 +33,7 @@ public enum SuiteMsg implements Localized {
 	label, aCustomLabel, description, value, name, primary, add, save, pickup,
 	// Tag
 	confirmNewTag, cannotCreateTag,
-	// Feddback messages
+	// Feedback messages
 	allFieldsMustBeSet,
 	//
 	;

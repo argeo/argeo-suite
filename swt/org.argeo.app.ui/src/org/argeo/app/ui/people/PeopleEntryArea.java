@@ -66,16 +66,6 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 		SashForm sashForm = new SashForm(parent, SWT.VERTICAL);
 		CmsSwtUtils.fill(sashForm);
 
-		// MODEL
-//		List<UserDirectory> directories = new ArrayList<>();
-//		// List<User> orgs = cmsUserManager.listGroups(null, true, false);
-//		for (UserDirectory directory : cmsUserManager.getUserDirectories()) {
-//			if (CurrentUser.implies(CmsRole.userAdmin, directory.getContext())) {
-//				directories.add(directory);
-//			}
-//
-//		}
-
 		// VIEW
 		HierarchicalPart<HierarchyUnit> hierarchyPart = new AbstractHierarchicalPart<>() {
 
@@ -132,17 +122,16 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 				if (ud.getRealm().isPresent()) {
 					for (Role r : ud.getHierarchyUnitRoles(ud, null, true)) {
 						Content content = ContentUtils.roleToContent(cmsUserManager, contentSession, r);
-						// if (r instanceof Person || r instanceof Organization)
 						if (content.hasContentClass(LdapObjs.inetOrgPerson.qName(), LdapObjs.organization.qName()))
 							roles.add(content);
 					}
 
 				} else {
 					for (HierarchyUnit directChild : hu.getDirectHierarchyUnits(false)) {
-						if (!directChild.isFunctional()) {
+						if (!(directChild.isType(HierarchyUnit.Type.FUNCTIONAL)
+								|| directChild.isType(HierarchyUnit.Type.ROLES))) {
 							for (Role r : ud.getHierarchyUnitRoles(directChild, null, false)) {
 								Content content = ContentUtils.roleToContent(cmsUserManager, contentSession, r);
-								// if (r instanceof Person || r instanceof Organization)
 								if (content.hasContentClass(LdapObjs.inetOrgPerson.qName(),
 										LdapObjs.organization.qName(), LdapObjs.groupOfNames.qName()))
 									roles.add(content);
@@ -189,7 +178,7 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 		});
 		usersPart.addColumn((Column<Content>) (role) -> role.attr(LdapAttrs.mail.qName()));
 
-		SwtTableView<HierarchyUnit, Content> usersView = new SwtTableView<>(sashForm, SWT.BORDER, usersPart);
+		new SwtTableView<>(sashForm, SWT.BORDER, usersPart);
 
 		// toolbar
 		Composite bottom = new Composite(parent, SWT.NONE);
@@ -211,8 +200,8 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 			if (o instanceof HierarchyUnit) {
 				HierarchyUnit hierarchyUnit = (HierarchyUnit) o;
 				usersPart.setInput(hierarchyUnit);
-				cmsView.sendEvent(SuiteUxEvent.refreshPart.topic(), SuiteUxEvent
-						.eventProperties(ContentUtils.hierarchyUnitToContent(contentSession, hierarchyUnit)));
+//				cmsView.sendEvent(SuiteUxEvent.refreshPart.topic(), SuiteUxEvent
+//						.eventProperties(ContentUtils.hierarchyUnitToContent(contentSession, hierarchyUnit)));
 			}
 		});
 
@@ -249,20 +238,6 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 
 		return sashForm;
 	}
-
-//	static String getProperty(Role role, LdapAttrs attr) {
-//		Object value = role.getProperties().get(attr.name());
-//		return value != null ? value.toString() : null;
-//	}
-
-//	private boolean isOrganisation(Role role) {
-//		String[] objectClasses = role.getProperties().get(LdapAttrs.objectClasses.name()).toString().split("\\n");
-//		for (String objectClass : objectClasses) {
-//			if (LdapObjs.organization.name().equalsIgnoreCase(objectClass))
-//				return true;
-//		}
-//		return false;
-//	}
 
 	public void setCmsUserManager(CmsUserManager cmsUserManager) {
 		this.cmsUserManager = cmsUserManager;

@@ -71,6 +71,10 @@ public class SuiteUiUtils {
 		}
 	}
 
+	public static Label addFormLabel(Composite parent, Localized msg) {
+		return addFormLabel(parent, msg.lead());
+	}
+
 	public static Label addFormLabel(Composite parent, String label) {
 		Label lbl = new Label(parent, SWT.WRAP);
 		lbl.setText(label);
