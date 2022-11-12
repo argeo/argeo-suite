@@ -167,11 +167,16 @@ public class PersonUiProvider implements SwtUiProvider {
 			}
 		}
 
-		if (systemRole.equals(CmsRole.userAdmin))
-			radio.setEnabled(CurrentUser.implies(CmsRole.groupAdmin, roleContext));
-		else
+		if (systemRole.equals(CmsRole.userAdmin)) {
+			if (!CurrentUser.isUserContext(roleContext) && CurrentUser.implies(CmsRole.userAdmin, roleContext)) {
+				// a user admin cannot modify the user admins of their own context
+				radio.setEnabled(true);
+			} else {
+				radio.setEnabled(false);
+			}
+		} else {
 			radio.setEnabled(CurrentUser.implies(CmsRole.userAdmin, roleContext));
-
+		}
 		new Label(parent, 0).setText(msg.lead());
 
 	}
