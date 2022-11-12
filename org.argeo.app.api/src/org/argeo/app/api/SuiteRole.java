@@ -6,7 +6,7 @@ import org.argeo.api.acr.ArgeoNamespace;
 import org.argeo.api.acr.ContentName;
 import org.argeo.api.acr.ldap.LdapAttrs;
 import org.argeo.api.cms.CmsConstants;
-import org.argeo.cms.auth.SystemRole;
+import org.argeo.cms.SystemRole;
 
 /** Standard suite system roles. */
 public enum SuiteRole implements SystemRole {

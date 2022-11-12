@@ -18,7 +18,7 @@ import org.argeo.api.acr.ldap.LdapObjs;
 import org.argeo.api.cms.CmsConstants;
 import org.argeo.api.cms.CmsSession;
 import org.argeo.app.api.EntityType;
-import org.argeo.cms.auth.RoleNameUtils;
+import org.argeo.cms.RoleNameUtils;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
 

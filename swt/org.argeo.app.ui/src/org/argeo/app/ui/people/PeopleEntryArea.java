@@ -11,8 +11,9 @@ import org.argeo.api.acr.ContentRepository;
 import org.argeo.api.acr.ContentSession;
 import org.argeo.api.acr.ldap.LdapAttrs;
 import org.argeo.api.acr.ldap.LdapObjs;
-import org.argeo.api.cms.directory.Directory;
+import org.argeo.api.cms.directory.CmsDirectory;
 import org.argeo.api.cms.directory.HierarchyUnit;
+import org.argeo.api.cms.directory.UserDirectory;
 import org.argeo.api.cms.ux.CmsIcon;
 import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.ui.SuiteIcon;
@@ -24,7 +25,6 @@ import org.argeo.cms.auth.CmsRole;
 import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.auth.UserAdminUtils;
 import org.argeo.cms.jcr.acr.JcrContent;
-import org.argeo.cms.osgi.useradmin.UserDirectory;
 import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.Selected;
@@ -79,7 +79,7 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 			public List<HierarchyUnit> getChildren(HierarchyUnit parent) {
 				List<HierarchyUnit> visible = new ArrayList<>();
 				if (parent != null) {
-					if (parent instanceof Directory) // do no show children of the directories
+					if (parent instanceof CmsDirectory) // do no show children of the directories
 						return visible;
 					for (HierarchyUnit hu : parent.getDirectHierarchyUnits(true)) {
 						visible.add(hu);
