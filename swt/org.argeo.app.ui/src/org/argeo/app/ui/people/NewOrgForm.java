@@ -3,9 +3,9 @@ package org.argeo.app.ui.people;
 import static org.argeo.eclipse.ui.EclipseUiUtils.isEmpty;
 
 import org.argeo.api.acr.Content;
+import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.app.ui.SuiteMsg;
 import org.argeo.app.ui.SuiteUiUtils;
-import org.argeo.cms.CmsUserManager;
 import org.argeo.cms.swt.widgets.SwtGuidedFormPage;
 import org.argeo.cms.ux.widgets.AbstractGuidedForm;
 import org.eclipse.swt.SWT;

@@ -8,5 +8,5 @@
    <property name="availableRoles" type="String">
    </property>
    <properties entry="config/personUiProvider.properties"/>
-   <reference bind="setCmsUserManager" cardinality="1..1" interface="org.argeo.cms.CmsUserManager" name="CmsUserManager" policy="static"/>
+   <reference bind="setCmsUserManager" cardinality="1..1" interface="org.argeo.api.cms.directory.CmsUserManager" name="CmsUserManager" policy="static"/>
 </scr:component>
