@@ -96,6 +96,7 @@ mixin
 - ldap:sn (String)
 - ldap:givenName (String)
 - ldap:mail (String) *
+- ldap:description (String)
 
 [entity:user] > entity:person
 mixin
