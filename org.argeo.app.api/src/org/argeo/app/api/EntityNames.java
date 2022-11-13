@@ -1,6 +1,6 @@
 package org.argeo.app.api;
 
-import org.argeo.api.acr.ldap.LdapAttrs;
+import org.argeo.api.acr.ldap.LdapAttr;
 
 /** Constants used to name entity structures. */
 public interface EntityNames {
@@ -35,16 +35,16 @@ public interface EntityNames {
 
 	// LDAP-LIKE ENTITIES
 	@Deprecated
-	final String DISPLAY_NAME = LdapAttrs.displayName.property();
+	final String DISPLAY_NAME = LdapAttr.displayName.property();
 	// Persons
 	@Deprecated
-	final String GIVEN_NAME = LdapAttrs.givenName.property();
+	final String GIVEN_NAME = LdapAttr.givenName.property();
 	@Deprecated
-	final String SURNAME = LdapAttrs.sn.property();
+	final String SURNAME = LdapAttr.sn.property();
 	@Deprecated
-	final String EMAIL = LdapAttrs.mail.property();
+	final String EMAIL = LdapAttr.mail.property();
 	@Deprecated
-	final String OU = LdapAttrs.ou.property();
+	final String OU = LdapAttr.ou.property();
 
 	// WGS84
 	final String GEO_LAT = "geo:lat";

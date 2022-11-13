@@ -13,8 +13,8 @@ import javax.security.auth.x500.X500Principal;
 import javax.xml.namespace.QName;
 
 import org.argeo.api.acr.Content;
-import org.argeo.api.acr.ldap.LdapAttrs;
-import org.argeo.api.acr.ldap.LdapObjs;
+import org.argeo.api.acr.ldap.LdapAttr;
+import org.argeo.api.acr.ldap.LdapObj;
 import org.argeo.api.cms.CmsConstants;
 import org.argeo.api.cms.CmsSession;
 import org.argeo.app.api.EntityType;
@@ -40,8 +40,8 @@ public class SuiteUtils {
 				userNode = usersBase.addNode(uid, NodeType.NT_UNSTRUCTURED);
 				userNode.addMixin(EntityType.user.get());
 				userNode.addMixin(NodeType.MIX_CREATED);
-				userNode.setProperty(LdapAttrs.distinguishedName.property(), userDn.toString());
-				userNode.setProperty(LdapAttrs.uid.property(), uid);
+				userNode.setProperty(LdapAttr.distinguishedName.property(), userDn.toString());
+				userNode.setProperty(LdapAttr.uid.property(), uid);
 				adminSession.save();
 //				JackrabbitSecurityUtils.denyPrivilege(adminSession, userNode.getPath(), SuiteRole.coworker.dn(),
 //						Privilege.JCR_READ);
@@ -121,20 +121,20 @@ public class SuiteUtils {
 	}
 
 	synchronized static public long findNextId(Content hierarchyUnit, QName cclass) {
-		if (!hierarchyUnit.hasContentClass(LdapObjs.posixGroup.qName())) 
+		if (!hierarchyUnit.hasContentClass(LdapObj.posixGroup.qName())) 
 			throw new IllegalArgumentException(hierarchyUnit + " is not a POSIX group");
 		
-		long min = hierarchyUnit.get(LdapAttrs.gidNumber.qName(), Long.class).orElseThrow();
+		long min = hierarchyUnit.get(LdapAttr.gidNumber.qName(), Long.class).orElseThrow();
 		long currentMax = 0l;
 		for (Content childHu : hierarchyUnit) {
-			if (!childHu.hasContentClass(LdapObjs.organizationalUnit.qName()))
+			if (!childHu.hasContentClass(LdapObj.organizationalUnit.qName()))
 				continue;
 			// FIXME filter out functional hierarchy unit
 			for (Content role : childHu) {
 				if (role.hasContentClass(cclass)) {
 
-					if (LdapObjs.posixAccount.qName().equals(cclass)) {
-						Long id = role.get(LdapAttrs.uidNumber.qName(), Long.class).orElseThrow();
+					if (LdapObj.posixAccount.qName().equals(cclass)) {
+						Long id = role.get(LdapAttr.uidNumber.qName(), Long.class).orElseThrow();
 						if (id > currentMax)
 							currentMax = id;
 					}

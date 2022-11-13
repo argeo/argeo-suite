@@ -1,8 +1,8 @@
 package org.argeo.app.ui.people;
 
 import org.argeo.api.acr.Content;
-import org.argeo.api.acr.ldap.LdapAttrs;
-import org.argeo.api.acr.ldap.LdapObjs;
+import org.argeo.api.acr.ldap.LdapAttr;
+import org.argeo.api.acr.ldap.LdapObj;
 import org.argeo.api.cms.directory.CmsGroup;
 import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.api.cms.directory.HierarchyUnit;
@@ -26,11 +26,11 @@ public class GroupUiProvider implements SwtUiProvider {
 
 		// TODO localise at content level
 		String title;
-		if (context.hasContentClass(LdapObjs.organization))
-			title = SuiteMsg.org.lead() + " " + context.attr(LdapAttrs.cn) + " ("
+		if (context.hasContentClass(LdapObj.organization))
+			title = SuiteMsg.org.lead() + " " + context.attr(LdapAttr.cn) + " ("
 					+ hierarchyUnit.getHierarchyUnitLabel(CurrentUser.locale()) + ")";
 		else
-			title = SuiteMsg.group.lead() + " " + context.attr(LdapAttrs.cn) + " ("
+			title = SuiteMsg.group.lead() + " " + context.attr(LdapAttr.cn) + " ("
 					+ hierarchyUnit.getHierarchyUnitLabel(CurrentUser.locale()) + ")";
 		SuiteUiUtils.addFormLabel(parent, title);
 

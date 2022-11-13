@@ -6,8 +6,8 @@ import java.util.Map;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.QNamed;
-import org.argeo.api.acr.ldap.LdapAttrs;
-import org.argeo.api.acr.ldap.LdapObjs;
+import org.argeo.api.acr.ldap.LdapAttr;
+import org.argeo.api.acr.ldap.LdapObj;
 import org.argeo.api.cms.directory.CmsUser;
 import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.app.api.SuiteRole;
@@ -56,15 +56,15 @@ public class PersonUiProvider implements SwtUiProvider {
 
 		String roleContext = RoleNameUtils.getContext(user.getName());
 
-		if (context.hasContentClass(LdapObjs.person.qName())) {
+		if (context.hasContentClass(LdapObj.person.qName())) {
 
-			addFormLine(main, SuiteMsg.firstName, context, LdapAttrs.givenName);
-			addFormLine(main, SuiteMsg.lastName, context, LdapAttrs.sn);
-			addFormLine(main, SuiteMsg.email, context, LdapAttrs.mail);
+			addFormLine(main, SuiteMsg.firstName, context, LdapAttr.givenName);
+			addFormLine(main, SuiteMsg.lastName, context, LdapAttr.sn);
+			addFormLine(main, SuiteMsg.email, context, LdapAttr.mail);
 		}
 
-		if (context.hasContentClass(LdapObjs.posixAccount.qName())) {
-			if (hierarchyUnitContent.hasContentClass(LdapObjs.organization)) {
+		if (context.hasContentClass(LdapObj.posixAccount.qName())) {
+			if (hierarchyUnitContent.hasContentClass(LdapObj.organization)) {
 				SwtSection rolesSection = new SwtSection(main, SWT.NONE);
 				rolesSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
 				rolesSection.setLayout(new GridLayout(2, false));

@@ -6,7 +6,7 @@ import javax.jcr.RepositoryException;
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentRepository;
 import org.argeo.api.acr.ContentSession;
-import org.argeo.api.acr.ldap.LdapAttrs;
+import org.argeo.api.acr.ldap.LdapAttr;
 import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.api.cms.directory.HierarchyUnit;
 import org.argeo.api.cms.ux.CmsView;
@@ -66,7 +66,7 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 
 			@Override
 			public String getText(Content role) {
-				return role.attr(LdapAttrs.mail);
+				return role.attr(LdapAttr.mail);
 			}
 
 			@Override

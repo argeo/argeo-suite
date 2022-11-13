@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentSession;
-import org.argeo.api.acr.ldap.LdapObjs;
+import org.argeo.api.acr.ldap.LdapObj;
 import org.argeo.api.cms.directory.CmsDirectory;
 import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.api.cms.directory.HierarchyUnit;
@@ -36,9 +36,9 @@ public class HierarchyUnitPart extends AbstractHierarchicalPart<HierarchyUnit> {
 			@Override
 			public CmsIcon getIcon(HierarchyUnit model) {
 				Content content = ContentUtils.hierarchyUnitToContent(contentSession, model);
-				if (content.hasContentClass(LdapObjs.organization))
+				if (content.hasContentClass(LdapObj.organization))
 					return SuiteIcon.organisation;
-				else if (content.hasContentClass(LdapObjs.posixGroup))
+				else if (content.hasContentClass(LdapObj.posixGroup))
 					return SuiteIcon.users;
 				else
 					return SuiteIcon.addressBook;
