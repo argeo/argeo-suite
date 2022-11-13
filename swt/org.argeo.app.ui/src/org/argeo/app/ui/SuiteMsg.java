@@ -5,7 +5,7 @@ import org.argeo.cms.Localized;
 /** Localized messages. */
 public enum SuiteMsg implements Localized {
 	// Entities
-	user, org, person,
+	user, org, person, group,
 	// UI parts
 	dashboard, people, documents, locations, recentItems,
 	// NewPersonWizard

@@ -16,7 +16,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-/** Ask first & last name. Update the passed node on finish */
+/** Form to create a new organisation. */
 public class NewOrgForm extends AbstractGuidedForm {
 	private Content hierarchyUnit;
 	private CmsUserManager cmsUserManager;

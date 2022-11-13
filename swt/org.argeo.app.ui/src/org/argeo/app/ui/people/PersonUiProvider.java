@@ -8,6 +8,7 @@ import org.argeo.api.acr.Content;
 import org.argeo.api.acr.QNamed;
 import org.argeo.api.acr.ldap.LdapAttrs;
 import org.argeo.api.acr.ldap.LdapObjs;
+import org.argeo.api.cms.directory.CmsUser;
 import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.app.api.SuiteRole;
 import org.argeo.app.ui.SuiteMsg;
@@ -37,7 +38,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.osgi.service.useradmin.User;
 
 /** Edit a suite user. */
 public class PersonUiProvider implements SwtUiProvider {
@@ -50,7 +50,9 @@ public class PersonUiProvider implements SwtUiProvider {
 
 		main.setLayout(new GridLayout(2, false));
 
-		User user = context.adapt(User.class);
+		CmsUser user = context.adapt(CmsUser.class);
+
+		Content hierarchyUnitContent = context.getParent().getParent();
 
 		String roleContext = RoleNameUtils.getContext(user.getName());
 
@@ -62,15 +64,15 @@ public class PersonUiProvider implements SwtUiProvider {
 		}
 
 		if (context.hasContentClass(LdapObjs.posixAccount.qName())) {
-
-			SwtSection rolesSection = new SwtSection(main, SWT.NONE);
-			rolesSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
-			rolesSection.setLayout(new GridLayout(2, false));
-			List<String> roles = Arrays.asList(cmsUserManager.getUserRoles(user.getName()));
-			addRoleCheckBox(rolesSection, SuiteMsg.coworkerRole, SuiteRole.coworker, roleContext, roles);
-			addRoleCheckBox(rolesSection, SuiteMsg.publisherRole, SuiteRole.publisher, roleContext, roles);
-			addRoleCheckBox(rolesSection, SuiteMsg.userAdminRole, CmsRole.userAdmin, roleContext, roles);
-
+			if (hierarchyUnitContent.hasContentClass(LdapObjs.organization)) {
+				SwtSection rolesSection = new SwtSection(main, SWT.NONE);
+				rolesSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
+				rolesSection.setLayout(new GridLayout(2, false));
+				List<String> roles = Arrays.asList(cmsUserManager.getUserRoles(user.getName()));
+				addRoleCheckBox(rolesSection, SuiteMsg.coworkerRole, SuiteRole.coworker, roleContext, roles);
+				addRoleCheckBox(rolesSection, SuiteMsg.publisherRole, SuiteRole.publisher, roleContext, roles);
+				addRoleCheckBox(rolesSection, SuiteMsg.userAdminRole, CmsRole.userAdmin, roleContext, roles);
+			}
 //			Composite facetsSection = new Composite(main, SWT.NONE);
 //			facetsSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
 //			facetsSection.setLayout(new GridLayout());

@@ -1,12 +1,18 @@
 package org.argeo.app.ui.people;
 
 import org.argeo.api.acr.Content;
+import org.argeo.api.acr.ldap.LdapAttrs;
+import org.argeo.api.acr.ldap.LdapObjs;
+import org.argeo.api.cms.directory.CmsGroup;
 import org.argeo.api.cms.directory.CmsUserManager;
+import org.argeo.api.cms.directory.HierarchyUnit;
+import org.argeo.app.ui.SuiteMsg;
+import org.argeo.app.ui.SuiteUiUtils;
+import org.argeo.cms.CurrentUser;
 import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.osgi.service.useradmin.Group;
 import org.osgi.service.useradmin.Role;
 
 public class GroupUiProvider implements SwtUiProvider {
@@ -14,9 +20,20 @@ public class GroupUiProvider implements SwtUiProvider {
 
 	@Override
 	public Control createUiPart(Composite parent, Content context) {
-		new Label(parent, 0).setText("Group " + context);
+		CmsGroup group = context.adapt(CmsGroup.class);
+		Content hierarchyUnitContent = context.getParent().getParent();
+		HierarchyUnit hierarchyUnit = hierarchyUnitContent.adapt(HierarchyUnit.class);
 
-		Group group = context.adapt(Group.class);
+		// TODO localise at content level
+		String title;
+		if (context.hasContentClass(LdapObjs.organization))
+			title = SuiteMsg.org.lead() + " " + context.attr(LdapAttrs.cn) + " ("
+					+ hierarchyUnit.getHierarchyUnitLabel(CurrentUser.locale()) + ")";
+		else
+			title = SuiteMsg.group.lead() + " " + context.attr(LdapAttrs.cn) + " ("
+					+ hierarchyUnit.getHierarchyUnitLabel(CurrentUser.locale()) + ")";
+		SuiteUiUtils.addFormLabel(parent, title);
+
 		for (Role member : group.getMembers()) {
 			new Label(parent, 0).setText(member.getName());
 		}
