@@ -23,9 +23,9 @@ import org.argeo.cms.swt.widgets.SwtGuidedFormDialog;
 import org.argeo.cms.swt.widgets.SwtTableView;
 import org.argeo.cms.swt.widgets.SwtTreeView;
 import org.argeo.cms.ui.CmsUiProvider;
+import org.argeo.cms.ux.widgets.CmsDialog;
 import org.argeo.cms.ux.widgets.Column;
 import org.argeo.cms.ux.widgets.GuidedForm;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.graphics.Point;
@@ -83,7 +83,6 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 
 		ToolItem deleteItem = new ToolItem(bottomToolBar, SWT.FLAT);
 		deleteItem.setEnabled(false);
-//		CmsUiUtils.style(deleteItem, SuiteStyle.recentItems);
 		deleteItem.setImage(theme.getSmallIcon(SuiteIcon.delete));
 
 		Menu menu = new Menu(Display.getCurrent().getActiveShell(), SWT.POP_UP);
@@ -97,7 +96,7 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 			Content huContent = ContentUtils.hierarchyUnitToContent(contentSession, hierarchyUnit);
 			GuidedForm wizard = new NewUserForm(cmsUserManager, huContent);
 			SwtGuidedFormDialog dialog = new SwtGuidedFormDialog(parent.getShell(), wizard);
-			if (dialog.open() == Window.OK) {
+			if (dialog.open() == CmsDialog.OK) {
 				// TODO create
 			}
 		});
@@ -110,7 +109,7 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 			Content huContent = ContentUtils.hierarchyUnitToContent(contentSession, hierarchyUnit);
 			GuidedForm wizard = new NewOrgForm(cmsUserManager, huContent);
 			SwtGuidedFormDialog dialog = new SwtGuidedFormDialog(parent.getShell(), wizard);
-			if (dialog.open() == Window.OK) {
+			if (dialog.open() == CmsDialog.OK) {
 				// TODO create
 			}
 		});

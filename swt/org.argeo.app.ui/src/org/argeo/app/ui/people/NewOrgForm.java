@@ -21,7 +21,7 @@ public class NewOrgForm extends AbstractGuidedForm {
 	private Content hierarchyUnit;
 	private CmsUserManager cmsUserManager;
 
-	protected Text firstNameT;
+	protected Text orgNameT;
 
 	public NewOrgForm(CmsUserManager cmsUserManager, Content hierarchyUnit) {
 		this.hierarchyUnit = hierarchyUnit;
@@ -55,7 +55,7 @@ public class NewOrgForm extends AbstractGuidedForm {
 
 	@Override
 	public boolean canFinish() {
-		String firstName = firstNameT.getText();
+		String firstName = orgNameT.getText();
 		if (isEmpty(firstName)) {
 			return false;
 		} else
@@ -74,9 +74,9 @@ public class NewOrgForm extends AbstractGuidedForm {
 
 			// FirstName
 			SuiteUiUtils.createBoldLabel(parent, SuiteMsg.org);
-			firstNameT = new Text(parent, SWT.BORDER);
+			orgNameT = new Text(parent, SWT.BORDER);
 			// firstNameTxt.setMessage("a first name");
-			firstNameT.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+			orgNameT.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 			ModifyListener ml = new ModifyListener() {
 				private static final long serialVersionUID = 1939491923843870844L;
@@ -87,9 +87,9 @@ public class NewOrgForm extends AbstractGuidedForm {
 				}
 			};
 
-			firstNameT.addModifyListener(ml);
+			orgNameT.addModifyListener(ml);
 
-			firstNameT.setFocus();
+			orgNameT.setFocus();
 		}
 	}
 }

@@ -14,6 +14,8 @@ public enum SuiteMsg implements Localized {
 	orgWizardWindowTitle, orgWizardPageTitle, legalName, legalForm, vatId,
 	// Roles
 	userAdminRole, groupAdminRole, publisherRole, coworkerRole,
+	// Group
+	chooseAMember,
 	// ContextAddressComposite
 	chooseAnOrganisation, street, streetComplement, zipCode, city, state, country, geopoint,
 	// FilteredOrderableEntityTable
