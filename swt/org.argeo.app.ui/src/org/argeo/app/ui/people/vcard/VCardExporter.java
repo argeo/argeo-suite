@@ -1,4 +1,4 @@
-package org.argeo.app.ui.people;
+package org.argeo.app.ui.people.vcard;
 
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
