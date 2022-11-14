@@ -2,12 +2,23 @@ package org.argeo.app.ui.people;
 
 import static org.argeo.eclipse.ui.EclipseUiUtils.isEmpty;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.argeo.api.acr.Content;
+import org.argeo.api.acr.ldap.LdapAttr;
+import org.argeo.api.acr.ldap.LdapObj;
+import org.argeo.api.cms.directory.CmsGroup;
 import org.argeo.api.cms.directory.CmsUserManager;
+import org.argeo.api.cms.directory.HierarchyUnit;
 import org.argeo.app.ui.SuiteMsg;
 import org.argeo.app.ui.SuiteUiUtils;
+import org.argeo.cms.swt.dialogs.CmsFeedback;
 import org.argeo.cms.swt.widgets.SwtGuidedFormPage;
 import org.argeo.cms.ux.widgets.AbstractGuidedForm;
+import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -39,13 +50,26 @@ public class NewOrgForm extends AbstractGuidedForm {
 		setFormTitle(SuiteMsg.orgWizardWindowTitle.lead());
 	}
 
-	/**
-	 * Called when the user click on 'Finish' in the wizard. The task is then
-	 * created and the corresponding session saved.
-	 */
 	@Override
 	public boolean performFinish() {
-		return false;
+		String orgName = orgNameT.getText();
+		if (EclipseUiUtils.isEmpty(orgName)) {
+			CmsFeedback.show(SuiteMsg.allFieldsMustBeSet.lead());
+			return false;
+		} else {
+			HierarchyUnit hu = hierarchyUnit.adapt(HierarchyUnit.class);
+			String dn = "cn=" + orgName + ",ou=Groups," + hu.getBase();
+
+			CmsGroup user = cmsUserManager.createGroup(dn);
+
+			Map<String, Object> additionalProperties = new HashMap<>();
+			additionalProperties.put(LdapAttr.o.name(), orgName);
+
+			Set<String> objectClasses = new HashSet<>();
+			objectClasses.add(LdapObj.organization.name());
+			cmsUserManager.addObjectClasses(user, objectClasses, additionalProperties);
+			return true;
+		}
 	}
 
 	@Override

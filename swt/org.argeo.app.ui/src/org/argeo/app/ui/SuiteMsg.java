@@ -9,9 +9,9 @@ public enum SuiteMsg implements Localized {
 	// UI parts
 	dashboard, people, documents, locations, recentItems,
 	// NewPersonWizard
-	firstName, lastName, salutation, email, personWizardWindowTitle, personWizardPageTitle,
+	firstName, lastName, salutation, email, personWizardWindowTitle, personWizardPageTitle, personWizardFeedback,
 	// NewOrgWizard
-	orgWizardWindowTitle, orgWizardPageTitle, legalName, legalForm, vatId,
+	orgWizardWindowTitle, orgWizardPageTitle, orgWizardFeedback, legalName, legalForm, vatId,
 	// Roles
 	userAdminRole, groupAdminRole, publisherRole, coworkerRole,
 	// Group

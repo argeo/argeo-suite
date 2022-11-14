@@ -13,12 +13,15 @@ import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.ui.SuiteIcon;
 import org.argeo.app.ui.SuiteMsg;
 import org.argeo.app.ui.SuiteUxEvent;
+import org.argeo.cms.CurrentUser;
 import org.argeo.cms.acr.ContentUtils;
+import org.argeo.cms.auth.CmsRole;
 import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.Selected;
 import org.argeo.cms.swt.acr.SwtUiProvider;
+import org.argeo.cms.swt.dialogs.CmsFeedback;
 import org.argeo.cms.swt.widgets.SwtGuidedFormDialog;
 import org.argeo.cms.swt.widgets.SwtTableView;
 import org.argeo.cms.swt.widgets.SwtTreeView;
@@ -81,9 +84,9 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 		ToolBar bottomToolBar = new ToolBar(bottom, SWT.NONE);
 		bottomToolBar.setLayoutData(new GridData(SWT.END, SWT.FILL, true, false));
 
-		ToolItem deleteItem = new ToolItem(bottomToolBar, SWT.FLAT);
-		deleteItem.setEnabled(false);
-		deleteItem.setImage(theme.getSmallIcon(SuiteIcon.delete));
+//		ToolItem deleteItem = new ToolItem(bottomToolBar, SWT.FLAT);
+//		deleteItem.setEnabled(false);
+//		deleteItem.setImage(theme.getSmallIcon(SuiteIcon.delete));
 
 		Menu menu = new Menu(Display.getCurrent().getActiveShell(), SWT.POP_UP);
 		// TODO display add user only if hierarchy unit is a POSIX group
@@ -97,7 +100,8 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 			GuidedForm wizard = new NewUserForm(cmsUserManager, huContent);
 			SwtGuidedFormDialog dialog = new SwtGuidedFormDialog(parent.getShell(), wizard);
 			if (dialog.open() == CmsDialog.OK) {
-				// TODO create
+				CmsFeedback.show(SuiteMsg.personWizardFeedback.lead());
+				usersPart.refresh();
 			}
 		});
 
@@ -110,7 +114,8 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 			GuidedForm wizard = new NewOrgForm(cmsUserManager, huContent);
 			SwtGuidedFormDialog dialog = new SwtGuidedFormDialog(parent.getShell(), wizard);
 			if (dialog.open() == CmsDialog.OK) {
-				// TODO create
+				CmsFeedback.show(SuiteMsg.orgWizardFeedback.lead());
+				usersPart.refresh();
 			}
 		});
 
@@ -129,6 +134,9 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 				HierarchyUnit hierarchyUnit = (HierarchyUnit) o;
 				usersPart.setInput(hierarchyUnit);
 				addItem.setEnabled(true);
+
+				addOrgItem.setEnabled(usersPart.getInput() != null
+						&& CurrentUser.implies(CmsRole.groupAdmin, usersPart.getInput().getBase()));
 //				cmsView.sendEvent(SuiteUxEvent.refreshPart.topic(), SuiteUxEvent
 //						.eventProperties(ContentUtils.hierarchyUnitToContent(contentSession, hierarchyUnit)));
 			}
@@ -138,9 +146,9 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 			Content user = (Content) o;
 			if (user != null) {
 				cmsView.sendEvent(SuiteUxEvent.refreshPart.topic(), SuiteUxEvent.eventProperties(user));
-				deleteItem.setEnabled(true);
+//				deleteItem.setEnabled(true);
 			} else {
-				deleteItem.setEnabled(false);
+//				deleteItem.setEnabled(false);
 			}
 		});
 

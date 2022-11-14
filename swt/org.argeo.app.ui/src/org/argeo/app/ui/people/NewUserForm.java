@@ -11,6 +11,7 @@ import java.util.UUID;
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ldap.LdapAttr;
 import org.argeo.api.acr.ldap.LdapObj;
+import org.argeo.api.cms.directory.CmsUser;
 import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.api.cms.directory.HierarchyUnit;
 import org.argeo.app.core.SuiteUtils;
@@ -27,7 +28,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-import org.osgi.service.useradmin.User;
 
 /** Ask first & last name. Update the passed node on finish */
 public class NewUserForm extends AbstractGuidedForm {
@@ -83,7 +83,7 @@ public class NewUserForm extends AbstractGuidedForm {
 			properties.put(LdapAttr.employeeNumber.name(), uuid.toString());
 
 			Map<String, Object> credentials = new HashMap<>();
-			User user = cmsUserManager.createUser(username, properties, credentials);
+			CmsUser user = cmsUserManager.createUser(username, properties, credentials);
 
 			Long huGidNumber = hierarchyUnit.get(LdapAttr.gidNumber.qName(), Long.class).orElseThrow();
 			Long nextUserId = SuiteUtils.findNextId(hierarchyUnit, LdapObj.posixAccount.qName());
