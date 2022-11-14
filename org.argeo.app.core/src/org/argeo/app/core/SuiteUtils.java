@@ -23,12 +23,16 @@ import org.argeo.jcr.JcrUtils;
 
 /** Utilities around the Argeo Suite APIs. */
 public class SuiteUtils {
+	public final static String USER_STATE_NODE_NAME = "state";
+	public final static String USER_DEVICES_NODE_NAME = "devices";
+	public final static String USER_SESSIONS_NODE_NAME = "sessions";
+
 	public static String getUserNodePath(String userDn) {
 		String uid = RoleNameUtils.getLastRdnValue(userDn);
 		return EntityType.user.basePath() + '/' + uid;
 	}
 
-	private static Node getOrCreateUserNode(Session adminSession, String userDn) {
+	public static Node getOrCreateUserNode(Session adminSession, String userDn) {
 		try {
 			Node usersBase = adminSession.getNode(EntityType.user.basePath());
 			String uid = RoleNameUtils.getLastRdnValue(userDn);
@@ -39,6 +43,11 @@ public class SuiteUtils {
 				userNode.addMixin(NodeType.MIX_CREATED);
 				userNode.setProperty(LdapAttr.distinguishedName.get(), userDn.toString());
 				userNode.setProperty(LdapAttr.uid.get(), uid);
+
+				userNode.addNode(USER_SESSIONS_NODE_NAME, NodeType.NT_UNSTRUCTURED);
+				Node userStateNode = userNode.addNode(USER_STATE_NODE_NAME, NodeType.NT_UNSTRUCTURED);
+				Node userDevicesNode = userNode.addNode(USER_DEVICES_NODE_NAME, NodeType.NT_UNSTRUCTURED);
+
 				adminSession.save();
 //				JackrabbitSecurityUtils.denyPrivilege(adminSession, userNode.getPath(), SuiteRole.coworker.dn(),
 //						Privilege.JCR_READ);
@@ -46,6 +55,10 @@ public class SuiteUtils {
 						Privilege.JCR_READ);
 				JcrUtils.addPrivilege(adminSession, userNode.getPath(), CmsConstants.ROLE_USER_ADMIN,
 						Privilege.JCR_ALL);
+
+				JcrUtils.addPrivilege(adminSession, userStateNode.getPath(), userDn, Privilege.JCR_ALL);
+				JcrUtils.addPrivilege(adminSession, userDevicesNode.getPath(), userDn, Privilege.JCR_ALL);
+
 			} else {
 				userNode = usersBase.getNode(uid);
 			}
@@ -57,7 +70,8 @@ public class SuiteUtils {
 
 	public static Node getCmsSessionNode(Session session, CmsSession cmsSession) {
 		try {
-			return session.getNode(getUserNodePath(cmsSession.getUserDn()) + '/' + cmsSession.getUuid().toString());
+			return session.getNode(getUserNodePath(cmsSession.getUserDn()) + '/' + USER_SESSIONS_NODE_NAME + '/'
+					+ cmsSession.getUuid().toString());
 		} catch (RepositoryException e) {
 			throw new JcrException("Cannot get session dir for " + cmsSession, e);
 		}
@@ -66,28 +80,18 @@ public class SuiteUtils {
 	public static Node getOrCreateCmsSessionNode(Session adminSession, CmsSession cmsSession) {
 		try {
 			String userDn = cmsSession.getUserDn();
-//			String uid = userDn.get(userDn.size() - 1);
 			Node userNode = getOrCreateUserNode(adminSession, userDn);
-//			if (!usersBase.hasNode(uid)) {
-//				userNode = usersBase.addNode(uid, NodeType.NT_UNSTRUCTURED);
-//				userNode.addMixin(EntityType.user.get());
-//				userNode.addMixin(NodeType.MIX_CREATED);
-//				usersBase.setProperty(LdapAttrs.uid.property(), uid);
-//				usersBase.setProperty(LdapAttrs.distinguishedName.property(), userDn.toString());
-//				adminSession.save();
-//			} else {
-//				userNode = usersBase.getNode(uid);
-//			}
+			Node sessionsNode = userNode.getNode(USER_SESSIONS_NODE_NAME);
 			String cmsSessionUuid = cmsSession.getUuid().toString();
 			Node cmsSessionNode;
-			if (!userNode.hasNode(cmsSessionUuid)) {
-				cmsSessionNode = userNode.addNode(cmsSessionUuid, NodeType.NT_UNSTRUCTURED);
+			if (!sessionsNode.hasNode(cmsSessionUuid)) {
+				cmsSessionNode = sessionsNode.addNode(cmsSessionUuid, NodeType.NT_UNSTRUCTURED);
 				cmsSessionNode.addMixin(NodeType.MIX_CREATED);
 				adminSession.save();
 				JcrUtils.addPrivilege(adminSession, cmsSessionNode.getPath(), cmsSession.getUserRole(),
 						Privilege.JCR_ALL);
 			} else {
-				cmsSessionNode = userNode.getNode(cmsSessionUuid);
+				cmsSessionNode = sessionsNode.getNode(cmsSessionUuid);
 			}
 			return cmsSessionNode;
 		} catch (RepositoryException e) {

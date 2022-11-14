@@ -33,12 +33,14 @@ import org.argeo.app.api.EntityConstants;
 import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.api.RankedObject;
+import org.argeo.app.core.SuiteUtils;
 import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
 import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.cms.jcr.acr.JcrContent;
+import org.argeo.cms.jcr.acr.JcrContentProvider;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.argeo.cms.swt.dialogs.CmsFeedback;
@@ -93,7 +95,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 
 	// ACR
 	private ContentRepository contentRepository;
-//	private JcrContentProvider jcrContentProvider;
+	private JcrContentProvider jcrContentProvider;
 
 	// JCR
 //	private Repository repository;
@@ -233,8 +235,15 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 								.get(ContentUtils.SLASH + CmsConstants.SYS_WORKSPACE + publicBasePath);
 						ui.setUserDir(userDir);
 					} else {
-						Content userDir = contentSession.getSessionRunDir();
+						Node userDirNode = jcrContentProvider.doInAdminSession((adminSession) -> {
+							Node node = SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
+							return node;
+						});
+						Content userDir = contentSession
+								.get(ContentUtils.SLASH + CmsConstants.SYS_WORKSPACE + userDirNode.getPath());
 						ui.setUserDir(userDir);
+//						Content userDir = contentSession.getSessionRunDir();
+//						ui.setUserDir(userDir);
 					}
 				}
 				initLocale(cmsSession);
@@ -638,4 +647,9 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 	public void setContentRepository(ContentRepository contentRepository) {
 		this.contentRepository = contentRepository;
 	}
+
+	public void setJcrContentProvider(JcrContentProvider jcrContentProvider) {
+		this.jcrContentProvider = jcrContentProvider;
+	}
+
 }
