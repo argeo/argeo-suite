@@ -8,8 +8,11 @@ import org.argeo.api.acr.Content;
 import org.argeo.api.acr.QNamed;
 import org.argeo.api.acr.ldap.LdapAttr;
 import org.argeo.api.acr.ldap.LdapObj;
+import org.argeo.api.cms.directory.CmsGroup;
 import org.argeo.api.cms.directory.CmsUser;
 import org.argeo.api.cms.directory.CmsUserManager;
+import org.argeo.api.cms.directory.HierarchyUnit;
+import org.argeo.api.cms.directory.HierarchyUnit.Type;
 import org.argeo.app.api.SuiteRole;
 import org.argeo.app.ui.SuiteMsg;
 import org.argeo.app.ui.SuiteStyle;
@@ -53,6 +56,7 @@ public class PersonUiProvider implements SwtUiProvider {
 		CmsUser user = context.adapt(CmsUser.class);
 
 		Content hierarchyUnitContent = context.getParent().getParent();
+		HierarchyUnit hierarchyUnit = hierarchyUnitContent.adapt(HierarchyUnit.class);
 
 		String roleContext = RoleNameUtils.getContext(user.getName());
 
@@ -69,9 +73,12 @@ public class PersonUiProvider implements SwtUiProvider {
 				rolesSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
 				rolesSection.setLayout(new GridLayout(2, false));
 				List<String> roles = Arrays.asList(cmsUserManager.getUserRoles(user.getName()));
-				addRoleCheckBox(rolesSection, SuiteMsg.coworkerRole, SuiteRole.coworker, roleContext, roles);
-				addRoleCheckBox(rolesSection, SuiteMsg.publisherRole, SuiteRole.publisher, roleContext, roles);
-				addRoleCheckBox(rolesSection, SuiteMsg.userAdminRole, CmsRole.userAdmin, roleContext, roles);
+				addRoleCheckBox(rolesSection, hierarchyUnit, user, SuiteMsg.coworkerRole, SuiteRole.coworker,
+						roleContext, roles);
+				addRoleCheckBox(rolesSection, hierarchyUnit, user, SuiteMsg.publisherRole, SuiteRole.publisher,
+						roleContext, roles);
+				addRoleCheckBox(rolesSection, hierarchyUnit, user, SuiteMsg.userAdminRole, CmsRole.userAdmin,
+						roleContext, roles);
 			}
 //			Composite facetsSection = new Composite(main, SWT.NONE);
 //			facetsSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 2, 1));
@@ -148,6 +155,7 @@ public class PersonUiProvider implements SwtUiProvider {
 					@Override
 					public void widgetDefaultSelected(SelectionEvent e) {
 						String editedTxt = text.getText();
+						content.put(attr, editedTxt);
 						text.stopEditing();
 						text.setText(editedTxt);
 						text.getParent().layout(new Control[] { text.getControl() });
@@ -158,8 +166,8 @@ public class PersonUiProvider implements SwtUiProvider {
 		});
 	}
 
-	private void addRoleCheckBox(SwtSection parent, Localized msg, SystemRole systemRole, String roleContext,
-			List<String> roles) {
+	private void addRoleCheckBox(SwtSection parent, HierarchyUnit hierarchyUnit, CmsUser user, Localized msg,
+			SystemRole systemRole, String roleContext, List<String> roles) {
 		Button radio = new Button(parent, SWT.CHECK);
 		radio.setSelection(false);
 		roles: for (String dn : roles) {
@@ -179,6 +187,16 @@ public class PersonUiProvider implements SwtUiProvider {
 		} else {
 			radio.setEnabled(CurrentUser.implies(CmsRole.userAdmin, roleContext));
 		}
+
+		radio.addSelectionListener((Selected) (e) -> {
+			HierarchyUnit rolesHu = hierarchyUnit.getDirectChild(Type.ROLES);
+			CmsGroup roleGroup = cmsUserManager.getOrCreateSystemRole(rolesHu, systemRole.qName());
+			if (radio.getSelection())
+				cmsUserManager.addMember(roleGroup, user);
+			else
+				cmsUserManager.removeMember(roleGroup, user);
+		});
+
 		new Label(parent, 0).setText(msg.lead());
 
 	}

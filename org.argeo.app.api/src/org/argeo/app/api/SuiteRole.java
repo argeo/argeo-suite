@@ -30,7 +30,7 @@ public enum SuiteRole implements SystemRole {
 	}
 
 	@Override
-	public QName getName() {
+	public QName qName() {
 		return name;
 	}
 
