@@ -1,7 +1,6 @@
 package org.argeo.app.core;
 
 import java.util.HashSet;
-import java.util.Optional;
 import java.util.Set;
 
 import javax.jcr.Node;
@@ -24,13 +23,11 @@ import org.argeo.jcr.JcrUtils;
 
 /** Utilities around the Argeo Suite APIs. */
 public class SuiteUtils {
-	@Deprecated
 	public static String getUserNodePath(String userDn) {
 		String uid = RoleNameUtils.getLastRdnValue(userDn);
 		return EntityType.user.basePath() + '/' + uid;
 	}
 
-	@Deprecated
 	private static Node getOrCreateUserNode(Session adminSession, String userDn) {
 		try {
 			Node usersBase = adminSession.getNode(EntityType.user.basePath());
@@ -40,8 +37,8 @@ public class SuiteUtils {
 				userNode = usersBase.addNode(uid, NodeType.NT_UNSTRUCTURED);
 				userNode.addMixin(EntityType.user.get());
 				userNode.addMixin(NodeType.MIX_CREATED);
-				userNode.setProperty(LdapAttr.distinguishedName.property(), userDn.toString());
-				userNode.setProperty(LdapAttr.uid.property(), uid);
+				userNode.setProperty(LdapAttr.distinguishedName.get(), userDn.toString());
+				userNode.setProperty(LdapAttr.uid.get(), uid);
 				adminSession.save();
 //				JackrabbitSecurityUtils.denyPrivilege(adminSession, userNode.getPath(), SuiteRole.coworker.dn(),
 //						Privilege.JCR_READ);
@@ -58,7 +55,6 @@ public class SuiteUtils {
 		}
 	}
 
-	@Deprecated
 	public static Node getCmsSessionNode(Session session, CmsSession cmsSession) {
 		try {
 			return session.getNode(getUserNodePath(cmsSession.getUserDn()) + '/' + cmsSession.getUuid().toString());
@@ -67,7 +63,6 @@ public class SuiteUtils {
 		}
 	}
 
-	@Deprecated
 	public static Node getOrCreateCmsSessionNode(Session adminSession, CmsSession cmsSession) {
 		try {
 			String userDn = cmsSession.getUserDn();
@@ -121,9 +116,9 @@ public class SuiteUtils {
 	}
 
 	synchronized static public long findNextId(Content hierarchyUnit, QName cclass) {
-		if (!hierarchyUnit.hasContentClass(LdapObj.posixGroup.qName())) 
+		if (!hierarchyUnit.hasContentClass(LdapObj.posixGroup.qName()))
 			throw new IllegalArgumentException(hierarchyUnit + " is not a POSIX group");
-		
+
 		long min = hierarchyUnit.get(LdapAttr.gidNumber.qName(), Long.class).orElseThrow();
 		long currentMax = 0l;
 		for (Content childHu : hierarchyUnit) {
