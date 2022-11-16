@@ -1,6 +1,8 @@
 package org.argeo.app.core;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -8,10 +10,12 @@ import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.security.Privilege;
 
+import org.argeo.api.acr.spi.ContentNamespace;
 import org.argeo.api.cms.CmsConstants;
 import org.argeo.app.api.EntityType;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.maintenance.AbstractMaintenanceService;
+import org.geotools.gml3.v3_2.GML;
 
 /** Initialises an Argeo Suite backend. */
 public class SuiteMaintenanceService extends AbstractMaintenanceService {
@@ -24,6 +28,29 @@ public class SuiteMaintenanceService extends AbstractMaintenanceService {
 //			getContentRepository().registerTypes(types.getDefaultPrefix(), types.getNamespace(),
 //					types.getResource() != null ? types.getResource().toExternalForm() : null);
 //		}
+		
+		// GML schema import fails because of xlinks issues
+		getContentRepository().registerTypes(new ContentNamespace() {
+
+			@Override
+			public URL getSchemaResource() {
+				try {
+					return new URL(GML.getInstance().getSchemaLocation());
+				} catch (MalformedURLException e) {
+					throw new IllegalArgumentException(e);
+				}
+			}
+
+			@Override
+			public String getNamespaceURI() {
+				return GML.getInstance().getNamespaceURI();
+			}
+
+			@Override
+			public String getDefaultPrefix() {
+				return "gml";
+			}
+		});
 	}
 
 	@Override
