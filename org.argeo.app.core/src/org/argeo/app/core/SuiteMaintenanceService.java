@@ -9,6 +9,8 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.security.Privilege;
+import javax.measure.Quantity;
+import javax.measure.quantity.Area;
 
 import org.argeo.api.acr.spi.ContentNamespace;
 import org.argeo.api.cms.CmsConstants;
@@ -17,10 +19,16 @@ import org.argeo.jcr.JcrUtils;
 import org.argeo.maintenance.AbstractMaintenanceService;
 import org.geotools.gml3.v3_2.GML;
 
+import si.uom.SI;
+import tech.units.indriya.quantity.Quantities;
+
 /** Initialises an Argeo Suite backend. */
 public class SuiteMaintenanceService extends AbstractMaintenanceService {
 	@Override
 	public void init() {
+		// make sure that the unit system is initialised
+		Quantity<Area> dummy = Quantities.getQuantity(0, SI.SQUARE_METRE);
+
 		super.init();
 
 		getContentRepository().registerTypes(SuiteContentNamespace.values());
@@ -28,7 +36,7 @@ public class SuiteMaintenanceService extends AbstractMaintenanceService {
 //			getContentRepository().registerTypes(types.getDefaultPrefix(), types.getNamespace(),
 //					types.getResource() != null ? types.getResource().toExternalForm() : null);
 //		}
-		
+
 		// GML schema import fails because of xlinks issues
 		getContentRepository().registerTypes(new ContentNamespace() {
 
