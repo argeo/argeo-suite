@@ -8,7 +8,6 @@ import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.security.Privilege;
 
-import org.argeo.api.acr.spi.ProvidedRepository;
 import org.argeo.api.cms.CmsConstants;
 import org.argeo.app.api.EntityType;
 import org.argeo.jcr.JcrUtils;
@@ -20,10 +19,11 @@ public class SuiteMaintenanceService extends AbstractMaintenanceService {
 	public void init() {
 		super.init();
 
-		for (SuiteContentTypes types : SuiteContentTypes.values()) {
-			getContentRepository().registerTypes(types.getDefaultPrefix(), types.getNamespace(),
-					types.getResource() != null ? types.getResource().toExternalForm() : null);
-		}
+		getContentRepository().registerTypes(SuiteContentNamespace.values());
+//		for (SuiteContentTypes types : SuiteContentTypes.values()) {
+//			getContentRepository().registerTypes(types.getDefaultPrefix(), types.getNamespace(),
+//					types.getResource() != null ? types.getResource().toExternalForm() : null);
+//		}
 	}
 
 	@Override
