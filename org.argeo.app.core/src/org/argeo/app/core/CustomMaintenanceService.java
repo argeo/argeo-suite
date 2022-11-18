@@ -48,7 +48,7 @@ public abstract class CustomMaintenanceService extends AbstractMaintenanceServic
 			if (typologiesLoadBase.contains("/") && !typologiesLoadBase.endsWith("/"))
 				typologiesLoadBase = typologiesLoadBase + "/";
 			String termsLoadPath = typologiesLoadBase + name + ".xml";
-			URL termsUrl = getClass().getClassLoader().getResource(termsLoadPath);
+			URL termsUrl = getClass().getResource(termsLoadPath);
 			if (termsUrl == null)
 				throw new IllegalArgumentException("Terms '" + name + "' not found.");
 			try (InputStream in = termsUrl.openStream()) {
