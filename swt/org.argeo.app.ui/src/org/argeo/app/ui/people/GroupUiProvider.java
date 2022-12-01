@@ -2,6 +2,7 @@ package org.argeo.app.ui.people;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentSession;
+import org.argeo.api.acr.ldap.LdapAcrUtils;
 import org.argeo.api.acr.ldap.LdapAttr;
 import org.argeo.api.acr.ldap.LdapObj;
 import org.argeo.api.acr.spi.ProvidedContent;
@@ -71,13 +72,9 @@ public class GroupUiProvider implements SwtUiProvider {
 
 		// title
 		// TODO localise at content level
-		String title;
-		if (context.hasContentClass(LdapObj.organization))
-			title = SuiteMsg.org.lead() + " " + context.attr(LdapAttr.cn) + " ("
-					+ hierarchyUnit.getHierarchyUnitLabel(CurrentUser.locale()) + ")";
-		else
-			title = SuiteMsg.group.lead() + " " + context.attr(LdapAttr.cn) + " ("
-					+ hierarchyUnit.getHierarchyUnitLabel(CurrentUser.locale()) + ")";
+		String title = (context.hasContentClass(LdapObj.organization) ? SuiteMsg.org.lead() : SuiteMsg.group.lead())
+				+ " " + LdapAcrUtils.getLocalized(context, LdapAttr.cn.qName(), CurrentUser.locale()) + " ("
+				+ hierarchyUnit.getHierarchyUnitLabel(CurrentUser.locale()) + ")";
 		SuiteUiUtils.addFormLabel(area, title);
 
 		// toolbar
