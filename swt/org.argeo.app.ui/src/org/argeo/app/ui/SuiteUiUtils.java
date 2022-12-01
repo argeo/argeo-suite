@@ -242,7 +242,8 @@ public class SuiteUiUtils {
 		boolean test = false;
 		if (test) {
 			try (InputStream in = JcrUtils.getFileAsStream(fileNode);
-					OutputStream out = Files.newOutputStream(Paths.get("/home/mbaudier/tmp/" + fileNode.getName()));) {
+					OutputStream out = Files.newOutputStream(
+							Paths.get(System.getProperty("user.home") + "/tmp/" + fileNode.getName()));) {
 //				BufferedImage img = ImageIO.read(in);
 //				System.out.println(fileNode.getName() + ": width=" + img.getWidth() + ", height=" + img.getHeight());
 				IOUtils.copy(in, out);
