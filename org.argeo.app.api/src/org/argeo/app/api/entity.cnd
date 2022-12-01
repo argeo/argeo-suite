@@ -96,6 +96,7 @@ mixin
 mixin
 - ldap:sn (String)
 - ldap:givenName (String)
+- ldap:cn (String)
 - ldap:mail (String) *
 - ldap:description (String)
 
