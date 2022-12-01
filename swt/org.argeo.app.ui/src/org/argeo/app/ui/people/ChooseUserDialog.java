@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 
+/** Pick up a user within a hierarchy. */
 public class ChooseUserDialog extends CmsMessageDialog {
 	private ContentSession contentSession;
 	private CmsUserManager cmsUserManager;
@@ -33,7 +34,7 @@ public class ChooseUserDialog extends CmsMessageDialog {
 
 	@Override
 	protected Control createInputArea(Composite parent) {
-		SashForm sashForm = new SashForm(parent, SWT.VERTICAL);
+		SashForm sashForm = new SashForm(parent, SWT.HORIZONTAL);
 		CmsSwtUtils.fill(sashForm);
 
 		HierarchyUnitPart hierarchyPart = new HierarchyUnitPart(contentSession, cmsUserManager);
@@ -59,7 +60,7 @@ public class ChooseUserDialog extends CmsMessageDialog {
 
 		hierarchyPart.refresh();
 
-		sashForm.setWeights(new int[] { 30, 70 });
+		sashForm.setWeights(new int[] { 40, 60 });
 		return sashForm;
 	}
 
@@ -69,7 +70,7 @@ public class ChooseUserDialog extends CmsMessageDialog {
 
 	@Override
 	protected Point getInitialSize() {
-		return new Point(600, 800);
+		return new Point(800, 600);
 	}
 
 }
