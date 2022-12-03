@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
@@ -43,8 +44,22 @@ public class SuiteUtils {
 				userNode.addMixin(NodeType.MIX_CREATED);
 				userNode.setProperty(LdapAttr.distinguishedName.get(), userDn.toString());
 				userNode.setProperty(LdapAttr.uid.get(), uid);
+			} else {
+				userNode = usersBase.getNode(uid);
+			}
 
-				userNode.addNode(USER_SESSIONS_NODE_NAME, NodeType.NT_UNSTRUCTURED);
+			if (!userNode.hasNode(USER_SESSIONS_NODE_NAME)) {
+				// Migrate existing user node
+				Node sessionsNode = userNode.addNode(USER_SESSIONS_NODE_NAME, NodeType.NT_UNSTRUCTURED);
+				oldSessions: for (NodeIterator nit = userNode.getNodes(); nit.hasNext();) {
+					Node child = nit.nextNode();
+					if (USER_SESSIONS_NODE_NAME.equals(child.getName()) || child.getName().startsWith("rep:")
+							|| child.getName().startsWith("jcr:"))
+						continue oldSessions;
+					Node target = sessionsNode.addNode(child.getName());
+					JcrUtils.copy(child, target);
+				}
+
 				Node userStateNode = userNode.addNode(USER_STATE_NODE_NAME, NodeType.NT_UNSTRUCTURED);
 				Node userDevicesNode = userNode.addNode(USER_DEVICES_NODE_NAME, NodeType.NT_UNSTRUCTURED);
 
@@ -58,9 +73,6 @@ public class SuiteUtils {
 
 				JcrUtils.addPrivilege(adminSession, userStateNode.getPath(), userDn, Privilege.JCR_ALL);
 				JcrUtils.addPrivilege(adminSession, userDevicesNode.getPath(), userDn, Privilege.JCR_ALL);
-
-			} else {
-				userNode = usersBase.getNode(uid);
 			}
 			return userNode;
 		} catch (RepositoryException e) {
