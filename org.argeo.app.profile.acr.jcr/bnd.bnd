@@ -1,0 +1,7 @@
+Import-Package: \
+org.argeo.cms.jcr.acr,\
+*
+
+Service-Component:\
+OSGI-INF/sysContentProvider.xml,\
+OSGI-INF/srvContentProvider.xml,\

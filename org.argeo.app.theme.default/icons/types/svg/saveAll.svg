@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" id="Layer_1" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1,.cls-2,.cls-3{fill:#454545;}.cls-2,.cls-3{stroke:#4f4d4e;}.cls-2,.cls-3,.cls-4,.cls-5{stroke-miterlimit:10;}.cls-2,.cls-4{stroke-width:30px;}.cls-3,.cls-5{stroke-width:40px;}.cls-4,.cls-5{fill:none;stroke:#7c7c7c;}</style>
+  </defs>
+  <title>saveAll</title>
+  <path class="cls-1" d="M170.19,125.05v338.3H508.48v-263l-81.19-75.31ZM402.73,230.92H276.06V146.6H402.73Zm-169,63.28h211V442.29h-211Z"/>
+  <rect class="cls-1" height="42.6" transform="translate(633.14 377.12) rotate(-180)" width="42.6" x="295.27" y="167.26"/>
+  <line class="cls-2" x1="376.88" x2="88.45" y1="70.98" y2="70.98"/>
+  <line class="cls-3" x1="108.19" x2="108.19" y1="68.98" y2="418.1"/>
+  <line class="cls-4" x1="321.63" x2="11.28" y1="2.33" y2="2.33"/>
+  <line class="cls-5" x1="29.79" x2="29.79" y1="1.33" y2="383.52"/>
+</svg>

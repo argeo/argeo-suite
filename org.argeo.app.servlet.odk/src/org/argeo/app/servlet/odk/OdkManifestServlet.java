@@ -33,10 +33,11 @@ import org.argeo.app.api.EntityMimeType;
 import org.argeo.app.odk.OrxManifestName;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.servlet.ServletHttpRequest;
+import org.argeo.cms.servlet.ServletUtils;
+import org.argeo.cms.util.CsvWriter;
+import org.argeo.cms.util.DigestUtils;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
-import org.argeo.util.CsvWriter;
-import org.argeo.util.DigestUtils;
 
 /** Describe additional files. */
 public class OdkManifestServlet extends HttpServlet {
@@ -53,9 +54,12 @@ public class OdkManifestServlet extends HttpServlet {
 		if (pathInfo.startsWith("//"))
 			pathInfo = pathInfo.substring(1);
 
-		String serverName = req.getServerName();
-		int serverPort = req.getServerPort();
-		String protocol = serverPort == 443 || req.isSecure() ? "https" : "http";
+//		String serverName = req.getServerName();
+//		int serverPort = req.getServerPort();
+//		String protocol = serverPort == 443 || req.isSecure() ? "https" : "http";
+//		String baseServer = protocol + "://" + serverName
+//				+ (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort);
+		StringBuilder baseServer = ServletUtils.getRequestUrlBase(req);
 
 		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), new ServletHttpRequest(req));
 
@@ -98,9 +102,8 @@ public class OdkManifestServlet extends HttpServlet {
 								writer.append("md5sum:" + DigestUtils.toHexString(out.getMessageDigest().digest()));
 								writer.append("</hash>");
 							}
-							writer.append("<downloadUrl>" + protocol + "://" + serverName
-									+ (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort)
-									+ "/api/odk/formManifest" + file.getPath() + "</downloadUrl>");
+							writer.append("<downloadUrl>" + baseServer + "/api/odk/formManifest" + file.getPath()
+									+ "</downloadUrl>");
 						}
 						writer.append("</mediaFile>");
 					}

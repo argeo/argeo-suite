@@ -23,6 +23,7 @@ import org.argeo.app.odk.OrxListName;
 import org.argeo.app.odk.OrxManifestName;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.servlet.ServletHttpRequest;
+import org.argeo.cms.servlet.ServletUtils;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrxApi;
 
@@ -39,9 +40,17 @@ public class OdkFormListServlet extends HttpServlet {
 		resp.setHeader("X-OpenRosa-Version", "1.0");
 		resp.setDateHeader("Date", System.currentTimeMillis());
 
-		String serverName = req.getServerName();
-		int serverPort = req.getServerPort();
-		String protocol = serverPort == 443 || req.isSecure() ? "https" : "http";
+////		String serverName = req.getServerName();
+////		int serverPort = req.getServerPort();
+////		String protocol = serverPort == 443 || req.isSecure() ? "https" : "http";
+////		String baseServer = protocol + "://" + serverName
+////				+ (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort);
+//		String requestUri=req.getRequestURI();
+//		String forwardedHost = req.getHeader("X-Forwarded-Host");
+//		URL requestUrl = new URL(req.getRequestURL().toString());
+//		String baseServer = requestUrl.getProtocol() + "://" + requestUrl.getHost()
+//				+ (requestUrl.getPort() > 0 ? ":" + requestUrl.getPort() : "");
+		StringBuilder baseServer = ServletUtils.getRequestUrlBase(req);
 
 		String pathInfo = req.getPathInfo();
 
@@ -77,23 +86,17 @@ public class OdkFormListServlet extends HttpServlet {
 					sb.append("<hash>md5:" + JcrxApi.getChecksum(node, JcrxApi.MD5) + "</hash>");
 					if (node.hasProperty(Property.JCR_DESCRIPTION))
 						sb.append("<name>" + node.getProperty(Property.JCR_DESCRIPTION).getString() + "</name>");
-					sb.append("<downloadUrl>" + protocol + "://" + serverName
-							+ (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort) + "/api/odk/form"
-							+ node.getPath() + "</downloadUrl>");
+					sb.append("<downloadUrl>" + baseServer + "/api/odk/form" + node.getPath() + "</downloadUrl>");
 					if (node.hasNode(OrxManifestName.manifest.name())) {
-						sb.append("<manifestUrl>" + protocol + "://" + serverName
-								+ (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort)
-								+ "/api/odk/formManifest" + node.getNode(OrxManifestName.manifest.name()).getPath()
-								+ "</manifestUrl>");
+						sb.append("<manifestUrl>" + baseServer + "/api/odk/formManifest"
+								+ node.getNode(OrxManifestName.manifest.name()).getPath() + "</manifestUrl>");
 					}
 					sb.append("</xform>");
 				} else if (node.isNodeType(EntityType.formSet.get())) {
 					sb.append("<xforms-group>");
 					sb.append("<groupId>" + node.getPath() + "</groupId>");
 					sb.append("<name>" + node.getProperty(Property.JCR_TITLE).getString() + "</name>");
-					sb.append("<listUrl>" + protocol + "://" + serverName
-							+ (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort) + "/api/odk/formList"
-							+ node.getPath() + "</listUrl>");
+					sb.append("<listUrl>" + baseServer + "/api/odk/formList" + node.getPath() + "</listUrl>");
 					sb.append("</xforms-group>");
 				}
 				String str = sb.toString();

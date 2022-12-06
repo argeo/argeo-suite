@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" id="Layer_1" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1{fill:#35987a;}.cls-2{fill:#6ac59a;stroke:#35987a;stroke-linecap:round;stroke-miterlimit:10;stroke-width:50px;}</style>
+  </defs>
+  <title>todo</title>
+  <path class="cls-1" d="M381,56.74V435H81V56.74H381m0-28H81a28,28,0,0,0-28,28V435a28,28,0,0,0,28,28H381a28,28,0,0,0,28-28V56.74a28,28,0,0,0-28-28Z"/>
+  <circle class="cls-1" cx="137" cy="147" r="23.5"/>
+  <path class="cls-1" d="M137,124a23,23,0,1,1-23,23,23,23,0,0,1,23-23m0-1a24,24,0,1,0,24,24,24,24,0,0,0-24-24Z"/>
+  <line class="cls-2" x1="206" x2="335" y1="147" y2="147"/>
+  <line class="cls-2" x1="205" x2="334.67" y1="259" y2="258.93"/>
+  <line class="cls-2" x1="209" x2="335" y1="366" y2="366"/>
+  <circle class="cls-1" cx="137" cy="254" r="23.5"/>
+  <path class="cls-1" d="M137,231a23,23,0,1,1-23,23,23,23,0,0,1,23-23m0-1a24,24,0,1,0,24,24,24,24,0,0,0-24-24Z"/>
+  <circle class="cls-1" cx="137" cy="366" r="23.5"/>
+  <path class="cls-1" d="M137,343a23,23,0,1,1-23,23,23,23,0,0,1,23-23m0-1a24,24,0,1,0,24,24,24,24,0,0,0-24-24Z"/>
+</svg>

@@ -1,13 +1,11 @@
 Import-Package:\
+org.apache.xmlgraphics.image.loader,\
 org.osgi.service.http.context,\
 javax.jcr.nodetype,\
-org.osgi.service.event,\
-org.eclipse.swt,\
-org.eclipse.jface.viewers,\
 org.osgi.framework,\
 org.apache.xml.serializer,\
-org.eclipse.rap.rwt,\
 org.argeo.app.api,\
+org.argeo.cms.acr.xml,\
 javax.servlet.*;version="[3,5)",\
 *
 

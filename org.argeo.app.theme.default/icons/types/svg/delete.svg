@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1{fill:#454545;}.cls-2{fill:none;stroke:#fff;stroke-linecap:round;stroke-miterlimit:10;stroke-width:50px;}</style>
+  </defs>
+  <title>delete</title>
+  <g id="Plus">
+    <path class="cls-1" d="M368,474.8l-232.79.09c-14.28,0-30.79-21.78-30.79-36.06L80.65,158.69l341-.44-23,279.7C398.61,452.23,382.25,474.8,368,474.8Z"/>
+    <rect class="cls-1" height="52.93" rx="12" ry="12" width="392.28" x="55" y="77.77"/>
+    <rect class="cls-1" height="84.44" rx="19.8" ry="19.8" width="182.09" x="160.99" y="25"/>
+    <line class="cls-2" x1="253.99" x2="253.99" y1="208.67" y2="408.74"/>
+    <line class="cls-2" x1="145.52" x2="162.82" y1="207.99" y2="409.42"/>
+    <line class="cls-2" x1="358.84" x2="340.33" y1="208.12" y2="409.29"/>
+  </g>
+</svg>

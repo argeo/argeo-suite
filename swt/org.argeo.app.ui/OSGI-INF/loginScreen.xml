@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="Default Login Screen">
+   <implementation class="org.argeo.app.ui.DefaultLoginScreen"/>
+   <properties entry="config/loginScreen.properties"/>
+   <service>
+      <provide interface="org.argeo.cms.swt.acr.SwtUiProvider"/>
+   </service>
+   <property name="service.ranking" type="Integer" value="-1000"/>
+   <reference bind="setCmsContext" cardinality="1..1" interface="org.argeo.api.cms.CmsContext" name="CmsContext" policy="static"/>
+</scr:component>

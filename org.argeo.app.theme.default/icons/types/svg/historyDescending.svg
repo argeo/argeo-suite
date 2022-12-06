@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" data-name="Layer 1" id="Layer_1" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1{fill:none;stroke:#f3964d;stroke-linecap:round;stroke-linejoin:round;stroke-width:25px;}.cls-2{fill:#f3964d;}</style>
+  </defs>
+  <title>historyDescending</title>
+  <path class="cls-1" d="M86.21,197.19a172,172,0,1,1,27.64,156.33"/>
+  <polygon class="cls-2" points="123.63 178.84 89.32 186.75 59.82 167.54 78.33 248.82 123.63 178.84"/>
+  <line class="cls-1" x1="245.33" x2="245.33" y1="135.82" y2="268.82"/>
+  <line class="cls-1" x1="245.33" x2="333.33" y1="268.82" y2="268.82"/>
+</svg>

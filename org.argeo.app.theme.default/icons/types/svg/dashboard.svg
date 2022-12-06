@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500">
+  <defs>
+    <style>.cls-1,.cls-2{fill:none;stroke-linecap:round;stroke-miterlimit:10;}.cls-1{stroke:#305d74;stroke-width:35px;}.cls-2{stroke:#f3964d;stroke-width:50px;}.cls-3{fill:#177f95;}.cls-4{fill:#49bac5;}</style>
+  </defs>
+  <title>dashboard</title>
+  <g id="Plus">
+    <polyline class="cls-1" points="379.15 199.72 379.15 456.05 113.88 456.05 113.88 199.72"/>
+    <polyline class="cls-2" points="47.29 255.25 244 58.54 440.72 255.25"/>
+    <rect class="cls-3" height="146.05" width="83.61" x="158.39" y="294"/>
+    <rect class="cls-4" height="76.5" width="64.5" x="266.5" y="217.5"/>
+  </g>
+</svg>

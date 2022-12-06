@@ -1,0 +1,43 @@
+Display,
+Label,
+Text,
+Tree,
+Table,
+Button,
+TreeColumn,
+TableColumn,
+{
+	font: 16px sans-serif;
+}
+
+Sash {
+  border: 1px solid white;
+  background-image: none;
+  background-color: white;
+}
+
+Sash:hover {
+  border: 1px solid #5882b5;
+  background-color: #5882b5;
+}
+
+Tree-Cell {
+    padding: 3px 3px 0px;
+    spacing: 3px;
+}
+
+Table-Cell {
+    padding: 3px 3px 0px;
+    spacing: 5px;
+}
+
+Tree-RowOverlay:selected {
+	color:#fff;
+	background-color:#5882b5;
+}
+
+Table-RowOverlay:selected {
+	color:#fff;
+	background-color:#5882b5;
+}
+
