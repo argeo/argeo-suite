@@ -4,6 +4,7 @@
 // see https://www.w3.org/2003/01/geo/
 <geo = "http://www.w3.org/2003/01/geo/wgs84_pos#">
 <svg = "http://www.w3.org/2000/svg">
+<gml = "http://www.opengis.net/gml/3.2">
 
 <ldap = "http://www.argeo.org/ns/ldap">
 <entity = 'http://www.argeo.org/ns/entity'>
@@ -95,7 +96,9 @@ mixin
 mixin
 - ldap:sn (String)
 - ldap:givenName (String)
+- ldap:cn (String)
 - ldap:mail (String) *
+- ldap:description (String)
 
 [entity:user] > entity:person
 mixin

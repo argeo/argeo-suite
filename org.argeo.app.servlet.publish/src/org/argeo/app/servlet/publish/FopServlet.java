@@ -3,6 +3,8 @@ package org.argeo.app.servlet.publish;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLDecoder;
@@ -39,9 +41,15 @@ import org.apache.xmlgraphics.io.ResourceResolver;
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentRepository;
 import org.argeo.api.acr.ContentSession;
+import org.argeo.app.geo.GeoUtils;
+import org.argeo.app.geo.GpxUtils;
+import org.argeo.cms.acr.xml.XmlNormalizer;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.servlet.ServletHttpRequest;
-import org.argeo.util.LangUtils;
+import org.argeo.cms.util.LangUtils;
+import org.geotools.data.collection.ListFeatureCollection;
+import org.geotools.data.simple.SimpleFeatureCollection;
+import org.opengis.feature.simple.SimpleFeature;
 
 /**
  * A servlet transforming an XML view of the data to either FOP or PDF.
@@ -70,8 +78,6 @@ public class FopServlet extends HttpServlet {
 		boolean pdf = ".pdf".equals(ext);
 		ContentSession session = RemoteAuthUtils.doAs(() -> contentRepository.get(), new ServletHttpRequest(req));
 		Content content = session.get(path);
-		Source xmlInput = content.adapt(Source.class);
-		xmlInput.setSystemId(req.getRequestURI());
 
 		// dev only
 		final boolean DEV = false;
@@ -84,19 +90,48 @@ public class FopServlet extends HttpServlet {
 			} catch (TransformerConfigurationException | IOException e) {
 				throw new IllegalStateException("Cannot instantiate XSL " + xslUrl, e);
 			}
+
+			Source xmlInput = content.adapt(Source.class);
+			XmlNormalizer.print(xmlInput,0);
 		}
+
+		Source xmlInput = content.adapt(Source.class);
+		String systemId = req.getRequestURL().toString();
+		xmlInput.setSystemId(systemId);
 
 		URIResolver uriResolver = (href, base) -> {
 			try {
-				URL url = new URL(href);
-				if (url.getProtocol().equals("file")) {
-					InputStream in = Files.newInputStream(Paths.get(URI.create(url.toString())));
-					return new StreamSource(in);
+				URI url = URI.create(href);
+				if (url.getScheme() != null) {
+					if (url.getScheme().equals("file")) {
+						InputStream in = Files.newInputStream(Paths.get(URI.create(url.toString())));
+						return new StreamSource(in);
+					}
+					if (url.getScheme().equals("geo2svg")) {
+						String includePath = path + url.getPath();
+						String geoExt = includePath.substring(includePath.lastIndexOf('.'));
+						Content geoContent = session.get(includePath);
+						if (".gpx".equals(geoExt)) {
+							try (InputStream in = geoContent.open(InputStream.class)) {
+								SimpleFeature field = GpxUtils.parseGpxToPolygon(in);
+								SimpleFeatureCollection features = new ListFeatureCollection(field.getType(), field);
+								try (StringWriter writer = new StringWriter()) {
+									GeoUtils.exportToSvg(features, writer, 100, 100);
+									StreamSource res = new StreamSource(new StringReader(writer.toString()));
+									return res;
+								}
+							}
+						} else {
+							throw new UnsupportedOperationException(geoExt + " is not supported");
+						}
+					}
 				}
 			} catch (IOException e) {
-				// silent
+				throw new RuntimeException("Cannot process " + href);
 			}
-			Content subContent = session.get(href);
+
+			String p = href.startsWith("/") ? href : path + '/' + href;
+			Content subContent = session.get(p);
 			return subContent.adapt(Source.class);
 		};
 

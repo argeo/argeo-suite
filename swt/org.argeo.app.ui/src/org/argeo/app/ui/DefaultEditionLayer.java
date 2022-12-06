@@ -10,7 +10,7 @@ import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.acr.SwtTabbedArea;
 import org.argeo.cms.swt.acr.SwtUiProvider;
-import org.argeo.util.LangUtils;
+import org.argeo.cms.util.LangUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridLayout;
@@ -31,6 +31,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 	private boolean fixedEntryArea = false;
 	private boolean singleTab = false;
 	private Localized title = null;
+	private Localized singleTabTitle = null;
 
 	@Override
 	public Control createUiPart(Composite parent, Content context) {
@@ -161,6 +162,29 @@ public class DefaultEditionLayer implements SuiteLayer {
 				title = new Localized.Untranslated(titleStr);
 			}
 		}
+
+		String singleTabTitleStr = (String) properties.get(SuiteLayer.Property.singleTabTitle.name());
+		if (singleTabTitleStr != null) {
+			if (singleTabTitleStr.startsWith("%")) {
+				singleTabTitle = new Localized() {
+
+					@Override
+					public String name() {
+						return singleTabTitleStr;
+					}
+
+					@Override
+					public ClassLoader getL10nClassLoader() {
+						return bundleContext != null
+								? bundleContext.getBundle().adapt(BundleWiring.class).getClassLoader()
+								: getClass().getClassLoader();
+					}
+				};
+			} else {
+				singleTabTitle = new Localized.Untranslated(singleTabTitleStr);
+			}
+		}
+
 	}
 
 	public void destroy(BundleContext bundleContext, Map<String, String> properties) {
@@ -182,6 +206,8 @@ public class DefaultEditionLayer implements SuiteLayer {
 	SwtTabbedArea createTabbedArea(Composite parent, CmsSwtTheme theme) {
 		SwtTabbedArea tabbedArea = new SwtTabbedArea(parent, SWT.NONE);
 		tabbedArea.setSingleTab(singleTab);
+		if (singleTabTitle != null)
+			tabbedArea.setSingleTabTitle(singleTabTitle.lead());
 		tabbedArea.setBodyStyle(SuiteStyle.mainTabBody.style());
 		tabbedArea.setTabStyle(SuiteStyle.mainTab.style());
 		tabbedArea.setTabSelectedStyle(SuiteStyle.mainTabSelected.style());

@@ -2,11 +2,11 @@ package org.argeo.app.api;
 
 import javax.xml.namespace.QName;
 
+import org.argeo.api.acr.ArgeoNamespace;
 import org.argeo.api.acr.ContentName;
-import org.argeo.api.acr.CrName;
+import org.argeo.api.acr.ldap.LdapAttr;
 import org.argeo.api.cms.CmsConstants;
-import org.argeo.cms.auth.SystemRole;
-import org.argeo.util.naming.LdapAttrs;
+import org.argeo.cms.SystemRole;
 
 /** Standard suite system roles. */
 public enum SuiteRole implements SystemRole {
@@ -26,11 +26,11 @@ public enum SuiteRole implements SystemRole {
 	private final ContentName name;
 
 	SuiteRole() {
-		name = new ContentName(CrName.ROLE_NAMESPACE_URI, QUALIFIER + name());
+		name = new ContentName(ArgeoNamespace.ROLE_NAMESPACE_URI, QUALIFIER + name());
 	}
 
 	@Override
-	public QName getName() {
+	public QName qName() {
 		return name;
 	}
 
@@ -41,7 +41,7 @@ public enum SuiteRole implements SystemRole {
 
 	@Deprecated
 	public String dn() {
-		return new StringBuilder(LdapAttrs.cn.name()).append("=").append(getRolePrefix()).append(".").append(name())
+		return new StringBuilder(LdapAttr.cn.name()).append("=").append(getRolePrefix()).append(".").append(name())
 				.append(",").append(CmsConstants.SYSTEM_ROLES_BASEDN).toString();
 	}
 }

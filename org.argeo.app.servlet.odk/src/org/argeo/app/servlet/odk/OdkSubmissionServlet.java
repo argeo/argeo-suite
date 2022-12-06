@@ -14,7 +14,6 @@ import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.Repository;
-import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.servlet.ServletException;
@@ -60,24 +59,24 @@ public class OdkSubmissionServlet extends HttpServlet {
 		RemoteAuthRequest request = new ServletHttpRequest(req);
 		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), request);
 
+		CmsSession cmsSession = RemoteAuthUtils.getCmsSession(request);
+
+		Session adminSession = null;
 		try {
-			CmsSession cmsSession = RemoteAuthUtils.getCmsSession(request);
+			// TODO centralise at a deeper level
+			adminSession = CmsJcrUtils.openDataAdminSession(repository, null);
+			SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
+		} finally {
+			Jcr.logout(adminSession);
+		}
 
-			Session adminSession = null;
-			try {
-				// TODO centralise at a deeper level
-				adminSession = CmsJcrUtils.openDataAdminSession(repository, null);
-				SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
-			} finally {
-				Jcr.logout(adminSession);
-			}
-
+		try {
 			Node cmsSessionNode = SuiteUtils.getCmsSessionNode(session, cmsSession);
 			Node submission = cmsSessionNode.addNode(submissionNameFormatter.format(Instant.now()),
 					OrxType.submission.get());
 			for (Part part : req.getParts()) {
-				if (log.isDebugEnabled())
-					log.debug("Part: " + part.getName() + ", " + part.getContentType());
+				if (log.isTraceEnabled())
+					log.trace("Part: " + part.getName() + ", " + part.getContentType());
 
 				if (part.getName().equals(XML_SUBMISSION_FILE)) {
 					Node xml = submission.addNode(XML_SUBMISSION_FILE, NodeType.NT_UNSTRUCTURED);
@@ -112,12 +111,22 @@ public class OdkSubmissionServlet extends HttpServlet {
 					}
 				}
 			}
+
 			session.save();
-			for (FormSubmissionListener submissionListener : submissionListeners) {
-				submissionListener.formSubmissionReceived(submission);
+			try {
+				for (FormSubmissionListener submissionListener : submissionListeners) {
+					submissionListener.formSubmissionReceived(submission);
+				}
+			} catch (Exception e) {
+				log.error("Cannot save submision, cancelling...", e);
+				submission.remove();
+				session.save();
+				resp.setStatus(503);
+				return;
 			}
-		} catch (RepositoryException e) {
-			e.printStackTrace();
+
+		} catch (Exception e) {
+			log.error("Cannot save submision", e);
 			resp.setStatus(503);
 			return;
 		} finally {

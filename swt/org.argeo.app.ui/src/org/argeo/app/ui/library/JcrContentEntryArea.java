@@ -13,7 +13,7 @@ import javax.jcr.query.Query;
 import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsConstants;
 import org.argeo.app.api.EntityType;
-import org.argeo.app.ui.SuiteEvent;
+import org.argeo.app.ui.SuiteUxEvent;
 import org.argeo.app.ui.SuiteIcon;
 import org.argeo.app.ui.widgets.TreeOrSearchArea;
 import org.argeo.cms.jcr.acr.JcrContentProvider;
@@ -85,8 +85,8 @@ public class JcrContentEntryArea implements CmsUiProvider {
 			public void doubleClick(DoubleClickEvent event) {
 				Node user = (Node) ui.getTreeViewer().getStructuredSelection().getFirstElement();
 				if (user != null) {
-					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(),
-							SuiteEvent.eventProperties(user));
+					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteUxEvent.openNewPart.topic(),
+							SuiteUxEvent.eventProperties(user));
 				}
 
 			}
@@ -95,8 +95,8 @@ public class JcrContentEntryArea implements CmsUiProvider {
 			public void selectionChanged(SelectionChangedEvent event) {
 				Node user = (Node) ui.getTreeViewer().getStructuredSelection().getFirstElement();
 				if (user != null) {
-					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(),
-							SuiteEvent.eventProperties(user));
+					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteUxEvent.refreshPart.topic(),
+							SuiteUxEvent.eventProperties(user));
 				}
 			}
 		});

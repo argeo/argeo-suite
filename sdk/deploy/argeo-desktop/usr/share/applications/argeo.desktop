@@ -1,0 +1,5 @@
+[Desktop Entry]
+Name=Argeo
+Exec=/usr/bin/argeo-desktop-open argeo/app
+#Icon=
+Type=Application

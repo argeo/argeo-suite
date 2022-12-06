@@ -1,7 +1,7 @@
 package org.argeo.app.ui.people;
 
 import org.argeo.api.acr.Content;
-import org.argeo.cms.CmsUserManager;
+import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;

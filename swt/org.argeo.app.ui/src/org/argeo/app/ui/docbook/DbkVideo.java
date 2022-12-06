@@ -9,6 +9,7 @@ import javax.jcr.Item;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
+import org.argeo.api.acr.ldap.NamingUtils;
 import org.argeo.app.docbook.DbkAttr;
 import org.argeo.app.docbook.DbkType;
 import org.argeo.app.docbook.DbkUtils;
@@ -20,7 +21,6 @@ import org.argeo.cms.ui.viewers.SectionPart;
 import org.argeo.cms.ui.widgets.StyledControl;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
-import org.argeo.util.naming.NamingUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.events.SelectionEvent;

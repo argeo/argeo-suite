@@ -66,9 +66,9 @@ public class ImageProcessor {
 						Files.deleteIfExists(temp);
 					}
 				} else {
-					try (OutputStream out = outSupplier.call()) {
-						copyWithMetadata(() -> in, metadata);
-					}
+//					try (OutputStream out = outSupplier.call()) {
+					copyWithMetadata(() -> in, metadata);
+//					}
 				}
 			}
 		} catch (Exception e) {

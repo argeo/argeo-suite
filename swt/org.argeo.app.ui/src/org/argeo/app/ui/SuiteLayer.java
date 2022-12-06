@@ -8,7 +8,7 @@ import org.eclipse.swt.widgets.Composite;
 /** An UI layer for the main work area. */
 public interface SuiteLayer extends SwtUiProvider {
 	static enum Property {
-		title, icon, weights, startMaximized, singleTab, fixedEntryArea;
+		title, icon, weights, startMaximized, singleTab, singleTabTitle, fixedEntryArea;
 	}
 
 	String getId();

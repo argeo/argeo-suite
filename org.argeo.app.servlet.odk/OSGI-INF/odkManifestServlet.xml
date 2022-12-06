@@ -6,5 +6,5 @@
    </service>
    <property name="osgi.http.whiteboard.servlet.pattern" type="String" value="/formManifest/*"/>
    <property name="osgi.http.whiteboard.context.select" type="String" value="(osgi.http.whiteboard.context.name=odkServletContext)"/>
-   <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="static" target="(cn=entity)"/>
+   <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="static" target="(cn=ego)"/>
 </scr:component>

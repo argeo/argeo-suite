@@ -33,7 +33,6 @@ public class GpxUtils {
 			GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
 			List<Coordinate> coordinates = new ArrayList<>();
 			SAXParserFactory factory = SAXParserFactory.newInstance();
-			Double[] startCoord = new Double[2];
 			SAXParser saxParser = factory.newSAXParser();
 
 			saxParser.parse(in, new DefaultHandler() {

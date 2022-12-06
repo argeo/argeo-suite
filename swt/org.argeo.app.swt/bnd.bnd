@@ -1,6 +1,5 @@
 Import-Package:\
 org.eclipse.swt,\
-org.argeo.util.naming,\
 org.argeo.api.cms.ux,\
 org.argeo.cms.ux.acr,\
 org.argeo.app.api,\

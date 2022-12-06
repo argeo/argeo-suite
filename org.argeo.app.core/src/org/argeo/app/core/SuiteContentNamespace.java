@@ -4,7 +4,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Objects;
 
-public enum SuiteContentTypes {
+import org.argeo.api.acr.spi.ContentNamespace;
+
+public enum SuiteContentNamespace implements ContentNamespace {
 	//
 	// ARGEO
 	//
@@ -14,14 +16,22 @@ public enum SuiteContentTypes {
 	//
 	// EXTERNAL
 	//
-	XCARD_4_0("xcard", "urn:ietf:params:xml:ns:vcard-4.0", "xCard-4.0.xsd", null),
+	DOCBOOK5("dbk", "http://docbook.org/ns/docbook", "docbook.xsd", "http://docbook.org/xml/5.0.1/xsd/docbook.xsd"),
 	//
-	XSL_FO_1999("fo", "http://www.w3.org/1999/XSL/Format", "fop.xsd",
+	XML_EVENTS("ev", "http://www.w3.org/2001/xml-events", "xml-events-attribs-1.xsd",
+			"http://www.w3.org/MarkUp/SCHEMA/xml-events-attribs-1.xsd"),
+	//
+	XFORMS("xforms", "http://www.w3.org/2002/xforms", "XForms-11-Schema.xsd",
+			"https://www.w3.org/MarkUp/Forms/2007/XForms-11-Schema.xsd"),
+	//
+	XCARD("xcard", "urn:ietf:params:xml:ns:vcard-4.0", "xCard-4.0.xsd", null),
+	//
+	XSL_FO("fo", "http://www.w3.org/1999/XSL/Format", "fop.xsd",
 			"https://svn.apache.org/repos/asf/xmlgraphics/fop/trunk/fop/src/foschema/fop.xsd"),
 	//
 //	XCAL_2_0("xcal", "urn:ietf:params:xml:ns:icalendar-2.0", "xCal-2.0.xsd", null),
 	//
-	XHTML_1_1("h", "http://www.w3.org/1999/xhtml", null, "https://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd"),
+	XHTML("h", "http://www.w3.org/1999/xhtml", null, "https://www.w3.org/MarkUp/SCHEMA/xhtml11.xsd"),
 	//
 	// ODK
 	//
@@ -46,7 +56,7 @@ public enum SuiteContentTypes {
 	private URL resource;
 	private URL publicUrl;
 
-	SuiteContentTypes(String defaultPrefix, String namespace, String resourceFileName, String publicUrl) {
+	SuiteContentNamespace(String defaultPrefix, String namespace, String resourceFileName, String publicUrl) {
 		Objects.requireNonNull(namespace);
 		this.defaultPrefix = defaultPrefix;
 		Objects.requireNonNull(namespace);
@@ -63,15 +73,18 @@ public enum SuiteContentTypes {
 			}
 	}
 
+	@Override
 	public String getDefaultPrefix() {
 		return defaultPrefix;
 	}
 
-	public String getNamespace() {
+	@Override
+	public String getNamespaceURI() {
 		return namespace;
 	}
 
-	public URL getResource() {
+	@Override
+	public URL getSchemaResource() {
 		return resource;
 	}
 

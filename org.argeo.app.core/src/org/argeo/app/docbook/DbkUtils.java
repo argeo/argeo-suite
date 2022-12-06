@@ -70,7 +70,7 @@ public class DbkUtils {
 
 	public static void setTitle(Node node, String txt) {
 		Node titleNode = getOrAddDbk(node, DbkType.title);
-		JcrxApi.setXmlValue(node, titleNode, txt);
+		JcrxApi.setXmlValue(titleNode, txt);
 	}
 
 	public static Node getMetadata(Node infoContainer) {
@@ -103,7 +103,7 @@ public class DbkUtils {
 
 	public static Node addParagraph(Node node, String txt) {
 		Node p = addDbk(node, para);
-		JcrxApi.setXmlValue(node, p, txt);
+		JcrxApi.setXmlValue(p, txt);
 		return p;
 	}
 

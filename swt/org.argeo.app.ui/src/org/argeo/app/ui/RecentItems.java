@@ -105,8 +105,8 @@ public class RecentItems implements CmsUiProvider {
 			public void doubleClick(DoubleClickEvent event) {
 				Node node = (Node) entityViewer.getViewer().getStructuredSelection().getFirstElement();
 				if (node != null)
-					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteEvent.openNewPart.topic(),
-							SuiteEvent.eventProperties(node));
+					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteUxEvent.openNewPart.topic(),
+							SuiteUxEvent.eventProperties(node));
 
 			}
 		});
@@ -114,8 +114,8 @@ public class RecentItems implements CmsUiProvider {
 			public void selectionChanged(SelectionChangedEvent event) {
 				Node node = (Node) entityViewer.getViewer().getStructuredSelection().getFirstElement();
 				if (node != null) {
-					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteEvent.refreshPart.topic(),
-							SuiteEvent.eventProperties(node));
+					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteUxEvent.refreshPart.topic(),
+							SuiteUxEvent.eventProperties(node));
 					deleteItem.setEnabled(true);
 				} else {
 					deleteItem.setEnabled(false);

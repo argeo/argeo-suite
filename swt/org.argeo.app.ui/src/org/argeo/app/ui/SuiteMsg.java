@@ -4,11 +4,18 @@ import org.argeo.cms.Localized;
 
 /** Localized messages. */
 public enum SuiteMsg implements Localized {
+	// Entities
+	user, org, person, group,
+	// UI parts
 	dashboard, people, documents, locations, recentItems,
 	// NewPersonWizard
-	firstName, lastName, salutation, email, personWizardWindowTitle, personWizardPageTitle,
+	firstName, lastName, salutation, email, personWizardWindowTitle, personWizardPageTitle, personWizardFeedback,
 	// NewOrgWizard
-	orgWizardWindowTitle, orgWizardPageTitle, legalName, legalForm, vatId,
+	orgWizardWindowTitle, orgWizardPageTitle, orgWizardFeedback, legalName, legalForm, vatId,
+	// Roles
+	userAdminRole, groupAdminRole, publisherRole, coworkerRole,
+	// Group
+	chooseAMember,
 	// ContextAddressComposite
 	chooseAnOrganisation, street, streetComplement, zipCode, city, state, country, geopoint,
 	// FilteredOrderableEntityTable
@@ -31,7 +38,7 @@ public enum SuiteMsg implements Localized {
 	label, aCustomLabel, description, value, name, primary, add, save, pickup,
 	// Tag
 	confirmNewTag, cannotCreateTag,
-	// Feddback messages
+	// Feedback messages
 	allFieldsMustBeSet,
 	//
 	;

@@ -43,6 +43,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.xalan.processor.TransformerFactoryImpl;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.ux.CmsTheme;
 import org.argeo.app.docbook.DbkType;
 import org.argeo.app.docbook.DbkUtils;
@@ -59,6 +60,8 @@ import org.w3c.dom.Document;
 public class DbkServlet extends HttpServlet {
 	private static final long serialVersionUID = 6906020513498289335L;
 
+	private CmsLog log = CmsLog.getLog(DbkServlet.class);
+
 	private Repository repository;
 
 	private DocumentBuilderFactory documentBuilderFactory;
@@ -69,6 +72,8 @@ public class DbkServlet extends HttpServlet {
 	private Templates docBoookFoTemplates;
 
 	private Map<String, CmsTheme> themes = Collections.synchronizedMap(new HashMap<>());
+
+	private String xslBase;
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -139,7 +144,7 @@ public class DbkServlet extends HttpServlet {
 						Source xmlInput = new DOMSource(doc);
 
 						if (pdf) {
-							//String baseUri = req.getRequestURI();
+							// String baseUri = req.getRequestURI();
 							FopFactory fopFactory = FopFactory.newInstance(URI.create(req.getRequestURL().toString()));
 							resp.setContentType("application/pdf");
 
@@ -161,16 +166,16 @@ public class DbkServlet extends HttpServlet {
 //								fopTransformer.transform(src, fopResult);
 //							}
 //
-							
+
 							Fop fop = fopFactory.newFop("application/pdf", resp.getOutputStream());
-							Transformer docBookTransformer = docBoookFoTemplates.newTransformer();
+							Transformer docBookTransformer = getDocBoookFoTemplates().newTransformer();
 							Result fopResult = new SAXResult(fop.getDefaultHandler());
 							docBookTransformer.transform(xmlInput, fopResult);
 
 						} else {
 							Result xmlOutput = new StreamResult(resp.getOutputStream());
 							resp.setContentType("text/html");
-							Transformer docBookTransformer = docBoookHtmlTemplates.newTransformer();
+							Transformer docBookTransformer = getDocBoookHtmlTemplates().newTransformer();
 
 							// gather CSS
 							if (cmsTheme != null) {
@@ -226,7 +231,7 @@ public class DbkServlet extends HttpServlet {
 	public void init() throws ServletException {
 
 		// TODO improve configuration and provisioning of DocBook XSL
-		String xslBase = System.getProperty("argeo.docbook.xsl");
+		xslBase = System.getProperty("argeo.docbook.xsl");
 		if (xslBase == null) {
 			// We need namespace aware XSL!
 			// Fedora (sudo dnf install docbook5-style-xsl)
@@ -234,8 +239,8 @@ public class DbkServlet extends HttpServlet {
 			if (!Files.exists(Paths.get(defaultXslBase))) {
 				defaultXslBase = "/opt/docbook-xsl";
 				if (!Files.exists(Paths.get(defaultXslBase))) {
-					throw new ServletException("System property argeo.docbook.xsl is not set and default location "
-							+ defaultXslBase + " does not exist.");
+					log.error("System property argeo.docbook.xsl is not set and default location " + defaultXslBase
+							+ " does not exist.");
 				}
 			}
 			xslBase = defaultXslBase;
@@ -246,18 +251,15 @@ public class DbkServlet extends HttpServlet {
 		documentBuilderFactory.setXIncludeAware(true);
 		documentBuilderFactory.setNamespaceAware(true);
 
-		// We must explicitly use the non-XSLTC transformer, as XSLTC is not working
-		// with DocBook stylesheets
-		transformerFactory = new TransformerFactoryImpl();
-
-		String htmlXsl = xslBase + "/html/docbook.xsl";
-		docBoookHtmlTemplates = createDocBookTemplates(htmlXsl);
-		String foXsl = xslBase + "/fo/docbook.xsl";
-		docBoookFoTemplates = createDocBookTemplates(foXsl);
 	}
 
 	protected Templates createDocBookTemplates(String xsl) {
 		try {
+			if (transformerFactory == null) {
+				// We must explicitly use the non-XSLTC transformer, as XSLTC is not working
+				// with DocBook stylesheets
+				transformerFactory = new TransformerFactoryImpl();
+			}
 			Source xslSource = new StreamSource(xsl);
 			Templates templates = transformerFactory.newTemplates(xslSource);
 			if (templates == null)
@@ -267,6 +269,22 @@ public class DbkServlet extends HttpServlet {
 			throw new IllegalStateException("Cannot instantiate XSL " + xsl, e);
 		}
 
+	}
+
+	protected Templates getDocBoookHtmlTemplates() {
+		if (docBoookHtmlTemplates == null) {
+			String htmlXsl = xslBase + "/html/docbook.xsl";
+			docBoookHtmlTemplates = createDocBookTemplates(htmlXsl);
+		}
+		return docBoookHtmlTemplates;
+	}
+
+	protected Templates getDocBoookFoTemplates() {
+		if (docBoookFoTemplates == null) {
+			String foXsl = xslBase + "/fo/docbook.xsl";
+			docBoookFoTemplates = createDocBookTemplates(foXsl);
+		}
+		return docBoookFoTemplates;
 	}
 
 	public void setRepository(Repository repository) {

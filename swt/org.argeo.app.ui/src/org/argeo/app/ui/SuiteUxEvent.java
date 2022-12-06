@@ -10,8 +10,8 @@ import org.argeo.api.cms.CmsEvent;
 import org.argeo.jcr.Jcr;
 import org.osgi.service.useradmin.User;
 
-/** Events specific to Argeo Suite. */
-public enum SuiteEvent implements CmsEvent {
+/** Events specific to Argeo Suite UX. */
+public enum SuiteUxEvent implements CmsEvent {
 	openNewPart, refreshPart, switchLayer;
 
 	public final static String LAYER = "layer";
@@ -19,12 +19,6 @@ public enum SuiteEvent implements CmsEvent {
 
 	// ACR
 	public final static String CONTENT_PATH = "contentPath";
-
-	// JCR
-	@Deprecated
-	public final static String NODE_PATH = "path";
-	@Deprecated
-	public final static String WORKSPACE = "workspace";
 
 	public String getTopicBase() {
 		return "argeo.suite.ui";
@@ -41,8 +35,6 @@ public enum SuiteEvent implements CmsEvent {
 		Map<String, Object> properties = new HashMap<>();
 		String contentPath = '/' + Jcr.getWorkspaceName(node) + Jcr.getPath(node);
 		properties.put(CONTENT_PATH, contentPath);
-//		properties.put(NODE_PATH, Jcr.getPath(node));
-//		properties.put(WORKSPACE, Jcr.getWorkspaceName(node));
 		return properties;
 	}
 

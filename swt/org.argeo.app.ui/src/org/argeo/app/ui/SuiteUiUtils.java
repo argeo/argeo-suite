@@ -17,13 +17,10 @@ import org.argeo.api.cms.CmsEvent;
 import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.api.cms.ux.CmsIcon;
 import org.argeo.api.cms.ux.CmsStyle;
-import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
-import org.argeo.app.api.SuiteRole;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
-import org.argeo.cms.auth.CurrentUser;
 import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -72,6 +69,10 @@ public class SuiteUiUtils {
 			CmsSwtUtils.style(editBtn, SuiteStyle.inlineButton);
 			editBtn.setText("Edit");
 		}
+	}
+
+	public static Label addFormLabel(Composite parent, Localized msg) {
+		return addFormLabel(parent, msg.lead());
 	}
 
 	public static Label addFormLabel(Composite parent, String label) {
@@ -241,7 +242,8 @@ public class SuiteUiUtils {
 		boolean test = false;
 		if (test) {
 			try (InputStream in = JcrUtils.getFileAsStream(fileNode);
-					OutputStream out = Files.newOutputStream(Paths.get("/home/mbaudier/tmp/" + fileNode.getName()));) {
+					OutputStream out = Files.newOutputStream(
+							Paths.get(System.getProperty("user.home") + "/tmp/" + fileNode.getName()));) {
 //				BufferedImage img = ImageIO.read(in);
 //				System.out.println(fileNode.getName() + ": width=" + img.getWidth() + ", height=" + img.getHeight());
 				IOUtils.copy(in, out);
@@ -381,7 +383,9 @@ public class SuiteUiUtils {
 		Label lbl = new Label(parent, SWT.NONE);
 		CmsSwtUtils.markup(lbl);
 		StringBuilder txt = new StringBuilder();
-		txt.append("<a class='" + plainCssAnchorClass + "'");
+		txt.append("<a");
+		if (plainCssAnchorClass != null)
+			txt.append(" class='" + plainCssAnchorClass + "'");
 		txt.append(" href='").append(url).append("'");
 		if (newWindow) {
 			txt.append(" target='blank_'");
@@ -420,7 +424,7 @@ public class SuiteUiUtils {
 			lbl.setText(txt);
 			lbl.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));
 		}
-		CmsSwtUtils.sendEventOnSelect(button, SuiteEvent.switchLayer.topic(), SuiteEvent.LAYER, layer);
+		CmsSwtUtils.sendEventOnSelect(button, SuiteUxEvent.switchLayer.topic(), SuiteUxEvent.LAYER, layer);
 		return button;
 	}
 

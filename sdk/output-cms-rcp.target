@@ -3,16 +3,8 @@
 <target name="(output) CMS RCP">
 	<locations>
 		<location path="${project_loc:argeo-suite}/../output/a2/org.argeo.cms" type="Directory"/>
-		<location path="${project_loc:argeo-suite}/../output/a2/org.argeo.cms.eclipse.rcp" type="Directory"/>
-		<location path="${project_loc:argeo-suite}/../output/a2/org.argeo.tp.apache" type="Directory"/>
-		<location path="${project_loc:argeo-suite}/../output/a2/org.argeo.tp.eclipse.equinox" type="Directory"/>
-		<location path="${project_loc:argeo-suite}/../output/a2/org.argeo.tp.eclipse.rcp" type="Directory"/>
-		<location path="${project_loc:argeo-suite}/../output/a2/org.argeo.tp.jetty" type="Directory"/>
-		<location path="${project_loc:argeo-suite}/../output/a2/org.argeo.tp.sdk" type="Directory"/>
-		<location path="${project_loc:argeo-suite}/../output/a2/org.argeo.tp.jcr" type="Directory"/>
-		<location path="${project_loc:argeo-suite}/../output/a2/org.argeo.tp" type="Directory"/>
-		<location path="${project_loc:argeo-suite}/../output/a2/org.argeo.tp.formats" type="Directory"/>
-		<location path="${project_loc:argeo-suite}/../output/a2/org.argeo.tp.poi" type="Directory"/>
-		<location path="${project_loc:argeo-suite}/../output/a2/org.argeo.tp.gis" type="Directory"/>
+		<location path="${project_loc:argeo-suite}/../output/a2/swt/org.argeo.cms" type="Directory"/>
+		<location path="${project_loc:argeo-suite}/../output/a2/swt/rcp/org.argeo.cms" type="Directory"/>
+		<location type="Target" uri="file:${project_loc:argeo-tp}/sdk/output-argeo-tp-swt.target"/>
 	</locations>
 </target>

@@ -9,18 +9,18 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.argeo.api.acr.Content;
+import org.argeo.api.acr.ldap.LdapAttr;
+import org.argeo.api.acr.ldap.LdapObj;
+import org.argeo.api.cms.directory.CmsUser;
+import org.argeo.api.cms.directory.CmsUserManager;
+import org.argeo.api.cms.directory.HierarchyUnit;
 import org.argeo.app.core.SuiteUtils;
 import org.argeo.app.ui.SuiteMsg;
 import org.argeo.app.ui.SuiteUiUtils;
-import org.argeo.cms.CmsUserManager;
-import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.swt.dialogs.CmsFeedback;
 import org.argeo.cms.swt.widgets.SwtGuidedFormPage;
 import org.argeo.cms.ux.widgets.AbstractGuidedForm;
 import org.argeo.eclipse.ui.EclipseUiUtils;
-import org.argeo.util.directory.HierarchyUnit;
-import org.argeo.util.naming.LdapAttrs;
-import org.argeo.util.naming.LdapObjs;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -28,7 +28,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
-import org.osgi.service.useradmin.User;
 
 /** Ask first & last name. Update the passed node on finish */
 public class NewUserForm extends AbstractGuidedForm {
@@ -41,7 +40,7 @@ public class NewUserForm extends AbstractGuidedForm {
 
 	public NewUserForm(CmsUserManager cmsUserManager, Content hierarchyUnit) {
 		this.hierarchyUnit = hierarchyUnit;
-		if (!hierarchyUnit.hasContentClass(LdapObjs.posixGroup.qName()))
+		if (!hierarchyUnit.hasContentClass(LdapObj.posixGroup.qName()))
 			throw new IllegalArgumentException(hierarchyUnit + " is not a POSIX group");
 		this.cmsUserManager = cmsUserManager;
 	}
@@ -49,7 +48,7 @@ public class NewUserForm extends AbstractGuidedForm {
 	@Override
 	public void addPages() {
 		try {
-			MainInfoPage page = new MainInfoPage("Main page");
+			MainInfoPage page = new MainInfoPage("main");
 			addPage(page);
 		} catch (Exception e) {
 			throw new RuntimeException("Cannot add page to wizard", e);
@@ -77,25 +76,25 @@ public class NewUserForm extends AbstractGuidedForm {
 			String username = "uid=" + uid + ",ou=People," + hu.getBase();
 
 			Map<String, Object> properties = new HashMap<>();
-			properties.put(LdapAttrs.givenName.name(), firstName);
-			properties.put(LdapAttrs.sn.name(), lastName);
-			properties.put(LdapAttrs.mail.name(), email);
-			properties.put(LdapAttrs.cn.name(), firstName + " " + lastName);
-			properties.put(LdapAttrs.employeeNumber.name(), uuid.toString());
+			properties.put(LdapAttr.givenName.name(), firstName);
+			properties.put(LdapAttr.sn.name(), lastName);
+			properties.put(LdapAttr.mail.name(), email);
+			properties.put(LdapAttr.cn.name(), firstName + " " + lastName);
+			properties.put(LdapAttr.employeeNumber.name(), uuid.toString());
 
 			Map<String, Object> credentials = new HashMap<>();
-			User user = cmsUserManager.createUser(username, properties, credentials);
+			CmsUser user = cmsUserManager.createUser(username, properties, credentials);
 
-			Long huGidNumber = hierarchyUnit.get(LdapAttrs.gidNumber.qName(), Long.class).orElseThrow();
-			Long nextUserId = SuiteUtils.findNextId(hierarchyUnit, LdapObjs.posixAccount.qName());
+			Long huGidNumber = hierarchyUnit.get(LdapAttr.gidNumber.qName(), Long.class).orElseThrow();
+			Long nextUserId = SuiteUtils.findNextId(hierarchyUnit, LdapObj.posixAccount.qName());
 			String homeDirectory = "/home/" + uid;
 			Map<String, Object> additionalProperties = new HashMap<>();
-			additionalProperties.put(LdapAttrs.uidNumber.name(), nextUserId.toString());
-			additionalProperties.put(LdapAttrs.gidNumber.name(), huGidNumber.toString());
-			additionalProperties.put(LdapAttrs.homeDirectory.name(), homeDirectory);
+			additionalProperties.put(LdapAttr.uidNumber.name(), nextUserId.toString());
+			additionalProperties.put(LdapAttr.gidNumber.name(), huGidNumber.toString());
+			additionalProperties.put(LdapAttr.homeDirectory.name(), homeDirectory);
 
 			Set<String> objectClasses = new HashSet<>();
-			objectClasses.add(LdapObjs.posixAccount.name());
+			objectClasses.add(LdapObj.posixAccount.name());
 			cmsUserManager.addObjectClasses(user, objectClasses, additionalProperties);
 			return true;
 		}
