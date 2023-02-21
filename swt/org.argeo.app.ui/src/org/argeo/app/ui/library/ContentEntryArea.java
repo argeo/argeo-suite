@@ -1,6 +1,7 @@
 package org.argeo.app.ui.library;
 
 import org.argeo.api.acr.Content;
+import org.argeo.api.acr.NamespaceUtils;
 import org.argeo.api.acr.spi.ProvidedContent;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.ux.CmsView;
@@ -26,7 +27,7 @@ public class ContentEntryArea implements SwtUiProvider {
 
 		new Label(parent, 0).setText(context.toString());
 
-		Content rootContent = ((ProvidedContent) context).getSession().getRepository().get().get("/srv");
+		Content rootContent = ((ProvidedContent) context).getSession().getRepository().get().get("/sys");
 
 		ContentHierarchicalPart contentPart = new ContentHierarchicalPart() {
 
@@ -36,7 +37,9 @@ public class ContentEntryArea implements SwtUiProvider {
 					return true;
 				return super.isLeaf(content);
 			}
+
 		};
+		contentPart.addColumn((c) -> NamespaceUtils.toPrefixedName(c.getName()));
 		contentPart.setInput(rootContent);
 
 		SwtTreeView<Content> view = new SwtTreeView<>(parent, 0, contentPart);
