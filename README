@@ -1,0 +1,21 @@
+Argeo Suite provides components and APIs to build productivity or reporting appalications.
+
+## Build
+Prerequisites to build this layer:
+- build Argeo TP
+- build Argeo Commons
+- build Argeo JCR
+(cf. http://git.argeo.org)
+
+Then, run:
+
+git clone http://git.argeo.org/gpl/argeo-suite.git --recursive
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/
+./argeo-suite/configure
+
+cd argeo-suite
+make clean all
+
+In order to use it within an Eclipse PDE environment:
+
+make clean all manifests
