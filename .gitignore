@@ -4,3 +4,4 @@
 **/MANIFEST.MF
 **/.DS_Store
 /sdk.mk
+/output/
