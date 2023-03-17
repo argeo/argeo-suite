@@ -16,9 +16,6 @@ org.argeo.app.profile.acr.jcr \
 swt/org.argeo.app.swt \
 swt/org.argeo.app.ui \
 
-A2_OUTPUT = $(SDK_BUILD_BASE)/a2
-A2_BASE = $(A2_OUTPUT)
-
 DEP_CATEGORIES = \
 org.argeo.tp \
 org.argeo.tp.jetty \
