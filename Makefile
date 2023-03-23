@@ -18,10 +18,12 @@ swt/org.argeo.app.ui \
 
 DEP_CATEGORIES = \
 org.argeo.tp \
-org.argeo.tp.jetty \
+org.argeo.tp.httpd \
 org.argeo.tp.jcr \
 org.argeo.tp.utils \
-org.argeo.tp.gis \
+org.argeo.tp.publish \
+org.argeo.tp.math \
+org.argeo.tp.earth \
 osgi/api/org.argeo.tp.osgi \
 osgi/equinox/org.argeo.tp.eclipse \
 swt/rap/org.argeo.tp.swt \
