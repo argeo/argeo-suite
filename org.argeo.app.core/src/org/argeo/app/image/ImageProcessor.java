@@ -196,13 +196,22 @@ public class ImageProcessor {
 	}
 
 	public static void main(String[] args) throws Exception {
+		if (args.length < 2)
+			throw new IllegalArgumentException(
+					"Usage: " + ImageProcessor.class.getSimpleName() + " <source image> <target image>");
 		Path imagePath = Paths.get(args[0]);
 		Path targetPath = Paths.get(args[1]);
+
+		System.out.println("## Source metadata:");
+		try (InputStream in = Files.newInputStream(imagePath)) {
+			metadataExample(in, null);
+		}
 
 		ImageProcessor imageProcessor = new ImageProcessor(() -> Files.newInputStream(imagePath),
 				() -> Files.newOutputStream(targetPath));
 		imageProcessor.process();
 
+		System.out.println("## Target metadata:");
 		try (InputStream in = Files.newInputStream(targetPath)) {
 			metadataExample(in, null);
 		}
