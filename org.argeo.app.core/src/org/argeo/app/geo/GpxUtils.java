@@ -2,8 +2,14 @@ package org.argeo.app.geo;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.StringTokenizer;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -25,7 +31,7 @@ import org.xml.sax.helpers.DefaultHandler;
 /** Utilities around the GPX format. */
 public class GpxUtils {
 
-	public static SimpleFeature parseGpxToPolygon(InputStream in) {
+	public static SimpleFeature parseGpxToPolygon(InputStream in) throws IOException {
 		try {
 			final SimpleFeatureType TYPE = DataUtilities.createType("Area", "the_geom:Polygon:srid=4326");
 			SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(TYPE);
@@ -56,9 +62,35 @@ public class GpxUtils {
 			featureBuilder.add(polygon);
 			SimpleFeature area = featureBuilder.buildFeature(null);
 			return area;
-		} catch (ParserConfigurationException | SAXException | IOException | SchemaException e) {
+		} catch (ParserConfigurationException | SAXException | SchemaException e) {
 			throw new RuntimeException("Cannot convert GPX", e);
 		}
+	}
+
+	public static void writeGeoShapeAsGpx(String geoShape, OutputStream out) throws IOException {
+		Objects.requireNonNull(geoShape);
+		Writer writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
+		writer.append("<gpx><trk><trkseg>");
+		StringTokenizer stSeg = new StringTokenizer(geoShape.trim(), ";");
+		while (stSeg.hasMoreTokens()) {
+			StringTokenizer stPt = new StringTokenizer(stSeg.nextToken().trim(), " ");
+			String lat = stPt.nextToken();
+			String lng = stPt.nextToken();
+			String alt = stPt.nextToken();
+			// String precision = stPt.nextToken();
+			writer.append("<trkpt");
+			writer.append(" lat=\"").append(lat).append('\"');
+			writer.append(" lon=\"").append(lng).append('\"');
+			if (!alt.equals("0.0")) {
+				writer.append('>');
+				writer.append("<ele>").append(alt).append("</ele>");
+				writer.append("</trkpt>");
+			} else {
+				writer.append("/>");
+			}
+		}
+		writer.append("</trkseg></trk></gpx>");
+		writer.flush();
 	}
 
 	/** Singleton. */
