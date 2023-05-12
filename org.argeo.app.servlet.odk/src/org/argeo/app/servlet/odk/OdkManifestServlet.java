@@ -54,12 +54,9 @@ public class OdkManifestServlet extends HttpServlet {
 		if (pathInfo.startsWith("//"))
 			pathInfo = pathInfo.substring(1);
 
-//		String serverName = req.getServerName();
-//		int serverPort = req.getServerPort();
-//		String protocol = serverPort == 443 || req.isSecure() ? "https" : "http";
-//		String baseServer = protocol + "://" + serverName
-//				+ (serverPort == 80 || serverPort == 443 ? "" : ":" + serverPort);
-		StringBuilder baseServer = ServletUtils.getRequestUrlBase(req);
+		// we force HTTPS since ODK Collect will fail anyhow when sending http
+		// cf. https://forum.getodk.org/t/authentication-for-non-https-schems/32967/4
+		StringBuilder baseServer = ServletUtils.getRequestUrlBase(req, true);
 
 		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), new ServletHttpRequest(req));
 
