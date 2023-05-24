@@ -42,7 +42,6 @@ import javax.xml.transform.stream.StreamSource;
 import org.apache.commons.io.IOUtils;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
-import org.apache.xalan.processor.TransformerFactoryImpl;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.ux.CmsTheme;
 import org.argeo.app.docbook.DbkType;
@@ -53,6 +52,8 @@ import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
 import org.w3c.dom.Document;
+
+import net.sf.saxon.BasicTransformerFactory;
 
 /**
  * A servlet transforming a dbk:* JCR node into HTML, using the DocBook XSL.
@@ -256,9 +257,10 @@ public class DbkServlet extends HttpServlet {
 	protected Templates createDocBookTemplates(String xsl) {
 		try {
 			if (transformerFactory == null) {
+				transformerFactory = new BasicTransformerFactory();
 				// We must explicitly use the non-XSLTC transformer, as XSLTC is not working
 				// with DocBook stylesheets
-				transformerFactory = new TransformerFactoryImpl();
+//				transformerFactory = new TransformerFactoryImpl();
 			}
 			Source xslSource = new StreamSource(xsl);
 			Templates templates = transformerFactory.newTemplates(xslSource);

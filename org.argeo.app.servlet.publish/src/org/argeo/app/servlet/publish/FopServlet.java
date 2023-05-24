@@ -35,7 +35,6 @@ import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.FopFactoryBuilder;
-import org.apache.xalan.processor.TransformerFactoryImpl;
 import org.apache.xmlgraphics.io.Resource;
 import org.apache.xmlgraphics.io.ResourceResolver;
 import org.argeo.api.acr.Content;
@@ -50,6 +49,8 @@ import org.argeo.cms.util.LangUtils;
 import org.geotools.data.collection.ListFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.opengis.feature.simple.SimpleFeature;
+
+import net.sf.saxon.BasicTransformerFactory;
 
 /**
  * A servlet transforming an XML view of the data to either FOP or PDF.
@@ -80,7 +81,7 @@ public class FopServlet extends HttpServlet {
 		Content content = session.get(path);
 
 		// dev only
-		final boolean DEV = false;
+		final boolean DEV = true;
 		if (DEV) {
 			try (InputStream in = xslUrl.openStream()) {
 				Source xslSource = new StreamSource(in);
@@ -92,7 +93,7 @@ public class FopServlet extends HttpServlet {
 			}
 
 			Source xmlInput = content.adapt(Source.class);
-			XmlNormalizer.print(xmlInput,0);
+			XmlNormalizer.print(xmlInput, 0);
 		}
 
 		Source xmlInput = content.adapt(Source.class);
@@ -131,6 +132,7 @@ public class FopServlet extends HttpServlet {
 			}
 
 			String p = href.startsWith("/") ? href : path + '/' + href;
+			p = URLDecoder.decode(p, StandardCharsets.UTF_8);
 			Content subContent = session.get(p);
 			return subContent.adapt(Source.class);
 		};
@@ -191,9 +193,7 @@ public class FopServlet extends HttpServlet {
 		documentBuilderFactory.setXIncludeAware(true);
 		documentBuilderFactory.setNamespaceAware(true);
 
-		// We must explicitly use the non-XSLTC transformer, as XSLTC is not working
-		// with DocBook stylesheets
-		transformerFactory = new TransformerFactoryImpl();
+		transformerFactory = new BasicTransformerFactory();
 //		transformerFactory = TransformerFactory.newDefaultInstance();
 		try {
 			String xslStr = LangUtils.get(properties, PROP_ARGEO_FO_XSL);
