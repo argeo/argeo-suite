@@ -2,6 +2,10 @@ include sdk.mk
 .PHONY: clean all osgi
 
 all: osgi
+	
+install: osgi-install
+
+uninstall: osgi-uninstall
 
 A2_CATEGORY = org.argeo.suite
 
