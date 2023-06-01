@@ -18,7 +18,6 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Property;
 import javax.jcr.PropertyIterator;
 import javax.jcr.RepositoryException;
-import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.io.IOUtils;
 import org.argeo.app.docbook.DbkAttr;
@@ -28,7 +27,7 @@ import org.argeo.jcr.JcrException;
 
 /** Based on HTML with a few Wiki-like shortcuts. */
 public class DbkTextInterpreter implements TextInterpreter {
-	private DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+//	private DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 
 	private String linkCssClass = DbkType.link.name();
 
@@ -242,8 +241,6 @@ public class DbkTextInterpreter implements TextInterpreter {
 				sb.append(lines.get(i));
 			}
 			return sb.toString();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
 		}
 	}
 

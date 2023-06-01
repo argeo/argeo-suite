@@ -23,11 +23,13 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.xalan.processor.TransformerFactoryImpl;
 import org.argeo.jcr.JcrException;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import net.sf.saxon.BasicTransformerFactory;
+import net.sf.saxon.TransformerFactoryImpl;
 
 /** Convert from DocBook v4 to DocBook v5, using the official XSL. */
 public class Dbk4Converter {
@@ -36,7 +38,8 @@ public class Dbk4Converter {
 	public Dbk4Converter() {
 		try (InputStream in = getClass().getResourceAsStream("db4-upgrade.xsl")) {
 			Source xsl = new StreamSource(in);
-			TransformerFactory transformerFactory = new TransformerFactoryImpl();
+			TransformerFactory transformerFactory = new BasicTransformerFactory();
+//			TransformerFactory transformerFactory = new TransformerFactoryImpl();
 			templates = transformerFactory.newTemplates(xsl);
 		} catch (IOException | TransformerConfigurationException e) {
 			throw new RuntimeException("Cannot initialise DocBook v4 converter", e);

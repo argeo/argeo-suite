@@ -2,6 +2,10 @@ include sdk.mk
 .PHONY: clean all osgi
 
 all: osgi
+	
+install: osgi-install
+
+uninstall: osgi-uninstall
 
 A2_CATEGORY = org.argeo.suite
 
@@ -16,15 +20,14 @@ org.argeo.app.profile.acr.jcr \
 swt/org.argeo.app.swt \
 swt/org.argeo.app.ui \
 
-A2_OUTPUT = $(SDK_BUILD_BASE)/a2
-A2_BASE = $(A2_OUTPUT)
-
 DEP_CATEGORIES = \
 org.argeo.tp \
-org.argeo.tp.jetty \
+org.argeo.tp.httpd \
 org.argeo.tp.jcr \
 org.argeo.tp.utils \
-org.argeo.tp.gis \
+org.argeo.tp.publish \
+org.argeo.tp.math \
+org.argeo.tp.earth \
 osgi/api/org.argeo.tp.osgi \
 osgi/equinox/org.argeo.tp.eclipse \
 swt/rap/org.argeo.tp.swt \

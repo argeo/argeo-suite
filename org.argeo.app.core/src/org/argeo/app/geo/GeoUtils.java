@@ -1,15 +1,26 @@
 package org.argeo.app.geo;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.Writer;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.measure.Quantity;
 import javax.measure.quantity.Area;
 
+import org.geotools.data.DefaultTransaction;
+import org.geotools.data.Transaction;
+import org.geotools.data.collection.ListFeatureCollection;
+import org.geotools.data.shapefile.ShapefileDataStore;
+import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
+import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.data.simple.SimpleFeatureStore;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
@@ -17,6 +28,7 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -100,6 +112,44 @@ public class GeoUtils {
 			out.write("</svg>");
 		} catch (IOException | FactoryException | MismatchedDimensionException | TransformException e) {
 			throw new RuntimeException("Cannot export to SVG", e);
+		}
+	}
+
+	/** Write a list of simple features to a shapefile. */
+	public static void saveFeaturesAsShapefile(SimpleFeatureType featureType, List<SimpleFeature> features,
+			Path shpFile) {
+		try {
+			ShapefileDataStoreFactory dataStoreFactory = new ShapefileDataStoreFactory();
+
+			Map<String, Serializable> params = new HashMap<>();
+			params.put("url", shpFile.toUri().toURL());
+
+			params.put("create spatial index", Boolean.TRUE);
+
+			ShapefileDataStore newDataStore = (ShapefileDataStore) dataStoreFactory.createNewDataStore(params);
+			newDataStore.createSchema(featureType);
+
+			String typeName = newDataStore.getTypeNames()[0];
+			SimpleFeatureSource featureSource = newDataStore.getFeatureSource(typeName);
+			if (featureSource instanceof SimpleFeatureStore) {
+				SimpleFeatureStore featureStore = (SimpleFeatureStore) featureSource;
+				SimpleFeatureCollection collection = new ListFeatureCollection(featureType, features);
+
+				try (Transaction transaction = new DefaultTransaction("create")) {
+					try {
+						featureStore.setTransaction(transaction);
+						featureStore.addFeatures(collection);
+						transaction.commit();
+					} catch (Exception problem) {
+						transaction.rollback();
+						throw new RuntimeException("Cannot write shapefile " + shpFile, problem);
+					}
+				}
+			} else {
+				throw new IllegalArgumentException(typeName + " does not support read/write access");
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot write shapefile " + shpFile, e);
 		}
 	}
 

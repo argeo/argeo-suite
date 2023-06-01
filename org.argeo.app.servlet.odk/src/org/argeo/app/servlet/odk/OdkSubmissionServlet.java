@@ -54,7 +54,9 @@ public class OdkSubmissionServlet extends HttpServlet {
 		resp.setContentType("text/xml; charset=utf-8");
 		resp.setHeader("X-OpenRosa-Version", "1.0");
 		resp.setDateHeader("Date", System.currentTimeMillis());
-		resp.setIntHeader("X-OpenRosa-Accept-Content-Length", 1024 * 1024);
+		
+		// should be set in HEAD? Let's rather use defaults.
+		//resp.setIntHeader("X-OpenRosa-Accept-Content-Length", 1024 * 1024);
 
 		RemoteAuthRequest request = new ServletHttpRequest(req);
 		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), request);

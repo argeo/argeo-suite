@@ -18,18 +18,16 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
 import org.argeo.api.acr.Content;
-import org.argeo.app.docbook.DbkType;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
 
 /** Based on HTML with a few Wiki-like shortcuts. */
 public class DbkTextInterpreter implements TextInterpreter {
 
 	private TransformerFactory transformerFactory = TransformerFactory.newDefaultInstance();
 
-	private String linkCssClass = DbkType.link.name();
+//	private String linkCssClass = DbkType.link.name();
 
 	@Override
 	public void write(Content node, String content) {
@@ -184,7 +182,7 @@ public class DbkTextInterpreter implements TextInterpreter {
 //				Text text = (Text) n;
 //				sb.append(text.getTextContent());
 //			} else 
-				if (n instanceof Element) {
+			if (n instanceof Element) {
 				Element elem = (Element) n;
 				sb.append(elem.getTextContent());
 			}
@@ -246,8 +244,6 @@ public class DbkTextInterpreter implements TextInterpreter {
 				sb.append(lines.get(i));
 			}
 			return sb.toString();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
 		}
 	}
 
