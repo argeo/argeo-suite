@@ -81,7 +81,7 @@ public class FopServlet extends HttpServlet {
 		Content content = session.get(path);
 
 		// dev only
-		final boolean DEV = true;
+		final boolean DEV = false;
 		if (DEV) {
 			try (InputStream in = xslUrl.openStream()) {
 				Source xslSource = new StreamSource(in);
