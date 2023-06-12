@@ -1,14 +1,10 @@
-package org.argeo.app.ui;
+package org.argeo.app.ux;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.jcr.Node;
-
 import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsEvent;
-import org.argeo.jcr.Jcr;
-import org.osgi.service.useradmin.User;
 
 /** Events specific to Argeo Suite UX. */
 public enum SuiteUxEvent implements CmsEvent {
@@ -30,17 +26,9 @@ public enum SuiteUxEvent implements CmsEvent {
 		return properties;
 	}
 
-	@Deprecated
-	public static Map<String, Object> eventProperties(Node node) {
-		Map<String, Object> properties = new HashMap<>();
-		String contentPath = '/' + Jcr.getWorkspaceName(node) + Jcr.getPath(node);
-		properties.put(CONTENT_PATH, contentPath);
-		return properties;
-	}
-
-	public static Map<String, Object> eventProperties(User user) {
-		Map<String, Object> properties = new HashMap<>();
-		properties.put(USERNAME, user.getName());
-		return properties;
-	}
+//	public static Map<String, Object> eventProperties(User user) {
+//		Map<String, Object> properties = new HashMap<>();
+//		properties.put(USERNAME, user.getName());
+//		return properties;
+//	}
 }

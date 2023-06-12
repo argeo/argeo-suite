@@ -1,10 +1,12 @@
-package org.argeo.app.ui;
+package org.argeo.app.swt.ux;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.argeo.api.acr.Content;
+import org.argeo.app.ux.SuiteIcon;
+import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -21,7 +23,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.wiring.BundleWiring;
 
 /** An app layer based on an entry area and an editor area. */
-public class DefaultEditionLayer implements SuiteLayer {
+public class DefaultEditionLayer implements SwtAppLayer {
 	private String id;
 	private SwtUiProvider entryArea;
 	private SwtUiProvider defaultView;
@@ -141,7 +143,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 		singleTab = properties.containsKey(Property.singleTab.name())
 				&& "true".equals(properties.get(Property.singleTab.name()));
 
-		String titleStr = (String) properties.get(SuiteLayer.Property.title.name());
+		String titleStr = (String) properties.get(SwtAppLayer.Property.title.name());
 		if (titleStr != null) {
 			if (titleStr.startsWith("%")) {
 				title = new Localized() {
@@ -163,7 +165,7 @@ public class DefaultEditionLayer implements SuiteLayer {
 			}
 		}
 
-		String singleTabTitleStr = (String) properties.get(SuiteLayer.Property.singleTabTitle.name());
+		String singleTabTitleStr = (String) properties.get(SwtAppLayer.Property.singleTabTitle.name());
 		if (singleTabTitleStr != null) {
 			if (singleTabTitleStr.startsWith("%")) {
 				singleTabTitle = new Localized() {

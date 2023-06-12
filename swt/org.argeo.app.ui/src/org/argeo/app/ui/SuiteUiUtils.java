@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.jcr.Node;
@@ -19,6 +21,8 @@ import org.argeo.api.cms.ux.CmsIcon;
 import org.argeo.api.cms.ux.CmsStyle;
 import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
+import org.argeo.app.ux.SuiteStyle;
+import org.argeo.app.ux.SuiteUxEvent;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
 import org.argeo.cms.jcr.acr.JcrContent;
@@ -426,6 +430,14 @@ public class SuiteUiUtils {
 		}
 		CmsSwtUtils.sendEventOnSelect(button, SuiteUxEvent.switchLayer.topic(), SuiteUxEvent.LAYER, layer);
 		return button;
+	}
+
+	@Deprecated
+	public static Map<String, Object> eventProperties(Node node) {
+		Map<String, Object> properties = new HashMap<>();
+		String contentPath = '/' + Jcr.getWorkspaceName(node) + Jcr.getPath(node);
+		properties.put(SuiteUxEvent.CONTENT_PATH, contentPath);
+		return properties;
 	}
 
 //	public static String createAndConfigureEntity(Shell shell, Session referenceSession, String mainMixin,

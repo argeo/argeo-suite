@@ -18,6 +18,8 @@ import javax.jcr.query.QueryResult;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.core.XPathUtils;
 import org.argeo.app.ui.widgets.DelayedText;
+import org.argeo.app.ux.SuiteIcon;
+import org.argeo.app.ux.SuiteUxEvent;
 import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
@@ -106,7 +108,7 @@ public class RecentItems implements CmsUiProvider {
 				Node node = (Node) entityViewer.getViewer().getStructuredSelection().getFirstElement();
 				if (node != null)
 					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteUxEvent.openNewPart.topic(),
-							SuiteUxEvent.eventProperties(node));
+							SuiteUiUtils.eventProperties(node));
 
 			}
 		});
@@ -115,7 +117,7 @@ public class RecentItems implements CmsUiProvider {
 				Node node = (Node) entityViewer.getViewer().getStructuredSelection().getFirstElement();
 				if (node != null) {
 					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteUxEvent.refreshPart.topic(),
-							SuiteUxEvent.eventProperties(node));
+							SuiteUiUtils.eventProperties(node));
 					deleteItem.setEnabled(true);
 				} else {
 					deleteItem.setEnabled(false);

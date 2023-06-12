@@ -13,6 +13,9 @@ import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.api.RankedObject;
 import org.argeo.app.core.SuiteUtils;
+import org.argeo.app.swt.ux.SwtAppLayer;
+import org.argeo.app.ux.SuiteIcon;
+import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.CurrentUser;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -35,7 +38,7 @@ public class DefaultLeadPane implements CmsUiProvider {
 		defaultLayers, adminLayers;
 	}
 
-	private Map<String, RankedObject<SuiteLayer>> layers = Collections.synchronizedSortedMap(new TreeMap<>());
+	private Map<String, RankedObject<SwtAppLayer>> layers = Collections.synchronizedSortedMap(new TreeMap<>());
 	private List<String> defaultLayers;
 	private List<String> adminLayers = new ArrayList<>();
 
@@ -98,11 +101,11 @@ public class DefaultLeadPane implements CmsUiProvider {
 //					if (intersection.isEmpty())
 //						continue layers;// skip unauthorized layer
 				}
-				RankedObject<SuiteLayer> layerObj = layers.get(layerId);
+				RankedObject<SwtAppLayer> layerObj = layers.get(layerId);
 
 				Localized title = null;
 				if (!adminLayers.contains(layerId)) {
-					String titleStr = (String) layerObj.getProperties().get(SuiteLayer.Property.title.name());
+					String titleStr = (String) layerObj.getProperties().get(SwtAppLayer.Property.title.name());
 					if (titleStr != null) {
 						if (titleStr.startsWith("%")) {
 							// LocaleUtils.local(titleStr, getClass().getClassLoader());
@@ -113,7 +116,7 @@ public class DefaultLeadPane implements CmsUiProvider {
 					}
 				}
 
-				String iconName = (String) layerObj.getProperties().get(SuiteLayer.Property.icon.name());
+				String iconName = (String) layerObj.getProperties().get(SwtAppLayer.Property.icon.name());
 				SuiteIcon icon = null;
 				if (iconName != null)
 					icon = SuiteIcon.valueOf(iconName);
@@ -153,18 +156,18 @@ public class DefaultLeadPane implements CmsUiProvider {
 
 	}
 
-	public void addLayer(SuiteLayer layer, Map<String, Object> properties) {
+	public void addLayer(SwtAppLayer layer, Map<String, Object> properties) {
 		if (properties.containsKey(Constants.SERVICE_PID)) {
 			String pid = (String) properties.get(Constants.SERVICE_PID);
 			RankedObject.putIfHigherRank(layers, pid, layer, properties);
 		}
 	}
 
-	public void removeLayer(SuiteLayer layer, Map<String, Object> properties) {
+	public void removeLayer(SwtAppLayer layer, Map<String, Object> properties) {
 		if (properties.containsKey(Constants.SERVICE_PID)) {
 			String pid = (String) properties.get(Constants.SERVICE_PID);
 			if (layers.containsKey(pid)) {
-				if (layers.get(pid).equals(new RankedObject<SuiteLayer>(layer, properties))) {
+				if (layers.get(pid).equals(new RankedObject<SwtAppLayer>(layer, properties))) {
 					layers.remove(pid);
 				}
 			}

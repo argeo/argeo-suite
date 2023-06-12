@@ -5,7 +5,7 @@ import org.argeo.api.acr.ldap.LdapAcrUtils;
 import org.argeo.api.acr.ldap.LdapAttr;
 import org.argeo.api.acr.ldap.LdapObj;
 import org.argeo.api.cms.ux.CmsIcon;
-import org.argeo.app.ui.SuiteIcon;
+import org.argeo.app.ux.SuiteIcon;
 import org.argeo.cms.CurrentUser;
 import org.argeo.cms.auth.UserAdminUtils;
 import org.argeo.cms.ux.widgets.Column;

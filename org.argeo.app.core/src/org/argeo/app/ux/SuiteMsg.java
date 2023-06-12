@@ -1,4 +1,4 @@
-package org.argeo.app.ui;
+package org.argeo.app.ux;
 
 import org.argeo.cms.Localized;
 

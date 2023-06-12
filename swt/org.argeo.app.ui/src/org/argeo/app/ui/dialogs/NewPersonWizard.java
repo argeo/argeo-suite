@@ -4,8 +4,8 @@ import static org.argeo.eclipse.ui.EclipseUiUtils.isEmpty;
 
 import javax.jcr.Node;
 
-import org.argeo.app.ui.SuiteMsg;
 import org.argeo.app.ui.SuiteUiUtils;
+import org.argeo.app.ux.SuiteMsg;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.Wizard;

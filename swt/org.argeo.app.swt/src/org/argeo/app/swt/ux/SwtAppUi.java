@@ -1,10 +1,11 @@
-package org.argeo.app.ui;
+package org.argeo.app.swt.ux;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsLog;
+import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtUi;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -13,9 +14,9 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 
 /** The view for the default UX of Argeo Suite. */
-class SuiteUi extends CmsSwtUi {
+public class SwtAppUi extends CmsSwtUi {
 	private static final long serialVersionUID = 6207018859086689108L;
-	private final static CmsLog log = CmsLog.getLog(SuiteUi.class);
+	private final static CmsLog log = CmsLog.getLog(SwtAppUi.class);
 
 	private Localized title;
 	private Composite header;
@@ -27,13 +28,13 @@ class SuiteUi extends CmsSwtUi {
 
 	private Content userDir;
 
-	private Map<String, SuiteLayer> layers = new HashMap<>();
+	private Map<String, SwtAppLayer> layers = new HashMap<>();
 	private Map<String, Composite> workAreas = new HashMap<>();
 	private String currentLayerId = null;
 
 	private boolean loginScreen = false;
 
-	public SuiteUi(Composite parent, int style) {
+	public SwtAppUi(Composite parent, int style) {
 		super(parent, style);
 		this.setLayout(CmsSwtUtils.noSpaceGridLayout());
 
@@ -86,13 +87,13 @@ class SuiteUi extends CmsSwtUi {
 	 * LAYERS
 	 */
 
-	Composite getCurrentWorkArea() {
+	public Composite getCurrentWorkArea() {
 		if (currentLayerId == null)
 			throw new IllegalStateException("No current layer");
 		return workAreas.get(currentLayerId);
 	}
 
-	String getCurrentLayerId() {
+	public String getCurrentLayerId() {
 		return currentLayerId;
 	}
 
@@ -104,7 +105,7 @@ class SuiteUi extends CmsSwtUi {
 		return workAreas.get(id);
 	}
 
-	Composite switchToLayer(String layerId, Content context) {
+	public Composite switchToLayer(String layerId, Content context) {
 		Composite current = null;
 		if (currentLayerId != null) {
 			current = getCurrentWorkArea();
@@ -134,10 +135,10 @@ class SuiteUi extends CmsSwtUi {
 		}
 	}
 
-	void switchToLayer(SuiteLayer layer, Content context) {
+	public void switchToLayer(SwtAppLayer layer, Content context) {
 		// TODO make it more robust
 		for (String layerId : layers.keySet()) {
-			SuiteLayer l = layers.get(layerId);
+			SwtAppLayer l = layers.get(layerId);
 			if (layer.getId().equals(l.getId())) {
 				switchToLayer(layerId, context);
 				return;
@@ -146,11 +147,11 @@ class SuiteUi extends CmsSwtUi {
 		throw new IllegalArgumentException("Layer is not registered.");
 	}
 
-	void addLayer(String id, SuiteLayer layer) {
+	public void addLayer(String id, SwtAppLayer layer) {
 		layers.put(id, layer);
 	}
 
-	void removeLayer(String id) {
+	public void removeLayer(String id) {
 		layers.remove(id);
 		if (workAreas.containsKey(id)) {
 			Composite workArea = workAreas.remove(id);
@@ -159,7 +160,7 @@ class SuiteUi extends CmsSwtUi {
 		}
 	}
 
-	protected Composite initLayer(String id, SuiteLayer layer, Content context) {
+	protected Composite initLayer(String id, SwtAppLayer layer, Content context) {
 		Composite workArea = getCmsView().doAs(() -> (Composite) layer.createUiPart(dynamicArea, context));
 		CmsSwtUtils.style(workArea, SuiteStyle.workArea);
 		workArea.setLayoutData(CmsSwtUtils.coverAll());
@@ -167,7 +168,7 @@ class SuiteUi extends CmsSwtUi {
 		return workArea;
 	}
 
-	synchronized void logout() {
+	public synchronized void logout() {
 		userDir = null;
 		currentLayerId = null;
 		workAreas.clear();
@@ -177,31 +178,31 @@ class SuiteUi extends CmsSwtUi {
 	 * GETTERS / SETTERS
 	 */
 
-	Composite getHeader() {
+	public Composite getHeader() {
 		return header;
 	}
 
-	Composite getFooter() {
+	public Composite getFooter() {
 		return footer;
 	}
 
-	Composite getLeadPane() {
+	public Composite getLeadPane() {
 		return leadPane;
 	}
 
-	Composite getSidePane() {
+	public Composite getSidePane() {
 		return sidePane;
 	}
 
-	Composite getBelowHeader() {
+	public Composite getBelowHeader() {
 		return belowHeader;
 	}
 
-	Content getUserDir() {
+	public Content getUserDir() {
 		return userDir;
 	}
 
-	void setUserDir(Content userDir) {
+	public void setUserDir(Content userDir) {
 		this.userDir = userDir;
 	}
 

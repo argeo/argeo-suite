@@ -1,7 +1,7 @@
 package org.argeo.app.ui.dialogs;
 
-import org.argeo.app.ui.SuiteMsg;
 import org.argeo.app.ui.SuiteUiUtils;
+import org.argeo.app.ux.SuiteMsg;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;

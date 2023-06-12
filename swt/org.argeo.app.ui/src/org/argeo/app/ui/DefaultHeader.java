@@ -4,6 +4,8 @@ import java.util.Map;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.cms.ux.CmsView;
+import org.argeo.app.ux.SuiteIcon;
+import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.CurrentUser;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtTheme;

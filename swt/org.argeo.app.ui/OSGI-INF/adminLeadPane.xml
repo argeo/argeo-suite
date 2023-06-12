@@ -8,5 +8,5 @@
    <property name="service.ranking" type="Integer" value="-1000"/>
    <property name="defaultLayers" type="String">argeo.suite.ui.termsLayer
    </property>
-   <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.ui.SuiteLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
+   <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.swt.ux.SwtAppLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
 </scr:component>

@@ -7,7 +7,7 @@
    <properties entry="config/cmsApp.properties"/>
    <reference bind="addUiProvider" cardinality="0..n" interface="org.argeo.cms.swt.acr.SwtUiProvider" policy="dynamic" unbind="removeUiProvider"/>
    <reference bind="addTheme" cardinality="1..n" interface="org.argeo.api.cms.ux.CmsTheme" name="CmsTheme" policy="dynamic" unbind="removeTheme"/>
-   <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.ui.SuiteLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
+   <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.swt.ux.SwtAppLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
    <reference bind="setCmsUserManager" cardinality="1..1" interface="org.argeo.api.cms.directory.CmsUserManager" name="CmsUserManager" policy="static"/>
    <reference bind="setCmsContext" cardinality="1..1" interface="org.argeo.api.cms.CmsContext" name="CmsContext" policy="static"/>
    <reference bind="setContentRepository" cardinality="1..1" interface="org.argeo.api.acr.ContentRepository" name="ContentRepository" policy="static"/>

@@ -15,7 +15,7 @@ import javax.jcr.RepositoryException;
 import org.apache.commons.io.IOUtils;
 import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
-import org.argeo.app.ui.SuiteUxEvent;
+import org.argeo.app.ux.SuiteUxEvent;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.ux.CmsView;
 import org.argeo.api.cms.CmsConstants;

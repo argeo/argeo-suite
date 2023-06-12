@@ -11,7 +11,7 @@ import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.api.cms.directory.HierarchyUnit;
 import org.argeo.api.cms.directory.UserDirectory;
 import org.argeo.api.cms.ux.CmsIcon;
-import org.argeo.app.ui.SuiteIcon;
+import org.argeo.app.ux.SuiteIcon;
 import org.argeo.cms.CurrentUser;
 import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.auth.CmsRole;

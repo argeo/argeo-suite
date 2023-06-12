@@ -6,7 +6,7 @@ import org.argeo.api.acr.spi.ProvidedContent;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.api.EntityType;
-import org.argeo.app.ui.SuiteUxEvent;
+import org.argeo.app.ux.SuiteUxEvent;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.argeo.cms.swt.widgets.SwtTreeView;

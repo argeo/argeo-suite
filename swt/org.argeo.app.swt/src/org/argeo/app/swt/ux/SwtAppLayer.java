@@ -1,4 +1,4 @@
-package org.argeo.app.ui;
+package org.argeo.app.swt.ux;
 
 import org.argeo.api.acr.Content;
 import org.argeo.cms.Localized;
@@ -6,7 +6,7 @@ import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.eclipse.swt.widgets.Composite;
 
 /** An UI layer for the main work area. */
-public interface SuiteLayer extends SwtUiProvider {
+public interface SwtAppLayer extends SwtUiProvider {
 	static enum Property {
 		title, icon, weights, startMaximized, singleTab, singleTabTitle, fixedEntryArea;
 	}

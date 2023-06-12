@@ -11,5 +11,5 @@ argeo.library.ui.contentLayer
 argeo.people.ui.peopleLayer
 argeo.geo.ui.mapLayer
    </property>
-   <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.ui.SuiteLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
+   <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.swt.ux.SwtAppLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
 </scr:component>

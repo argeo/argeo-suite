@@ -34,6 +34,9 @@ import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.api.RankedObject;
 import org.argeo.app.core.SuiteUtils;
+import org.argeo.app.swt.ux.SwtAppUi;
+import org.argeo.app.ux.SuiteUxEvent;
+import org.argeo.app.swt.ux.SwtAppLayer;
 import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
@@ -85,13 +88,13 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 	// TODO use QName as key for byType
 	private Map<String, RankedObject<SwtUiProvider>> uiProvidersByPid = Collections.synchronizedMap(new HashMap<>());
 	private Map<String, RankedObject<SwtUiProvider>> uiProvidersByType = Collections.synchronizedMap(new HashMap<>());
-	private Map<String, RankedObject<SuiteLayer>> layersByPid = Collections.synchronizedSortedMap(new TreeMap<>());
-	private Map<String, RankedObject<SuiteLayer>> layersByType = Collections.synchronizedSortedMap(new TreeMap<>());
+	private Map<String, RankedObject<SwtAppLayer>> layersByPid = Collections.synchronizedSortedMap(new TreeMap<>());
+	private Map<String, RankedObject<SwtAppLayer>> layersByType = Collections.synchronizedSortedMap(new TreeMap<>());
 
 	private CmsUserManager cmsUserManager;
 
 	// TODO make more optimal or via CmsSession/CmsView
-	private Map<String, SuiteUi> managedUis = new HashMap<>();
+	private Map<String, SwtAppUi> managedUis = new HashMap<>();
 
 	// ACR
 	private ContentRepository contentRepository;
@@ -134,7 +137,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 	}
 
 	public void destroy(Map<String, Object> properties) {
-		for (SuiteUi ui : managedUis.values())
+		for (SwtAppUi ui : managedUis.values())
 			if (!ui.isDisposed()) {
 				ui.getDisplay().syncExec(() -> ui.dispose());
 			}
@@ -162,7 +165,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		CmsTheme theme = getTheme(uiName);
 		if (theme != null)
 			CmsSwtUtils.registerCmsTheme(uiParent.getShell(), theme);
-		SuiteUi argeoSuiteUi = new SuiteUi(uiParent, SWT.INHERIT_DEFAULT);
+		SwtAppUi argeoSuiteUi = new SwtAppUi(uiParent, SWT.INHERIT_DEFAULT);
 		String uid = cmsView.getUid();
 		managedUis.put(uid, argeoSuiteUi);
 		argeoSuiteUi.addDisposeListener((e) -> {
@@ -185,7 +188,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 	public void refreshUi(CmsUi cmsUi, String state) {
 		try {
 			Content context = null;
-			SuiteUi ui = (SuiteUi) cmsUi;
+			SwtAppUi ui = (SwtAppUi) cmsUi;
 
 			String uiName = Objects.toString(ui.getParent().getData(UI_NAME_PROPERTY), null);
 			if (uiName == null)
@@ -255,7 +258,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 					refreshPart(headerUiProvider, ui.getHeader(), context);
 				ui.refreshBelowHeader(true);
 				for (String key : layersByPid.keySet()) {
-					SuiteLayer layer = layersByPid.get(key).get();
+					SwtAppLayer layer = layersByPid.get(key).get();
 					ui.addLayer(key, layer);
 				}
 
@@ -291,7 +294,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		return uiProvidersByPid.get(pid).get();
 	}
 
-	private SuiteLayer findLayer(String pid) {
+	private SwtAppLayer findLayer(String pid) {
 		if (!layersByPid.containsKey(pid))
 			return null;
 		return layersByPid.get(pid).get();
@@ -401,8 +404,8 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		if (state == null)
 			return;
 		if (!state.startsWith("/")) {
-			if (cmsUi instanceof SuiteUi) {
-				SuiteUi ui = (SuiteUi) cmsUi;
+			if (cmsUi instanceof SwtAppUi) {
+				SwtAppUi ui = (SwtAppUi) cmsUi;
 				if (LOGIN.equals(state)) {
 					String appTitle = "";
 					if (ui.getTitle() != null)
@@ -418,7 +421,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 			}
 			return;
 		}
-		SuiteUi suiteUi = (SuiteUi) cmsUi;
+		SwtAppUi suiteUi = (SwtAppUi) cmsUi;
 		if (suiteUi.isLoginScreen()) {
 			return;
 		}
@@ -437,7 +440,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		return node.getPath();
 	}
 
-	private Content stateToNode(SuiteUi suiteUi, String state) {
+	private Content stateToNode(SwtAppUi suiteUi, String state) {
 		if (suiteUi == null)
 			return null;
 		if (state == null || !state.startsWith("/"))
@@ -458,7 +461,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 	public void onEvent(String topic, Map<String, Object> event) {
 
 		// Specific UI related events
-		SuiteUi ui = getRelatedUi(event);
+		SwtAppUi ui = getRelatedUi(event);
 		if (ui == null)
 			return;
 		ui.getCmsView().runAs(() -> {
@@ -472,7 +475,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 					if (node == null)
 						return;
 					SwtUiProvider uiProvider = findByType(uiProvidersByType, node);
-					SuiteLayer layer = findByType(layersByType, node);
+					SwtAppLayer layer = findByType(layersByType, node);
 					ui.switchToLayer(layer, node);
 					layer.view(uiProvider, ui.getCurrentWorkArea(), node);
 					ui.getCmsView().stateChanged(nodeToState(node), appTitle + CmsUxUtils.getTitle(node));
@@ -481,14 +484,14 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 					if (node == null)
 						return;
 					SwtUiProvider uiProvider = findByType(uiProvidersByType, node);
-					SuiteLayer layer = findByType(layersByType, node);
+					SwtAppLayer layer = findByType(layersByType, node);
 					ui.switchToLayer(layer, node);
 					layer.open(uiProvider, ui.getCurrentWorkArea(), node);
 					ui.getCmsView().stateChanged(nodeToState(node), appTitle + CmsUxUtils.getTitle(node));
 				} else if (SuiteUiUtils.isTopic(topic, SuiteUxEvent.switchLayer)) {
 					String layerId = get(event, SuiteUxEvent.LAYER);
 					if (layerId != null) {
-						SuiteLayer suiteLayer = findLayer(layerId);
+						SwtAppLayer suiteLayer = findLayer(layerId);
 						if (suiteLayer == null)
 							throw new IllegalArgumentException("No layer '" + layerId + "' available.");
 						Localized layerTitle = suiteLayer.getTitle();
@@ -517,7 +520,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 					} else {
 						Content node = getContentFromEvent(ui, event);
 						if (node != null) {
-							SuiteLayer layer = findByType(layersByType, node);
+							SwtAppLayer layer = findByType(layersByType, node);
 							ui.switchToLayer(layer, node);
 						}
 					}
@@ -529,7 +532,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		});
 	}
 
-	protected Content getContentFromEvent(SuiteUi ui, Map<String, Object> event) {
+	protected Content getContentFromEvent(SwtAppUi ui, Map<String, Object> event) {
 		ProvidedSession contentSession = (ProvidedSession) CmsUxUtils.getContentSession(contentRepository,
 				ui.getCmsView());
 
@@ -553,7 +556,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		return node;
 	}
 
-	private SuiteUi getRelatedUi(Map<String, Object> eventProperties) {
+	private SwtAppUi getRelatedUi(Map<String, Object> eventProperties) {
 		return managedUis.get(get(eventProperties, CMS_VIEW_UID_PROPERTY));
 	}
 
@@ -603,7 +606,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		}
 	}
 
-	public void addLayer(SuiteLayer layer, Map<String, Object> properties) {
+	public void addLayer(SwtAppLayer layer, Map<String, Object> properties) {
 		if (properties.containsKey(Constants.SERVICE_PID)) {
 			String pid = (String) properties.get(Constants.SERVICE_PID);
 			RankedObject.putIfHigherRank(layersByPid, pid, layer, properties);
@@ -615,11 +618,11 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		}
 	}
 
-	public void removeLayer(SuiteLayer layer, Map<String, Object> properties) {
+	public void removeLayer(SwtAppLayer layer, Map<String, Object> properties) {
 		if (properties.containsKey(Constants.SERVICE_PID)) {
 			String pid = (String) properties.get(Constants.SERVICE_PID);
 			if (layersByPid.containsKey(pid)) {
-				if (layersByPid.get(pid).equals(new RankedObject<SuiteLayer>(layer, properties))) {
+				if (layersByPid.get(pid).equals(new RankedObject<SwtAppLayer>(layer, properties))) {
 					layersByPid.remove(pid);
 				}
 			}
@@ -628,7 +631,7 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 			List<String> types = LangUtils.toStringList(properties.get(EntityConstants.TYPE));
 			for (String type : types) {
 				if (layersByType.containsKey(type)) {
-					if (layersByType.get(type).equals(new RankedObject<SuiteLayer>(layer, properties))) {
+					if (layersByType.get(type).equals(new RankedObject<SwtAppLayer>(layer, properties))) {
 						layersByType.remove(type);
 					}
 				}
