@@ -32,9 +32,9 @@ import org.argeo.app.api.EntityType;
 import org.argeo.app.api.RankedObject;
 import org.argeo.app.swt.ux.SwtAppLayer;
 import org.argeo.app.swt.ux.SwtAppUi;
+import org.argeo.app.ux.AbstractArgeoApp;
 import org.argeo.app.ux.AppUi;
 import org.argeo.app.ux.SuiteUxEvent;
-import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
 import org.argeo.cms.acr.ContentUtils;
@@ -49,7 +49,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.osgi.framework.Constants;
 
 /** The Argeo Suite App. */
-public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
+public class SuiteApp extends AbstractArgeoApp implements CmsEventSubscriber {
 	private final static CmsLog log = CmsLog.getLog(SuiteApp.class);
 
 	public final static String PUBLIC_BASE_PATH_PROPERTY = "publicBasePath";
