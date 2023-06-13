@@ -12,6 +12,7 @@ javax.jcr.nodetype,\
 javax.jcr.security,\
 com.fasterxml.jackson.core,\
 org.apache.jackrabbit.*;version="[1,4)",\
+org.argeo.cms.acr,\
 *
 
 Require-Capability:\

@@ -1,7 +1,7 @@
 package org.argeo.app.ui.publish;
 
-import static org.argeo.app.ui.SuiteApp.DEFAULT_THEME_ID_PROPERTY;
-import static org.argeo.app.ui.SuiteApp.DEFAULT_UI_NAME_PROPERTY;
+import static org.argeo.app.swt.ux.SwtArgeoApp.DEFAULT_THEME_ID_PROPERTY;
+import static org.argeo.app.swt.ux.SwtArgeoApp.DEFAULT_UI_NAME_PROPERTY;
 
 import java.util.HashSet;
 import java.util.Map;
@@ -14,7 +14,7 @@ import javax.jcr.Session;
 import org.argeo.api.cms.CmsApp;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.ux.CmsUi;
-import org.argeo.app.ui.SuiteApp;
+import org.argeo.app.swt.ux.SwtArgeoApp;
 import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.util.LangUtils;
@@ -47,7 +47,7 @@ public class PublishingApp extends AbstractCmsApp {
 			defaultUiName = LangUtils.get(properties, DEFAULT_UI_NAME_PROPERTY);
 		if (properties.containsKey(DEFAULT_THEME_ID_PROPERTY))
 			defaultThemeId = LangUtils.get(properties, DEFAULT_THEME_ID_PROPERTY);
-		publicBasePath = LangUtils.get(properties, SuiteApp.PUBLIC_BASE_PATH_PROPERTY);
+		publicBasePath = LangUtils.get(properties, SwtArgeoApp.PUBLIC_BASE_PATH_PROPERTY);
 		pid = properties.get(Constants.SERVICE_PID);
 
 		if (log.isDebugEnabled())

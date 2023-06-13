@@ -1,4 +1,4 @@
-package org.argeo.app.ui;
+package org.argeo.app.swt.ux;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,28 +10,32 @@ import java.util.TreeMap;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsLog;
+import org.argeo.api.cms.ux.CmsIcon;
 import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.api.RankedObject;
 import org.argeo.app.core.SuiteUtils;
-import org.argeo.app.swt.ux.SwtAppLayer;
 import org.argeo.app.ux.SuiteIcon;
 import org.argeo.app.ux.SuiteStyle;
+import org.argeo.app.ux.SuiteUxEvent;
 import org.argeo.cms.CurrentUser;
+import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
+import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
-import org.argeo.cms.ui.CmsUiProvider;
+import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.wiring.BundleWiring;
 
 /** Side pane listing various perspectives. */
-public class DefaultLeadPane implements CmsUiProvider {
+public class DefaultLeadPane implements SwtUiProvider {
 	private final static CmsLog log = CmsLog.getLog(DefaultLeadPane.class);
 
 	public static enum Property {
@@ -126,12 +130,33 @@ public class DefaultLeadPane implements CmsUiProvider {
 					buttonParent = adminLayersC;
 				else
 					buttonParent = appLayersC;
-				Button b = SuiteUiUtils.createLayerButton(buttonParent, layerId, title, icon, l10nClassLoader);
+				Button b = createLayerButton(buttonParent, layerId, title, icon, l10nClassLoader);
 				if (first == null)
 					first = b;
 			}
 		}
 		return first;
+	}
+
+	protected Button createLayerButton(Composite parent, String layer, Localized msg, CmsIcon icon,
+			ClassLoader l10nClassLoader) {
+		CmsSwtTheme theme = CmsSwtUtils.getCmsTheme(parent);
+		Button button = new Button(parent, SWT.PUSH);
+		CmsSwtUtils.style(button, SuiteStyle.leadPane);
+		if (icon != null)
+			button.setImage(theme.getBigIcon(icon));
+		button.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, false));
+		// button.setToolTipText(msg.lead());
+		if (msg != null) {
+			Label lbl = new Label(parent, SWT.CENTER);
+			CmsSwtUtils.style(lbl, SuiteStyle.leadPane);
+			String txt = LocaleUtils.lead(msg, l10nClassLoader);
+//			String txt = msg.lead();
+			lbl.setText(txt);
+			lbl.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));
+		}
+		CmsSwtUtils.sendEventOnSelect(button, SuiteUxEvent.switchLayer.topic(), SuiteUxEvent.LAYER, layer);
+		return button;
 	}
 
 	public void init(BundleContext bundleContext, Map<String, Object> properties) {

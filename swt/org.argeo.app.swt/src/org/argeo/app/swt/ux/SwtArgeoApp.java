@@ -1,4 +1,4 @@
-package org.argeo.app.ui;
+package org.argeo.app.swt.ux;
 
 import static org.argeo.api.cms.ux.CmsView.CMS_VIEW_UID_PROPERTY;
 
@@ -19,6 +19,7 @@ import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentRepository;
 import org.argeo.api.acr.spi.ProvidedSession;
 import org.argeo.api.cms.CmsConstants;
+import org.argeo.api.cms.CmsEvent;
 import org.argeo.api.cms.CmsEventSubscriber;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.CmsSession;
@@ -30,8 +31,6 @@ import org.argeo.app.api.EntityConstants;
 import org.argeo.app.api.EntityName;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.api.RankedObject;
-import org.argeo.app.swt.ux.SwtAppLayer;
-import org.argeo.app.swt.ux.SwtAppUi;
 import org.argeo.app.ux.AbstractArgeoApp;
 import org.argeo.app.ux.AppUi;
 import org.argeo.app.ux.SuiteUxEvent;
@@ -49,8 +48,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.osgi.framework.Constants;
 
 /** The Argeo Suite App. */
-public class SuiteApp extends AbstractArgeoApp implements CmsEventSubscriber {
-	private final static CmsLog log = CmsLog.getLog(SuiteApp.class);
+public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber {
+	private final static CmsLog log = CmsLog.getLog(SwtArgeoApp.class);
 
 	public final static String PUBLIC_BASE_PATH_PROPERTY = "publicBasePath";
 	public final static String DEFAULT_UI_NAME_PROPERTY = "defaultUiName";
@@ -469,7 +468,7 @@ public class SuiteApp extends AbstractArgeoApp implements CmsEventSubscriber {
 				if (ui.getTitle() != null)
 					appTitle = ui.getTitle().lead() + " - ";
 
-				if (SuiteUiUtils.isTopic(topic, SuiteUxEvent.refreshPart)) {
+				if (isTopic(topic, SuiteUxEvent.refreshPart)) {
 					Content node = getContentFromEvent(ui, event);
 					if (node == null)
 						return;
@@ -478,7 +477,7 @@ public class SuiteApp extends AbstractArgeoApp implements CmsEventSubscriber {
 					ui.switchToLayer(layer, node);
 					layer.view(uiProvider, ui.getCurrentWorkArea(), node);
 					ui.getCmsView().stateChanged(nodeToState(node), appTitle + CmsUxUtils.getTitle(node));
-				} else if (SuiteUiUtils.isTopic(topic, SuiteUxEvent.openNewPart)) {
+				} else if (isTopic(topic, SuiteUxEvent.openNewPart)) {
 					Content node = getContentFromEvent(ui, event);
 					if (node == null)
 						return;
@@ -487,7 +486,7 @@ public class SuiteApp extends AbstractArgeoApp implements CmsEventSubscriber {
 					ui.switchToLayer(layer, node);
 					layer.open(uiProvider, ui.getCurrentWorkArea(), node);
 					ui.getCmsView().stateChanged(nodeToState(node), appTitle + CmsUxUtils.getTitle(node));
-				} else if (SuiteUiUtils.isTopic(topic, SuiteUxEvent.switchLayer)) {
+				} else if (isTopic(topic, SuiteUxEvent.switchLayer)) {
 					String layerId = get(event, SuiteUxEvent.LAYER);
 					if (layerId != null) {
 						SwtAppLayer suiteLayer = findLayer(layerId);
@@ -529,6 +528,11 @@ public class SuiteApp extends AbstractArgeoApp implements CmsEventSubscriber {
 //				log.error("Cannot handle event " + event, e);
 			}
 		});
+	}
+
+	private boolean isTopic(String topic, CmsEvent cmsEvent) {
+		Objects.requireNonNull(topic);
+		return topic.equals(cmsEvent.topic());
 	}
 
 	protected Content getContentFromEvent(SwtAppUi ui, Map<String, Object> event) {

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" immediate="false" name="Default Suite Footer">
-   <implementation class="org.argeo.app.ui.DefaultFooter"/>
+   <implementation class="org.argeo.app.swt.ux.DefaultFooter"/>
    <service>
       <provide interface="org.argeo.cms.swt.acr.SwtUiProvider"/>
    </service>

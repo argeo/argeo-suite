@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -15,18 +14,15 @@ import javax.jcr.Session;
 
 import org.apache.commons.io.IOUtils;
 import org.argeo.api.acr.Content;
-import org.argeo.api.cms.CmsEvent;
 import org.argeo.api.cms.ux.CmsEditable;
-import org.argeo.api.cms.ux.CmsIcon;
 import org.argeo.api.cms.ux.CmsStyle;
 import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
+import org.argeo.app.swt.ux.SwtArgeoApp;
 import org.argeo.app.ux.SuiteStyle;
 import org.argeo.app.ux.SuiteUxEvent;
-import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
 import org.argeo.cms.jcr.acr.JcrContent;
-import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.dialogs.LightweightDialog;
 import org.argeo.cms.ui.util.CmsLink;
@@ -367,11 +363,11 @@ public class SuiteUiUtils {
 	}
 
 	public static String toLink(Content node) {
-		return node != null ? "#" + CmsSwtUtils.cleanPathForUrl(SuiteApp.nodeToState(node)) : null;
+		return node != null ? "#" + CmsSwtUtils.cleanPathForUrl(SwtArgeoApp.nodeToState(node)) : null;
 	}
 
 	public static String toLink(Node node) {
-		return node != null ? "#" + CmsSwtUtils.cleanPathForUrl(SuiteApp.nodeToState(JcrContent.nodeToContent(node)))
+		return node != null ? "#" + CmsSwtUtils.cleanPathForUrl(SwtArgeoApp.nodeToState(JcrContent.nodeToContent(node)))
 				: null;
 	}
 
@@ -399,37 +395,6 @@ public class SuiteUiUtils {
 		txt.append("</a>");
 		lbl.setText(txt.toString());
 		return lbl;
-	}
-
-//	public static boolean isCoworker(CmsView cmsView) {
-//		boolean coworker = cmsView.doAs(() -> CurrentUser.isInRole(SuiteRole.coworker.dn()));
-//		return coworker;
-//	}
-
-	public static boolean isTopic(String topic, CmsEvent cmsEvent) {
-		Objects.requireNonNull(topic);
-		return topic.equals(cmsEvent.topic());
-	}
-
-	public static Button createLayerButton(Composite parent, String layer, Localized msg, CmsIcon icon,
-			ClassLoader l10nClassLoader) {
-		CmsSwtTheme theme = CmsSwtUtils.getCmsTheme(parent);
-		Button button = new Button(parent, SWT.PUSH);
-		CmsSwtUtils.style(button, SuiteStyle.leadPane);
-		if (icon != null)
-			button.setImage(theme.getBigIcon(icon));
-		button.setLayoutData(new GridData(SWT.CENTER, SWT.BOTTOM, true, false));
-		// button.setToolTipText(msg.lead());
-		if (msg != null) {
-			Label lbl = new Label(parent, SWT.CENTER);
-			CmsSwtUtils.style(lbl, SuiteStyle.leadPane);
-			String txt = LocaleUtils.lead(msg, l10nClassLoader);
-//			String txt = msg.lead();
-			lbl.setText(txt);
-			lbl.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, false));
-		}
-		CmsSwtUtils.sendEventOnSelect(button, SuiteUxEvent.switchLayer.topic(), SuiteUxEvent.LAYER, layer);
-		return button;
 	}
 
 	@Deprecated

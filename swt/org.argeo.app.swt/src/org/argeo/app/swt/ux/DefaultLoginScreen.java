@@ -1,12 +1,12 @@
-package org.argeo.app.ui;
+package org.argeo.app.swt.ux;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsContext;
 import org.argeo.api.cms.ux.CmsView;
 import org.argeo.cms.CurrentUser;
 import org.argeo.cms.swt.CmsSwtUtils;
+import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.argeo.cms.swt.auth.CmsLogin;
-import org.argeo.cms.ui.CmsUiProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 /** Provides a login screen. */
-public class DefaultLoginScreen implements CmsUiProvider {
+public class DefaultLoginScreen implements SwtUiProvider {
 	private CmsContext cmsContext;
 
 	@Override

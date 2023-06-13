@@ -1,4 +1,4 @@
-package org.argeo.app.ui;
+package org.argeo.app.swt.ux;
 
 import java.util.Map;
 
@@ -10,7 +10,7 @@ import org.argeo.cms.CurrentUser;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
-import org.argeo.cms.ui.CmsUiProvider;
+import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -23,7 +23,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.wiring.BundleWiring;
 
 /** Header of a standard Argeo Suite application. */
-public class DefaultHeader implements CmsUiProvider {
+public class DefaultHeader implements SwtUiProvider {
 	public final static String TITLE_PROPERTY = "argeo.suite.ui.header.title";
 	private Localized title = null;
 

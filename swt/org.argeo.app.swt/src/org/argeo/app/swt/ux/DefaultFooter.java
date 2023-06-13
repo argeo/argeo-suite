@@ -1,10 +1,10 @@
-package org.argeo.app.ui;
+package org.argeo.app.swt.ux;
 
 import java.util.Map;
 
 import org.argeo.api.acr.Content;
 import org.argeo.cms.swt.CmsSwtUtils;
-import org.argeo.cms.ui.CmsUiProvider;
+import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -12,7 +12,7 @@ import org.eclipse.swt.widgets.Control;
 import org.osgi.framework.BundleContext;
 
 /** Footer of a standard Argeo Suite application. */
-public class DefaultFooter implements CmsUiProvider {
+public class DefaultFooter implements SwtUiProvider {
 	@Override
 	public Control createUiPart(Composite parent, Content context) {
 		parent.setLayout(CmsSwtUtils.noSpaceGridLayout());

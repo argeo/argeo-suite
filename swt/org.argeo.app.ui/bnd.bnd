@@ -39,4 +39,5 @@ org.eclipse.jface.window,\
 org.eclipse.jface.dialogs,\
 org.eclipse.rap.rwt,\
 javax.servlet.*;version="[3,5)",\
+javax.jcr.nodetype,\
 *
