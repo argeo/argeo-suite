@@ -1,0 +1,11 @@
+Service-Component:\
+OSGI-INF/termsManager.xml,\
+OSGI-INF/maintenanceService.xml,\
+OSGI-INF/appUserState.xml,\
+
+Import-Package:\
+javax.jcr.nodetype,\
+javax.jcr.security,\
+org.apache.jackrabbit.*;version="[1,4)",\
+org.argeo.cms.acr,\
+*

@@ -24,13 +24,14 @@ import javax.servlet.http.Part;
 
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.CmsSession;
-import org.argeo.app.core.SuiteUtils;
 import org.argeo.app.image.ImageProcessor;
+import org.argeo.app.jcr.SuiteJcrUtils;
 import org.argeo.app.odk.OrxType;
 import org.argeo.app.xforms.FormSubmissionListener;
 import org.argeo.cms.auth.RemoteAuthRequest;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.jcr.CmsJcrUtils;
+import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.servlet.ServletHttpRequest;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
@@ -54,9 +55,9 @@ public class OdkSubmissionServlet extends HttpServlet {
 		resp.setContentType("text/xml; charset=utf-8");
 		resp.setHeader("X-OpenRosa-Version", "1.0");
 		resp.setDateHeader("Date", System.currentTimeMillis());
-		
+
 		// should be set in HEAD? Let's rather use defaults.
-		//resp.setIntHeader("X-OpenRosa-Accept-Content-Length", 1024 * 1024);
+		// resp.setIntHeader("X-OpenRosa-Accept-Content-Length", 1024 * 1024);
 
 		RemoteAuthRequest request = new ServletHttpRequest(req);
 		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), request);
@@ -67,13 +68,13 @@ public class OdkSubmissionServlet extends HttpServlet {
 		try {
 			// TODO centralise at a deeper level
 			adminSession = CmsJcrUtils.openDataAdminSession(repository, null);
-			SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
+			SuiteJcrUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
 		} finally {
 			Jcr.logout(adminSession);
 		}
 
 		try {
-			Node cmsSessionNode = SuiteUtils.getCmsSessionNode(session, cmsSession);
+			Node cmsSessionNode = SuiteJcrUtils.getCmsSessionNode(session, cmsSession);
 			Node submission = cmsSessionNode.addNode(submissionNameFormatter.format(Instant.now()),
 					OrxType.submission.get());
 			for (Part part : req.getParts()) {
@@ -117,7 +118,7 @@ public class OdkSubmissionServlet extends HttpServlet {
 			session.save();
 			try {
 				for (FormSubmissionListener submissionListener : submissionListeners) {
-					submissionListener.formSubmissionReceived(submission);
+					submissionListener.formSubmissionReceived(JcrContent.nodeToContent(submission));
 				}
 			} catch (Exception e) {
 				log.error("Cannot save submision, cancelling...", e);

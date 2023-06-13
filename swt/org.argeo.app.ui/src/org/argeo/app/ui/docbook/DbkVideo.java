@@ -12,7 +12,7 @@ import javax.jcr.RepositoryException;
 import org.argeo.api.acr.ldap.NamingUtils;
 import org.argeo.app.docbook.DbkAttr;
 import org.argeo.app.docbook.DbkType;
-import org.argeo.app.docbook.DbkUtils;
+import org.argeo.app.jcr.docbook.DbkJcrUtils;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.Selected;
 import org.argeo.cms.ui.viewers.NodePart;
@@ -70,7 +70,7 @@ public class DbkVideo extends StyledControl implements SectionPart, NodePart {
 			Composite editor = new Composite(wrapper, SWT.BORDER);
 			editor.setLayout(new GridLayout(3, false));
 			editor.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-			String fileref = DbkUtils.getMediaFileref(mediaobject);
+			String fileref = DbkJcrUtils.getMediaFileref(mediaobject);
 			Text text = new Text(editor, SWT.SINGLE);
 			if (fileref != null)
 				text.setText(fileref);
@@ -171,7 +171,7 @@ public class DbkVideo extends StyledControl implements SectionPart, NodePart {
 			if (control instanceof Browser) {
 				Browser browser = (Browser) control;
 				getNode().getSession();
-				String fileref = DbkUtils.getMediaFileref(getNode());
+				String fileref = DbkJcrUtils.getMediaFileref(getNode());
 				if (fileref != null) {
 					// TODO manage self-hosted videos
 					// TODO for YouTube videos, check whether the URL starts with

@@ -7,8 +7,6 @@ OSGI-INF/leadPane.xml,\
 OSGI-INF/loginScreen.xml,\
 OSGI-INF/recentItems.xml,\
 OSGI-INF/adminLeadPane.xml,\
-OSGI-INF/termsEntryArea.xml,\
-OSGI-INF/termsLayer.xml,\
 OSGI-INF/dashboard.xml,\
 OSGI-INF/dashboardLayer.xml,\
 OSGI-INF/peopleEntryArea.xml,\

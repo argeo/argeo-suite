@@ -1,4 +1,4 @@
-package org.argeo.app.core;
+package org.argeo.app.jcr;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

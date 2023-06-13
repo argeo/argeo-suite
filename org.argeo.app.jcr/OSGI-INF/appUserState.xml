@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.argeo.internal.app.core.appUserState">
-   <implementation class="org.argeo.internal.app.core.AppUserStateImpl"/>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.argeo.internal.app.jcr.appUserState">
+   <implementation class="org.argeo.internal.app.jcr.AppUserStateImpl"/>
    <service>
       <provide interface="org.argeo.app.api.AppUserState"/>
    </service>

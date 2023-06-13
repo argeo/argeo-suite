@@ -1,4 +1,4 @@
-package org.argeo.app.core;
+package org.argeo.app.jcr.terms;
 
 import java.util.ArrayList;
 import java.util.List;

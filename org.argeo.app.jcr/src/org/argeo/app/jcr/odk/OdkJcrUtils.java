@@ -1,4 +1,4 @@
-package org.argeo.app.odk;
+package org.argeo.app.jcr.odk;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,14 +18,17 @@ import javax.jcr.nodetype.NodeType;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.app.api.EntityMimeType;
 import org.argeo.app.api.EntityType;
+import org.argeo.app.odk.OdkNames;
+import org.argeo.app.odk.OrxListName;
+import org.argeo.app.odk.OrxManifestName;
 import org.argeo.cms.util.DigestUtils;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.jcr.JcrxApi;
 
 /** Utilities around ODK. */
-public class OdkUtils {
-	private final static CmsLog log = CmsLog.getLog(OdkUtils.class);
+public class OdkJcrUtils {
+	private final static CmsLog log = CmsLog.getLog(OdkJcrUtils.class);
 
 	public static Node loadOdkForm(Node formBase, String name, InputStream in, InputStream... additionalNodes)
 			throws RepositoryException, IOException {
@@ -186,7 +189,7 @@ public class OdkUtils {
 	}
 
 	/** Singleton. */
-	private OdkUtils() {
+	private OdkJcrUtils() {
 
 	}
 

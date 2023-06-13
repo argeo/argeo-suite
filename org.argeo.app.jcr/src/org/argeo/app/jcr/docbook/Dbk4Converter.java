@@ -1,4 +1,4 @@
-package org.argeo.app.docbook;
+package org.argeo.app.jcr.docbook;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

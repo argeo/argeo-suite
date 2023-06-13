@@ -5,7 +5,7 @@ import javax.jcr.RepositoryException;
 
 import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.app.docbook.DbkType;
-import org.argeo.app.docbook.DbkUtils;
+import org.argeo.app.jcr.docbook.DbkJcrUtils;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.eclipse.swt.widgets.Composite;
 
@@ -22,7 +22,7 @@ public class DocumentTextEditor extends AbstractDbkViewer {
 	@Override
 	protected void initModel(Node textNode) throws RepositoryException {
 		if (isFlat()) {
-			DbkUtils.addParagraph(textNode, "");
+			DbkJcrUtils.addParagraph(textNode, "");
 		}
 //		else
 //			textNode.setProperty(DocBookNames.DBK_TITLE, textNode.getName());

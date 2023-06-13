@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" immediate="true"  name="Suite Maintenance Service">
-   <implementation class="org.argeo.app.core.SuiteMaintenanceService"/>
+   <implementation class="org.argeo.internal.app.jcr.SuiteMaintenanceService"/>
    <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="static" target="(cn=ego)"/>
    <reference bind="setUserTransaction" cardinality="1..1" interface="org.argeo.api.cms.transaction.WorkTransaction" name="WorkTransaction" policy="static"/>
    <reference bind="setUserAdmin" cardinality="1..1" interface="org.osgi.service.useradmin.UserAdmin" name="UserAdmin" policy="static"/>

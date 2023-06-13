@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.argeo.product.knowledge.swtArgeoApp">
+   <implementation class="org.argeo.app.swt.ux.SwtArgeoApp"/>
+   <service>
+      <provide interface="org.argeo.api.cms.CmsApp"/>
+   </service>
+   <properties entry="config/swtArgeoApp.properties"/>
+   <reference bind="addUiProvider" cardinality="0..n" interface="org.argeo.cms.swt.acr.SwtUiProvider" policy="dynamic" unbind="removeUiProvider"/>
+   <reference bind="addTheme" cardinality="1..n" interface="org.argeo.api.cms.ux.CmsTheme" name="CmsTheme" policy="dynamic" unbind="removeTheme"/>
+   <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.swt.ux.SwtAppLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
+   <reference bind="setCmsContext" cardinality="1..1" interface="org.argeo.api.cms.CmsContext" name="CmsContext" policy="static"/>
+   <reference bind="setContentRepository" cardinality="1..1" interface="org.argeo.api.acr.ContentRepository" name="ContentRepository" policy="static"/>
+   <reference bind="setAppUserState" cardinality="1..1" interface="org.argeo.app.api.AppUserState" name="AppUserState" policy="static"/>
+</scr:component>

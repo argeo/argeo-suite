@@ -45,7 +45,7 @@ import org.apache.fop.apps.FopFactory;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.ux.CmsTheme;
 import org.argeo.app.docbook.DbkType;
-import org.argeo.app.docbook.DbkUtils;
+import org.argeo.app.jcr.docbook.DbkJcrUtils;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.servlet.ServletHttpRequest;
 import org.argeo.jcr.Jcr;
@@ -116,7 +116,7 @@ public class DbkServlet extends HttpServlet {
 
 			if (node.hasNode(DbkType.article.get())) {
 				Node dbkNode = node.getNode(DbkType.article.get());
-				if (DbkUtils.isDbk(dbkNode)) {
+				if (DbkJcrUtils.isDbk(dbkNode)) {
 					CmsTheme cmsTheme = null;
 					String themeId = req.getParameter("themeId");
 					if (themeId != null) {

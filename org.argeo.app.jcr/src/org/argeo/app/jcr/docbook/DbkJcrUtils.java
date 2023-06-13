@@ -1,4 +1,4 @@
-package org.argeo.app.docbook;
+package org.argeo.app.jcr.docbook;
 
 import static org.argeo.app.docbook.DbkType.para;
 
@@ -11,20 +11,20 @@ import java.nio.file.Path;
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
 import javax.jcr.NodeIterator;
-import javax.jcr.PathNotFoundException;
 import javax.jcr.RepositoryException;
-import javax.jcr.ValueFormatException;
 
 import org.argeo.api.cms.CmsLog;
 import org.argeo.app.api.EntityType;
+import org.argeo.app.docbook.DbkAttr;
+import org.argeo.app.docbook.DbkType;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.jcr.JcrxApi;
 
-/** Utilities around DocBook. */
-public class DbkUtils {
-	private final static CmsLog log = CmsLog.getLog(DbkUtils.class);
+/** JCR utilities around DocBook. */
+public class DbkJcrUtils {
+	private final static CmsLog log = CmsLog.getLog(DbkJcrUtils.class);
 
 	/** Get or add a DocBook element. */
 	public static Node getOrAddDbk(Node parent, DbkType child) {
@@ -247,7 +247,7 @@ public class DbkUtils {
 	}
 
 	/** Singleton. */
-	private DbkUtils() {
+	private DbkJcrUtils() {
 	}
 
 }
