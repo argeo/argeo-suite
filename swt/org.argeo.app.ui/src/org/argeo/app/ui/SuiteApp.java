@@ -13,9 +13,6 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import javax.jcr.Node;
-import javax.jcr.RepositoryException;
-import javax.jcr.nodetype.NodeType;
 import javax.xml.namespace.QName;
 
 import org.argeo.api.acr.Content;
@@ -25,36 +22,31 @@ import org.argeo.api.cms.CmsConstants;
 import org.argeo.api.cms.CmsEventSubscriber;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.CmsSession;
-import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.api.cms.ux.CmsTheme;
 import org.argeo.api.cms.ux.CmsUi;
 import org.argeo.api.cms.ux.CmsView;
+import org.argeo.app.api.AppUserState;
 import org.argeo.app.api.EntityConstants;
-import org.argeo.app.api.EntityNames;
+import org.argeo.app.api.EntityName;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.api.RankedObject;
-import org.argeo.app.core.SuiteUtils;
-import org.argeo.app.swt.ux.SwtAppUi;
-import org.argeo.app.ux.SuiteUxEvent;
 import org.argeo.app.swt.ux.SwtAppLayer;
+import org.argeo.app.swt.ux.SwtAppUi;
+import org.argeo.app.ux.AppUi;
+import org.argeo.app.ux.SuiteUxEvent;
 import org.argeo.cms.AbstractCmsApp;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
 import org.argeo.cms.acr.ContentUtils;
-import org.argeo.cms.jcr.CmsJcrUtils;
-import org.argeo.cms.jcr.acr.JcrContent;
-import org.argeo.cms.jcr.acr.JcrContentProvider;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.argeo.cms.swt.dialogs.CmsFeedback;
 import org.argeo.cms.util.LangUtils;
 import org.argeo.cms.ux.CmsUxUtils;
 import org.argeo.eclipse.ui.specific.UiContext;
-import org.argeo.jcr.JcrException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.osgi.framework.Constants;
-import org.osgi.service.useradmin.User;
 
 /** The Argeo Suite App. */
 public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
@@ -91,15 +83,14 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 	private Map<String, RankedObject<SwtAppLayer>> layersByPid = Collections.synchronizedSortedMap(new TreeMap<>());
 	private Map<String, RankedObject<SwtAppLayer>> layersByType = Collections.synchronizedSortedMap(new TreeMap<>());
 
-	private CmsUserManager cmsUserManager;
+//	private CmsUserManager cmsUserManager;
 
 	// TODO make more optimal or via CmsSession/CmsView
 	private Map<String, SwtAppUi> managedUis = new HashMap<>();
 
 	// ACR
 	private ContentRepository contentRepository;
-	private JcrContentProvider jcrContentProvider;
-
+	private AppUserState appUserState;
 	// JCR
 //	private Repository repository;
 
@@ -238,14 +229,14 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 								.get(ContentUtils.SLASH + CmsConstants.SYS_WORKSPACE + publicBasePath);
 						ui.setUserDir(userDir);
 					} else {
-						Node userDirNode = jcrContentProvider.doInAdminSession((adminSession) -> {
-							Node node = SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
-							return node;
-						});
-						Content userDir = contentSession
-								.get(ContentUtils.SLASH + CmsConstants.SYS_WORKSPACE + userDirNode.getPath());
+						Content userDir = appUserState.getOrCreateSessionDir(contentSession, cmsSession);
 						ui.setUserDir(userDir);
-//						Content userDir = contentSession.getSessionRunDir();
+//						Node userDirNode = jcrContentProvider.doInAdminSession((adminSession) -> {
+//							Node node = SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
+//							return node;
+//						});
+//						Content userDir = contentSession
+//								.get(ContentUtils.SLASH + CmsConstants.SYS_WORKSPACE + userDirNode.getPath());
 //						ui.setUserDir(userDir);
 					}
 				}
@@ -304,143 +295,151 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		if (content == null)
 			throw new IllegalArgumentException("A node should be provided");
 
-		if (content instanceof JcrContent) {
-			Node context = ((JcrContent) content).getJcrNode();
-			try {
-				// mixins
-				Set<String> types = new TreeSet<>();
-				for (NodeType mixinType : context.getMixinNodeTypes()) {
-					String mixinTypeName = mixinType.getName();
-					if (byType.containsKey(mixinTypeName)) {
-						types.add(mixinTypeName);
-					}
-					for (NodeType superType : mixinType.getDeclaredSupertypes()) {
-						if (byType.containsKey(superType.getName())) {
-							types.add(superType.getName());
-						}
-					}
-				}
-				// primary node type
-				NodeType primaryType = context.getPrimaryNodeType();
-				String primaryTypeName = primaryType.getName();
-				if (byType.containsKey(primaryTypeName)) {
-					types.add(primaryTypeName);
-				}
-				for (NodeType superType : primaryType.getDeclaredSupertypes()) {
-					if (byType.containsKey(superType.getName())) {
-						types.add(superType.getName());
-					}
-				}
-				// entity type
-				if (context.isNodeType(EntityType.entity.get())) {
-					if (context.hasProperty(EntityNames.ENTITY_TYPE)) {
-						String entityTypeName = context.getProperty(EntityNames.ENTITY_TYPE).getString();
-						if (byType.containsKey(entityTypeName)) {
-							types.add(entityTypeName);
-						}
-					}
-				}
-
-				if (CmsJcrUtils.isUserHome(context) && byType.containsKey("nt:folder")) {// home node
-					types.add("nt:folder");
-				}
-
-				if (types.size() == 0)
-					throw new IllegalArgumentException(
-							"No type found for " + context + " (" + listTypes(context) + ")");
-				String type = types.iterator().next();
-				if (!byType.containsKey(type))
-					throw new IllegalArgumentException("No component found for " + context + " with type " + type);
-				return byType.get(type).get();
-			} catch (RepositoryException e) {
-				throw new IllegalStateException(e);
-			}
-
-		} else {
-			List<QName> objectClasses = content.getContentClasses();
-			Set<String> types = new TreeSet<>();
-			for (QName cc : objectClasses) {
-				String type = cc.getPrefix() + ":" + cc.getLocalPart();
-				if (byType.containsKey(type))
-					types.add(type);
-			}
-			if (types.size() == 0) {
-				throw new IllegalArgumentException("No type found for " + content + " (" + objectClasses + ")");
-			}
-			String type = types.iterator().next();
-			if (!byType.containsKey(type))
-				throw new IllegalArgumentException("No component found for " + content + " with type " + type);
-			return byType.get(type).get();
+//		boolean checkJcr = false;
+//		if (checkJcr && content instanceof JcrContent) {
+//			Node context = ((JcrContent) content).getJcrNode();
+//			try {
+//				// mixins
+//				Set<String> types = new TreeSet<>();
+//				for (NodeType mixinType : context.getMixinNodeTypes()) {
+//					String mixinTypeName = mixinType.getName();
+//					if (byType.containsKey(mixinTypeName)) {
+//						types.add(mixinTypeName);
+//					}
+//					for (NodeType superType : mixinType.getDeclaredSupertypes()) {
+//						if (byType.containsKey(superType.getName())) {
+//							types.add(superType.getName());
+//						}
+//					}
+//				}
+//				// primary node type
+//				NodeType primaryType = context.getPrimaryNodeType();
+//				String primaryTypeName = primaryType.getName();
+//				if (byType.containsKey(primaryTypeName)) {
+//					types.add(primaryTypeName);
+//				}
+//				for (NodeType superType : primaryType.getDeclaredSupertypes()) {
+//					if (byType.containsKey(superType.getName())) {
+//						types.add(superType.getName());
+//					}
+//				}
+//				// entity type
+//				if (context.isNodeType(EntityType.entity.get())) {
+//					if (context.hasProperty(EntityNames.ENTITY_TYPE)) {
+//						String entityTypeName = context.getProperty(EntityNames.ENTITY_TYPE).getString();
+//						if (byType.containsKey(entityTypeName)) {
+//							types.add(entityTypeName);
+//						}
+//					}
+//				}
+//
+//				if (CmsJcrUtils.isUserHome(context) && byType.containsKey("nt:folder")) {// home node
+//					types.add("nt:folder");
+//				}
+//
+//				if (types.size() == 0)
+//					throw new IllegalArgumentException(
+//							"No type found for " + context + " (" + listTypes(context) + ")");
+//				String type = types.iterator().next();
+//				if (!byType.containsKey(type))
+//					throw new IllegalArgumentException("No component found for " + context + " with type " + type);
+//				return byType.get(type).get();
+//			} catch (RepositoryException e) {
+//				throw new IllegalStateException(e);
+//			}
+//
+//		} else {
+		Set<String> types = new TreeSet<>();
+		if (content.hasContentClass(EntityType.entity.qName())) {
+			String type = content.attr(EntityName.type.qName());
+			if (type != null && byType.containsKey(type))
+				types.add(type);
 		}
+
+		List<QName> objectClasses = content.getContentClasses();
+		for (QName cc : objectClasses) {
+			String type = cc.getPrefix() + ":" + cc.getLocalPart();
+			if (byType.containsKey(type))
+				types.add(type);
+		}
+		if (types.size() == 0) {
+			throw new IllegalArgumentException("No type found for " + content + " (" + objectClasses + ")");
+		}
+		String type = types.iterator().next();
+		if (!byType.containsKey(type))
+			throw new IllegalArgumentException("No component found for " + content + " with type " + type);
+		return byType.get(type).get();
+//		}
 	}
 
-	private static String listTypes(Node context) {
-		try {
-			StringBuilder sb = new StringBuilder();
-			sb.append(context.getPrimaryNodeType().getName());
-			for (NodeType superType : context.getPrimaryNodeType().getDeclaredSupertypes()) {
-				sb.append(' ');
-				sb.append(superType.getName());
-			}
-
-			for (NodeType nodeType : context.getMixinNodeTypes()) {
-				sb.append(' ');
-				sb.append(nodeType.getName());
-				if (nodeType.getName().equals(EntityType.local.get()))
-					sb.append('/').append(context.getProperty(EntityNames.ENTITY_TYPE).getString());
-				for (NodeType superType : nodeType.getDeclaredSupertypes()) {
-					sb.append(' ');
-					sb.append(superType.getName());
-				}
-			}
-			return sb.toString();
-		} catch (RepositoryException e) {
-			throw new JcrException(e);
-		}
-	}
+//	private static String listTypes(Node context) {
+//		try {
+//			StringBuilder sb = new StringBuilder();
+//			sb.append(context.getPrimaryNodeType().getName());
+//			for (NodeType superType : context.getPrimaryNodeType().getDeclaredSupertypes()) {
+//				sb.append(' ');
+//				sb.append(superType.getName());
+//			}
+//
+//			for (NodeType nodeType : context.getMixinNodeTypes()) {
+//				sb.append(' ');
+//				sb.append(nodeType.getName());
+//				if (nodeType.getName().equals(EntityType.local.get()))
+//					sb.append('/').append(context.getProperty(EntityNames.ENTITY_TYPE).getString());
+//				for (NodeType superType : nodeType.getDeclaredSupertypes()) {
+//					sb.append(' ');
+//					sb.append(superType.getName());
+//				}
+//			}
+//			return sb.toString();
+//		} catch (RepositoryException e) {
+//			throw new JcrException(e);
+//		}
+//	}
 
 	@Override
 	public void setState(CmsUi cmsUi, String state) {
+		AppUi ui = (AppUi) cmsUi;
 		if (state == null)
 			return;
 		if (!state.startsWith("/")) {
-			if (cmsUi instanceof SwtAppUi) {
-				SwtAppUi ui = (SwtAppUi) cmsUi;
-				if (LOGIN.equals(state)) {
-					String appTitle = "";
-					if (ui.getTitle() != null)
-						appTitle = ui.getTitle().lead();
-					ui.getCmsView().stateChanged(state, appTitle);
-					return;
-				}
-				Map<String, Object> properties = new HashMap<>();
-				String layerId = HOME_STATE.equals(state) ? defaultLayerPid : state;
-				properties.put(SuiteUxEvent.LAYER, layerId);
-				properties.put(SuiteUxEvent.CONTENT_PATH, HOME_STATE);
-				ui.getCmsView().sendEvent(SuiteUxEvent.switchLayer.topic(), properties);
+//			if (cmsUi instanceof SwtAppUi) {
+//				SwtAppUi ui = (SwtAppUi) cmsUi;
+			if (LOGIN.equals(state)) {
+				String appTitle = "";
+				if (ui.getTitle() != null)
+					appTitle = ui.getTitle().lead();
+				ui.getCmsView().stateChanged(state, appTitle);
+				return;
 			}
+			Map<String, Object> properties = new HashMap<>();
+			String layerId = HOME_STATE.equals(state) ? defaultLayerPid : state;
+			properties.put(SuiteUxEvent.LAYER, layerId);
+			properties.put(SuiteUxEvent.CONTENT_PATH, HOME_STATE);
+			ui.getCmsView().sendEvent(SuiteUxEvent.switchLayer.topic(), properties);
+//			}
 			return;
 		}
-		SwtAppUi suiteUi = (SwtAppUi) cmsUi;
-		if (suiteUi.isLoginScreen()) {
+//		SwtAppUi suiteUi = (SwtAppUi) cmsUi;
+		if (ui.isLoginScreen()) {
 			return;
 		}
 
-		Content node = stateToNode(suiteUi, state);
+		Content node = stateToNode(ui, state);
 		if (node == null) {
-			suiteUi.getCmsView().navigateTo(HOME_STATE);
+			ui.getCmsView().navigateTo(HOME_STATE);
 		} else {
-			suiteUi.getCmsView().sendEvent(SuiteUxEvent.switchLayer.topic(), SuiteUxEvent.eventProperties(node));
-			suiteUi.getCmsView().sendEvent(SuiteUxEvent.refreshPart.topic(), SuiteUxEvent.eventProperties(node));
+			ui.getCmsView().sendEvent(SuiteUxEvent.switchLayer.topic(), SuiteUxEvent.eventProperties(node));
+			ui.getCmsView().sendEvent(SuiteUxEvent.refreshPart.topic(), SuiteUxEvent.eventProperties(node));
 		}
 	}
 
 	// TODO move it to an internal package?
-	static String nodeToState(Content node) {
+	public static String nodeToState(Content node) {
 		return node.getPath();
 	}
 
-	private Content stateToNode(SwtAppUi suiteUi, String state) {
+	private Content stateToNode(CmsUi suiteUi, String state) {
 		if (suiteUi == null)
 			return null;
 		if (state == null || !state.startsWith("/"))
@@ -542,14 +541,15 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 			return ui.getUserDir();
 		Content node;
 		if (path == null) {
-			// look for a user
-			String username = get(event, SuiteUxEvent.USERNAME);
-			if (username == null)
-				return null;
-			User user = cmsUserManager.getUser(username);
-			if (user == null)
-				return null;
-			node = ContentUtils.roleToContent(cmsUserManager, contentSession, user);
+			return null;
+//			// look for a user
+//			String username = get(event, SuiteUxEvent.USERNAME);
+//			if (username == null)
+//				return null;
+//			User user = cmsUserManager.getUser(username);
+//			if (user == null)
+//				return null;
+//			node = ContentUtils.roleToContent(cmsUserManager, contentSession, user);
 		} else {
 			node = contentSession.get(path);
 		}
@@ -639,20 +639,20 @@ public class SuiteApp extends AbstractCmsApp implements CmsEventSubscriber {
 		}
 	}
 
-	public void setCmsUserManager(CmsUserManager cmsUserManager) {
-		this.cmsUserManager = cmsUserManager;
-	}
+//	public void setCmsUserManager(CmsUserManager cmsUserManager) {
+//		this.cmsUserManager = cmsUserManager;
+//	}
 
-	protected ContentRepository getContentRepository() {
-		return contentRepository;
-	}
+//	protected ContentRepository getContentRepository() {
+//		return contentRepository;
+//	}
 
 	public void setContentRepository(ContentRepository contentRepository) {
 		this.contentRepository = contentRepository;
 	}
 
-	public void setJcrContentProvider(JcrContentProvider jcrContentProvider) {
-		this.jcrContentProvider = jcrContentProvider;
+	public void setAppUserState(AppUserState appUserState) {
+		this.appUserState = appUserState;
 	}
 
 }

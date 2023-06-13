@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsLog;
+import org.argeo.app.ux.AppUi;
 import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtUi;
@@ -14,7 +15,7 @@ import org.eclipse.swt.layout.FormLayout;
 import org.eclipse.swt.widgets.Composite;
 
 /** The view for the default UX of Argeo Suite. */
-public class SwtAppUi extends CmsSwtUi {
+public class SwtAppUi extends CmsSwtUi implements AppUi {
 	private static final long serialVersionUID = 6207018859086689108L;
 	private final static CmsLog log = CmsLog.getLog(SwtAppUi.class);
 
@@ -206,6 +207,7 @@ public class SwtAppUi extends CmsSwtUi {
 		this.userDir = userDir;
 	}
 
+//	@Override
 	public Localized getTitle() {
 		return title;
 	}
@@ -214,6 +216,7 @@ public class SwtAppUi extends CmsSwtUi {
 		this.title = title;
 	}
 
+	@Override
 	public boolean isLoginScreen() {
 		return loginScreen;
 	}

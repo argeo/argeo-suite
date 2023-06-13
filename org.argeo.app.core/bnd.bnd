@@ -3,7 +3,7 @@ Bundle-ActivationPolicy: lazy
 Service-Component:\
 OSGI-INF/termsManager.xml,\
 OSGI-INF/maintenanceService.xml,\
-OSGI-INF/dbk4Converter.xml,\
+OSGI-INF/appUserState.xml,\
 
 Import-Package:\
 tech.units.indriya.unit,\

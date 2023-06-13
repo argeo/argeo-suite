@@ -11,7 +11,7 @@ public enum SuiteUxEvent implements CmsEvent {
 	openNewPart, refreshPart, switchLayer;
 
 	public final static String LAYER = "layer";
-	public final static String USERNAME = "username";
+//	public final static String USERNAME = "username";
 
 	// ACR
 	public final static String CONTENT_PATH = "contentPath";
