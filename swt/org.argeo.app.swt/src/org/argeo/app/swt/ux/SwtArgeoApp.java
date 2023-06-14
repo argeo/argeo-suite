@@ -55,17 +55,21 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 	public final static String DEFAULT_UI_NAME_PROPERTY = "defaultUiName";
 	public final static String DEFAULT_THEME_ID_PROPERTY = "defaultThemeId";
 	public final static String DEFAULT_LAYER_PROPERTY = "defaultLayer";
+	public final static String SHARED_PID_PREFIX_PROPERTY = "sharedPidPrefix";
+
 	private final static String LOGIN = "login";
 	private final static String HOME_STATE = "~";
 
 	private String publicBasePath = null;
 
 	private String pidPrefix;
-	private String headerPid;
-	private String footerPid;
-	private String leadPanePid;
-	private String adminLeadPanePid;
-	private String loginScreenPid;
+	private String sharedPidPrefix;
+
+//	private String headerPid;
+//	private String footerPid;
+//	private String leadPanePid;
+//	private String adminLeadPanePid;
+//	private String loginScreenPid;
 
 	private String defaultUiName = "app";
 	private String adminUiName = "admin";
@@ -93,7 +97,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 	// JCR
 //	private Repository repository;
 
-	public void init(Map<String, Object> properties) {
+	public void start(Map<String, Object> properties) {
 		for (SuiteUxEvent event : SuiteUxEvent.values()) {
 			getCmsContext().getCmsEventBus().addEventSubscriber(event.topic(), this);
 		}
@@ -107,26 +111,28 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 			defaultThemeId = LangUtils.get(properties, DEFAULT_THEME_ID_PROPERTY);
 		if (properties.containsKey(DEFAULT_LAYER_PROPERTY))
 			defaultLayerPid = LangUtils.get(properties, DEFAULT_LAYER_PROPERTY);
+		sharedPidPrefix = LangUtils.get(properties, SHARED_PID_PREFIX_PROPERTY);
 		publicBasePath = LangUtils.get(properties, PUBLIC_BASE_PATH_PROPERTY);
 
 		if (properties.containsKey(Constants.SERVICE_PID)) {
 			String servicePid = properties.get(Constants.SERVICE_PID).toString();
-			if (servicePid.endsWith(".app")) {
-				pidPrefix = servicePid.substring(0, servicePid.length() - "app".length());
+			int lastDotIndex = servicePid.lastIndexOf('.');
+			if (lastDotIndex >= 0) {
+				pidPrefix = servicePid.substring(0, lastDotIndex);
 			}
 		}
 
-		if (pidPrefix == null)
-			throw new IllegalArgumentException("PID prefix must be set.");
+//		if (pidPrefix == null)
+//			throw new IllegalArgumentException("PID prefix must be set.");
 
-		headerPid = pidPrefix + "header";
-		footerPid = pidPrefix + "footer";
-		leadPanePid = pidPrefix + "leadPane";
-		adminLeadPanePid = pidPrefix + "adminLeadPane";
-		loginScreenPid = pidPrefix + "loginScreen";
+//		headerPid = pidPrefix + "header";
+//		footerPid = pidPrefix + "footer";
+//		leadPanePid = pidPrefix + "leadPane";
+//		adminLeadPanePid = pidPrefix + "adminLeadPane";
+//		loginScreenPid = pidPrefix + "loginScreen";
 	}
 
-	public void destroy(Map<String, Object> properties) {
+	public void stop(Map<String, Object> properties) {
 		for (SwtAppUi ui : managedUis.values())
 			if (!ui.isDisposed()) {
 				ui.getDisplay().syncExec(() -> ui.dispose());
@@ -187,13 +193,13 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 
 			ProvidedSession contentSession = (ProvidedSession) CmsUxUtils.getContentSession(contentRepository, cmsView);
 
-			SwtUiProvider headerUiProvider = findUiProvider(headerPid);
-			SwtUiProvider footerUiProvider = findUiProvider(footerPid);
+			SwtUiProvider headerUiProvider = findStructuralUiProvider(SwtAppUi.Structural.header.name());
+			SwtUiProvider footerUiProvider = findStructuralUiProvider(SwtAppUi.Structural.footer.name());
 			SwtUiProvider leadPaneUiProvider;
 			if (adminUiName.equals(uiName)) {
-				leadPaneUiProvider = findUiProvider(adminLeadPanePid);
+				leadPaneUiProvider = findStructuralUiProvider(SwtAppUi.Structural.adminLeadPane.name());
 			} else {
-				leadPaneUiProvider = findUiProvider(leadPanePid);
+				leadPaneUiProvider = findStructuralUiProvider(SwtAppUi.Structural.leadPane.name());
 			}
 
 			Localized appTitle = null;
@@ -208,7 +214,8 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 				if (headerUiProvider != null)
 					refreshPart(headerUiProvider, ui.getHeader(), context);
 				ui.refreshBelowHeader(false);
-				refreshPart(findUiProvider(loginScreenPid), ui.getBelowHeader(), context);
+				SwtUiProvider loginScreenUiProvider = findStructuralUiProvider(SwtAppUi.Structural.loginScreen.name());
+				refreshPart(loginScreenUiProvider, ui.getBelowHeader(), context);
 				if (footerUiProvider != null)
 					refreshPart(footerUiProvider, ui.getFooter(), context);
 				ui.layout(true, true);
@@ -276,6 +283,17 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 	private void refreshPart(SwtUiProvider uiProvider, Composite part, Content context) {
 		CmsSwtUtils.clear(part);
 		uiProvider.createUiPart(part, context);
+	}
+
+	private SwtUiProvider findStructuralUiProvider(String suffix) {
+		SwtUiProvider res = null;
+		if (pidPrefix != null)
+			res = findUiProvider(pidPrefix + "." + suffix);
+		if (res != null)
+			return res;
+		if (sharedPidPrefix != null)
+			res = findUiProvider(sharedPidPrefix + "." + suffix);
+		return res;
 	}
 
 	private SwtUiProvider findUiProvider(String pid) {

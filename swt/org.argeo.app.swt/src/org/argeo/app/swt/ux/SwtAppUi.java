@@ -16,6 +16,10 @@ import org.eclipse.swt.widgets.Composite;
 
 /** The view for the default UX of Argeo Suite. */
 public class SwtAppUi extends CmsSwtUi implements AppUi {
+	static enum Structural {
+		header, footer, leadPane, sidePane, loginScreen, adminLeadPane;
+	}
+
 	private static final long serialVersionUID = 6207018859086689108L;
 	private final static CmsLog log = CmsLog.getLog(SwtAppUi.class);
 
