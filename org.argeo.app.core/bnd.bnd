@@ -2,6 +2,7 @@ Bundle-ActivationPolicy: lazy
 
 Service-Component:\
 OSGI-INF/suiteMaintenance.xml,\
+OSGI-INF/termsContentProvider.xml,\
 
 Import-Package:\
 tech.units.indriya.unit,\

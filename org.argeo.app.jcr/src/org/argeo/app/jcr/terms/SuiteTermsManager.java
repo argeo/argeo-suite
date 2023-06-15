@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import javax.jcr.Node;
+import javax.jcr.NodeIterator;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -15,6 +18,7 @@ import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.api.Term;
 import org.argeo.app.api.TermsManager;
+import org.argeo.app.api.Typology;
 import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
@@ -58,6 +62,16 @@ public class SuiteTermsManager implements TermsManager {
 			t = loadTypology(termsNode);
 		}
 		return t;
+	}
+
+	@Override
+	public Set<Typology> getTypologies() {
+		Set<Typology> res = new TreeSet<>((o1, o2) -> o1.getId().compareTo(o2.getId()));
+		NodeIterator termsNodes = Jcr.executeQuery(adminSession, "SELECT * FROM [{0}]", EntityType.terms.get());
+		for (Node termsNode : Jcr.iterate(termsNodes)) {
+			res.add(loadTypology(termsNode));
+		}
+		return res;
 	}
 
 	SuiteTypology loadTypology(Node termsNode) {
