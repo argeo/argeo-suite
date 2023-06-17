@@ -1,11 +1,15 @@
 Service-Component:\
 OSGI-INF/swtArgeoApp.xml,\
 OSGI-INF/leadPane.xml,\
+OSGI-INF/spaceEntryArea.xml,\
+OSGI-INF/structureLayer.xml,\
 OSGI-INF/termsEntryArea.xml,\
 OSGI-INF/termsLayer.xml,\
 
 Import-Package:\
+org.argeo.app.api,\
 org.argeo.cms.swt.acr,\
 org.argeo.app.swt.ux,\
 org.argeo.app.swt.terms,\
+org.argeo.app.swt.space,\
 *

@@ -48,7 +48,7 @@ public class TermsEntryArea implements SwtUiProvider {
 
 		};
 		contentPart.addColumn((c) -> NamespaceUtils.toPrefixedName(c.getName()));
-		contentPart.setInput(rootContent);
+//		contentPart.setInput(rootContent);
 
 		SwtTreeView<Content> view = new SwtTreeView<>(parent, 0, contentPart);
 		view.setLayoutData(CmsSwtUtils.fillAll());

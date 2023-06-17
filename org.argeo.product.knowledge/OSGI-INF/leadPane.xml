@@ -6,7 +6,8 @@
    </service>
    <property name="service.ranking" type="Integer" value="-1000"/>
    <properties entry="config/leadPane.properties"/>
-   <property name="defaultLayers" type="String">argeo.product.knowledge.termsLayer
+   <property name="defaultLayers" type="String">argeo.product.knowledge.structureLayer
+argeo.product.knowledge.termsLayer
    </property>
    <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.swt.ux.SwtAppLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
 </scr:component>
