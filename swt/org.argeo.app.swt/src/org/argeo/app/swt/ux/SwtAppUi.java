@@ -153,6 +153,11 @@ public class SwtAppUi extends CmsSwtUi implements AppUi {
 	}
 
 	public void addLayer(String id, SwtAppLayer layer) {
+		if (!id.equals(layer.getId())) {
+			log.error("Layer id as key '" + id + "' is not consistent with layer id '" + layer.getId()
+					+ "', ignoring...");
+			return;
+		}
 		layers.put(id, layer);
 	}
 

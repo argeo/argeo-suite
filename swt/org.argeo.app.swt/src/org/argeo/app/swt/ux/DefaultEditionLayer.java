@@ -3,6 +3,7 @@ package org.argeo.app.swt.ux;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.argeo.api.acr.Content;
 import org.argeo.app.ux.SuiteIcon;
@@ -130,6 +131,7 @@ public class DefaultEditionLayer implements SwtAppLayer {
 	public void init(BundleContext bundleContext, Map<String, Object> properties) {
 		String pid = (String) properties.get(Constants.SERVICE_PID);
 		id = pid;
+		Objects.requireNonNull(id, "Layer id must be set.");
 
 		weights = LangUtils.toStringList(properties.get(Property.weights.name()));
 		startMaximized = properties.containsKey(Property.startMaximized.name())
