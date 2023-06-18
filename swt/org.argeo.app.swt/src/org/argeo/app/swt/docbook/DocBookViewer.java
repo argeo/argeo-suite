@@ -3,6 +3,8 @@ package org.argeo.app.swt.docbook;
 import static org.argeo.app.docbook.DbkAcrUtils.isDbk;
 import static org.argeo.app.docbook.DbkType.para;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.argeo.api.acr.Content;
@@ -22,6 +24,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
+/** Displays DocBook content. */
 public class DocBookViewer extends AbstractPageViewer {
 
 	private TextInterpreter textInterpreter = new DbkTextInterpreter();
@@ -52,14 +55,14 @@ public class DocBookViewer extends AbstractPageViewer {
 	protected void refresh(Control control) {
 		if (!(control instanceof SwtSection))
 			return;
-		long begin = System.currentTimeMillis();
+//		long begin = System.currentTimeMillis();
 		SwtSection section = (SwtSection) control;
 		if (section instanceof TextSection) {
 			CmsSwtUtils.clear(mainSection);
 			refreshTextSection(mainSection);
 
 		}
-		long duration = System.currentTimeMillis() - begin;
+//		long duration = System.currentTimeMillis() - begin;
 //		System.out.println(duration + " ms - " + DbkUtils.getTitle(section.getNode()));
 
 	}
@@ -90,7 +93,7 @@ public class DocBookViewer extends AbstractPageViewer {
 		for (Content child : section.getContent()) {
 			if (child.hasContentClass(DbkType.section)) {
 				processingSubSections = true;
-				TextSection childSection = new TextSection(section, 0, child);
+				TextSection childSection = newTextSection(section, child); // new TextSection(section, 0, child);
 				childSection.setLayoutData(CmsSwtUtils.fillWidth());
 				refreshTextSection(childSection);
 			} else {
@@ -107,6 +110,8 @@ public class DocBookViewer extends AbstractPageViewer {
 					} else {
 						throw new IllegalArgumentException("Unsupported media object " + child);
 					}
+				} else if (isDbk(child, DbkType.info)) {
+					// TODO enrich UI based on info
 				} else if (isDbk(child, DbkType.title)) {
 					// already managed
 					// TODO check that it is first?
@@ -145,7 +150,7 @@ public class DocBookViewer extends AbstractPageViewer {
 
 			} else if (part instanceof DbkImg) {
 				DbkImg editableImage = (DbkImg) part;
-//				imageManager.load(partContent, part.getControl(), editableImage.getPreferredImageSize());
+				imageManager.load(partContent, part.getControl(), editableImage.getPreferredImageSize());
 			} else if (part instanceof DbkVideo) {
 				DbkVideo video = (DbkVideo) part;
 				video.load(part.getControl());
@@ -159,6 +164,11 @@ public class DocBookViewer extends AbstractPageViewer {
 			else
 				title.setText(textInterpreter.readSimpleHtml(title.getContent()));
 		}
+	}
+
+	/** To be overridden in order to provide additional SectionPart types */
+	protected TextSection newTextSection(SwtSection section, Content node) {
+		return new TextSection(section, SWT.NONE, node);
 	}
 
 	protected Paragraph newParagraph(TextSection parent, Content node) {
@@ -222,10 +232,14 @@ public class DocBookViewer extends AbstractPageViewer {
 	 * level.
 	 * 
 	 * @return the parent to use for the {@link DbkSectionTitle}, by default
-	 *         {@link Section#getHeader()}
+	 *         {@link SwtSection#getHeader()}
 	 */
 	protected Composite newSectionHeader(TextSection section) {
 		return section.getHeader();
+	}
+
+	protected List<String> getAvailableStyles(SwtEditablePart editablePart) {
+		return new ArrayList<>();
 	}
 
 	public TextSection getMainSection() {
