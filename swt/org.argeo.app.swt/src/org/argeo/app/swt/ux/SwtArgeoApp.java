@@ -128,6 +128,8 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 			appPid = "<unknown>";
 		}
 
+		Objects.requireNonNull(contentRepository, "Content repository must be provided");
+		Objects.requireNonNull(appUserState, "App user state must be provided");
 //		if (pidPrefix == null)
 //			throw new IllegalArgumentException("PID prefix must be set.");
 
