@@ -56,7 +56,8 @@ public abstract class CustomMaintenanceService extends AbstractMaintenanceServic
 						ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
 			} catch (ItemExistsException e) {
 				log.warn("Terms " + name + " exists with another UUID, removing it...");
-				termsBase.getNode(name).remove();
+				if (termsBase.hasNode(name))
+					termsBase.getNode(name).remove();
 				try (InputStream in = termsUrl.openStream()) {
 					termsBase.getSession().importXML(termsBase.getPath(), in,
 							ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
