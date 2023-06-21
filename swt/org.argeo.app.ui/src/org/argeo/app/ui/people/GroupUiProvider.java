@@ -10,7 +10,7 @@ import org.argeo.api.cms.directory.CmsGroup;
 import org.argeo.api.cms.directory.CmsUser;
 import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.api.cms.directory.HierarchyUnit;
-import org.argeo.app.ui.SuiteUiUtils;
+import org.argeo.app.swt.ux.SuiteSwtUtils;
 import org.argeo.app.ux.SuiteIcon;
 import org.argeo.app.ux.SuiteMsg;
 import org.argeo.cms.CurrentUser;
@@ -75,7 +75,7 @@ public class GroupUiProvider implements SwtUiProvider {
 		String title = (context.hasContentClass(LdapObj.organization) ? SuiteMsg.org.lead() : SuiteMsg.group.lead())
 				+ " " + LdapAcrUtils.getLocalized(context, LdapAttr.cn.qName(), CurrentUser.locale()) + " ("
 				+ hierarchyUnit.getHierarchyUnitLabel(CurrentUser.locale()) + ")";
-		SuiteUiUtils.addFormLabel(area, title);
+		SuiteSwtUtils.addFormLabel(area, title);
 
 		// toolbar
 		ToolBar toolBar = new ToolBar(area, SWT.NONE);

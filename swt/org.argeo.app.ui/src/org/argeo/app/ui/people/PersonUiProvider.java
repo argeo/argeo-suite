@@ -14,7 +14,7 @@ import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.api.cms.directory.HierarchyUnit;
 import org.argeo.api.cms.directory.HierarchyUnit.Type;
 import org.argeo.app.api.SuiteRole;
-import org.argeo.app.ui.SuiteUiUtils;
+import org.argeo.app.swt.ux.SuiteSwtUtils;
 import org.argeo.app.ux.SuiteMsg;
 import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.CmsMsg;
@@ -95,12 +95,12 @@ public class PersonUiProvider implements SwtUiProvider {
 				changePasswordSection.setLayout(new GridLayout(2, false));
 //				SuiteUiUtils.addFormLabel(changePasswordSection, CmsMsg.changePassword)
 //						.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, false, false, 2, 1));
-				SuiteUiUtils.addFormLabel(changePasswordSection, CmsMsg.newPassword);
-				Text newPasswordT = SuiteUiUtils.addFormTextField(changePasswordSection, null, null,
+				SuiteSwtUtils.addFormLabel(changePasswordSection, CmsMsg.newPassword);
+				Text newPasswordT = SuiteSwtUtils.addFormTextField(changePasswordSection, null, null,
 						SWT.PASSWORD | SWT.BORDER);
 				newPasswordT.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-				SuiteUiUtils.addFormLabel(changePasswordSection, CmsMsg.repeatNewPassword);
-				Text repeatNewPasswordT = SuiteUiUtils.addFormTextField(changePasswordSection, null, null,
+				SuiteSwtUtils.addFormLabel(changePasswordSection, CmsMsg.repeatNewPassword);
+				Text repeatNewPasswordT = SuiteSwtUtils.addFormTextField(changePasswordSection, null, null,
 						SWT.PASSWORD | SWT.BORDER);
 				repeatNewPasswordT.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 				Button apply = new Button(changePasswordSection, SWT.FLAT);
@@ -127,7 +127,7 @@ public class PersonUiProvider implements SwtUiProvider {
 	}
 
 	private void addFormLine(SwtSection parent, Localized msg, Content content, QNamed attr) {
-		SuiteUiUtils.addFormLabel(parent, msg.lead());
+		SuiteSwtUtils.addFormLabel(parent, msg.lead());
 		EditableText text = new EditableText(parent, SWT.SINGLE | SWT.FLAT);
 		text.setLayoutData(CmsSwtUtils.fillWidth());
 		text.setStyle(SuiteStyle.simpleInput);

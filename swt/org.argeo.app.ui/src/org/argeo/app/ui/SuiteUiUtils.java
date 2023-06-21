@@ -13,21 +13,18 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.commons.io.IOUtils;
-import org.argeo.api.acr.Content;
 import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.api.cms.ux.CmsStyle;
 import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
+import org.argeo.app.swt.ux.SuiteSwtUtils;
 import org.argeo.app.swt.ux.SwtArgeoApp;
-import org.argeo.app.ux.SuiteStyle;
 import org.argeo.app.ux.SuiteUxEvent;
-import org.argeo.cms.Localized;
 import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.dialogs.LightweightDialog;
 import org.argeo.cms.ui.util.CmsLink;
 import org.argeo.cms.ui.util.CmsUiUtils;
-import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
 import org.eclipse.swt.SWT;
@@ -38,102 +35,20 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-/** UI utilities related to the APAF project. */
+/** UI utilities around SWT and JCR. */
 public class SuiteUiUtils {
-
-	/** Singleton. */
-	private SuiteUiUtils() {
-	}
-
-	/** creates a title bar composite with label and optional button */
-	public static void addTitleBar(Composite parent, String title, Boolean isEditable) {
-		Composite titleBar = new Composite(parent, SWT.NONE);
-		titleBar.setLayoutData(CmsSwtUtils.fillWidth());
-		CmsSwtUtils.style(titleBar, SuiteStyle.titleContainer);
-
-		titleBar.setLayout(CmsSwtUtils.noSpaceGridLayout(new GridLayout(2, false)));
-		Label titleLbl = new Label(titleBar, SWT.NONE);
-		titleLbl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
-		CmsSwtUtils.style(titleLbl, SuiteStyle.titleLabel);
-		titleLbl.setText(title);
-
-		if (isEditable) {
-			Button editBtn = new Button(titleBar, SWT.PUSH);
-			editBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
-			CmsSwtUtils.style(editBtn, SuiteStyle.inlineButton);
-			editBtn.setText("Edit");
-		}
-	}
-
-	public static Label addFormLabel(Composite parent, Localized msg) {
-		return addFormLabel(parent, msg.lead());
-	}
-
-	public static Label addFormLabel(Composite parent, String label) {
-		Label lbl = new Label(parent, SWT.WRAP);
-		lbl.setText(label);
-		// lbl.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, true, true));
-		CmsSwtUtils.style(lbl, SuiteStyle.simpleLabel);
-		return lbl;
-	}
-
-	public static Text addFormTextField(Composite parent, String text, String message) {
-		return addFormTextField(parent, text, message, SWT.NONE);
-	}
-
-	public static Text addFormTextField(Composite parent, String text, String message, int style) {
-		Text txt = new Text(parent, style);
-		if (text != null)
-			txt.setText(text);
-		if (message != null)
-			txt.setMessage(message);
-		txt.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, true, true));
-		CmsSwtUtils.style(txt, SuiteStyle.simpleText);
-		return txt;
-	}
-
-	public static Text addFormInputField(Composite parent, String placeholder) {
-		Text txt = new Text(parent, SWT.BORDER);
-
-		GridData gridData = CmsSwtUtils.fillWidth();
-		txt.setLayoutData(gridData);
-
-		if (placeholder != null)
-			txt.setText(placeholder);
-
-		CmsSwtUtils.style(txt, SuiteStyle.simpleInput);
-		return txt;
-	}
-
-	/** creates a single horizontal-block composite for key:value display */
-	public static Text addFormLine(Composite parent, String label, String text) {
-		Composite lineComposite = new Composite(parent, SWT.NONE);
-		lineComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		lineComposite.setLayout(new GridLayout(2, false));
-		CmsSwtUtils.style(lineComposite, SuiteStyle.formLine);
-		addFormLabel(lineComposite, label);
-		Text txt = addFormTextField(lineComposite, text, null);
-		txt.setEditable(false);
-		txt.setLayoutData(CmsSwtUtils.fillWidth());
-		return txt;
-	}
-
 	public static Text addFormLine(Composite parent, String label, Node node, String property,
 			CmsEditable cmsEditable) {
-		Composite lineComposite = new Composite(parent, SWT.NONE);
-		lineComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		lineComposite.setLayout(new GridLayout(2, false));
-		CmsSwtUtils.style(lineComposite, SuiteStyle.formLine);
-		addFormLabel(lineComposite, label);
+		Composite lineComposite = SuiteSwtUtils.addLineComposite(parent, 2);
+		SuiteSwtUtils.addFormLabel(lineComposite, label);
 		String text = Jcr.get(node, property);
 //		int style = cmsEditable.isEditing() ? SWT.WRAP : SWT.WRAP;
-		Text txt = addFormTextField(lineComposite, text, null, SWT.WRAP);
+		Text txt = SuiteSwtUtils.addFormTextField(lineComposite, text, null, SWT.WRAP);
 		if (cmsEditable != null && cmsEditable.isEditing()) {
 			txt.addModifyListener((e) -> {
 				Jcr.set(node, property, txt.getText());
@@ -142,48 +57,6 @@ public class SuiteUiUtils {
 		} else {
 			txt.setEditable(false);
 		}
-		txt.setLayoutData(CmsSwtUtils.fillWidth());
-		return txt;
-	}
-
-	public static Text addFormInput(Composite parent, String label, String placeholder) {
-		Composite lineComposite = new Composite(parent, SWT.NONE);
-		lineComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		lineComposite.setLayout(new GridLayout(2, false));
-		CmsSwtUtils.style(lineComposite, SuiteStyle.formLine);
-		addFormLabel(lineComposite, label);
-		Text txt = addFormInputField(lineComposite, placeholder);
-		txt.setLayoutData(CmsSwtUtils.fillWidth());
-		return txt;
-	}
-
-	/**
-	 * creates a single horizontal-block composite for key:value display, with
-	 * offset value
-	 */
-	public static Text addFormLine(Composite parent, String label, String text, Integer offset) {
-		Composite lineComposite = new Composite(parent, SWT.NONE);
-		lineComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		lineComposite.setLayout(new GridLayout(3, false));
-		CmsSwtUtils.style(lineComposite, SuiteStyle.formLine);
-		Label offsetLbl = new Label(lineComposite, SWT.NONE);
-		GridData gridData = new GridData();
-		gridData.widthHint = offset;
-		offsetLbl.setLayoutData(gridData);
-		addFormLabel(lineComposite, label);
-		Text txt = addFormTextField(lineComposite, text, null);
-		txt.setLayoutData(CmsSwtUtils.fillWidth());
-		return txt;
-	}
-
-	/** creates a single vertical-block composite for key:value display */
-	public static Text addFormColumn(Composite parent, String label, String text) {
-//		Composite columnComposite = new Composite(parent, SWT.NONE);
-//		columnComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-//		columnComposite.setLayout(new GridLayout(1, false));
-		addFormLabel(parent, label);
-		Text txt = addFormTextField(parent, text, null);
-		txt.setEditable(false);
 		txt.setLayoutData(CmsSwtUtils.fillWidth());
 		return txt;
 	}
@@ -193,10 +66,10 @@ public class SuiteUiUtils {
 //		Composite columnComposite = new Composite(parent, SWT.NONE);
 //		columnComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 //		columnComposite.setLayout(new GridLayout(1, false));
-		addFormLabel(parent, label);
+		SuiteSwtUtils.addFormLabel(parent, label);
 		String text = Jcr.get(node, property);
 //		int style = cmsEditable.isEditing() ? SWT.WRAP : SWT.WRAP;
-		Text txt = addFormTextField(parent, text, null, SWT.WRAP);
+		Text txt = SuiteSwtUtils.addFormTextField(parent, text, null, SWT.WRAP);
 		if (cmsEditable != null && cmsEditable.isEditing()) {
 			txt.addModifyListener((e) -> {
 				Jcr.set(node, property, txt.getText());
@@ -209,20 +82,9 @@ public class SuiteUiUtils {
 		return txt;
 	}
 
-	public static Label createBoldLabel(Composite parent, Localized localized) {
-		Label label = new Label(parent, SWT.LEAD);
-		label.setText(localized.lead());
-		label.setFont(EclipseUiUtils.getBoldFont(parent));
-		label.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, false, false));
-		return label;
-	}
-
 	public static Label addFormPicture(Composite parent, String label, Node fileNode) throws RepositoryException {
-		Composite lineComposite = new Composite(parent, SWT.NONE);
-		lineComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-		lineComposite.setLayout(new GridLayout(2, true));
-		CmsSwtUtils.style(lineComposite, SuiteStyle.formLine);
-		addFormLabel(lineComposite, label);
+		Composite lineComposite = SuiteSwtUtils.addLineComposite(parent, 2);
+		SuiteSwtUtils.addFormLabel(lineComposite, label);
 
 		return addPicture(lineComposite, fileNode);
 	}
@@ -362,10 +224,6 @@ public class SuiteUiUtils {
 		return img;
 	}
 
-	public static String toLink(Content node) {
-		return node != null ? "#" + CmsSwtUtils.cleanPathForUrl(SwtArgeoApp.nodeToState(node)) : null;
-	}
-
 	public static String toLink(Node node) {
 		return node != null ? "#" + CmsSwtUtils.cleanPathForUrl(SwtArgeoApp.nodeToState(JcrContent.nodeToContent(node)))
 				: null;
@@ -378,25 +236,6 @@ public class SuiteUiUtils {
 		return link.createUi(parent, node);
 	}
 
-	public static Control addExternalLink(Composite parent, String label, String url, String plainCssAnchorClass,
-			boolean newWindow) throws RepositoryException {
-		Label lbl = new Label(parent, SWT.NONE);
-		CmsSwtUtils.markup(lbl);
-		StringBuilder txt = new StringBuilder();
-		txt.append("<a");
-		if (plainCssAnchorClass != null)
-			txt.append(" class='" + plainCssAnchorClass + "'");
-		txt.append(" href='").append(url).append("'");
-		if (newWindow) {
-			txt.append(" target='blank_'");
-		}
-		txt.append(">");
-		txt.append(label);
-		txt.append("</a>");
-		lbl.setText(txt.toString());
-		return lbl;
-	}
-
 	@Deprecated
 	public static Map<String, Object> eventProperties(Node node) {
 		Map<String, Object> properties = new HashMap<>();
@@ -405,39 +244,8 @@ public class SuiteUiUtils {
 		return properties;
 	}
 
-//	public static String createAndConfigureEntity(Shell shell, Session referenceSession, String mainMixin,
-//			String... additionnalProps) {
-//
-//		Session tmpSession = null;
-//		Session mainSession = null;
-//		try {
-//			// FIXME would not work if home is another physical workspace
-//			tmpSession = referenceSession.getRepository().login(NodeConstants.HOME_WORKSPACE);
-//			Node draftNode = null;
-//			for (int i = 0; i < additionnalProps.length - 1; i += 2) {
-//				draftNode.setProperty(additionnalProps[i], additionnalProps[i + 1]);
-//			}
-//			Wizard wizard = null;
-//			CmsWizardDialog dialog = new CmsWizardDialog(shell, wizard);
-//			// WizardDialog dialog = new WizardDialog(shell, wizard);
-//			if (dialog.open() == Window.OK) {
-//				String parentPath = null;// "/" + appService.getBaseRelPath(mainMixin);
-//				// FIXME it should be possible to specify the workspace
-//				mainSession = referenceSession.getRepository().login();
-//				Node parent = mainSession.getNode(parentPath);
-//				Node task = null;// appService.publishEntity(parent, mainMixin, draftNode);
-////				task = appService.saveEntity(task, false);
-//				referenceSession.refresh(true);
-//				return task.getPath();
-//			}
-//			return null;
-//		} catch (RepositoryException e1) {
-//			throw new JcrException(
-//					"Unable to create " + mainMixin + " entity with session " + referenceSession.toString(), e1);
-//		} finally {
-//			JcrUtils.logoutQuietly(tmpSession);
-//			JcrUtils.logoutQuietly(mainSession);
-//		}
-//	}
+	/** Singleton. */
+	private SuiteUiUtils() {
+	}
 
 }
