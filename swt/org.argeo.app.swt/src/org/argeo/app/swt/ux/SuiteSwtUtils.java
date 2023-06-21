@@ -1,6 +1,10 @@
 package org.argeo.app.swt.ux;
 
+import javax.xml.namespace.QName;
+
 import org.argeo.api.acr.Content;
+import org.argeo.api.acr.QNamed;
+import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -8,7 +12,6 @@ import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -17,7 +20,12 @@ import org.eclipse.swt.widgets.Text;
 /** Static utilities implementing the look and feel of Argeo Suite with SWT. */
 public class SuiteSwtUtils {
 	/** creates a title bar composite with label and optional button */
-	public static void addTitleBar(Composite parent, String title, Boolean isEditable) {
+	public static Composite addTitleBar(Composite parent, Localized title) {
+		return addTitleBar(parent, title.lead());
+	}
+
+	/** creates a title bar composite with label and optional button */
+	public static Composite addTitleBar(Composite parent, String title) {
 		Composite titleBar = new Composite(parent, SWT.NONE);
 		titleBar.setLayoutData(CmsSwtUtils.fillWidth());
 		CmsSwtUtils.style(titleBar, SuiteStyle.titleContainer);
@@ -28,12 +36,13 @@ public class SuiteSwtUtils {
 		CmsSwtUtils.style(titleLbl, SuiteStyle.titleLabel);
 		titleLbl.setText(title);
 
-		if (isEditable) {
-			Button editBtn = new Button(titleBar, SWT.PUSH);
-			editBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
-			CmsSwtUtils.style(editBtn, SuiteStyle.inlineButton);
-			editBtn.setText("Edit");
-		}
+//		if (isEditable) {
+//			Button editBtn = new Button(titleBar, SWT.PUSH);
+//			editBtn.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
+//			CmsSwtUtils.style(editBtn, SuiteStyle.inlineButton);
+//			editBtn.setText("Edit");
+//		}
+		return titleBar;
 	}
 
 	public static Label addFormLabel(Composite parent, String label) {
@@ -85,6 +94,11 @@ public class SuiteSwtUtils {
 	}
 
 	/** creates a single horizontal-block composite for key:value display */
+	public static Text addFormLine(Composite parent, Localized label, String text) {
+		return addFormLine(parent, label.lead(), text);
+	}
+
+	/** creates a single horizontal-block composite for key:value display */
 	public static Text addFormLine(Composite parent, String label, String text) {
 		Composite lineComposite = addLineComposite(parent, 2);
 		CmsSwtUtils.style(lineComposite, SuiteStyle.formLine);
@@ -120,6 +134,11 @@ public class SuiteSwtUtils {
 	}
 
 	/** creates a single vertical-block composite for key:value display */
+	public static Text addFormColumn(Composite parent, Localized label, String text) {
+		return addFormColumn(parent, label.lead(), text);
+	}
+
+	/** creates a single vertical-block composite for key:value display */
 	public static Text addFormColumn(Composite parent, String label, String text) {
 		// Composite columnComposite = new Composite(parent, SWT.NONE);
 		// columnComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true,
@@ -140,10 +159,6 @@ public class SuiteSwtUtils {
 		return label;
 	}
 
-	public static String toLink(Content node) {
-		return node != null ? "#" + CmsSwtUtils.cleanPathForUrl(SwtArgeoApp.nodeToState(node)) : null;
-	}
-
 	public static Control addExternalLink(Composite parent, String label, String url, String plainCssAnchorClass,
 			boolean newWindow) {
 		Label lbl = new Label(parent, SWT.NONE);
@@ -161,6 +176,56 @@ public class SuiteSwtUtils {
 		txt.append("</a>");
 		lbl.setText(txt.toString());
 		return lbl;
+	}
+
+	/*
+	 * CONTENT
+	 */
+	public static String toLink(Content content) {
+		return content != null ? "#" + CmsSwtUtils.cleanPathForUrl(SwtArgeoApp.nodeToState(content)) : null;
+	}
+
+	public static Text addFormLine(Composite parent, Localized label, Content content, QNamed property,
+			CmsEditable cmsEditable) {
+		return addFormLine(parent, label.lead(), content, property.qName(), cmsEditable);
+	}
+
+	public static Text addFormLine(Composite parent, String label, Content content, QName property,
+			CmsEditable cmsEditable) {
+		Composite lineComposite = SuiteSwtUtils.addLineComposite(parent, 2);
+		SuiteSwtUtils.addFormLabel(lineComposite, label);
+		String text = content.attr(property);
+		Text txt = SuiteSwtUtils.addFormTextField(lineComposite, text, null, SWT.WRAP);
+		if (cmsEditable != null && cmsEditable.isEditing()) {
+			txt.addModifyListener((e) -> {
+				content.put(property, txt.getText());
+			});
+		} else {
+			txt.setEditable(false);
+		}
+		txt.setLayoutData(CmsSwtUtils.fillWidth());
+		return txt;
+	}
+
+	public static Text addFormColumn(Composite parent, Localized label, Content content, QNamed property,
+			CmsEditable cmsEditable) {
+		return addFormColumn(parent, label.lead(), content, property.qName(), cmsEditable);
+	}
+
+	public static Text addFormColumn(Composite parent, String label, Content content, QName property,
+			CmsEditable cmsEditable) {
+		SuiteSwtUtils.addFormLabel(parent, label);
+		String text = content.attr(property);
+		Text txt = SuiteSwtUtils.addFormTextField(parent, text, null, SWT.WRAP);
+		if (cmsEditable != null && cmsEditable.isEditing()) {
+			txt.addModifyListener((e) -> {
+				content.put(property, txt.getText());
+			});
+		} else {
+			txt.setEditable(false);
+		}
+		txt.setLayoutData(CmsSwtUtils.fillWidth());
+		return txt;
 	}
 
 	/** singleton */

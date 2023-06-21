@@ -155,6 +155,7 @@ public abstract class AbstractTermsPart extends StyledControl implements SwtEdit
 		return canDelete;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setLocalized(Class<? extends Enum> localized) {
 		this.localized = localized;
 	}

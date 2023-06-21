@@ -41,13 +41,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 /** UI utilities around SWT and JCR. */
+@Deprecated
 public class SuiteUiUtils {
 	public static Text addFormLine(Composite parent, String label, Node node, String property,
 			CmsEditable cmsEditable) {
 		Composite lineComposite = SuiteSwtUtils.addLineComposite(parent, 2);
 		SuiteSwtUtils.addFormLabel(lineComposite, label);
 		String text = Jcr.get(node, property);
-//		int style = cmsEditable.isEditing() ? SWT.WRAP : SWT.WRAP;
 		Text txt = SuiteSwtUtils.addFormTextField(lineComposite, text, null, SWT.WRAP);
 		if (cmsEditable != null && cmsEditable.isEditing()) {
 			txt.addModifyListener((e) -> {
@@ -63,12 +63,8 @@ public class SuiteUiUtils {
 
 	public static Text addFormColumn(Composite parent, String label, Node node, String property,
 			CmsEditable cmsEditable) {
-//		Composite columnComposite = new Composite(parent, SWT.NONE);
-//		columnComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
-//		columnComposite.setLayout(new GridLayout(1, false));
 		SuiteSwtUtils.addFormLabel(parent, label);
 		String text = Jcr.get(node, property);
-//		int style = cmsEditable.isEditing() ? SWT.WRAP : SWT.WRAP;
 		Text txt = SuiteSwtUtils.addFormTextField(parent, text, null, SWT.WRAP);
 		if (cmsEditable != null && cmsEditable.isEditing()) {
 			txt.addModifyListener((e) -> {
@@ -82,12 +78,12 @@ public class SuiteUiUtils {
 		return txt;
 	}
 
-	public static Label addFormPicture(Composite parent, String label, Node fileNode) throws RepositoryException {
-		Composite lineComposite = SuiteSwtUtils.addLineComposite(parent, 2);
-		SuiteSwtUtils.addFormLabel(lineComposite, label);
-
-		return addPicture(lineComposite, fileNode);
-	}
+//	public static Label addFormPicture(Composite parent, String label, Node fileNode) throws RepositoryException {
+//		Composite lineComposite = SuiteSwtUtils.addLineComposite(parent, 2);
+//		SuiteSwtUtils.addFormLabel(lineComposite, label);
+//
+//		return addPicture(lineComposite, fileNode);
+//	}
 
 	public static Label addPicture(Composite parent, Node fileNode) throws RepositoryException {
 		return addPicture(parent, fileNode, null);
