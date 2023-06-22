@@ -1,5 +1,7 @@
 package org.argeo.app.swt.ux;
 
+import java.util.function.Predicate;
+
 import javax.xml.namespace.QName;
 
 import org.argeo.api.acr.Content;
@@ -8,8 +10,16 @@ import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtUtils;
+import org.argeo.cms.swt.dialogs.CmsFeedback;
+import org.argeo.cms.swt.widgets.EditableText;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -48,7 +58,7 @@ public class SuiteSwtUtils {
 	public static Label addFormLabel(Composite parent, String label) {
 		Label lbl = new Label(parent, SWT.WRAP);
 		lbl.setText(label);
-		// lbl.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, true, true));
+		lbl.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false));
 		CmsSwtUtils.style(lbl, SuiteStyle.simpleLabel);
 		return lbl;
 	}
@@ -63,8 +73,8 @@ public class SuiteSwtUtils {
 			txt.setText(text);
 		if (message != null)
 			txt.setMessage(message);
-		txt.setLayoutData(new GridData(SWT.LEAD, SWT.CENTER, true, true));
-		CmsSwtUtils.style(txt, SuiteStyle.simpleText);
+		txt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
+		CmsSwtUtils.style(txt, SuiteStyle.simpleInput);
 		return txt;
 	}
 
@@ -72,22 +82,23 @@ public class SuiteSwtUtils {
 		return addFormTextField(parent, text, message, SWT.NONE);
 	}
 
-	public static Text addFormInputField(Composite parent, String placeholder) {
-		Text txt = new Text(parent, SWT.BORDER);
-
-		GridData gridData = CmsSwtUtils.fillWidth();
-		txt.setLayoutData(gridData);
-
-		if (placeholder != null)
-			txt.setText(placeholder);
-
-		CmsSwtUtils.style(txt, SuiteStyle.simpleInput);
-		return txt;
-	}
+//	public static Text addFormInputField(Composite parent, String placeholder) {
+//		Text txt = new Text(parent, SWT.BORDER);
+//
+//		GridData gridData = CmsSwtUtils.fillWidth();
+//		txt.setLayoutData(gridData);
+//
+//		if (placeholder != null)
+//			txt.setText(placeholder);
+//
+//		CmsSwtUtils.style(txt, SuiteStyle.simpleInput);
+//		return txt;
+//	}
 
 	public static Composite addLineComposite(Composite parent, int columns) {
 		Composite lineComposite = new Composite(parent, SWT.NONE);
-		lineComposite.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		GridData gd = new GridData(SWT.FILL, SWT.CENTER, true, false);
+		lineComposite.setLayoutData(gd);
 		lineComposite.setLayout(new GridLayout(columns, false));
 		CmsSwtUtils.style(lineComposite, SuiteStyle.formLine);
 		return lineComposite;
@@ -109,13 +120,13 @@ public class SuiteSwtUtils {
 		return txt;
 	}
 
-	public static Text addFormInput(Composite parent, String label, String placeholder) {
-		Composite lineComposite = addLineComposite(parent, 2);
-		addFormLabel(lineComposite, label);
-		Text txt = addFormInputField(lineComposite, placeholder);
-		txt.setLayoutData(CmsSwtUtils.fillWidth());
-		return txt;
-	}
+//	public static Text addFormInput(Composite parent, String label, String placeholder) {
+//		Composite lineComposite = addLineComposite(parent, 2);
+//		addFormLabel(lineComposite, label);
+//		Text txt = addFormInputField(lineComposite, placeholder);
+//		txt.setLayoutData(CmsSwtUtils.fillWidth());
+//		return txt;
+//	}
 
 	/**
 	 * creates a single horizontal-block composite for key:value display, with
@@ -190,6 +201,84 @@ public class SuiteSwtUtils {
 		return addFormLine(parent, label.lead(), content, property.qName(), cmsEditable);
 	}
 
+	public static EditableText addTextLine(Composite parent, int style, Localized msg, Content content, QNamed attr,
+			CmsEditable cmsEditable, boolean line, Predicate<String> validator) {
+		Composite parentToUse = line ? SuiteSwtUtils.addLineComposite(parent, 2) : parent;
+		SuiteSwtUtils.addFormLabel(parentToUse, msg.lead());
+		EditableText text = createFormText(parentToUse, style, msg, content, attr, cmsEditable, validator);
+		return text;
+	}
+
+	public static EditableText createFormText(Composite parent, int style, Localized msg, Content content, QNamed attr,
+			CmsEditable cmsEditable, Predicate<String> validator) {
+		EditableText text = new EditableText(parent, style | SWT.FLAT | (cmsEditable.isEditing() ? 0 : SWT.READ_ONLY));
+		text.setMessage("-");
+		text.setLayoutData(CmsSwtUtils.fillWidth());
+		text.setStyle(SuiteStyle.simpleInput);
+		String txt = content.attr(attr);
+		if (txt == null)
+			txt = "";
+		text.setText(txt);
+		if (cmsEditable.isEditing())
+			text.setMouseListener(new MouseAdapter() {
+
+				private static final long serialVersionUID = 1L;
+
+				@Override
+				public void mouseDoubleClick(MouseEvent e) {
+					String currentTxt = text.getText();
+					text.startEditing();
+					text.setText(currentTxt);
+
+					Runnable save = () -> {
+						String editedTxt = text.getText();
+						if (validator != null) {
+							if (!validator.test(editedTxt)) {
+								text.stopEditing();
+								text.setText(currentTxt);
+								CmsFeedback.show(editedTxt + " is not properly formatted");
+								return;
+								// throw new IllegalArgumentException(editedTxt + " is not properly formatted");
+							}
+						}
+						content.put(attr, editedTxt);
+						text.stopEditing();
+						text.setText(editedTxt);
+						text.getParent().layout(new Control[] { text.getControl() });
+					};
+					((Text) text.getControl()).addSelectionListener(new SelectionListener() {
+
+						private static final long serialVersionUID = 1L;
+
+						@Override
+						public void widgetSelected(SelectionEvent e) {
+						}
+
+						@Override
+						public void widgetDefaultSelected(SelectionEvent e) {
+							save.run();
+						}
+					});
+					((Text) text.getControl()).addFocusListener(new FocusListener() {
+
+						private static final long serialVersionUID = 333838002411959302L;
+
+						@Override
+						public void focusLost(FocusEvent event) {
+							save.run();
+						}
+
+						@Override
+						public void focusGained(FocusEvent event) {
+						}
+					});
+
+				}
+
+			});
+		return text;
+	}
+
 	public static Text addFormLine(Composite parent, String label, Content content, QName property,
 			CmsEditable cmsEditable) {
 		Composite lineComposite = SuiteSwtUtils.addLineComposite(parent, 2);
@@ -216,7 +305,7 @@ public class SuiteSwtUtils {
 			CmsEditable cmsEditable) {
 		SuiteSwtUtils.addFormLabel(parent, label);
 		String text = content.attr(property);
-		Text txt = SuiteSwtUtils.addFormTextField(parent, text, null, SWT.WRAP);
+		Text txt = SuiteSwtUtils.addFormTextField(parent, text, null, 0);
 		if (cmsEditable != null && cmsEditable.isEditing()) {
 			txt.addModifyListener((e) -> {
 				content.put(property, txt.getText());

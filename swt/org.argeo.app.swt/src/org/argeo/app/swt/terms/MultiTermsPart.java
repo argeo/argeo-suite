@@ -8,7 +8,7 @@ import org.argeo.api.acr.NamespaceUtils;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.app.api.Term;
 import org.argeo.app.api.TermsManager;
-import org.argeo.app.swt.forms.FormStyle;
+import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.MouseDoubleClick;
 import org.argeo.cms.swt.MouseDown;
@@ -22,7 +22,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -51,10 +50,11 @@ public class MultiTermsPart extends AbstractTermsPart {
 			for (Term value : currentValue) {
 				Composite block = new Composite(placeholder, SWT.NONE);
 				block.setLayout(CmsSwtUtils.noSpaceGridLayout(3));
-				Label lbl = new Label(block, SWT.NONE);
+				Text lbl = new Text(block, SWT.NONE);
+				lbl.setEditable(false);
 				String display = getTermLabel(value);
 				lbl.setText(display);
-				CmsSwtUtils.style(lbl, style == null ? FormStyle.propertyText.style() : style);
+				CmsSwtUtils.style(lbl, style == null ? SuiteStyle.simpleInput.style() : style);
 				processTermListLabel(value, lbl);
 				if (isEditable())
 					lbl.addMouseListener((MouseDoubleClick) (e) -> {
@@ -100,7 +100,7 @@ public class MultiTermsPart extends AbstractTermsPart {
 			txt.setLayoutData(CmsSwtUtils.fillWidth());
 //			txt.setMessage("[new]");
 
-			CmsSwtUtils.style(txt, style == null ? FormStyle.propertyText.style() : style);
+			CmsSwtUtils.style(txt, style == null ? SuiteStyle.simpleInput.style() : style);
 
 			ToolBar toolBar = new ToolBar(block, SWT.HORIZONTAL);
 			ToolItem cancelItem = new ToolItem(toolBar, SWT.FLAT);
@@ -158,7 +158,8 @@ public class MultiTermsPart extends AbstractTermsPart {
 			String display = getTermLabel(term);
 			if (filter != null && !display.toLowerCase().contains(filter))
 				continue terms;
-			Label termL = new Label(contextArea, SWT.WRAP);
+			Text termL = new Text(contextArea, SWT.WRAP);
+			termL.setEditable(false);
 			termL.setText(display);
 			processTermListLabel(term, termL);
 			if (isTermSelectable(term))

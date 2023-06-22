@@ -17,7 +17,6 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolItem;
 
@@ -39,6 +38,10 @@ public abstract class AbstractTermsPart extends StyledControl implements SwtEdit
 	private boolean canDelete = true;
 
 	protected final CmsSwtTheme theme;
+
+	private int iconsSize = 12;
+
+	private String message;
 
 	@SuppressWarnings("rawtypes")
 	private Class<? extends Enum> localized;
@@ -90,7 +93,7 @@ public abstract class AbstractTermsPart extends StyledControl implements SwtEdit
 		return true;
 	}
 
-	protected void processTermListLabel(Term term, Label label) {
+	protected void processTermListLabel(Term term, Text label) {
 
 	}
 
@@ -129,17 +132,22 @@ public abstract class AbstractTermsPart extends StyledControl implements SwtEdit
 	}
 
 	protected void styleCancel(ToolItem cancelItem) {
-		if (cancelIcon != null)
-			cancelItem.setImage(theme.getSmallIcon(cancelIcon));
-		else
+		if (cancelIcon != null) {
+			// cancelItem.setImage(theme.getSmallIcon(cancelIcon));
+			cancelItem.setImage(theme.getIcon(cancelIcon.name(), iconsSize));
+
+		} else {
 			cancelItem.setText("X");
+		}
 	}
 
 	protected void styleAdd(ToolItem addItem) {
-		if (addIcon != null)
-			addItem.setImage(theme.getSmallIcon(addIcon));
-		else
+		if (addIcon != null) {
+//			addItem.setImage(theme.getSmallIcon(addIcon));
+			addItem.setImage(theme.getIcon(addIcon.name(), iconsSize));
+		} else {
 			addItem.setText("+");
+		}
 	}
 
 	@Override
@@ -158,6 +166,14 @@ public abstract class AbstractTermsPart extends StyledControl implements SwtEdit
 	@SuppressWarnings("rawtypes")
 	public void setLocalized(Class<? extends Enum> localized) {
 		this.localized = localized;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }

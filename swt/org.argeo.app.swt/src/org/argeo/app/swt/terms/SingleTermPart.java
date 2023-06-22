@@ -5,7 +5,7 @@ import java.util.List;
 import org.argeo.api.acr.Content;
 import org.argeo.app.api.Term;
 import org.argeo.app.api.TermsManager;
-import org.argeo.app.swt.forms.FormStyle;
+import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.MouseDoubleClick;
 import org.argeo.cms.swt.MouseDown;
@@ -18,7 +18,6 @@ import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -39,8 +38,8 @@ public class SingleTermPart extends AbstractTermsPart {
 
 			createHighlight(block);
 
-			Text txt = new Text(block, SWT.SINGLE | SWT.BORDER);
-			CmsSwtUtils.style(txt, style == null ? FormStyle.propertyText.style() : style);
+			Text txt = new Text(block, SWT.SINGLE);
+			CmsSwtUtils.style(txt, style == null ? SuiteStyle.simpleInput.style() : style);
 
 			ToolBar toolBar = new ToolBar(block, SWT.HORIZONTAL);
 			if (isCanDelete()) {
@@ -97,10 +96,11 @@ public class SingleTermPart extends AbstractTermsPart {
 			block.setLayout(CmsSwtUtils.noSpaceGridLayout(2));
 			Term currentValue = getValue();
 			if (currentValue != null) {
-				Label lbl = new Label(block, SWT.SINGLE);
+				Text lbl = new Text(block, SWT.SINGLE);
+				lbl.setEditable(false);
 				String display = getTermLabel(currentValue);
 				lbl.setText(display);
-				CmsSwtUtils.style(lbl, style == null ? FormStyle.propertyText.style() : style);
+				CmsSwtUtils.style(lbl, style == null ? SuiteStyle.simpleInput.style() : style);
 				processTermListLabel(currentValue, lbl);
 				if (isEditable()) {
 					lbl.addMouseListener((MouseDoubleClick) (e) -> {
@@ -109,12 +109,20 @@ public class SingleTermPart extends AbstractTermsPart {
 				}
 			} else {
 				if (isEditable()) {
+
 					ToolBar toolBar = new ToolBar(block, SWT.HORIZONTAL);
 					ToolItem addItem = new ToolItem(toolBar, SWT.FLAT);
 					styleAdd(addItem);
 					addItem.addSelectionListener((Selected) (e) -> {
 						startEditing();
 					});
+				}
+				// add dummy text so that height wont's move afterwards
+				Text lbl = new Text(block, SWT.SINGLE);
+				lbl.setEditable(false);
+				if (!isEditable()) {// empty, non editable
+					if (getMessage() != null)
+						lbl.setMessage(getMessage());
 				}
 			}
 			return block;
@@ -129,7 +137,8 @@ public class SingleTermPart extends AbstractTermsPart {
 			String display = getTermLabel(term);
 			if (filter != null && !display.toLowerCase().contains(filter))
 				continue terms;
-			Label termL = new Label(contextArea, SWT.WRAP);
+			Text termL = new Text(contextArea, SWT.WRAP);
+			termL.setEditable(false);
 			termL.setText(display);
 			processTermListLabel(term, termL);
 			if (isTermSelectable(term))
