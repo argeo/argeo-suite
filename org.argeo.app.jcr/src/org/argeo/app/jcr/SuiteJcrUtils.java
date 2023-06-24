@@ -77,8 +77,8 @@ public class SuiteJcrUtils {
 	@Deprecated
 	public static Node getCmsSessionNode(Session session, CmsSession cmsSession) {
 		try {
-			return session.getNode(SuiteUtils.getUserNodePath(cmsSession.getUserDn()) + '/' + USER_SESSIONS_NODE_NAME + '/'
-					+ cmsSession.getUuid().toString());
+			return session.getNode(SuiteUtils.getUserNodePath(cmsSession.getUserDn()) + '/' + USER_SESSIONS_NODE_NAME
+					+ '/' + cmsSession.uuid().toString());
 		} catch (RepositoryException e) {
 			throw new JcrException("Cannot get session dir for " + cmsSession, e);
 		}
@@ -91,7 +91,7 @@ public class SuiteJcrUtils {
 			String userDn = cmsSession.getUserDn();
 			Node userNode = getOrCreateUserNode(adminSession, userDn);
 			Node sessionsNode = userNode.getNode(USER_SESSIONS_NODE_NAME);
-			String cmsSessionUuid = cmsSession.getUuid().toString();
+			String cmsSessionUuid = cmsSession.uuid().toString();
 			Node cmsSessionNode;
 			if (!sessionsNode.hasNode(cmsSessionUuid)) {
 				cmsSessionNode = sessionsNode.addNode(cmsSessionUuid, NodeType.NT_UNSTRUCTURED);
