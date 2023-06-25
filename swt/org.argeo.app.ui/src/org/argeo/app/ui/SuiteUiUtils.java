@@ -18,7 +18,6 @@ import org.argeo.api.cms.ux.CmsStyle;
 import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.swt.ux.SuiteSwtUtils;
-import org.argeo.app.swt.ux.SwtArgeoApp;
 import org.argeo.app.ux.SuiteUxEvent;
 import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -221,8 +220,7 @@ public class SuiteUiUtils {
 	}
 
 	public static String toLink(Node node) {
-		return node != null ? "#" + CmsSwtUtils.cleanPathForUrl(SwtArgeoApp.nodeToState(JcrContent.nodeToContent(node)))
-				: null;
+		return node != null ? "#" + CmsSwtUtils.cleanPathForUrl(JcrContent.nodeToContent(node).getPath()) : null;
 	}
 
 	public static Control addLink(Composite parent, String label, Node node, CmsStyle style)

@@ -8,7 +8,6 @@ import org.argeo.api.cms.CmsConstants;
 import org.argeo.api.cms.CmsSession;
 import org.argeo.app.api.AppUserState;
 import org.argeo.app.jcr.SuiteJcrUtils;
-import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.jcr.acr.JcrContentProvider;
 import org.argeo.jcr.Jcr;
 
@@ -22,8 +21,7 @@ public class AppUserStateImpl implements AppUserState {
 			Node node = SuiteJcrUtils.getOrCreateCmsSessionNode(adminSession, session);
 			return node;
 		});
-		Content userDir = contentSession
-				.get(ContentUtils.SLASH + CmsConstants.SYS_WORKSPACE + Jcr.getPath(userDirNode));
+		Content userDir = contentSession.get(Content.ROOT_PATH + CmsConstants.SYS_WORKSPACE + Jcr.getPath(userDirNode));
 		return userDir;
 	}
 

@@ -6,22 +6,28 @@ import javax.xml.namespace.QName;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.QNamed;
+import org.argeo.api.cms.ux.Cms2DSize;
 import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.api.cms.ux.CmsStyle;
 import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtUtils;
+import org.argeo.cms.swt.acr.Img;
 import org.argeo.cms.swt.dialogs.CmsFeedback;
-import org.argeo.cms.swt.widgets.EditableText;
+import org.argeo.cms.swt.dialogs.LightweightDialog;
 import org.argeo.cms.swt.widgets.CmsLink;
+import org.argeo.cms.swt.widgets.EditableText;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -172,30 +178,11 @@ public class SuiteSwtUtils {
 		return label;
 	}
 
-	public static Control addExternalLink(Composite parent, String label, String url, String plainCssAnchorClass,
-			boolean newWindow) {
-		Label lbl = new Label(parent, SWT.NONE);
-		CmsSwtUtils.markup(lbl);
-		StringBuilder txt = new StringBuilder();
-		txt.append("<a");
-		if (plainCssAnchorClass != null)
-			txt.append(" class='" + plainCssAnchorClass + "'");
-		txt.append(" href='").append(url).append("'");
-		if (newWindow) {
-			txt.append(" target='blank_'");
-		}
-		txt.append(">");
-		txt.append(label);
-		txt.append("</a>");
-		lbl.setText(txt.toString());
-		return lbl;
-	}
-
 	/*
 	 * CONTENT
 	 */
 	public static String toLink(Content content) {
-		return content != null ? "#" + CmsSwtUtils.cleanPathForUrl(SwtArgeoApp.nodeToState(content)) : null;
+		return content != null ? "#" + CmsSwtUtils.cleanPathForUrl(content.getPath()) : null;
 	}
 
 	public static Text addFormLine(Composite parent, Localized label, Content content, QNamed property,
@@ -319,11 +306,143 @@ public class SuiteSwtUtils {
 		return txt;
 	}
 
+	/*
+	 * LINKS
+	 */
+
 	/** Add a link to an internal content. */
 	public static Control addLink(Composite parent, String label, Content node, CmsStyle style) {
 		String target = toLink(node);
 		CmsLink link = new CmsLink(label, target, style);
 		return link.createUi(parent);
+	}
+
+	public static Control addExternalLink(Composite parent, String label, String url, String plainCssAnchorClass,
+			boolean newWindow) {
+		Label lbl = new Label(parent, SWT.NONE);
+		CmsSwtUtils.markup(lbl);
+		StringBuilder txt = new StringBuilder();
+		txt.append("<a");
+		if (plainCssAnchorClass != null)
+			txt.append(" class='" + plainCssAnchorClass + "'");
+		txt.append(" href='").append(url).append("'");
+		if (newWindow) {
+			txt.append(" target='blank_'");
+		}
+		txt.append(">");
+		txt.append(label);
+		txt.append("</a>");
+		lbl.setText(txt.toString());
+		return lbl;
+	}
+
+	/*
+	 * IMAGES
+	 */
+
+	public static Img addPicture(Composite parent, Content file) {
+		return addPicture(parent, file, null);
+	}
+
+	public static Img addPicture(Composite parent, Content file, Integer maxWidth) {
+		return addPicture(parent, file, maxWidth, null);
+	}
+
+	public static Img addPicture(Composite parent, Content file, Integer maxWidth, Content link) {
+		// TODO optimise
+//		Integer width;
+//		Integer height;
+//		if (file.hasContentClass(EntityType.box)) {
+//			width = file.get(SvgAttrs.width, Integer.class).get();
+//			height = file.get(SvgAttrs.height, Integer.class).get();
+//		} else {
+//			try (InputStream in = file.open(InputStream.class)) {
+//				ImageData imageData = new ImageData(in);
+//				width = imageData.width;
+//				height = imageData.height;
+//			} catch (IOException e) {
+//				throw new RuntimeException(e);
+//			}
+//		}
+//
+//		if (maxWidth != null && width > maxWidth) {
+//			Double ratio = maxWidth.doubleValue() / width.doubleValue();
+//			width = maxWidth;
+//			height = (int) Math.rint(ratio * height);
+//		}
+//		Label img = new Label(parent, SWT.NONE);
+//		CmsSwtUtils.markup(img);
+//		StringBuffer txt = new StringBuffer();
+//		String target = toLink(link);
+//		if (target != null)
+//			txt.append("<a href='").append(target).append("'>");
+//		txt.append(CmsUiUtils.img(fileNode, width.toString(), height.toString()));
+//		if (target != null)
+//			txt.append("</a>");
+//		img.setText(txt.toString());
+//		if (parent.getLayout() instanceof GridLayout) {
+//			GridData gd = new GridData(SWT.CENTER, SWT.CENTER, false, false);
+//			gd.widthHint = width.intValue();
+//			gd.heightHint = height.intValue();
+//			img.setLayoutData(gd);
+//		}
+
+		Img img = new Img(parent, 0, file, new Cms2DSize(maxWidth != null ? maxWidth : 0, 0));
+		if (link != null)
+			img.setLink(link);
+
+//		String target = toLink(link);
+		if (link == null)
+			img.addMouseListener(new MouseListener() {
+				private static final long serialVersionUID = -1362242049325206168L;
+
+				@Override
+				public void mouseUp(MouseEvent e) {
+				}
+
+				@Override
+				public void mouseDown(MouseEvent e) {
+				}
+
+				@Override
+				public void mouseDoubleClick(MouseEvent e) {
+					LightweightDialog dialog = new LightweightDialog(img.getShell()) {
+
+						@Override
+						protected Control createDialogArea(Composite parent) {
+							parent.setLayout(new GridLayout());
+							ScrolledComposite scroll = new ScrolledComposite(parent, SWT.H_SCROLL | SWT.V_SCROLL);
+							scroll.setLayoutData(CmsSwtUtils.fillAll());
+							scroll.setLayout(CmsSwtUtils.noSpaceGridLayout());
+							scroll.setExpandHorizontal(true);
+							scroll.setExpandVertical(true);
+							// scroll.setAlwaysShowScrollBars(true);
+
+							Composite c = new Composite(scroll, SWT.NONE);
+							scroll.setContent(c);
+							c.setLayout(new GridLayout());
+							c.setLayoutData(CmsSwtUtils.fillAll());
+							Img bigImg = new Img(c, 0, file);
+//							Label bigImg = new Label(c, SWT.NONE);
+//							CmsSwtUtils.markup(bigImg);
+//							bigImg.setText(CmsUiUtils.img(fileNode, Jcr.get(content, EntityNames.SVG_WIDTH),
+//									Jcr.get(content, EntityNames.SVG_HEIGHT)));
+							bigImg.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true));
+							return bigImg;
+						}
+
+						@Override
+						protected Point getInitialSize() {
+							Point shellSize = img.getShell().getSize();
+							return new Point(shellSize.x - 100, shellSize.y - 100);
+						}
+
+					};
+					dialog.open();
+				}
+			});
+		img.initControl();
+		return img;
 	}
 
 	/** singleton */

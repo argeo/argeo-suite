@@ -36,7 +36,6 @@ import org.argeo.app.ux.AppUi;
 import org.argeo.app.ux.SuiteUxEvent;
 import org.argeo.cms.LocaleUtils;
 import org.argeo.cms.Localized;
-import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.argeo.cms.swt.dialogs.CmsFeedback;
@@ -249,7 +248,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 					if (cmsSession == null || cmsView.isAnonymous()) {
 						assert publicBasePath != null;
 						Content userDir = contentSession
-								.get(ContentUtils.SLASH + CmsConstants.SYS_WORKSPACE + publicBasePath);
+								.get(Content.ROOT_PATH + CmsConstants.SYS_WORKSPACE + publicBasePath);
 						ui.setUserDir(userDir);
 					} else {
 						Content userDir = appUserState.getOrCreateSessionDir(contentSession, cmsSession);
@@ -469,7 +468,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 	}
 
 	// TODO move it to an internal package?
-	public static String nodeToState(Content node) {
+	private static String nodeToState(Content node) {
 		return node.getPath();
 	}
 

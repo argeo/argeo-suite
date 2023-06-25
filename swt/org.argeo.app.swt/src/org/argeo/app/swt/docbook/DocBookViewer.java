@@ -150,7 +150,7 @@ public class DocBookViewer extends AbstractPageViewer {
 
 			} else if (part instanceof DbkImg) {
 				DbkImg editableImage = (DbkImg) part;
-				imageManager.load(partContent, part.getControl(), editableImage.getPreferredImageSize());
+				imageManager.load(partContent, part.getControl(), editableImage.getPreferredImageSize(), null);
 			} else if (part instanceof DbkVideo) {
 				DbkVideo video = (DbkVideo) part;
 				video.load(part.getControl());

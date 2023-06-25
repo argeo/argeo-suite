@@ -21,7 +21,6 @@ import org.argeo.cms.swt.acr.AbstractPageViewer;
 import org.argeo.cms.swt.acr.Img;
 import org.argeo.cms.swt.acr.SwtSection;
 import org.argeo.cms.swt.acr.SwtSectionPart;
-import org.argeo.cms.swt.widgets.EditableImage;
 import org.argeo.cms.swt.widgets.StyledControl;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.rap.fileupload.FileDetails;
@@ -161,9 +160,9 @@ public class FormPageViewer extends AbstractPageViewer {
 		} else if (part instanceof SwtSectionPart sectionPart) {
 			Content partNode = sectionPart.getContent();
 			// use control AFTER setting style, since it may have been reset
-			if (part instanceof EditableImage) {
-				EditableImage editableImage = (EditableImage) part;
-				imageManager().load(partNode, part.getControl(), editableImage.getPreferredImageSize());
+			if (part instanceof Img) {
+				Img editableImage = (Img) part;
+				imageManager().load(partNode, part.getControl(), editableImage.getPreferredImageSize(), null);
 			}
 		}
 	}
