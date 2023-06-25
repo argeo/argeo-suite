@@ -7,11 +7,13 @@ import javax.xml.namespace.QName;
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.QNamed;
 import org.argeo.api.cms.ux.CmsEditable;
+import org.argeo.api.cms.ux.CmsStyle;
 import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.dialogs.CmsFeedback;
 import org.argeo.cms.swt.widgets.EditableText;
+import org.argeo.cms.swt.widgets.CmsLink;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
@@ -315,6 +317,13 @@ public class SuiteSwtUtils {
 		}
 		txt.setLayoutData(CmsSwtUtils.fillWidth());
 		return txt;
+	}
+
+	/** Add a link to an internal content. */
+	public static Control addLink(Composite parent, String label, Content node, CmsStyle style) {
+		String target = toLink(node);
+		CmsLink link = new CmsLink(label, target, style);
+		return link.createUi(parent);
 	}
 
 	/** singleton */
