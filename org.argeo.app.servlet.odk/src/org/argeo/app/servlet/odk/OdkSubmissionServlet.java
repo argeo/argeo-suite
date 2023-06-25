@@ -13,8 +13,6 @@ import java.util.Set;
 import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
 import javax.jcr.Property;
-import javax.jcr.Repository;
-import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,18 +20,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.CmsSession;
+import org.argeo.app.api.AppUserState;
 import org.argeo.app.image.ImageProcessor;
-import org.argeo.app.jcr.SuiteJcrUtils;
 import org.argeo.app.odk.OrxType;
 import org.argeo.app.xforms.FormSubmissionListener;
 import org.argeo.cms.auth.RemoteAuthRequest;
 import org.argeo.cms.auth.RemoteAuthUtils;
-import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.servlet.ServletHttpRequest;
-import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
 
 /** Receives a form submission. */
@@ -46,9 +43,12 @@ public class OdkSubmissionServlet extends HttpServlet {
 	private DateTimeFormatter submissionNameFormatter = DateTimeFormatter.ofPattern("YYYY-MM-dd-HHmmssSSS")
 			.withZone(ZoneId.from(ZoneOffset.UTC));
 
-	private Repository repository;
+//	private Repository repository;
+//	private ContentRepository contentRepository;
 
 	private Set<FormSubmissionListener> submissionListeners = new HashSet<>();
+
+	private AppUserState appUserState;
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -60,21 +60,23 @@ public class OdkSubmissionServlet extends HttpServlet {
 		// resp.setIntHeader("X-OpenRosa-Accept-Content-Length", 1024 * 1024);
 
 		RemoteAuthRequest request = new ServletHttpRequest(req);
-		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), request);
-
+//		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), request);
+//
 		CmsSession cmsSession = RemoteAuthUtils.getCmsSession(request);
 
-		Session adminSession = null;
-		try {
-			// TODO centralise at a deeper level
-			adminSession = CmsJcrUtils.openDataAdminSession(repository, null);
-			SuiteJcrUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
-		} finally {
-			Jcr.logout(adminSession);
-		}
+//		Session adminSession = null;
+//		try {
+//			// TODO centralise at a deeper level
+//			adminSession = CmsJcrUtils.openDataAdminSession(repository, null);
+//			SuiteJcrUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
+//		} finally {
+//			Jcr.logout(adminSession);
+//		}
 
 		try {
-			Node cmsSessionNode = SuiteJcrUtils.getCmsSessionNode(session, cmsSession);
+			Content sessionDir = appUserState.getOrCreateSessionDir(cmsSession);
+			Node cmsSessionNode = sessionDir.adapt(Node.class);
+			// Node cmsSessionNode = SuiteJcrUtils.getCmsSessionNode(session, cmsSession);
 			Node submission = cmsSessionNode.addNode(submissionNameFormatter.format(Instant.now()),
 					OrxType.submission.get());
 			for (Part part : req.getParts()) {
@@ -83,7 +85,7 @@ public class OdkSubmissionServlet extends HttpServlet {
 
 				if (part.getName().equals(XML_SUBMISSION_FILE)) {
 					Node xml = submission.addNode(XML_SUBMISSION_FILE, NodeType.NT_UNSTRUCTURED);
-					session.importXML(xml.getPath(), part.getInputStream(),
+					cmsSessionNode.getSession().importXML(xml.getPath(), part.getInputStream(),
 							ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
 
 				} else {
@@ -115,7 +117,7 @@ public class OdkSubmissionServlet extends HttpServlet {
 				}
 			}
 
-			session.save();
+			cmsSessionNode.getSession().save();
 			try {
 				for (FormSubmissionListener submissionListener : submissionListeners) {
 					submissionListener.formSubmissionReceived(JcrContent.nodeToContent(submission));
@@ -123,7 +125,7 @@ public class OdkSubmissionServlet extends HttpServlet {
 			} catch (Exception e) {
 				log.error("Cannot save submision, cancelling...", e);
 				submission.remove();
-				session.save();
+				cmsSessionNode.getSession().save();
 				resp.setStatus(503);
 				return;
 			}
@@ -132,8 +134,8 @@ public class OdkSubmissionServlet extends HttpServlet {
 			log.error("Cannot save submision", e);
 			resp.setStatus(503);
 			return;
-		} finally {
-			Jcr.logout(session);
+//		} finally {
+//			Jcr.logout(session);
 		}
 
 		resp.setStatus(201);
@@ -142,9 +144,9 @@ public class OdkSubmissionServlet extends HttpServlet {
 
 	}
 
-	public void setRepository(Repository repository) {
-		this.repository = repository;
-	}
+//	public void setRepository(Repository repository) {
+//		this.repository = repository;
+//	}
 
 	public synchronized void addSubmissionListener(FormSubmissionListener listener) {
 		submissionListeners.add(listener);
@@ -153,4 +155,13 @@ public class OdkSubmissionServlet extends HttpServlet {
 	public synchronized void removeSubmissionListener(FormSubmissionListener listener) {
 		submissionListeners.remove(listener);
 	}
+
+//	public void setContentRepository(ContentRepository contentRepository) {
+//		this.contentRepository = contentRepository;
+//	}
+
+	public void setAppUserState(AppUserState appUserState) {
+		this.appUserState = appUserState;
+	}
+
 }

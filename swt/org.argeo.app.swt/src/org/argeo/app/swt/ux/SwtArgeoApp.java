@@ -251,7 +251,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 								.get(Content.ROOT_PATH + CmsConstants.SYS_WORKSPACE + publicBasePath);
 						ui.setUserDir(userDir);
 					} else {
-						Content userDir = appUserState.getOrCreateSessionDir(contentSession, cmsSession);
+						Content userDir = appUserState.getOrCreateSessionDir(cmsSession);
 						ui.setUserDir(userDir);
 //						Node userDirNode = jcrContentProvider.doInAdminSession((adminSession) -> {
 //							Node node = SuiteUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
