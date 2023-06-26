@@ -30,7 +30,7 @@ org.argeo.tp.utils \
 org.argeo.tp.publish \
 org.argeo.tp.math \
 org.argeo.tp.earth \
-osgi/api/org.argeo.tp.osgi \
+osgi/equinox/org.argeo.tp.osgi \
 osgi/equinox/org.argeo.tp.eclipse \
 swt/rap/org.argeo.tp.swt \
 swt/rap/org.argeo.tp.swt.workbench \
