@@ -8,8 +8,8 @@ OSGI-INF/termsLayer.xml,\
 
 Import-Package:\
 org.argeo.app.api,\
-org.argeo.cms.swt.acr,\
-org.argeo.app.swt.ux,\
-org.argeo.app.swt.terms,\
-org.argeo.app.swt.space,\
+org.argeo.cms.swt.acr;resolution:=optional,\
+org.argeo.app.swt.ux;resolution:=optional,\
+org.argeo.app.swt.terms;resolution:=optional,\
+org.argeo.app.swt.space;resolution:=optional,\
 *

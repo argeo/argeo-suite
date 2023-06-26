@@ -20,7 +20,7 @@ org.argeo.app.profile.acr.fs \
 org.argeo.app.profile.acr.jcr \
 swt/org.argeo.app.swt \
 swt/org.argeo.app.ui \
-org.argeo.product.knowledge \
+org.argeo.suite.knowledge \
 
 DEP_CATEGORIES = \
 org.argeo.tp \
