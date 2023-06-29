@@ -17,14 +17,14 @@ public interface EntityNames {
 	/** Administrative units. */
 	final String ADM = "adm";
 
+	@Deprecated
 	final String ENTITY_TYPE = "entity:type";
-	// final String ENTITY_UID = "entity:uid";
-	// final String ENTITY_NAME = "entity:name";
 
 	// GENERIC CONCEPTS
-	/** The language which is relevant. */
-	final String XML_LANG = "xml:lang";
+//	/** The language which is relevant. */
+//	final String XML_LANG = "xml:lang";
 	/** The date which is relevant. */
+	@Deprecated
 	final String ENTITY_DATE = "entity:date";
 	@Deprecated
 	final String ENTITY_RELATED_TO = "entity:relatedTo";
@@ -47,15 +47,24 @@ public interface EntityNames {
 	final String OU = LdapAttr.ou.property();
 
 	// WGS84
-	final String GEO_LAT = "geo:lat";
-	final String GEO_LONG = "geo:long";
-	final String GEO_ALT = "geo:alt";
+	@Deprecated
+	final String GEO_LAT = WGS84PosName.lat.get();
+	@Deprecated
+	final String GEO_LONG = WGS84PosName.lng.get();
+	@Deprecated
+	final String GEO_ALT = WGS84PosName.alt.get();
 
 	// SVG
+	@Deprecated
 	final String SVG_WIDTH = "svg:width";
+	@Deprecated
 	final String SVG_HEIGHT = "svg:height";
+	@Deprecated
 	final String SVG_LENGTH = "svg:length";
+	@Deprecated
 	final String SVG_UNIT = "svg:unit";
+	@Deprecated
 	final String SVG_DUR = "svg:dur";
+	@Deprecated
 	final String SVG_DIRECTION = "svg:direction";
 }

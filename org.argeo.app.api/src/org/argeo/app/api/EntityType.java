@@ -19,19 +19,13 @@ public enum EntityType implements QNamed {
 	// ldap
 	person, user;
 
+	public final static String ENTITY_NAMESPACE_URI = "http://www.argeo.org/ns/entity";
+	public final static String ENTITY_DEFAULT_PREFIX = "entity";
+
 	@Override
 	public String getDefaultPrefix() {
-		return "entity";
+		return ENTITY_DEFAULT_PREFIX;
 	}
-
-//	@Override
-//	public String getPrefix() {
-//		return getDefaultPrefix();
-//	}
-//
-//	public static String prefix() {
-//		return "entity";
-//	}
 
 	public String basePath() {
 		return '/' + name();
@@ -39,11 +33,6 @@ public enum EntityType implements QNamed {
 
 	@Override
 	public String getNamespace() {
-		return "http://www.argeo.org/ns/entity";
+		return ENTITY_NAMESPACE_URI;
 	}
-
-//	public static String namespace() {
-//		return "http://www.argeo.org/ns/entity";
-//	}
-
 }

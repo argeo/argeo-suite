@@ -23,7 +23,7 @@ import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.docbook.DbkAttr;
 import org.argeo.app.docbook.DbkType;
-import org.argeo.app.docbook.DbkUtils;
+import org.argeo.app.jcr.docbook.DbkJcrUtils;
 import org.argeo.cms.ui.util.CmsUiUtils;
 import org.argeo.cms.ui.util.DefaultImageManager;
 import org.argeo.jcr.JcrException;
@@ -55,7 +55,7 @@ public class DbkImageManager extends DefaultImageManager {
 	@Override
 	public Binary getImageBinary(Node node) {
 		Node fileNode = null;
-		if (DbkUtils.isDbk(node, DbkType.mediaobject)) {
+		if (DbkJcrUtils.isDbk(node, DbkType.mediaobject)) {
 			Node imageDataNode = getImageDataNode(node);
 			fileNode = getFileNode(imageDataNode);
 		}

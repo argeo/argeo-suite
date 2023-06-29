@@ -13,8 +13,8 @@ import org.argeo.api.acr.ldap.LdapObj;
 import org.argeo.api.cms.directory.CmsGroup;
 import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.api.cms.directory.HierarchyUnit;
-import org.argeo.app.ui.SuiteMsg;
-import org.argeo.app.ui.SuiteUiUtils;
+import org.argeo.app.swt.ux.SuiteSwtUtils;
+import org.argeo.app.ux.SuiteMsg;
 import org.argeo.cms.swt.dialogs.CmsFeedback;
 import org.argeo.cms.swt.widgets.SwtGuidedFormPage;
 import org.argeo.cms.ux.widgets.AbstractGuidedForm;
@@ -97,7 +97,7 @@ public class NewOrgForm extends AbstractGuidedForm {
 			parent.setLayout(new GridLayout(2, false));
 
 			// FirstName
-			SuiteUiUtils.createBoldLabel(parent, SuiteMsg.org);
+			SuiteSwtUtils.createBoldLabel(parent, SuiteMsg.org);
 			orgNameT = new Text(parent, SWT.BORDER);
 			// firstNameTxt.setMessage("a first name");
 			orgNameT.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));

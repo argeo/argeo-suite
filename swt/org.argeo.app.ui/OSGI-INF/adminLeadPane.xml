@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" immediate="false" name="Admin Lead Pane">
-   <implementation class="org.argeo.app.ui.DefaultLeadPane"/>
+   <implementation class="org.argeo.app.swt.ux.DefaultLeadPane"/>
    <service>
       <provide interface="org.argeo.cms.swt.acr.SwtUiProvider"/>
    </service>
@@ -8,5 +8,5 @@
    <property name="service.ranking" type="Integer" value="-1000"/>
    <property name="defaultLayers" type="String">argeo.suite.ui.termsLayer
    </property>
-   <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.ui.SuiteLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
+   <reference bind="addLayer" cardinality="1..n" interface="org.argeo.app.swt.ux.SwtAppLayer" name="SuiteLayer" policy="dynamic" unbind="removeLayer"/>
 </scr:component>

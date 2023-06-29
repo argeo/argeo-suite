@@ -4,8 +4,8 @@ import static org.argeo.eclipse.ui.EclipseUiUtils.isEmpty;
 
 import javax.jcr.Node;
 
-import org.argeo.app.ui.SuiteMsg;
-import org.argeo.app.ui.SuiteUiUtils;
+import org.argeo.app.swt.ux.SuiteSwtUtils;
+import org.argeo.app.ux.SuiteMsg;
 import org.argeo.eclipse.ui.EclipseUiUtils;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.wizard.Wizard;
@@ -97,13 +97,13 @@ public class NewPersonWizard extends Wizard {
 			parent.setLayout(new GridLayout(2, false));
 
 			// FirstName
-			SuiteUiUtils.createBoldLabel(parent, SuiteMsg.firstName);
+			SuiteSwtUtils.createBoldLabel(parent, SuiteMsg.firstName);
 			firstNameTxt = new Text(parent, SWT.BORDER);
 			// firstNameTxt.setMessage("a first name");
 			firstNameTxt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 			// LastName
-			SuiteUiUtils.createBoldLabel(parent, SuiteMsg.lastName);
+			SuiteSwtUtils.createBoldLabel(parent, SuiteMsg.lastName);
 			lastNameTxt = new Text(parent, SWT.BORDER);
 			// lastNameTxt.setMessage("a last name");
 			lastNameTxt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));

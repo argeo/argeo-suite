@@ -136,7 +136,13 @@ public class OdkManifestServlet extends HttpServlet {
 		if (target.isNodeType(NodeType.NT_QUERY)) {
 			Query query = target.getSession().getWorkspace().getQueryManager().getQuery(target);
 			QueryResult queryResult = query.execute();
-			String[] columnNames = queryResult.getColumnNames();
+			List<String> columnNames = new ArrayList<>();
+			for (String c : queryResult.getColumnNames()) {
+				columnNames.add(c);
+			}
+			// TODO make it more configurable
+			columnNames.add("display");
+
 			if (EntityMimeType.XML.equals(mimeType)) {
 			} else if (EntityMimeType.CSV.equals(mimeType)) {
 				CsvWriter csvWriter = new CsvWriter(out, charset);
@@ -150,12 +156,14 @@ public class OdkManifestServlet extends HttpServlet {
 						for (Value value : values) {
 							lst.add(value.getString());
 						}
+						// display
+						lst.add(row.getValue("name").getString() + " (" + row.getValue("label").getString() + ")");
 						csvWriter.writeLine(lst);
 					}
 				} else {
 					// corner case of an empty initial database
 					List<String> lst = new ArrayList<>();
-					for (int i = 0; i < columnNames.length; i++)
+					for (int i = 0; i < columnNames.size(); i++)
 						lst.add("-");
 					csvWriter.writeLine(lst);
 				}

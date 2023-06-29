@@ -1,7 +1,7 @@
 package org.argeo.app.ui.dialogs;
 
-import org.argeo.app.ui.SuiteMsg;
-import org.argeo.app.ui.SuiteUiUtils;
+import org.argeo.app.swt.ux.SuiteSwtUtils;
+import org.argeo.app.ux.SuiteMsg;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -27,16 +27,16 @@ public class NewPersonPage extends WizardPage {
 		parent.setLayout(new GridLayout(2, false));
 
 		// FirstName
-		SuiteUiUtils.createBoldLabel(parent, SuiteMsg.firstName);
+		SuiteSwtUtils.createBoldLabel(parent, SuiteMsg.firstName);
 		firstNameTxt = new Text(parent, SWT.BORDER);
 		firstNameTxt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 		// LastName
-		SuiteUiUtils.createBoldLabel(parent, SuiteMsg.lastName);
+		SuiteSwtUtils.createBoldLabel(parent, SuiteMsg.lastName);
 		lastNameTxt = new Text(parent, SWT.BORDER);
 		lastNameTxt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-		SuiteUiUtils.createBoldLabel(parent, SuiteMsg.email);
+		SuiteSwtUtils.createBoldLabel(parent, SuiteMsg.email);
 		emailTxt = new Text(parent, SWT.BORDER);
 		emailTxt.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 

@@ -1,17 +1,14 @@
 Bundle-ActivationPolicy: lazy
 
 Service-Component:\
-OSGI-INF/termsManager.xml,\
-OSGI-INF/maintenanceService.xml,\
-OSGI-INF/dbk4Converter.xml,\
+OSGI-INF/suiteMaintenance.xml,\
+OSGI-INF/termsContentProvider.xml,\
 
 Import-Package:\
 tech.units.indriya.unit,\
 org.osgi.service.useradmin,\
-javax.jcr.nodetype,\
-javax.jcr.security,\
 com.fasterxml.jackson.core,\
-org.apache.jackrabbit.*;version="[1,4)",\
+org.argeo.cms.acr,\
 *
 
 Require-Capability:\

@@ -7,7 +7,7 @@ import javax.jcr.Node;
 
 import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.app.docbook.DbkMsg;
-import org.argeo.app.docbook.DbkUtils;
+import org.argeo.app.jcr.docbook.DbkJcrUtils;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.SwtEditablePart;
 import org.argeo.cms.swt.MouseDown;
@@ -136,7 +136,7 @@ class DbkContextMenu {
 		Label insertPictureB = new Label(parent, SWT.NONE);
 		insertPictureB.setText(DbkMsg.insertPicture.lead());
 		insertPictureB.addMouseListener((MouseDown) (e) -> {
-			Node newNode = DbkUtils.insertImageAfter(nodePart.getNode());
+			Node newNode = DbkJcrUtils.insertImageAfter(nodePart.getNode());
 			Jcr.save(newNode);
 			textViewer.insertPart(section, newNode);
 			hide();
@@ -144,7 +144,7 @@ class DbkContextMenu {
 		Label insertVideoB = new Label(parent, SWT.NONE);
 		insertVideoB.setText(DbkMsg.insertVideo.lead());
 		insertVideoB.addMouseListener((MouseDown) (e) -> {
-			Node newNode = DbkUtils.insertVideoAfter(nodePart.getNode());
+			Node newNode = DbkJcrUtils.insertVideoAfter(nodePart.getNode());
 			Jcr.save(newNode);
 			textViewer.insertPart(section, newNode);
 			hide();

@@ -44,13 +44,14 @@ public class DbkVideo extends StyledControl implements SwtSectionPart, ContentPa
 		super(parent, style);
 		editable = !(SWT.READ_ONLY == (style & SWT.READ_ONLY));
 		this.section = section;
-		setStyle(DbkType.videoobject.name());
+		// set data before setting style since it creates the control
 		setData(node);
+		setStyle(DbkType.videoobject.name());
 	}
 
 	@Override
 	protected Control createControl(Composite box, String style) {
-		Content mediaobject = getNode();
+		Content mediaobject = getContent();
 		Composite wrapper = new Composite(box, SWT.NONE);
 		wrapper.setLayout(CmsSwtUtils.noSpaceGridLayout());
 
@@ -77,6 +78,8 @@ public class DbkVideo extends StyledControl implements SwtSectionPart, ContentPa
 			Button updateB = new Button(editor, SWT.FLAT);
 			updateB.setText("Update");
 			updateB.addSelectionListener(new Selected() {
+
+				private static final long serialVersionUID = -8234047511858456222L;
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
@@ -138,6 +141,8 @@ public class DbkVideo extends StyledControl implements SwtSectionPart, ContentPa
 			Button deleteB = new Button(editor, SWT.FLAT);
 			deleteB.setText("Delete");
 			deleteB.addSelectionListener(new Selected() {
+
+				private static final long serialVersionUID = -7552456185687361642L;
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {

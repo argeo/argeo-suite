@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="Default Login Screen">
-   <implementation class="org.argeo.app.ui.DefaultLoginScreen"/>
+   <implementation class="org.argeo.app.swt.ux.DefaultLoginScreen"/>
    <properties entry="config/loginScreen.properties"/>
    <service>
       <provide interface="org.argeo.cms.swt.acr.SwtUiProvider"/>

@@ -119,7 +119,7 @@ public class DbkImageManager extends AcrSwtImageManager {
 		String fileref = imageDataNode.get(DbkAttr.fileref, String.class).orElse(null);
 		if (fileref == null)
 			return null;
-		return ((ProvidedContent) baseFolder).getContent(fileref);
+		return ((ProvidedContent) baseFolder).getContent(fileref).get();
 	}
 
 	protected Content getMediaFolder() {

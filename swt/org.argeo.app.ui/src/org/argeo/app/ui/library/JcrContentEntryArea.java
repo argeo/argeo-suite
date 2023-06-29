@@ -13,9 +13,10 @@ import javax.jcr.query.Query;
 import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsConstants;
 import org.argeo.app.api.EntityType;
-import org.argeo.app.ui.SuiteUxEvent;
-import org.argeo.app.ui.SuiteIcon;
+import org.argeo.app.ui.SuiteUiUtils;
 import org.argeo.app.ui.widgets.TreeOrSearchArea;
+import org.argeo.app.ux.SuiteIcon;
+import org.argeo.app.ux.SuiteUxEvent;
 import org.argeo.cms.jcr.acr.JcrContentProvider;
 import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -86,7 +87,7 @@ public class JcrContentEntryArea implements CmsUiProvider {
 				Node user = (Node) ui.getTreeViewer().getStructuredSelection().getFirstElement();
 				if (user != null) {
 					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteUxEvent.openNewPart.topic(),
-							SuiteUxEvent.eventProperties(user));
+							SuiteUiUtils.eventProperties(user));
 				}
 
 			}
@@ -96,7 +97,7 @@ public class JcrContentEntryArea implements CmsUiProvider {
 				Node user = (Node) ui.getTreeViewer().getStructuredSelection().getFirstElement();
 				if (user != null) {
 					CmsSwtUtils.getCmsView(parent).sendEvent(SuiteUxEvent.refreshPart.topic(),
-							SuiteUxEvent.eventProperties(user));
+							SuiteUiUtils.eventProperties(user));
 				}
 			}
 		});

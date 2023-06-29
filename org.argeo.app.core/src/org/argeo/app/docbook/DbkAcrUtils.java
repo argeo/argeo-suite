@@ -1,7 +1,9 @@
 package org.argeo.app.docbook;
 
 import org.argeo.api.acr.Content;
+import org.argeo.app.api.EntityType;
 
+/** Utilities when using ACR to access DocBook. */
 public class DbkAcrUtils {
 	/** Whether this DocBook element is of this type. */
 	public static boolean isDbk(Content content, DbkType type) {
@@ -21,6 +23,15 @@ public class DbkAcrUtils {
 		} else {
 			return null;
 		}
+	}
+
+	public static Content getMetadata(Content infoContainer) {
+		if (!infoContainer.hasChild(DbkType.info))
+			return null;
+		Content info = infoContainer.child(DbkType.info);
+		if (!info.hasChild(EntityType.local))
+			return null;
+		return info.child(EntityType.local);
 	}
 
 	/** singleton */

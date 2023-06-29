@@ -1,8 +1,8 @@
 package org.argeo.app.ui.docbook;
 
 import static org.argeo.app.docbook.DbkType.para;
-import static org.argeo.app.docbook.DbkUtils.addDbk;
-import static org.argeo.app.docbook.DbkUtils.isDbk;
+import static org.argeo.app.jcr.docbook.DbkJcrUtils.addDbk;
+import static org.argeo.app.jcr.docbook.DbkJcrUtils.isDbk;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -21,7 +21,7 @@ import org.argeo.api.cms.ux.Cms2DSize;
 import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.app.docbook.DbkAttr;
 import org.argeo.app.docbook.DbkType;
-import org.argeo.app.docbook.DbkUtils;
+import org.argeo.app.jcr.docbook.DbkJcrUtils;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.SwtEditablePart;
 import org.argeo.cms.ui.viewers.AbstractPageViewer;
@@ -265,7 +265,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 
 	protected DbkSectionTitle prepareSectionTitle(Section newSection, String titleText) throws RepositoryException {
 		Node sectionNode = newSection.getNode();
-		Node titleNode = DbkUtils.getOrAddDbk(sectionNode, DbkType.title);
+		Node titleNode = DbkJcrUtils.getOrAddDbk(sectionNode, DbkType.title);
 		getTextInterpreter().write(titleNode, titleText);
 		if (newSection.getHeader() == null)
 			newSection.createHeader();
@@ -685,7 +685,7 @@ public abstract class AbstractDbkViewer extends AbstractPageViewer implements Ke
 						((Control) sp).dispose();
 				}
 				// create title
-				Node titleNode = DbkUtils.addDbk(newSectionNode, DbkType.title);
+				Node titleNode = DbkJcrUtils.addDbk(newSectionNode, DbkType.title);
 				// newSectionNode.addNode(DocBookType.TITLE, DocBookType.TITLE);
 				getTextInterpreter().write(titleNode, txt);
 

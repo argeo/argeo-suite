@@ -7,7 +7,8 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
 import org.argeo.api.cms.ux.CmsView;
-import org.argeo.app.ui.SuiteUxEvent;
+import org.argeo.app.ui.SuiteUiUtils;
+import org.argeo.app.ux.SuiteUxEvent;
 import org.argeo.cms.fs.CmsFsUtils;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;
@@ -29,7 +30,7 @@ public class DocumentsFolderUiProvider implements CmsUiProvider {
 			protected void externalNavigateTo(Path path) {
 				Node folderNode = cmsView.doAs(() -> CmsFsUtils.getNode(Jcr.getSession(context).getRepository(), path));
 				parent.addDisposeListener((e1) -> Jcr.logout(folderNode));
-				cmsView.sendEvent(SuiteUxEvent.openNewPart.topic(), SuiteUxEvent.eventProperties(folderNode));
+				cmsView.sendEvent(SuiteUxEvent.openNewPart.topic(), SuiteUiUtils.eventProperties(folderNode));
 			}
 		};
 		dfc.setLayoutData(CmsSwtUtils.fillAll());

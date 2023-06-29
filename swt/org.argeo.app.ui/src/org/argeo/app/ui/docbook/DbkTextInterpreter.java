@@ -2,7 +2,7 @@ package org.argeo.app.ui.docbook;
 
 import static org.argeo.app.docbook.DbkType.para;
 import static org.argeo.app.docbook.DbkType.title;
-import static org.argeo.app.docbook.DbkUtils.isDbk;
+import static org.argeo.app.jcr.docbook.DbkJcrUtils.isDbk;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

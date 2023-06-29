@@ -15,8 +15,8 @@ import org.argeo.api.cms.directory.CmsUser;
 import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.api.cms.directory.HierarchyUnit;
 import org.argeo.app.core.SuiteUtils;
-import org.argeo.app.ui.SuiteMsg;
-import org.argeo.app.ui.SuiteUiUtils;
+import org.argeo.app.swt.ux.SuiteSwtUtils;
+import org.argeo.app.ux.SuiteMsg;
 import org.argeo.cms.swt.dialogs.CmsFeedback;
 import org.argeo.cms.swt.widgets.SwtGuidedFormPage;
 import org.argeo.cms.ux.widgets.AbstractGuidedForm;
@@ -127,18 +127,18 @@ public class NewUserForm extends AbstractGuidedForm {
 			parent.setLayout(new GridLayout(2, false));
 
 			// FirstName
-			SuiteUiUtils.createBoldLabel(parent, SuiteMsg.firstName);
+			SuiteSwtUtils.createBoldLabel(parent, SuiteMsg.firstName);
 			firstNameT = new Text(parent, SWT.BORDER);
 			// firstNameTxt.setMessage("a first name");
 			firstNameT.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
 			// LastName
-			SuiteUiUtils.createBoldLabel(parent, SuiteMsg.lastName);
+			SuiteSwtUtils.createBoldLabel(parent, SuiteMsg.lastName);
 			lastNameT = new Text(parent, SWT.BORDER);
 			// lastNameTxt.setMessage("a last name");
 			lastNameT.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
-			SuiteUiUtils.createBoldLabel(parent, SuiteMsg.email);
+			SuiteSwtUtils.createBoldLabel(parent, SuiteMsg.email);
 			emailT = new Text(parent, SWT.BORDER);
 			emailT.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 
