@@ -123,7 +123,7 @@ public class OdkSubmissionServlet extends HttpServlet {
 					submissionListener.formSubmissionReceived(JcrContent.nodeToContent(submission));
 				}
 			} catch (Exception e) {
-				log.error("Cannot save submision, cancelling...", e);
+				log.error("Cannot save submission, cancelling...", e);
 				submission.remove();
 				cmsSessionNode.getSession().save();
 				resp.setStatus(503);
@@ -131,7 +131,7 @@ public class OdkSubmissionServlet extends HttpServlet {
 			}
 
 		} catch (Exception e) {
-			log.error("Cannot save submision", e);
+			log.error("Cannot save submission", e);
 			resp.setStatus(503);
 			return;
 //		} finally {
