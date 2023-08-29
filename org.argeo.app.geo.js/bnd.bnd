@@ -1,0 +1,5 @@
+Export-Package: org.argeo.app.geo.js
+
+
+Provide-Capability:\
+cms.publish;pkg=org.argeo.app.geo.js;file="*.png,*.js,*.css,*.html"

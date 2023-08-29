@@ -5,9 +5,9 @@ OSGI-INF/suiteMaintenance.xml,\
 OSGI-INF/termsContentProvider.xml,\
 
 Import-Package:\
-tech.units.indriya.unit,\
+javax.measure.quantity,\
 org.osgi.service.useradmin,\
-com.fasterxml.jackson.core,\
+tech.units.indriya.unit,\
 org.argeo.cms.acr,\
 *
 

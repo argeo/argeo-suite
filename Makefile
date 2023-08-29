@@ -1,7 +1,7 @@
 include sdk.mk
 .PHONY: clean all osgi
 
-all: osgi
+all: web osgi
 	
 install: osgi-install
 
@@ -13,14 +13,17 @@ BUNDLES = \
 org.argeo.app.api \
 org.argeo.app.core \
 org.argeo.app.jcr \
+org.argeo.app.geo \
+org.argeo.app.geo.js \
 org.argeo.app.servlet.odk \
 org.argeo.app.servlet.publish \
 org.argeo.app.theme.default \
 org.argeo.app.profile.acr.fs \
 org.argeo.app.profile.acr.jcr \
-swt/org.argeo.app.swt \
-swt/org.argeo.app.ui \
 org.argeo.suite.knowledge \
+swt/org.argeo.app.swt \
+swt/org.argeo.app.geo.swt \
+swt/org.argeo.app.ui \
 
 DEP_CATEGORIES = \
 org.argeo.tp \
@@ -42,5 +45,13 @@ swt/rap/org.argeo.cms \
 
 clean:
 	rm -rf $(BUILD_BASE)
+
+## WEB
+web:
+	cd org.argeo.app.geo.js && npm run build
+
+npm-install:
+	cd org.argeo.app.geo.js && npm install
+
 
 include  $(SDK_SRC_BASE)/sdk/argeo-build/osgi.mk
