@@ -1,7 +1,6 @@
 package org.argeo.app.geo.swt;
 
 import org.argeo.api.acr.Content;
-import org.argeo.app.geo.swt.openlayers.OLMap;
 import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -11,7 +10,7 @@ public class MapUiProvider implements SwtUiProvider {
 
 	@Override
 	public Control createUiPart(Composite parent, Content context) {
-		OLMap map = new OLMap(parent, 0);
+		SwtMapPart map = new SwtMapPart(parent, 0);
 		// map.setCenter(13.404954, 52.520008); // Berlin
 		map.setCenter(-74.00597, 40.71427); // NYC
 		map.setZoom(6);

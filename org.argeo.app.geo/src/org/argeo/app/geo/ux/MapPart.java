@@ -1,5 +1,6 @@
 package org.argeo.app.geo.ux;
 
+/** An UX part displaying a map. */
 public interface MapPart {
 	enum Format {
 		GEOJSON, GPX;

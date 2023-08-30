@@ -1,7 +1,8 @@
-package org.argeo.app.geo.swt.openlayers;
+package org.argeo.app.geo.swt;
 
 import java.util.concurrent.CompletableFuture;
 
+import org.argeo.app.geo.ux.JsImplementation;
 import org.argeo.app.geo.ux.MapPart;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.eclipse.swt.SWT;
@@ -11,7 +12,7 @@ import org.eclipse.swt.browser.ProgressListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
-public class OLMap extends Composite implements MapPart {
+public class SwtMapPart extends Composite implements MapPart {
 	static final long serialVersionUID = 2713128477504858552L;
 	private Browser browser;
 
@@ -19,9 +20,10 @@ public class OLMap extends Composite implements MapPart {
 	// CompletableFuture<>();
 	private CompletableFuture<Boolean> pageLoaded = new CompletableFuture<>();
 
+	private String jsImplementation = JsImplementation.OPENLAYERS_MAP_PART.getJsClass();
 	private String mapVar = "globalThis.argeoMap";
 
-	public OLMap(Composite parent, int style) {
+	public SwtMapPart(Composite parent, int style) {
 		super(parent, style);
 		parent.setLayout(CmsSwtUtils.noSpaceGridLayout());
 		setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
@@ -38,7 +40,7 @@ public class OLMap extends Composite implements MapPart {
 			public void completed(ProgressEvent event) {
 
 				// create map
-				browser.execute(mapVar + " = new globalThis.argeo.app.geo.ArgeoMap();");
+				browser.execute(mapVar + " = new " + jsImplementation + "();");
 
 				// browser.execute("console.log(myInstance.myField)");
 				pageLoaded.complete(true);
