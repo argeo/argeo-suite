@@ -14,4 +14,13 @@ export default class MapPart {
 	setCenter(lng, lat) {
 		throw new Error("Abstract method");
 	}
+
+	/** Add a single point. */
+	addPoint(lng, lat, style) {
+		throw new Error("Abstract method");
+	}
+
+	addUrlLayer(url, format) {
+		throw new Error("Abstract method");
+	}
 }

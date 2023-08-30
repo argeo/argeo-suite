@@ -53,15 +53,18 @@ public class SwtMapPart extends Composite implements MapPart {
 	}
 
 	@Override
-	public void addPoint(Double lng, Double lat) {
-		// TODO Auto-generated method stub
-
+	public void addPoint(Double lng, Double lat, String style) {
+		pageLoaded.thenAccept((b) -> {
+			browser.evaluate(
+					mapVar + ".addPoint(" + lng + ", " + lat + "," + (style == null ? "'default'" : style) + ")");
+		});
 	}
 
 	@Override
-	public void addUrlLayer(String layer, Format format) {
-		// TODO Auto-generated method stub
-
+	public void addUrlLayer(String url, Format format) {
+		pageLoaded.thenAccept((b) -> {
+			browser.evaluate(mapVar + ".addUrlLayer('" + url + "','" + format.name() + "')");
+		});
 	}
 
 	@Override

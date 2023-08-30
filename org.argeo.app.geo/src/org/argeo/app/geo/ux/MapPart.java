@@ -6,9 +6,9 @@ public interface MapPart {
 		GEOJSON, GPX;
 	}
 
-	void addPoint(Double lng, Double lat);
+	void addPoint(Double lng, Double lat, String style);
 
-	void addUrlLayer(String layer, Format format);
+	void addUrlLayer(String url, Format format);
 
 	void setZoom(int zoom);
 
