@@ -43,6 +43,7 @@ module.exports = {
 		new HtmlWebpackPlugin({
 			title: 'Open Layers',
 			template: 'src/org.argeo.app.geo.js/index.html',
+			scriptLoading: 'module',
 		}),
 
 	],

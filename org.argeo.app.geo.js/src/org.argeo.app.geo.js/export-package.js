@@ -8,5 +8,7 @@ if (typeof globalThis.argeo.app === 'undefined')
 if (typeof globalThis.argeo.app.geo === 'undefined')
 	globalThis.argeo.app.geo = {};
 
-
+// PUBLIC CLASSES
 globalThis.argeo.app.geo.OpenLayersMapPart = OpenLayersMapPart;
+
+"use strict";
