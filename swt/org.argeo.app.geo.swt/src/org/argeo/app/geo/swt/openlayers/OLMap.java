@@ -19,7 +19,7 @@ public class OLMap extends Composite implements MapPart {
 	// CompletableFuture<>();
 	private CompletableFuture<Boolean> pageLoaded = new CompletableFuture<>();
 
-	private String mapVar = "window.argeoMap";
+	private String mapVar = "globalThis.argeoMap";
 
 	public OLMap(Composite parent, int style) {
 		super(parent, style);
@@ -38,7 +38,9 @@ public class OLMap extends Composite implements MapPart {
 			public void completed(ProgressEvent event) {
 
 				// create map
-				browser.execute(mapVar + " = Object.create(window.argeo.app.geo.ArgeoMap);");
+				browser.execute(mapVar + " = new globalThis.argeo.app.geo.ArgeoMap();");
+
+				// browser.execute("console.log(myInstance.myField)");
 				pageLoaded.complete(true);
 			}
 

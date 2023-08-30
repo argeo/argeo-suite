@@ -24,34 +24,62 @@ import 'ol/ol.css';
 //});
 //map.getView().setZoom(4);
 
-if (typeof window.argeo === 'undefined')
-	window.argeo = {};
-if (typeof window.argeo.app === 'undefined')
-	window.argeo.app = {};
-if (typeof window.argeo.app.geo === 'undefined')
-	window.argeo.app.geo = {};
+if (typeof globalThis.argeo === 'undefined')
+	globalThis.argeo = {};
+if (typeof globalThis.argeo.app === 'undefined')
+	globalThis.argeo.app = {};
+if (typeof globalThis.argeo.app.geo === 'undefined')
+	globalThis.argeo.app.geo = {};
 
 
 
-window.argeo.app.geo.ArgeoMap = {
-	map: new Map({
-		layers: [
-			new TileLayer({
-				source: new OSM(),
-			}),
-		],
-		target: 'map',
-	}),
+//window.argeo.app.geo.ArgeoMap = {
+//	map: new Map({
+//		layers: [
+//			new TileLayer({
+//				source: new OSM(),
+//			}),
+//		],
+//		target: 'map',
+//	}),
+//
+//	setZoom: function(zoom) {
+//		this.map.getView().setZoom(zoom);
+//	},
+//
+//	setCenter: function(lng, lat) {
+//		this.map.getView().setCenter(fromLonLat([lng, lat]));
+//	},
+//
+//};
 
-	setZoom: function(zoom) {
-		this.map.getView().setZoom(zoom);
-	},
+export class ArgeoMap {
+	#map;
+	// Constructor
+	constructor() {
+		this.#map = new Map({
+			layers: [
+				new TileLayer({
+					source: new OSM(),
+				}),
+			],
+			target: 'map',
+		});
+	}
 
-	setCenter: function(lng, lat) {
-		this.map.getView().setCenter(fromLonLat([lng, lat]));
-	},
+	setZoom(zoom) {
+		this.#map.getView().setZoom(zoom);
+	}
 
-};
+	setCenter(lng, lat) {
+		this.#map.getView().setCenter(fromLonLat([lng, lat]));
+	}
+}
+
+globalThis.argeo.app.geo.ArgeoMap = ArgeoMap;
+
+//globalThis.argeoMap = new ArgeoMap();
+
 //window.argeoMap = Object.create(argeo.app.geo.ArgeoMap);
 //window.argeoMap.map.on('rendercomplete', e => {
 //	console.log('Render completed.');
