@@ -48,7 +48,7 @@ clean:
 
 ## WEB
 web:
-	cd org.argeo.app.geo.js && npm run build
+	cd org.argeo.app.geo.js && npm run build-prod
 
 npm-install:
 	cd org.argeo.app.geo.js && npm install

@@ -4,14 +4,15 @@
 	"description": "",
 	"private": "true",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"build": "webpack"
+		"build": "webpack --config webpack.dev.js",
+		"build-prod": "webpack --config webpack.prod.js"
 	},
 	"keywords": [],
 	"author": "",
 	"license": "GPL",
 	"devDependencies": {
 		"css-loader": "^6.8.1",
+		"css-minimizer-webpack-plugin": "^5.0.1",
 		"html-webpack-plugin": "^5.5.3",
 		"mini-css-extract-plugin": "^2.7.6",
 		"npm-check-updates": "^16.13.2",
