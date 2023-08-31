@@ -2,3 +2,6 @@ Import-Package:\
 tech.units.indriya.unit,\
 com.fasterxml.jackson.core,\
 *
+
+Service-Component:\
+OSGI-INF/geoJsonHttpHandler.xml,\
