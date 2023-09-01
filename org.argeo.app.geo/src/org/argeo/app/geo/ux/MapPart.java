@@ -2,15 +2,16 @@ package org.argeo.app.geo.ux;
 
 /** An UX part displaying a map. */
 public interface MapPart {
-	enum Format {
+	/** A supported geographical data format. */
+	enum GeoFormat {
 		GEOJSON, GPX;
 	}
 
-	void addPoint(Double lng, Double lat, String style);
+	void addPoint(double lng, double lat, String style);
 
-	void addUrlLayer(String url, Format format);
+	void addUrlLayer(String url, GeoFormat format);
 
 	void setZoom(int zoom);
 
-	void setCenter(Double lng, Double lat);
+	void setCenter(double lng, double lat);
 }
