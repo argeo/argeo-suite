@@ -1,17 +1,13 @@
 package org.argeo.app.geo.swt;
 
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.function.Consumer;
 
-import org.argeo.api.cms.CmsConstants;
 import org.argeo.api.cms.CmsLog;
-import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.geo.ux.JsImplementation;
 import org.argeo.app.geo.ux.MapPart;
-import org.argeo.app.ux.SuiteUxEvent;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
@@ -25,33 +21,28 @@ import org.eclipse.swt.widgets.Composite;
  * An SWT implementation of {@link MapPart} based on JavaScript execute in a
  * {@link Browser} control.
  */
-public class SwtJavaScriptMapPart extends Composite implements MapPart {
+public class SwtJSMapPart extends Composite implements MapPart {
 	static final long serialVersionUID = 2713128477504858552L;
 
-	private final static CmsLog log = CmsLog.getLog(SwtJavaScriptMapPart.class);
+	private final static CmsLog log = CmsLog.getLog(SwtJSMapPart.class);
 
-	private Browser browser;
+	private final static String GLOBAL_THIS_ = "globalThis.";
 
-	private CompletableFuture<Boolean> pageLoaded = new CompletableFuture<>();
+	private final Browser browser;
+
+	private final CompletableFuture<Boolean> pageLoaded = new CompletableFuture<>();
 
 	private String jsImplementation = JsImplementation.OPENLAYERS_MAP_PART.getJsClass();
-	private String mapVar = "globalThis.argeoMap";
+	private String mapVar = "argeoMap";
 
-	private final CmsView cmsView;
-
-	public SwtJavaScriptMapPart(Composite parent, int style) {
+	public SwtJSMapPart(Composite parent, int style) {
 		super(parent, style);
 		parent.setLayout(CmsSwtUtils.noSpaceGridLayout());
 		setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		setLayout(CmsSwtUtils.noSpaceGridLayout());
 
-		cmsView = CmsSwtUtils.getCmsView(parent);
-
 		browser = new Browser(this, SWT.BORDER);
 		browser.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-
-		// functions exposed to JavaScript
-		new onFeatureSelect();
 
 		browser.setUrl("/pkg/org.argeo.app.geo.js/index.html");
 		browser.addProgressListener(new ProgressListener() {
@@ -61,7 +52,7 @@ public class SwtJavaScriptMapPart extends Composite implements MapPart {
 			public void completed(ProgressEvent event) {
 				try {
 					// create map
-					browser.execute(mapVar + " = new " + jsImplementation + "();");
+					browser.execute(getJsMapVar() + " = new " + jsImplementation + "();");
 					pageLoaded.complete(true);
 				} catch (Exception e) {
 					log.error("Cannot create map in browser", e);
@@ -75,28 +66,40 @@ public class SwtJavaScriptMapPart extends Composite implements MapPart {
 		});
 	}
 
+	/*
+	 * MapPart.js METHODS
+	 */
+
 	@Override
 	public void addPoint(double lng, double lat, String style) {
-		callMethod(mapVar, "addPoint(%f, %f, %s)", lng, lat, style == null ? "'default'" : style);
+		callMapMethod("addPoint(%f, %f, %s)", lng, lat, style == null ? "'default'" : style);
 	}
 
 	@Override
 	public void addUrlLayer(String url, GeoFormat format) {
-		callMethod(mapVar, "addUrlLayer('%s', '%s')", url, format.name());
+		callMapMethod("addUrlLayer('%s', '%s')", url, format.name());
 	}
 
 	@Override
 	public void setZoom(int zoom) {
-		callMethod(mapVar, "setZoom(%d)", zoom);
+		callMapMethod("setZoom(%d)", zoom);
 	}
 
 	@Override
 	public void setCenter(double lng, double lat) {
-		callMethod(mapVar, "setCenter(%f, %f)", lng, lat);
+		callMapMethod("setCenter(%f, %f)", lng, lat);
+	}
+
+	protected CompletionStage<Object> callMapMethod(String methodCall, Object... args) {
+		return callMethod(getJsMapVar(), methodCall, args);
 	}
 
 	protected CompletionStage<Object> callMethod(String jsObject, String methodCall, Object... args) {
 		return evaluate(jsObject + '.' + methodCall, args);
+	}
+
+	private String getJsMapVar() {
+		return GLOBAL_THIS_ + mapVar;
 	}
 
 	/**
@@ -119,23 +122,31 @@ public class SwtJavaScriptMapPart extends Composite implements MapPart {
 		return res.minimalCompletionStage();
 	}
 
-	/** JavaScript function called when a feature is selected on the map. */
-	private class onFeatureSelect extends BrowserFunction {
+	/*
+	 * CALLBACKS
+	 */
+	public void onFeatureSelected(Consumer<FeatureSelectedEvent> toDo) {
+		addCallback("FeatureSelected", (arr) -> toDo.accept(new FeatureSelectedEvent((String) arr[0])));
+	}
 
-		onFeatureSelect() {
-			super(browser, onFeatureSelect.class.getSimpleName());
-		}
+	public void onFeatureSingleClick(Consumer<FeatureSingleClickEvent> toDo) {
+		addCallback("FeatureSingleClick", (arr) -> toDo.accept(new FeatureSingleClickEvent((String) arr[0])));
+	}
 
-		@Override
-		public Object function(Object[] arguments) {
-			if (arguments.length == 0)
-				return null;
-			String path = arguments[0].toString();
-			Map<String, Object> properties = new HashMap<>();
-			properties.put(SuiteUxEvent.CONTENT_PATH, '/' + CmsConstants.SYS_WORKSPACE + path);
-			cmsView.sendEvent(SuiteUxEvent.refreshPart.topic(), properties);
-			return null;
-		}
+	protected void addCallback(String suffix, Consumer<Object[]> toDo) {
+		pageLoaded.thenAccept((ready) -> {
+			// browser functions must be directly on window (RAP specific)
+			new BrowserFunction(browser, mapVar + "__on" + suffix) {
 
+				@Override
+				public Object function(Object[] arguments) {
+					toDo.accept(arguments);
+					return null;
+				}
+
+			};
+			browser.execute(getJsMapVar() + ".callbacks['on" + suffix + "']=window." + mapVar + "__on" + suffix + ";");
+			callMethod(mapVar, "enable" + suffix + "()");
+		});
 	}
 }

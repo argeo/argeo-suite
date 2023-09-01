@@ -14,4 +14,12 @@ public interface MapPart {
 	void setZoom(int zoom);
 
 	void setCenter(double lng, double lat);
+
+	/** Event when a feature has been single-clicked. */
+	record FeatureSingleClickEvent(String path) {
+	};
+
+	/** Event when a feature has been selected. */
+	record FeatureSelectedEvent(String path) {
+	};
 }
