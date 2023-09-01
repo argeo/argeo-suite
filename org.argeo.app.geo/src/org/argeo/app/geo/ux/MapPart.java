@@ -22,4 +22,7 @@ public interface MapPart {
 	/** Event when a feature has been selected. */
 	record FeatureSelectedEvent(String path) {
 	};
+	/** Event when a feature popup is requested. */
+	record FeaturePopupEvent(String path) {
+	};
 }

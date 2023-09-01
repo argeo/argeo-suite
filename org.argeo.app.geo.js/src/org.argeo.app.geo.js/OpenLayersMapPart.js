@@ -13,6 +13,7 @@ import VectorLayer from 'ol/layer/Vector.js';
 import GeoJSON from 'ol/format/GeoJSON.js';
 import GPX from 'ol/format/GPX.js';
 import Select from 'ol/interaction/Select.js';
+import Overlay from 'ol/Overlay.js';
 
 import MapPart from './MapPart.js';
 import { SentinelCloudless } from './OpenLayerTileSources.js';
@@ -79,9 +80,10 @@ export default class OpenLayersMapPart extends MapPart {
 		let mapPart = this;
 		this.#map.on('singleclick', function(e) {
 			let feature = null;
-			// we chose only one
+			// we chose the first one
 			e.map.forEachFeatureAtPixel(e.pixel, function(f) {
 				feature = f;
+				return true;
 			});
 			if (feature !== null)
 				mapPart.callbacks['onFeatureSingleClick'](feature.get('path'));
@@ -97,6 +99,56 @@ export default class OpenLayersMapPart extends MapPart {
 			if (e.selected.length > 0) {
 				let feature = e.selected[0];
 				mapPart.callbacks['onFeatureSelected'](feature.get('path'));
+			}
+		});
+	}
+
+	enableFeaturePopup() {
+		// we cannot use 'this' in the function provided to OpenLayers
+		let mapPart = this;
+		/**
+		 * Elements that make up the popup.
+		 */
+		const container = document.getElementById('popup');
+		const content = document.getElementById('popup-content');
+		const closer = document.getElementById('popup-closer');
+
+		/**
+		 * Create an overlay to anchor the popup to the map.
+		 */
+		const overlay = new Overlay({
+			element: container,
+			autoPan: false,
+			autoPanAnimation: {
+				duration: 250,
+			},
+		});
+		this.#map.addOverlay(overlay);
+
+		let selected = null;
+		this.#map.on('pointermove', function(e) {
+			if (selected !== null) {
+				selected.setStyle(undefined);
+				selected = null;
+			}
+
+			e.map.forEachFeatureAtPixel(e.pixel, function(f) {
+				selected = f;
+				return true;
+			});
+
+			if (selected == null) {
+				overlay.setPosition(undefined);
+				return;
+			}
+			const coordinate = e.coordinate;
+			const path = selected.get('path');
+			const res = mapPart.callbacks['onFeaturePopup'](path);
+			if (res != null) {
+				content.innerHTML = res;
+				overlay.setPosition(coordinate);
+			} else {
+				overlay.setPosition(undefined);
 			}
 		});
 	}

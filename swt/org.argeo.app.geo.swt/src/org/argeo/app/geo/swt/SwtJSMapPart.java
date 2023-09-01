@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import org.argeo.api.cms.CmsLog;
 import org.argeo.app.geo.ux.JsImplementation;
@@ -126,22 +127,34 @@ public class SwtJSMapPart extends Composite implements MapPart {
 	 * CALLBACKS
 	 */
 	public void onFeatureSelected(Consumer<FeatureSelectedEvent> toDo) {
-		addCallback("FeatureSelected", (arr) -> toDo.accept(new FeatureSelectedEvent((String) arr[0])));
+		addCallback("FeatureSelected", (arr) -> {
+			toDo.accept(new FeatureSelectedEvent((String) arr[0]));
+			return null;
+		});
 	}
 
 	public void onFeatureSingleClick(Consumer<FeatureSingleClickEvent> toDo) {
-		addCallback("FeatureSingleClick", (arr) -> toDo.accept(new FeatureSingleClickEvent((String) arr[0])));
+		addCallback("FeatureSingleClick", (arr) -> {
+			toDo.accept(new FeatureSingleClickEvent((String) arr[0]));
+			return null;
+		});
 	}
 
-	protected void addCallback(String suffix, Consumer<Object[]> toDo) {
+	public void onFeaturePopup(Function<FeaturePopupEvent, String> toDo) {
+		addCallback("FeaturePopup", (arr) -> {
+			return toDo.apply(new FeaturePopupEvent((String) arr[0]));
+		});
+	}
+
+	protected void addCallback(String suffix, Function<Object[], Object> toDo) {
 		pageLoaded.thenAccept((ready) -> {
 			// browser functions must be directly on window (RAP specific)
 			new BrowserFunction(browser, mapVar + "__on" + suffix) {
 
 				@Override
 				public Object function(Object[] arguments) {
-					toDo.accept(arguments);
-					return null;
+					Object result = toDo.apply(arguments);
+					return result;
 				}
 
 			};
