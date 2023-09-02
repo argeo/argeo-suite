@@ -1,5 +1,5 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+//const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
 
@@ -19,11 +19,11 @@ module.exports = {
 		splitChunks: {
 			chunks: 'all',
 		},
-		minimizer: [
-			// For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
-			`...`,
-			new CssMinimizerPlugin(),
-		],
+//		minimizer: [
+//			// For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
+//			`...`,
+//			new CssMinimizerPlugin(),
+//		],
 	},
 	module: {
 		rules: [
@@ -37,7 +37,7 @@ module.exports = {
 		],
 	},
 	plugins: [
-		// deal with CSS
+//		// deal with CSS
 		new MiniCssExtractPlugin(),
 		// deal with HTML generation
 		new HtmlWebpackPlugin({
