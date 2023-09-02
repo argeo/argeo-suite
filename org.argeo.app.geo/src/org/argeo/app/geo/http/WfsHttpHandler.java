@@ -1,6 +1,4 @@
-package org.argeo.app.internal.geo.http;
-
-import static org.argeo.app.geo.CqlUtils.CQL_FILTER;
+package org.argeo.app.geo.http;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,20 +25,24 @@ import org.geotools.data.DataUtilities;
 import org.geotools.data.geojson.GeoJSONWriter;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.filter.text.cql2.CQL;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.filter.Filter;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-public class GeoJsonHttpHandler implements HttpHandler {
+/** A partially implemented WFS 2.0 server. */
+public class WfsHttpHandler implements HttpHandler {
 	private ProvidedRepository contentRepository;
+
+	// HTTP parameters
+	final static String OUTPUT_FORMAT = "outputFormat";
+	final static String TYPE_NAMES = "typeNames";
+	final static String CQL_FILTER = "cql_filter";
 
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
@@ -48,15 +50,40 @@ public class GeoJsonHttpHandler implements HttpHandler {
 		ContentSession session = HttpServerUtils.getContentSession(contentRepository, exchange);
 		// Content content = session.get(path);
 
-		exchange.getResponseHeaders().set(HttpHeader.CONTENT_TYPE.getHeaderName(), "application/json");
-
 		Map<String, List<String>> parameters = HttpServerUtils.parseParameters(exchange);
 		String cql = parameters.containsKey(CQL_FILTER) ? parameters.get(CQL_FILTER).get(0) : null;
+		String typeNamesStr = parameters.containsKey(TYPE_NAMES) ? parameters.get(TYPE_NAMES).get(0) : null;
+		String outputFormat = parameters.containsKey(OUTPUT_FORMAT) ? parameters.get(OUTPUT_FORMAT).get(0) : null;
+		if (outputFormat == null) {
+			outputFormat = "application/json";
+		}
+
+		switch (outputFormat) {
+		case "application/json" -> {
+			exchange.getResponseHeaders().set(HttpHeader.CONTENT_TYPE.getHeaderName(), "application/json");
+		}
+
+		default -> throw new IllegalArgumentException("Unexpected value: " + outputFormat);
+		}
+
+		QName[] typeNames;
+		if (typeNamesStr != null) {
+			String[] arr = typeNamesStr.split(",");
+			typeNames = new QName[arr.length];
+			for (int i = 0; i < arr.length; i++) {
+				typeNames[i] = NamespaceUtils.parsePrefixedName(arr[i]);
+			}
+		} else {
+			typeNames = new QName[] { EntityType.local.qName() };
+		}
 
 		if (cql != null) {
 			Stream<Content> res = session.search((search) -> {
 				CqlUtils.filter(search.from(path), cql);
-				search.getWhere().isContentClass(EntityType.local);
+				search.getWhere().any((f) -> {
+					for (QName typeName : typeNames)
+						f.isContentClass(typeName);
+				});
 			});
 
 			exchange.sendResponseHeaders(200, 0);
@@ -64,13 +91,6 @@ public class GeoJsonHttpHandler implements HttpHandler {
 			// BODY PROCESSING
 			GeoJSONWriter geoJSONWriter = new GeoJSONWriter(exchange.getResponseBody());
 			geoJSONWriter.setPrettyPrinting(true);
-
-//			Writer writer = new OutputStreamWriter(exchange.getResponseBody());
-//			writer.write("""
-//					{
-//					  "type": "FeatureCollection",
-//					  "features": [
-//					""");
 
 			boolean gpx = false;
 			SimpleFeatureType TYPE;
@@ -125,17 +145,12 @@ public class GeoJsonHttpHandler implements HttpHandler {
 				String uuid = c.attr(LdapAttr.entryUUID);
 
 				SimpleFeature feature = featureBuilder.buildFeature(uuid);
-//				String json = GeoJSONWriter.toGeoJSON(feature);
 				try {
 					geoJSONWriter.write(feature);
 				} catch (IOException e) {
 					throw new UncheckedIOException(e);
 				}
 			});
-//			writer.write("""
-//					  ]
-//					}
-//					""");
 			geoJSONWriter.close();
 		}
 
@@ -143,10 +158,5 @@ public class GeoJsonHttpHandler implements HttpHandler {
 
 	public void setContentRepository(ProvidedRepository contentRepository) {
 		this.contentRepository = contentRepository;
-	}
-
-	public static void main(String[] args) throws Exception {
-		Filter filter = CQL.toFilter("entity:type='apafField' AND jcr:isCheckedOut=false");
-		System.out.println(CQL.toCQL(filter));
 	}
 }

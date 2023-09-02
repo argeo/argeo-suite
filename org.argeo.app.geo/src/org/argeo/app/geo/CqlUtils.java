@@ -12,9 +12,8 @@ import org.opengis.filter.PropertyIsEqualTo;
 import org.opengis.filter.expression.Literal;
 import org.opengis.filter.expression.PropertyName;
 
+/** Utilities around the CQL query format. */
 public class CqlUtils {
-
-	public final static String CQL_FILTER = "cql_filter";
 
 	public static void filter(BasicSearch search, String cql) {
 		try {
