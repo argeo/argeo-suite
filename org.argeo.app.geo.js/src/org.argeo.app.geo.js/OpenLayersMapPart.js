@@ -3,6 +3,7 @@
  */
 
 import Map from 'ol/Map.js';
+import View from 'ol/View.js';
 import OSM from 'ol/source/OSM.js';
 import TileLayer from 'ol/layer/Tile.js';
 import { fromLonLat } from 'ol/proj.js';
@@ -14,6 +15,7 @@ import GeoJSON from 'ol/format/GeoJSON.js';
 import GPX from 'ol/format/GPX.js';
 import Select from 'ol/interaction/Select.js';
 import Overlay from 'ol/Overlay.js';
+import { Style, Icon } from 'ol/style.js';
 
 import MapPart from './MapPart.js';
 import { SentinelCloudless } from './OpenLayerTileSources.js';
@@ -22,23 +24,25 @@ import { SentinelCloudless } from './OpenLayerTileSources.js';
 export default class OpenLayersMapPart extends MapPart {
 	/** The OpenLayers Map. */
 	#map;
+
+	/** Externally added callback functions. */
 	callbacks = {};
 
-	// Constructor
-	constructor() {
-		super();
+	/** Constructor taking the mapName as an argument. */
+	constructor(mapName) {
+		super(mapName);
 		this.#map = new Map({
 			layers: [
-				new TileLayer({
-					source: new SentinelCloudless(),
-				}),
+				//				new TileLayer({
+				//					source: new SentinelCloudless(),
+				//				}),
 				new TileLayer({
 					source: new OSM(),
 					opacity: 0.4,
 					transition: 0,
 				}),
 			],
-			target: 'map',
+			target: this.getMapName(),
 		});
 	}
 
@@ -58,10 +62,13 @@ export default class OpenLayersMapPart extends MapPart {
 				geometry: new Point(fromLonLat([lng, lat]))
 			})]
 		});
-		this.#map.addLayer(new VectorLayer({ source: vectorSource }));
+		this.#map.addLayer(new VectorLayer({
+			source: vectorSource,
+			style: style,
+		}));
 	}
 
-	addUrlLayer(url, format) {
+	addUrlLayer(url, format, style) {
 		let vectorSource;
 		if (format === 'GEOJSON') {
 			vectorSource = new VectorSource({ url: url, format: new GeoJSON() })
@@ -71,6 +78,7 @@ export default class OpenLayersMapPart extends MapPart {
 		}
 		this.#map.addLayer(new VectorLayer({
 			source: vectorSource,
+			style: style,
 		}));
 	}
 
@@ -143,6 +151,8 @@ export default class OpenLayersMapPart extends MapPart {
 			}
 			const coordinate = e.coordinate;
 			const path = selected.get('path');
+			if (path === null)
+				return true;
 			const res = mapPart.callbacks['onFeaturePopup'](path);
 			if (res != null) {
 				content.innerHTML = res;
@@ -152,4 +162,24 @@ export default class OpenLayersMapPart extends MapPart {
 			}
 		});
 	}
+
+	//
+	// HTML
+	//
+	getMapDivCssClass() {
+		return 'map';
+	}
+
+	//
+	// STATIC FOR EXTENSION
+	//
+	static newStyle(args){
+		return new Style(args);
+	}
+	
+	static newIcon(args){
+		return new Icon(args);
+	}
+	
+	
 }

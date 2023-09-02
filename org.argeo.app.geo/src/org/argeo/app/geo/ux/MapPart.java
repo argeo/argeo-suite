@@ -9,7 +9,7 @@ public interface MapPart {
 
 	void addPoint(double lng, double lat, String style);
 
-	void addUrlLayer(String url, GeoFormat format);
+	void addUrlLayer(String url, GeoFormat format, String style);
 
 	void setZoom(int zoom);
 
@@ -22,6 +22,7 @@ public interface MapPart {
 	/** Event when a feature has been selected. */
 	record FeatureSelectedEvent(String path) {
 	};
+
 	/** Event when a feature popup is requested. */
 	record FeaturePopupEvent(String path) {
 	};

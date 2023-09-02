@@ -10,14 +10,14 @@ public class MapUiProvider implements SwtUiProvider {
 
 	@Override
 	public Control createUiPart(Composite parent, Content context) {
-		SwtJSMapPart map = new SwtJSMapPart(parent, 0);
+		SwtJSMapPart map = new SwtJSMapPart("defaultOverviewMap", parent, 0);
 		map.setCenter(13.404954, 52.520008); // Berlin
 //		map.setCenter(-74.00597, 40.71427); // NYC
 //		map.addPoint(-74.00597, 40.71427, null);
 		map.setZoom(6);
 		// map.addUrlLayer("https://openlayers.org/en/v4.6.5/examples/data/geojson/countries.geojson",
 		// Format.GEOJSON);
-		return map;
+		return map.getControl();
 	}
 
 }
