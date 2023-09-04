@@ -6,7 +6,7 @@ import Map from 'ol/Map.js';
 import View from 'ol/View.js';
 import OSM from 'ol/source/OSM.js';
 import TileLayer from 'ol/layer/Tile.js';
-import { fromLonLat } from 'ol/proj.js';
+import { fromLonLat, getPointResolution } from 'ol/proj.js';
 import VectorSource from 'ol/source/Vector.js';
 import Feature from 'ol/Feature.js';
 import { Point } from 'ol/geom.js';
@@ -16,6 +16,8 @@ import GPX from 'ol/format/GPX.js';
 import Select from 'ol/interaction/Select.js';
 import Overlay from 'ol/Overlay.js';
 import { Style, Icon } from 'ol/style.js';
+
+import * as SLDReader from '@nieuwlandgeo/sldreader';
 
 import MapPart from './MapPart.js';
 import { SentinelCloudless } from './OpenLayerTileSources.js';
@@ -68,19 +70,31 @@ export default class OpenLayersMapPart extends MapPart {
 		}));
 	}
 
-	addUrlLayer(url, format, style) {
-		let vectorSource;
+	addUrlLayer(url, format, style, sld) {
+		let featureFormat;
 		if (format === 'GEOJSON') {
-			vectorSource = new VectorSource({ url: url, format: new GeoJSON() })
+			featureFormat = new GeoJSON();
 		}
 		else if (format === 'GPX') {
-			vectorSource = new VectorSource({ url: url, format: new GPX() })
+			featureFormat = new GPX();
+		} else {
+			throw new Error("Unsupported format " + format);
 		}
-		this.#map.addLayer(new VectorLayer({
+		const vectorSource = new VectorSource({
+			url: url,
+			format: featureFormat,
+		});
+		const vectorLayer = new VectorLayer({
 			source: vectorSource,
-			style: style,
-		}));
+		});
+		if (sld) {
+			this.#applySLD(vectorLayer, style);
+		} else {
+			vectorLayer.setStyle(style);
+		}
+		this.#map.addLayer(vectorLayer);
 	}
+
 
 	/* CALLBACKS */
 	enableFeatureSingleClick() {
@@ -173,13 +187,39 @@ export default class OpenLayersMapPart extends MapPart {
 	//
 	// STATIC FOR EXTENSION
 	//
-	static newStyle(args){
+	static newStyle(args) {
 		return new Style(args);
 	}
-	
-	static newIcon(args){
+
+	static newIcon(args) {
 		return new Icon(args);
 	}
-	
-	
+
+	//
+	// SLD STYLING
+	//
+	#applySLD(vectorLayer, text) {
+		const sldObject = SLDReader.Reader(text);
+		const sldLayer = SLDReader.getLayer(sldObject);
+		const style = SLDReader.getStyle(sldLayer);
+		const featureTypeStyle = style.featuretypestyles[0];
+
+		const viewProjection = this.#map.getView().getProjection();
+		const olStyleFunction = SLDReader.createOlStyleFunction(featureTypeStyle, {
+			// Use the convertResolution option to calculate a more accurate resolution.
+			convertResolution: viewResolution => {
+				const viewCenter = this.#map.getView().getCenter();
+				return getPointResolution(viewProjection, viewResolution, viewCenter);
+			},
+			// If you use point icons with an ExternalGraphic, you have to use imageLoadCallback
+			// to update the vector layer when an image finishes loading.
+			// If you do not do this, the image will only be visible after next layer pan/zoom.
+			imageLoadedCallback: () => {
+				vectorLayer.changed();
+			},
+		});
+		vectorLayer.setStyle(olStyleFunction);
+	}
+
+
 }

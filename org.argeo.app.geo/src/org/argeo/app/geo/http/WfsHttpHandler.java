@@ -96,9 +96,9 @@ public class WfsHttpHandler implements HttpHandler {
 			SimpleFeatureType TYPE;
 			try {
 				if (gpx)
-					TYPE = DataUtilities.createType("Content", "the_geom:Polygon:srid=4326,path:String,type:String");
+					TYPE = DataUtilities.createType("Content", "the_geom:Polygon:srid=4326,path:String,type:String,name:String");
 				else
-					TYPE = DataUtilities.createType("Content", "the_geom:Point:srid=4326,path:String,type:String");
+					TYPE = DataUtilities.createType("Content", "the_geom:Point:srid=4326,path:String,type:String,name:String");
 			} catch (SchemaException e) {
 				throw new RuntimeException(e);
 			}
@@ -141,6 +141,7 @@ public class WfsHttpHandler implements HttpHandler {
 						featureBuilder.add(NamespaceUtils.toPrefixedName(contentClasses.get(0)));
 					}
 				}
+				featureBuilder.add(NamespaceUtils.toPrefixedName(c.getName()));
 
 				String uuid = c.attr(LdapAttr.entryUUID);
 

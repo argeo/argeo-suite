@@ -3,7 +3,7 @@ package org.argeo.app.geo.swt;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import java.util.function.Function;
-
+import org.argeo.app.geo.GeoUtils;
 import org.argeo.app.geo.ux.JsImplementation;
 import org.argeo.app.geo.ux.MapPart;
 import org.argeo.app.swt.js.SwtBrowserJsPart;
@@ -40,7 +40,12 @@ public class SwtJSMapPart extends SwtBrowserJsPart implements MapPart {
 
 	@Override
 	public void addUrlLayer(String url, GeoFormat format, String style) {
-		callMapMethod("addUrlLayer('%s', '%s', %s)", url, format.name(), style);
+		callMapMethod("addUrlLayer('%s', '%s', %s, false)", url, format.name(), style);
+	}
+
+	public void addCssUrlLayer(String url, GeoFormat format, String css) {
+		String style = GeoUtils.createSldFromCss("layer", "Layer", css);
+		callMapMethod("addUrlLayer('%s', '%s', '%s', true)", url, format.name(), style);
 	}
 
 	@Override
