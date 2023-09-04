@@ -49,7 +49,7 @@ export default class MapPart {
 	}
 
 	//
-	// AcCESSORS
+	// ACCESSORS
 	//
 	getMapName() {
 		return this.#mapName;
