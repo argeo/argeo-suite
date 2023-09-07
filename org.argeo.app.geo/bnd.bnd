@@ -1,6 +1,7 @@
 Import-Package:\
 tech.units.indriya.unit,\
 com.fasterxml.jackson.core,\
+org.geotools.xml.transform,\
 *
 
 Service-Component:\

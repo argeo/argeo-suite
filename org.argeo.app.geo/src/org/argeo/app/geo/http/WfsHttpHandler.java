@@ -3,6 +3,7 @@ package org.argeo.app.geo.http;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UncheckedIOException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -23,14 +24,22 @@ import org.argeo.cms.http.HttpHeader;
 import org.argeo.cms.http.server.HttpServerUtils;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.geojson.GeoJSONWriter;
+import org.geotools.feature.DefaultFeatureCollection;
+import org.geotools.feature.NameImpl;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.geometry.jts.JTSFactoryFinder;
+import org.geotools.referencing.crs.DefaultGeographicCRS;
+import org.geotools.wfs.GML;
+import org.geotools.wfs.GML.Version;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.opengis.feature.GeometryAttribute;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.feature.type.Name;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -62,6 +71,10 @@ public class WfsHttpHandler implements HttpHandler {
 		case "application/json" -> {
 			exchange.getResponseHeaders().set(HttpHeader.CONTENT_TYPE.getHeaderName(), "application/json");
 		}
+		case "GML3" -> {
+//			exchange.getResponseHeaders().set(HttpHeader.CONTENT_TYPE.getHeaderName(), "application/gml+xml");
+			exchange.getResponseHeaders().set(HttpHeader.CONTENT_TYPE.getHeaderName(), "application/xml");
+		}
 
 		default -> throw new IllegalArgumentException("Unexpected value: " + outputFormat);
 		}
@@ -77,16 +90,99 @@ public class WfsHttpHandler implements HttpHandler {
 			typeNames = new QName[] { EntityType.local.qName() };
 		}
 
-		if (cql != null) {
-			Stream<Content> res = session.search((search) -> {
+		Stream<Content> res = session.search((search) -> {
+			if (cql != null) {
 				CqlUtils.filter(search.from(path), cql);
-				search.getWhere().any((f) -> {
-					for (QName typeName : typeNames)
-						f.isContentClass(typeName);
+			} else {
+				search.from(path).where((and) -> {
 				});
+			}
+			search.getWhere().any((f) -> {
+				for (QName typeName : typeNames)
+					f.isContentClass(typeName);
 			});
+		});
 
-			exchange.sendResponseHeaders(200, 0);
+		exchange.sendResponseHeaders(200, 0);
+
+		if ("GML3".equals(outputFormat)) {
+			String entityType = "apafField";
+			URL schemaLocation = new URL("http://localhost:7070/pkg/eu.netiket.on.apaf/apaf.xsd");
+			String namespace = "http://apaf.on.netiket.eu/ns/apaf";
+
+			GML gml = new GML(Version.WFS1_1);
+			gml.setCoordinateReferenceSystem(DefaultGeographicCRS.WGS84);
+			gml.setNamespace("local", namespace);
+
+			SimpleFeatureType featureType = gml.decodeSimpleFeatureType(schemaLocation,
+					new NameImpl(namespace, entityType + "Feature"));
+
+//			CoordinateReferenceSystem crs=DefaultGeographicCRS.WGS84;
+//			QName featureName = new QName(namespace,"apafFieldFeature");
+//			GMLConfiguration configuration = new GMLConfiguration();
+//			FeatureType parsed = GTXML.parseFeatureType(configuration, featureName, crs);
+//			SimpleFeatureType featureType = DataUtilities.simple(parsed);
+
+			SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(featureType);
+			GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
+
+			DefaultFeatureCollection featureCollection = new DefaultFeatureCollection();
+
+			res.forEach((c) -> {
+//				boolean gpx = false;
+				Geometry the_geom = null;
+				Geometry the_area = null;
+//				if (gpx) {
+				Content area = c.getContent("gpx/area.gpx").orElse(null);
+				if (area != null) {
+
+					try (InputStream in = area.open(InputStream.class)) {
+						SimpleFeature feature = GpxUtils.parseGpxToPolygon(in);
+						the_area = (Geometry) feature.getDefaultGeometry();
+					} catch (IOException e) {
+						throw new UncheckedIOException("Cannot parse " + c, e);
+					}
+				}
+//				} else {
+				if (c.hasContentClass(EntityType.geopoint)) {
+					double latitude = c.get(WGS84PosName.lat, Double.class).get();
+					double longitude = c.get(WGS84PosName.lng, Double.class).get();
+
+					Coordinate coordinate = new Coordinate(longitude, latitude);
+					the_geom = geometryFactory.createPoint(coordinate);
+				}
+
+//				}
+				if (the_geom != null)
+					featureBuilder.set(new NameImpl(namespace, "geopoint"), the_geom);
+				if (the_area != null)
+					featureBuilder.set(new NameImpl(namespace, "area"), the_geom);
+
+				List<AttributeDescriptor> attrDescs = featureType.getAttributeDescriptors();
+				for (AttributeDescriptor attrDesc : attrDescs) {
+					if (attrDesc instanceof GeometryAttribute)
+						continue;
+					Name name = attrDesc.getName();
+					QName qName = new QName(name.getNamespaceURI(), name.getLocalPart());
+					String value = c.attr(qName);
+					if (value == null) {
+						value = c.attr(name.getLocalPart());
+					}
+					if (value != null) {
+						featureBuilder.set(name, value);
+					}
+				}
+
+				String uuid = c.attr(LdapAttr.entryUUID);
+
+				SimpleFeature feature = featureBuilder.buildFeature(uuid);
+				featureCollection.add(feature);
+
+			});
+			gml.encode(exchange.getResponseBody(), featureCollection);
+			exchange.getResponseBody().close();
+
+		} else if ("application/json".equals(outputFormat)) {
 
 			// BODY PROCESSING
 			GeoJSONWriter geoJSONWriter = new GeoJSONWriter(exchange.getResponseBody());
@@ -96,9 +192,11 @@ public class WfsHttpHandler implements HttpHandler {
 			SimpleFeatureType TYPE;
 			try {
 				if (gpx)
-					TYPE = DataUtilities.createType("Content", "the_geom:Polygon:srid=4326,path:String,type:String,name:String");
+					TYPE = DataUtilities.createType("Content",
+							"the_geom:Polygon:srid=4326,path:String,type:String,name:String");
 				else
-					TYPE = DataUtilities.createType("Content", "the_geom:Point:srid=4326,path:String,type:String,name:String");
+					TYPE = DataUtilities.createType("Content",
+							"the_geom:Point:srid=4326,path:String,type:String,name:String");
 			} catch (SchemaException e) {
 				throw new RuntimeException(e);
 			}
