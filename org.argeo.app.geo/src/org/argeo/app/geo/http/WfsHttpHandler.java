@@ -19,6 +19,7 @@ import org.argeo.app.api.EntityName;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.api.WGS84PosName;
 import org.argeo.app.geo.CqlUtils;
+import org.argeo.app.geo.GeoTools;
 import org.argeo.app.geo.GpxUtils;
 import org.argeo.cms.http.HttpHeader;
 import org.argeo.cms.http.server.HttpServerUtils;
@@ -35,6 +36,7 @@ import org.geotools.wfs.GML.Version;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Polygon;
 import org.opengis.feature.GeometryAttribute;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -124,21 +126,19 @@ public class WfsHttpHandler implements HttpHandler {
 //			SimpleFeatureType featureType = DataUtilities.simple(parsed);
 
 			SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(featureType);
-			GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
 
 			DefaultFeatureCollection featureCollection = new DefaultFeatureCollection();
 
 			res.forEach((c) -> {
 //				boolean gpx = false;
 				Geometry the_geom = null;
-				Geometry the_area = null;
+				Polygon the_area = null;
 //				if (gpx) {
 				Content area = c.getContent("gpx/area.gpx").orElse(null);
 				if (area != null) {
 
 					try (InputStream in = area.open(InputStream.class)) {
-						SimpleFeature feature = GpxUtils.parseGpxToPolygon(in);
-						the_area = (Geometry) feature.getDefaultGeometry();
+						the_area = GpxUtils.parseGpxTrackTo(in, Polygon.class);
 					} catch (IOException e) {
 						throw new UncheckedIOException("Cannot parse " + c, e);
 					}
@@ -149,14 +149,14 @@ public class WfsHttpHandler implements HttpHandler {
 					double longitude = c.get(WGS84PosName.lng, Double.class).get();
 
 					Coordinate coordinate = new Coordinate(longitude, latitude);
-					the_geom = geometryFactory.createPoint(coordinate);
+					the_geom = GeoTools.GEOMETRY_FACTORY.createPoint(coordinate);
 				}
 
 //				}
 				if (the_geom != null)
 					featureBuilder.set(new NameImpl(namespace, "geopoint"), the_geom);
 				if (the_area != null)
-					featureBuilder.set(new NameImpl(namespace, "area"), the_geom);
+					featureBuilder.set(new NameImpl(namespace, "area"), the_area);
 
 				List<AttributeDescriptor> attrDescs = featureType.getAttributeDescriptors();
 				for (AttributeDescriptor attrDesc : attrDescs) {

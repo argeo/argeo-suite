@@ -18,9 +18,10 @@ import javax.xml.parsers.SAXParserFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.Polygon;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -30,14 +31,30 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /** Utilities around the GPX format. */
 public class GpxUtils {
+	/** GPX as a LineString in WGS84 (feature type with only the_geom). */
+	public static final SimpleFeatureType LINESTRING_FEATURE_TYPE;
+	/** GPX as a Polygon in WGS84 (feature type with only the_geom). */
+	public static final SimpleFeatureType POLYGON_FEATURE_TYPE;
 
-	public static SimpleFeature parseGpxToPolygon(InputStream in) throws IOException {
+	static {
 		try {
-			final SimpleFeatureType TYPE = DataUtilities.createType("Area", "the_geom:Polygon:srid=4326");
-			SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(TYPE);
+			LINESTRING_FEATURE_TYPE = DataUtilities.createType("Area", "the_geom:LineString:srid=4326");
+			POLYGON_FEATURE_TYPE = DataUtilities.createType("Area", "the_geom:Polygon:srid=4326");
+		} catch (SchemaException e) {
+			throw new RuntimeException("Cannot create GPX Feature type", e);
+		}
+	}
 
-			GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
-			List<Coordinate> coordinates = new ArrayList<>();
+	/**
+	 * Converts a GPX track to either a {@link Geometry} with WGS84 coordinates
+	 * ({@link LineString} or {@link Polygon}) or a {@link SimpleFeature} (with
+	 * {@link #LINESTRING_FEATURE_TYPE}).
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T parseGpxTrackTo(InputStream in, Class<T> clss) throws IOException {
+		GeometryFactory geometryFactory = GeoTools.GEOMETRY_FACTORY;
+		List<Coordinate> coordinates = new ArrayList<>();
+		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			SAXParser saxParser = factory.newSAXParser();
 
@@ -49,24 +66,51 @@ public class GpxUtils {
 					if ("trkpt".equals(qName)) {
 						Double latitude = Double.parseDouble(attributes.getValue("lat"));
 						Double longitude = Double.parseDouble(attributes.getValue("lon"));
+						// TODO elevation in 3D context
 						Coordinate coordinate = new Coordinate(longitude, latitude);
 						coordinates.add(coordinate);
 					}
 				}
 
 			});
+		} catch (ParserConfigurationException | SAXException e) {
+			throw new RuntimeException("Cannot convert GPX", e);
+		}
+
+		if (LineString.class.isAssignableFrom(clss)) {
+			LineString lineString = geometryFactory
+					.createLineString(coordinates.toArray(new Coordinate[coordinates.size()]));
+			return (T) lineString;
+		} else if (Polygon.class.isAssignableFrom(clss)) {
 			// close the line string
 			coordinates.add(coordinates.get(0));
-
 			Polygon polygon = geometryFactory.createPolygon(coordinates.toArray(new Coordinate[coordinates.size()]));
-			featureBuilder.add(polygon);
+			return (T) polygon;
+		}
+		// TODO MultiPoint? MultiLine? etc.
+		else if (SimpleFeature.class.isAssignableFrom(clss)) {
+			SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(LINESTRING_FEATURE_TYPE);
+			LineString lineString = geometryFactory
+					.createLineString(coordinates.toArray(new Coordinate[coordinates.size()]));
+			featureBuilder.add(lineString);
 			SimpleFeature area = featureBuilder.buildFeature(null);
-			return area;
-		} catch (ParserConfigurationException | SAXException | SchemaException e) {
-			throw new RuntimeException("Cannot convert GPX", e);
+			return (T) area;
+		} else {
+			throw new IllegalArgumentException("Unsupported format " + clss);
 		}
 	}
 
+	/** @deprecated Use {@link #parseGpxTrackTo(InputStream, Class)} instead. */
+	@Deprecated
+	public static SimpleFeature parseGpxToPolygon(InputStream in) throws IOException {
+		SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(POLYGON_FEATURE_TYPE);
+		Polygon polygon = parseGpxTrackTo(in, Polygon.class);
+		featureBuilder.add(polygon);
+		SimpleFeature area = featureBuilder.buildFeature(null);
+		return area;
+	}
+
+	/** Write ODK GepShape as a GPX file. */
 	public static void writeGeoShapeAsGpx(String geoShape, OutputStream out) throws IOException {
 		Objects.requireNonNull(geoShape);
 		Writer writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);

@@ -5,4 +5,4 @@ org.geotools.xml.transform,\
 *
 
 Service-Component:\
-OSGI-INF/geoJsonHttpHandler.xml,\
+OSGI-INF/wfsHttpHandler.xml,\
