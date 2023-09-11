@@ -37,3 +37,4 @@
 - * (STRING)
 + xforms:label (jcrx:xmlvalue) = jcrx:xmlvalue
 + xforms:hint (jcrx:xmlvalue) = jcrx:xmlvalue *
++ xforms:setvalue (xforms:setvalue) = xforms:setvalue *
