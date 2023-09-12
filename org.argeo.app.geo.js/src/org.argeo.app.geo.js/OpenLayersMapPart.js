@@ -89,7 +89,7 @@ export default class OpenLayersMapPart extends MapPart {
 		});
 		if (sld) {
 			this.#applySLD(vectorLayer, style);
-		} else {
+		} else if (style !== null) {
 			vectorLayer.setStyle(style);
 		}
 		this.#map.addLayer(vectorLayer);
