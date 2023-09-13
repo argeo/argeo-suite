@@ -10,7 +10,7 @@ public enum SuiteContentNamespace implements ContentNamespace {
 	//
 	// ARGEO
 	//
-	ENTITY("entity", "http://www.argeo.org/ns/entity", "entity.xsd", null),
+	ENTITY("entity", "http://www.argeo.org/ns/entity", "/org/argeo/app/api/entity.xsd", null),
 	//
 	ARGEO_DBK("argeodbk", "http://www.argeo.org/ns/argeodbk", null, null),
 	//
@@ -62,7 +62,10 @@ public enum SuiteContentNamespace implements ContentNamespace {
 		Objects.requireNonNull(namespace);
 		this.namespace = namespace;
 		if (resourceFileName != null) {
-			resource = getClass().getResource(RESOURCE_BASE + resourceFileName);
+			if (!resourceFileName.startsWith("/"))
+				resource = getClass().getResource(RESOURCE_BASE + resourceFileName);
+			else
+				resource = getClass().getResource(resourceFileName);
 			Objects.requireNonNull(resource);
 		}
 		if (publicUrl != null)

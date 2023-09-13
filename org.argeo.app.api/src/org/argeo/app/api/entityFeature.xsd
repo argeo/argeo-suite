@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://apaf.on.netiket.eu/ns/apaf"
+	targetNamespace="http://apaf.on.netiket.eu/ns/apaf"
+	xmlns:entity="http://www.argeo.org/ns/entity" xmlns:dav="DAV:"
+	xmlns:gml="http://www.opengis.net/gml">
+<!-- 	<xs:import -->
+<!-- 		schemaLocation="entity.xsd" -->
+<!-- 		namespace="http://www.argeo.org/ns/entity"></xs:import> -->
+	<!-- <xs:import -->
+	<!-- schemaLocation="https://schemas.opengis.net/gml/3.2.1/gml.xsd" -->
+	<!-- namespace="http://www.opengis.net/gml/3.2"></xs:import> -->
+	<xs:import namespace="http://www.opengis.net/gml"
+		schemaLocation="http://schemas.opengis.net/gml/3.1.1/base/gml.xsd" />
+
+	<xs:complexType name="entityFeatureType">
+		<xs:complexContent>
+			<xs:extension base="gml:AbstractFeatureType">
+				<xs:sequence>
+					<xs:element name="area" type="gml:PolygonPropertyType" />
+					<xs:element name="geopoint" type="gml:PointPropertyType" />
+					<xs:element name="path" type="xs:string" />
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
+	<xs:element name="entityFeature" type="entityFeatureType"
+		substitutionGroup="gml:_Feature" />
+
+	<!-- <xs:complexType name="TestFeatureCollectionType"> <xs:complexContent> 
+		<xs:extension base="gml:AbstractFeatureCollectionType" /> </xs:complexContent> 
+		</xs:complexType> <xs:element name="TestFeatureCollection" type="TestFeatureCollectionType" 
+		/> -->
+
+</xs:schema>

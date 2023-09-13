@@ -2,9 +2,7 @@ package org.argeo.app.geo;
 
 import org.argeo.api.cms.CmsLog;
 import org.geotools.factory.CommonFactoryFinder;
-import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.geotools.styling.StyleFactory;
-import org.locationtech.jts.geom.GeometryFactory;
 import org.opengis.filter.FilterFactory2;
 
 /**
@@ -16,13 +14,11 @@ import org.opengis.filter.FilterFactory2;
 public class GeoTools {
 	private final static CmsLog log = CmsLog.getLog(GeoTools.class);
 
-	public final static GeometryFactory GEOMETRY_FACTORY;
 	public final static StyleFactory STYLE_FACTORY;
 	public final static FilterFactory2 FILTER_FACTORY;
 
 	static {
 		try {
-			GEOMETRY_FACTORY = JTSFactoryFinder.getGeometryFactory();
 			STYLE_FACTORY = CommonFactoryFinder.getStyleFactory();
 			FILTER_FACTORY = CommonFactoryFinder.getFilterFactory2();
 		} catch (RuntimeException e) {

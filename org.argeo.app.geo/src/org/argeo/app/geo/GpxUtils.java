@@ -52,7 +52,7 @@ public class GpxUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T parseGpxTrackTo(InputStream in, Class<T> clss) throws IOException {
-		GeometryFactory geometryFactory = GeoTools.GEOMETRY_FACTORY;
+		GeometryFactory geometryFactory = JTS.GEOMETRY_FACTORY;
 		List<Coordinate> coordinates = new ArrayList<>();
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
