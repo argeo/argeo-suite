@@ -1,6 +1,6 @@
 import * as Plot from "@observablehq/plot";
 
-export class TestGraph {
+export default class TestGraph {
 
 	init() {
 

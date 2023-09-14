@@ -1,5 +1,5 @@
 import TestGraph from './TestGraph.js';
-import * as Plot from "@observablehq/plot";
+//import { rectY, binX } from "@observablehq/plot";
 
 // PSEUDO PACKAGE
 if (typeof globalThis.argeo === 'undefined')
@@ -12,8 +12,8 @@ if (typeof globalThis.argeo.app.graph === 'undefined')
 // PUBLIC CLASSES
 globalThis.argeo.app.graph.TestGraph = TestGraph;
 
-const plot = Plot.rectY({ length: 10000 }, Plot.binX({ y: "count" }, { x: Math.random })).plot();
-const div = document.querySelector("#myplot");
-div.append(plot);
+//const plot = rectY({ length: 10000 }, binX({ y: "count" }, { x: Math.random })).plot();
+//const div = document.querySelector("#myplot");
+//div.append(plot);
 
 "use strict";
