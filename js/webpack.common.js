@@ -5,13 +5,14 @@ const path = require('path');
 
 module.exports = {
 	entry: {
-		"org.argeo.app.geo.js": { 
-			import: './src/org.argeo.app.geo.js/index.js',
+		"geo": { 
+			import: './src/geo/index.js',
 		}
 	},
 	output: {
 		filename: '[name].[contenthash].js',
-		path: path.resolve(__dirname, 'org.argeo.app.geo.js/org/argeo/app/geo/js'),
+		path: path.resolve(__dirname, 'org.argeo.app.js/org/argeo/app/js'),
+			publicPath:'/pkg/org.argeo.app.js',
 		clean: true,
 	},
 	optimization: {
@@ -43,9 +44,11 @@ module.exports = {
 		new MiniCssExtractPlugin(),
 		// deal with HTML generation
 		new HtmlWebpackPlugin({
-			title: 'Open Layers',
-			template: 'src/org.argeo.app.geo.js/index.html',
+			title: 'Argeo Suite Geo JS',
+			template: 'src/geo/index.html',
 			scriptLoading: 'module',
+			filename: 'geo.html',
+			chunks: ['geo'],
 		}),
 
 	],

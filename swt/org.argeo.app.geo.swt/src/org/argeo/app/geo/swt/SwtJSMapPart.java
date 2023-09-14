@@ -19,7 +19,7 @@ public class SwtJSMapPart extends SwtBrowserJsPart implements MapPart {
 	private final String mapName;// = "argeoMap";
 
 	public SwtJSMapPart(String mapName, Composite parent, int style) {
-		super(parent, style, "/pkg/org.argeo.app.geo.js/index.html");
+		super(parent, style, "/pkg/org.argeo.app.js/geo.html");
 		this.mapName = mapName;
 	}
 
