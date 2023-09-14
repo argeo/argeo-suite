@@ -1,12 +1,27 @@
-import * as Plot from "@observablehq/plot";
+import Chart from 'chart.js/auto';
 
 export default class TestGraph {
 
 	init() {
+		const ctx = document.getElementById('myChart');
 
-		const plot = Plot.rectY({ length: 10000 }, Plot.binX({ y: "count" }, { x: Math.random })).plot();
-		const div = document.querySelector("#myplot");
-		div.append(plot);
-
+		new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+				datasets: [{
+					label: '# of Votes',
+					data: [12, 19, 3, 5, 2, 3],
+					borderWidth: 1
+				}]
+			},
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				}
+			}
+		});
 	}
 }
