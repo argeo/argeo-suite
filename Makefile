@@ -1,5 +1,5 @@
 include sdk.mk
-.PHONY: clean all osgi
+.PHONY: clean all osgi web
 
 all: web osgi
 	
@@ -45,17 +45,10 @@ swt/rap/org.argeo.cms \
 
 clean:
 	rm -rf $(BUILD_BASE)
+	make -C js clean
 
 ## WEB
 web:
-	cd org.argeo.app.geo.js && npm run build
-
-npm-install:
-	cd org.argeo.app.geo.js && npm install
-	
-jsdoc:
-	org.argeo.app.geo.js/node_modules/.bin/jsdoc -r org.argeo.app.geo.js/src/org.argeo.app.geo.js \
-		-d $(SDK_BUILD_BASE)/jsdoc/org.argeo.app.geo.js
-
+	make -C js all
 
 include  $(SDK_SRC_BASE)/sdk/argeo-build/osgi.mk

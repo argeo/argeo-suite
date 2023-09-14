@@ -220,6 +220,4 @@ export default class OpenLayersMapPart extends MapPart {
 		});
 		vectorLayer.setStyle(olStyleFunction);
 	}
-
-
 }

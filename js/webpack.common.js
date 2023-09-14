@@ -5,11 +5,13 @@ const path = require('path');
 
 module.exports = {
 	entry: {
-		index: './src/org.argeo.app.geo.js/index.js'
+		"org.argeo.app.geo.js": { 
+			import: './src/org.argeo.app.geo.js/index.js',
+		}
 	},
 	output: {
 		filename: '[name].[contenthash].js',
-		path: path.resolve(__dirname, 'org/argeo/app/geo/js'),
+		path: path.resolve(__dirname, 'org.argeo.app.geo.js/org/argeo/app/geo/js'),
 		clean: true,
 	},
 	optimization: {
@@ -19,11 +21,11 @@ module.exports = {
 		splitChunks: {
 			chunks: 'all',
 		},
-//		minimizer: [
-//			// For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
-//			`...`,
-//			new CssMinimizerPlugin(),
-//		],
+		//		minimizer: [
+		//			// For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
+		//			`...`,
+		//			new CssMinimizerPlugin(),
+		//		],
 	},
 	module: {
 		rules: [
@@ -37,7 +39,7 @@ module.exports = {
 		],
 	},
 	plugins: [
-//		// deal with CSS
+		// deal with CSS
 		new MiniCssExtractPlugin(),
 		// deal with HTML generation
 		new HtmlWebpackPlugin({
