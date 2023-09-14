@@ -5,14 +5,13 @@ const path = require('path');
 
 module.exports = {
 	entry: {
-		"geo": { 
-			import: './src/geo/index.js',
-		}
+		"geo": './src/geo/index.js',
+		"graph": './src/graph/index.js',
 	},
 	output: {
 		filename: '[name].[contenthash].js',
 		path: path.resolve(__dirname, 'org.argeo.app.js/org/argeo/app/js'),
-			publicPath:'/pkg/org.argeo.app.js',
+		publicPath: '/pkg/org.argeo.app.js',
 		clean: true,
 	},
 	optimization: {
@@ -49,6 +48,13 @@ module.exports = {
 			scriptLoading: 'module',
 			filename: 'geo.html',
 			chunks: ['geo'],
+		}),
+		new HtmlWebpackPlugin({
+			title: 'Argeo Suite Graph JS',
+			template: 'src/graph/index.html',
+			scriptLoading: 'module',
+			filename: 'graph.html',
+			chunks: ['graph'],
 		}),
 
 	],
