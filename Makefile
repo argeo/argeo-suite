@@ -14,7 +14,6 @@ org.argeo.app.api \
 org.argeo.app.core \
 org.argeo.app.jcr \
 org.argeo.app.geo \
-org.argeo.app.geo.js \
 org.argeo.app.servlet.odk \
 org.argeo.app.servlet.publish \
 org.argeo.app.theme.default \
