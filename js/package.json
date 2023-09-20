@@ -25,6 +25,7 @@
 	"dependencies": {
 		"@nieuwlandgeo/sldreader": "0.3.x",
 		"chart.js": "4.x.x",
+		"chartjs-plugin-annotation": "^3.0.1",
 		"ol": "8.x.x"
 	}
 }

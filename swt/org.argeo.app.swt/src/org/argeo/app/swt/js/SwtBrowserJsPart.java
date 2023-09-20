@@ -1,6 +1,8 @@
 package org.argeo.app.swt.js;
 
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.StringJoiner;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
@@ -135,10 +137,45 @@ public class SwtBrowserJsPart {
 		return GLOBAL_THIS_ + name;
 	}
 
+	protected static String toJsArray(int... arr) {
+		return Arrays.toString(arr);
+	}
+
+	protected static String toJsArray(long... arr) {
+		return Arrays.toString(arr);
+	}
+
+	protected static String toJsArray(double... arr) {
+		return Arrays.toString(arr);
+	}
+
+	protected static String toJsArray(String... arr) {
+		return toJsArray((Object[]) arr);
+	}
+
+	protected static String toJsArray(Object... arr) {
+		StringJoiner sj = new StringJoiner(",", "[", "]");
+		for (Object o : arr) {
+			sj.add(toJsValue(o));
+		}
+		return sj.toString();
+	}
+
+	protected static String toJsValue(Object o) {
+		if (o instanceof CharSequence)
+			return '\"' + o.toString() + '\"';
+		else if (o instanceof Number)
+			return o.toString();
+		else if (o instanceof Boolean)
+			return o.toString();
+		else
+			return '\"' + o.toString() + '\"';
+	}
+
 	/*
 	 * ACCESSORS
 	 */
-	
+
 	public Control getControl() {
 		return browser;
 	}

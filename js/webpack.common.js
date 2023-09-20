@@ -6,7 +6,7 @@ const path = require('path');
 module.exports = {
 	entry: {
 		"geo": './src/geo/index.js',
-		"graph": './src/graph/index.js',
+		"chart": './src/chart/index.js',
 	},
 	output: {
 		filename: '[name].[contenthash].js',
@@ -50,11 +50,11 @@ module.exports = {
 			chunks: ['geo'],
 		}),
 		new HtmlWebpackPlugin({
-			title: 'Argeo Suite Graph JS',
-			template: 'src/graph/index.html',
+			title: 'Argeo Suite Chart JS',
+			template: 'src/chart/index.html',
 			scriptLoading: 'module',
-			filename: 'graph.html',
-			chunks: ['graph'],
+			filename: 'chart.html',
+			chunks: ['chart'],
 		}),
 
 	],

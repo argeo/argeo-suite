@@ -12,13 +12,13 @@ import org.eclipse.swt.widgets.Composite;
 /**
  * An SWT implementation of {@link MapPart} based on JavaScript.
  */
-public class SwtJSMapPart extends SwtBrowserJsPart implements MapPart {
+public class SwtJsMapPart extends SwtBrowserJsPart implements MapPart {
 	static final long serialVersionUID = 2713128477504858552L;
 
 	private String jsImplementation = JsImplementation.OPENLAYERS_MAP_PART.getJsClass();
 	private final String mapName;// = "argeoMap";
 
-	public SwtJSMapPart(String mapName, Composite parent, int style) {
+	public SwtJsMapPart(String mapName, Composite parent, int style) {
 		super(parent, style, "/pkg/org.argeo.app.js/geo.html");
 		this.mapName = mapName;
 	}
