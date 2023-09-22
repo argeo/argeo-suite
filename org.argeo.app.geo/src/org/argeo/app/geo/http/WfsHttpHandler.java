@@ -171,7 +171,7 @@ public class WfsHttpHandler implements HttpHandler {
 	protected Geometry getDefaultGeometry(Content content) {
 		if (content.hasContentClass(EntityType.geopoint)) {
 			double latitude = content.get(WGS84PosName.lat, Double.class).get();
-			double longitude = content.get(WGS84PosName.lng, Double.class).get();
+			double longitude = content.get(WGS84PosName.lon, Double.class).get();
 
 			Coordinate coordinate = new Coordinate(longitude, latitude);
 			Point the_geom = JTS.GEOMETRY_FACTORY.createPoint(coordinate);
@@ -283,7 +283,7 @@ public class WfsHttpHandler implements HttpHandler {
 						return;
 
 					double latitude = c.get(WGS84PosName.lat, Double.class).get();
-					double longitude = c.get(WGS84PosName.lng, Double.class).get();
+					double longitude = c.get(WGS84PosName.lon, Double.class).get();
 
 					Coordinate coordinate = new Coordinate(longitude, latitude);
 					the_geom = geometryFactory.createPoint(coordinate);
@@ -355,7 +355,7 @@ public class WfsHttpHandler implements HttpHandler {
 //			} else {
 			if (c.hasContentClass(EntityType.geopoint)) {
 				double latitude = c.get(WGS84PosName.lat, Double.class).get();
-				double longitude = c.get(WGS84PosName.lng, Double.class).get();
+				double longitude = c.get(WGS84PosName.lon, Double.class).get();
 
 				Coordinate coordinate = new Coordinate(longitude, latitude);
 				the_geom = JTS.GEOMETRY_FACTORY.createPoint(coordinate);

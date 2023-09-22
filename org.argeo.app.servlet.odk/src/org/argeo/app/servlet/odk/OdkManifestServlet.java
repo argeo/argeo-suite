@@ -165,7 +165,7 @@ public class OdkManifestServlet extends HttpServlet {
 						Node field = row.getNode("geopoint");
 						if (field != null && field.isNodeType(EntityType.geopoint.get())) {
 							double lat = field.getProperty(WGS84PosName.lat.get()).getDouble();
-							double lon = field.getProperty(WGS84PosName.lng.get()).getDouble();
+							double lon = field.getProperty(WGS84PosName.lon.get()).getDouble();
 							double alt = field.hasProperty(WGS84PosName.alt.get())
 									? field.getProperty(WGS84PosName.alt.get()).getDouble()
 									: Double.NaN;

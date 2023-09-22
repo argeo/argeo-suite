@@ -8,7 +8,7 @@ import org.argeo.api.acr.QNamed;
  * @see https://www.w3.org/2003/01/geo/
  */
 public enum WGS84PosName implements QNamed {
-	lat, lng("long"), alt;
+	lat, lon("long"), alt;
 
 	private final String localName;
 

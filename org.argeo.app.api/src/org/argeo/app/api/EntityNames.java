@@ -50,7 +50,7 @@ public interface EntityNames {
 	@Deprecated
 	final String GEO_LAT = WGS84PosName.lat.get();
 	@Deprecated
-	final String GEO_LONG = WGS84PosName.lng.get();
+	final String GEO_LONG = WGS84PosName.lon.get();
 	@Deprecated
 	final String GEO_ALT = WGS84PosName.alt.get();
 
