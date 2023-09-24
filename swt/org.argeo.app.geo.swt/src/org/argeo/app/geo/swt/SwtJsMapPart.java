@@ -1,8 +1,8 @@
 package org.argeo.app.geo.swt;
 
-import java.util.concurrent.CompletionStage;
 import java.util.function.Consumer;
 import java.util.function.Function;
+
 import org.argeo.app.geo.GeoUtils;
 import org.argeo.app.geo.ux.JsImplementation;
 import org.argeo.app.geo.ux.MapPart;
@@ -35,31 +35,35 @@ public class SwtJsMapPart extends SwtBrowserJsPart implements MapPart {
 
 	@Override
 	public void addPoint(double lng, double lat, String style) {
-		callMapMethod("addPoint(%f, %f, %s)", lng, lat, style == null ? "'default'" : style);
+		executeMapMethod("addPoint(%f, %f, %s)", lng, lat, style == null ? "'default'" : style);
 	}
 
 	@Override
 	public void addUrlLayer(String url, GeoFormat format, String style) {
-		callMapMethod("addUrlLayer('%s', '%s', %s, false)", url, format.name(), style);
+		executeMapMethod("addUrlLayer('%s', '%s', %s, false)", url, format.name(), style);
 	}
 
 	public void addCssUrlLayer(String url, GeoFormat format, String css) {
 		String style = GeoUtils.createSldFromCss("layer", "Layer", css);
-		callMapMethod("addUrlLayer('%s', '%s', '%s', true)", url, format.name(), style);
+		executeMapMethod("addUrlLayer('%s', '%s', '%s', true)", url, format.name(), style);
 	}
 
 	@Override
 	public void setZoom(int zoom) {
-		callMapMethod("setZoom(%d)", zoom);
+		executeMapMethod("setZoom(%d)", zoom);
 	}
 
 	@Override
 	public void setCenter(double lng, double lat) {
-		callMapMethod("setCenter(%f, %f)", lng, lat);
+		executeMapMethod("setCenter(%f, %f)", lng, lat);
 	}
 
-	protected CompletionStage<Object> callMapMethod(String methodCall, Object... args) {
+	protected Object callMapMethod(String methodCall, Object... args) {
 		return callMethod(getJsMapVar(), methodCall, args);
+	}
+
+	protected void executeMapMethod(String methodCall, Object... args) {
+		executeMethod(getJsMapVar(), methodCall, args);
 	}
 
 	private String getJsMapVar() {
@@ -93,7 +97,7 @@ public class SwtJsMapPart extends SwtBrowserJsPart implements MapPart {
 		getReadyStage().thenAccept((ready) -> {
 			String functionName = createJsFunction(mapName + "__on" + suffix, toDo);
 			doExecute(getJsMapVar() + ".callbacks['on" + suffix + "']=" + functionName + ";");
-			callMethod(mapName, "enable" + suffix + "()");
+			executeMethod(mapName, "enable" + suffix + "()");
 		});
 	}
 }

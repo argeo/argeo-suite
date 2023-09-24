@@ -19,19 +19,19 @@ public class SwtJsBarChart extends AbstractJsChart {
 	}
 
 	public void setLabels(String[] labels) {
-		callMethod(getJsChartVar(), "setLabels(%s)", toJsArray(labels));
+		executeChartMethod("setLabels(%s)", toJsArray(labels));
 	}
 
 	public void addDataset(String label, int[] values) {
-		callMethod(getJsChartVar(), "addDataset('%s', %s)", label, toJsArray(values));
+		executeChartMethod("addDataset('%s', %s)", label, toJsArray(values));
 	}
 
 	public void setData(String[] labels, String label, int[] values) {
-		callMethod(getJsChartVar(), "setData(%s, '%s', %s)", toJsArray(labels), label, toJsArray(values));
+		executeChartMethod("setData(%s, '%s', %s)", toJsArray(labels), label, toJsArray(values));
 	}
 
 	public void setDatasets(String[] labels, String[] label, int[][] values) {
-		callMethod(getJsChartVar(), "setDatasets(%s, %s)", toJsArray(labels), toDatasets(label, values));
+		executeChartMethod("setDatasets(%s, %s)", toJsArray(labels), toDatasets(label, values));
 	}
 
 	protected String toDatasets(String[] label, int[][] values) {
@@ -56,6 +56,6 @@ public class SwtJsBarChart extends AbstractJsChart {
 	}
 
 	public void clearDatasets() {
-		callMethod(getJsChartVar(), "clearDatasets()");
+		executeChartMethod("clearDatasets()");
 	}
 }

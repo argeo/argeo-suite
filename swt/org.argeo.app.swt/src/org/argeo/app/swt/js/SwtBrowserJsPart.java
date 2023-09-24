@@ -1,11 +1,14 @@
 package org.argeo.app.swt.js;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
 import java.util.StringJoiner;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import org.argeo.api.cms.CmsLog;
 import org.eclipse.swt.SWT;
@@ -17,6 +20,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 
 /**
  * A part using a {@link Browser} and remote JavaScript components on the client
@@ -28,7 +32,13 @@ public class SwtBrowserJsPart {
 	private final static String GLOBAL_THIS_ = "globalThis.";
 
 	private final Browser browser;
-	private final CompletableFuture<Boolean> pageLoaded = new CompletableFuture<>();
+	private final CompletableFuture<Boolean> readyStage = new CompletableFuture<>();
+
+	/**
+	 * Tasks that were requested before the context was ready. Typically
+	 * configuration methods on the part while the user interfaces is being build.
+	 */
+	private List<Supplier<Boolean>> preReadyToDos = new ArrayList<>();
 
 	public SwtBrowserJsPart(Composite parent, int style, String url) {
 		this.browser = new Browser(parent, 0);
@@ -45,10 +55,17 @@ public class SwtBrowserJsPart {
 				try {
 					init();
 					loadExtensions();
-					pageLoaded.complete(true);
+					// execute todos in order
+					for (Supplier<Boolean> toDo : preReadyToDos) {
+						boolean success = toDo.get();
+						if (!success)
+							throw new IllegalStateException("Post-initalisation JavaScript execution failed");
+					}
+					preReadyToDos.clear();
+					readyStage.complete(true);
 				} catch (Exception e) {
 					log.error("Cannot initialise " + url + " in browser", e);
-					pageLoaded.complete(false);
+					readyStage.complete(false);
 				}
 			}
 
@@ -62,7 +79,12 @@ public class SwtBrowserJsPart {
 	 * LIFECYCLE
 	 */
 
-	/** Called when the page has been loaded. */
+	/**
+	 * Called when the page has been loaded, typically in order to initialise
+	 * JavaScript objects. One MUST use {@link #doExecute(String, Object...)} in
+	 * order to do so, since the context is not yet considered ready and calls to
+	 * {@link #evaluate(String, Object...)} will block.
+	 */
 	protected void init() {
 	}
 
@@ -82,7 +104,7 @@ public class SwtBrowserJsPart {
 	}
 
 	protected CompletionStage<Boolean> getReadyStage() {
-		return pageLoaded.minimalCompletionStage();
+		return readyStage.minimalCompletionStage();
 	}
 
 	/*
@@ -99,14 +121,30 @@ public class SwtBrowserJsPart {
 	 * @param args the optional arguments of
 	 *             {@link String#format(String, Object...)}
 	 */
-	protected CompletionStage<Object> evaluate(String js, Object... args) {
-		CompletableFuture<Object> res = pageLoaded.thenApply((ready) -> {
-			if (!ready)
-				throw new IllegalStateException("Component is not initialised.");
-			Object result = browser.evaluate(String.format(Locale.ROOT, js, args));
-			return result;
-		});
-		return res.minimalCompletionStage();
+	protected Object evaluate(String js, Object... args) {
+		assert browser.getDisplay().equals(Display.findDisplay(Thread.currentThread())) : "Not the proper UI thread.";
+		if (!readyStage.isDone())
+			throw new IllegalStateException("Methods returning a result can only be called after UI initilaisation.");
+		// wait for the context to be ready
+//		boolean ready = readyStage.join();
+//		if (!ready)
+//			throw new IllegalStateException("Component is not initialised.");
+		Object result = browser.evaluate(String.format(Locale.ROOT, js, args));
+		return result;
+	}
+
+	protected void execute(String js, Object... args) {
+		if (readyStage.isDone()) {
+			boolean success = browser.execute(String.format(Locale.ROOT, js, args));
+			if (!success)
+				throw new RuntimeException("JavaScript execution failed.");
+		} else {
+			Supplier<Boolean> toDo = () -> {
+				boolean success = browser.execute(String.format(Locale.ROOT, js, args));
+				return success;
+			};
+			preReadyToDos.add(toDo);
+		}
 	}
 
 	/** @return the globally usable function name. */
@@ -124,13 +162,21 @@ public class SwtBrowserJsPart {
 		return "window." + name;
 	}
 
-	/** Directly executes */
+	/**
+	 * Directly executes, even if {@link #getReadyStage()} is not completed. Except
+	 * in initialisation, {@link #evaluate(String, Object...)} should be used
+	 * instead.
+	 */
 	protected void doExecute(String js, Object... args) {
 		browser.execute(String.format(Locale.ROOT, js, args));
 	}
 
-	protected CompletionStage<Object> callMethod(String jsObject, String methodCall, Object... args) {
+	protected Object callMethod(String jsObject, String methodCall, Object... args) {
 		return evaluate(jsObject + '.' + methodCall, args);
+	}
+
+	protected void executeMethod(String jsObject, String methodCall, Object... args) {
+		execute(jsObject + '.' + methodCall, args);
 	}
 
 	protected String getJsVarName(String name) {

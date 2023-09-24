@@ -24,4 +24,8 @@ public abstract class AbstractJsChart extends SwtBrowserJsPart {
 		return getJsVarName(chartName);
 	}
 
+	protected void executeChartMethod(String methodCall, Object... args) {
+		executeMethod(getJsChartVar(), methodCall, args);
+	}
+
 }
