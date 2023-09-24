@@ -1,4 +1,4 @@
-package org.argeo.app.geo.http;
+package org.argeo.app.api.geo;
 
 import javax.xml.namespace.QName;
 

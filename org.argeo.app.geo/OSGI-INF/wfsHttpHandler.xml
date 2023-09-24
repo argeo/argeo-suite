@@ -6,5 +6,5 @@
    </service>
    <property name="context.path" type="String" value="/api/wfs/" />
    <reference bind="setContentRepository" cardinality="1..1" interface="org.argeo.api.acr.spi.ProvidedRepository" name="ProvidedRepository" policy="static"/>
-   <reference bind="addFeatureAdapter" cardinality="0..n" interface="org.argeo.app.geo.http.FeatureAdapter" name="FeatureAdapter" policy="dynamic" unbind="removeFeatureAdapter"/>
+   <reference bind="addFeatureAdapter" cardinality="0..n" interface="org.argeo.app.api.geo.FeatureAdapter" name="FeatureAdapter" policy="dynamic" unbind="removeFeatureAdapter"/>
 </scr:component>

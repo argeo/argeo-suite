@@ -18,7 +18,6 @@ import javax.xml.namespace.QName;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentSession;
-import org.argeo.api.acr.DName;
 import org.argeo.api.acr.NamespaceUtils;
 import org.argeo.api.acr.ldap.LdapAttr;
 import org.argeo.api.acr.search.AndFilter;
@@ -27,10 +26,12 @@ import org.argeo.api.cms.CmsLog;
 import org.argeo.app.api.EntityName;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.api.WGS84PosName;
+import org.argeo.app.api.geo.FeatureAdapter;
 import org.argeo.app.geo.CqlUtils;
 import org.argeo.app.geo.GeoJSon;
 import org.argeo.app.geo.GpxUtils;
 import org.argeo.app.geo.JTS;
+import org.argeo.cms.acr.json.AcrJsonUtils;
 import org.argeo.cms.http.HttpHeader;
 import org.argeo.cms.http.server.HttpServerUtils;
 import org.argeo.cms.util.LangUtils;
@@ -205,10 +206,11 @@ public class WfsHttpHandler implements HttpHandler {
 			GeoJSon.writeGeometry(generator, defaultGeometry);
 
 			generator.writeStartObject("properties");
-			writeTimeProperties(generator, c);
-			writeProperties(generator, c);
+			AcrJsonUtils.writeTimeProperties(generator, c);
 			if (featureAdapter != null)
 				featureAdapter.writeProperties(generator, c, typeName);
+			else
+				writeProperties(generator, c);
 			generator.writeEnd();// properties object
 
 			generator.writeEnd();// feature object
@@ -243,24 +245,7 @@ public class WfsHttpHandler implements HttpHandler {
 		return uuid;
 	}
 
-	private final QName JCR_CREATED = NamespaceUtils.parsePrefixedName("jcr:created");
-
-	private final QName JCR_LAST_MODIFIED = NamespaceUtils.parsePrefixedName("jcr:lastModified");
-
-	protected void writeTimeProperties(JsonGenerator g, Content content) {
-		String creationDate = content.attr(DName.creationdate);
-		if (creationDate == null)
-			creationDate = content.attr(JCR_CREATED);
-		if (creationDate != null)
-			g.write(DName.creationdate.get(), creationDate);
-		String lastModified = content.attr(DName.getlastmodified);
-		if (lastModified == null)
-			lastModified = content.attr(JCR_LAST_MODIFIED);
-		if (lastModified != null)
-			g.write(DName.getlastmodified.get(), lastModified);
-	}
-
-	protected void writeProperties(JsonGenerator generator, Content content) {
+	public void writeProperties(JsonGenerator generator, Content content) {
 		String path = content.getPath();
 		generator.write("path", path);
 		if (content.hasContentClass(EntityType.local)) {
