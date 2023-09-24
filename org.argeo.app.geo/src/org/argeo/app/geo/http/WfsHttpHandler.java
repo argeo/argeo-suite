@@ -6,8 +6,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
@@ -17,8 +20,8 @@ import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentSession;
 import org.argeo.api.acr.DName;
 import org.argeo.api.acr.NamespaceUtils;
-import org.argeo.api.acr.QNamed;
 import org.argeo.api.acr.ldap.LdapAttr;
+import org.argeo.api.acr.search.AndFilter;
 import org.argeo.api.acr.spi.ProvidedRepository;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.app.api.EntityName;
@@ -30,6 +33,7 @@ import org.argeo.app.geo.GpxUtils;
 import org.argeo.app.geo.JTS;
 import org.argeo.cms.http.HttpHeader;
 import org.argeo.cms.http.server.HttpServerUtils;
+import org.argeo.cms.util.LangUtils;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.geojson.GeoJSONWriter;
 import org.geotools.feature.DefaultFeatureCollection;
@@ -67,6 +71,8 @@ public class WfsHttpHandler implements HttpHandler {
 	final static String TYPE_NAMES = "typeNames";
 	final static String CQL_FILTER = "cql_filter";
 
+	private final Map<QName, FeatureAdapter> featureAdapters = new HashMap<>();
+
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 		String path = HttpServerUtils.subPath(exchange);
@@ -74,9 +80,9 @@ public class WfsHttpHandler implements HttpHandler {
 		// Content content = session.get(path);
 
 		Map<String, List<String>> parameters = HttpServerUtils.parseParameters(exchange);
-		String cql = parameters.containsKey(CQL_FILTER) ? parameters.get(CQL_FILTER).get(0) : null;
-		String typeNamesStr = parameters.containsKey(TYPE_NAMES) ? parameters.get(TYPE_NAMES).get(0) : null;
-		String outputFormat = parameters.containsKey(OUTPUT_FORMAT) ? parameters.get(OUTPUT_FORMAT).get(0) : null;
+		String cql = getKvpParameter(parameters, CQL_FILTER);
+		String typeNamesStr = getKvpParameter(parameters, TYPE_NAMES);
+		String outputFormat = getKvpParameter(parameters, OUTPUT_FORMAT);
 		if (outputFormat == null) {
 			outputFormat = "application/json";
 		}
@@ -93,16 +99,18 @@ public class WfsHttpHandler implements HttpHandler {
 		default -> throw new IllegalArgumentException("Unexpected value: " + outputFormat);
 		}
 
-		QName[] typeNames;
+		List<QName> typeNames = new ArrayList<>();
 		if (typeNamesStr != null) {
 			String[] arr = typeNamesStr.split(",");
-			typeNames = new QName[arr.length];
 			for (int i = 0; i < arr.length; i++) {
-				typeNames[i] = NamespaceUtils.parsePrefixedName(arr[i]);
+				typeNames.add(NamespaceUtils.parsePrefixedName(arr[i]));
 			}
 		} else {
-			typeNames = new QName[] { EntityType.local.qName() };
+			typeNames.add(EntityType.local.qName());
 		}
+
+		if (typeNames.size() > 1)
+			throw new UnsupportedOperationException("Only one type name is currently supported");
 
 		Stream<Content> res = session.search((search) -> {
 			if (cql != null) {
@@ -111,10 +119,15 @@ public class WfsHttpHandler implements HttpHandler {
 				search.from(path).where((and) -> {
 				});
 			}
-			search.getWhere().any((f) -> {
-				for (QName typeName : typeNames)
-					f.isContentClass(typeName);
-			});
+//			search.getWhere().any((f) -> {
+			for (QName typeName : typeNames) {
+				FeatureAdapter featureAdapter = featureAdapters.get(typeName);
+				if (featureAdapter == null)
+					throw new IllegalStateException("No feature adapter found for " + typeName);
+				// f.isContentClass(typeName);
+				featureAdapter.addConstraintsForFeature((AndFilter) search.getWhere(), typeName);
+			}
+//			});
 		});
 
 		exchange.sendResponseHeaders(200, 0);
@@ -124,12 +137,46 @@ public class WfsHttpHandler implements HttpHandler {
 			if ("GML3".equals(outputFormat)) {
 				encodeCollectionAsGML(res, out);
 			} else if ("application/json".equals(outputFormat)) {
-				encodeCollectionAsGeoJSon(res, out);
+				encodeCollectionAsGeoJSon(res, out, typeNames);
 			}
 		}
 	}
 
-	protected void encodeCollectionAsGeoJSon(Stream<Content> features, OutputStream out) throws IOException {
+	/**
+	 * Retrieve KVP (keyword-value pairs) parameters, which are lower case, as per
+	 * specifications.
+	 * 
+	 * @see https://docs.ogc.org/is/09-025r2/09-025r2.html#19
+	 */
+	protected String getKvpParameter(Map<String, List<String>> parameters, String key) {
+		Objects.requireNonNull(key, "KVP key cannot be null");
+		// let's first try the default (CAML case) which should be more efficient
+		List<String> values = parameters.get(key);
+		if (values == null) {
+			// then let's do an ignore case comparison of the key
+			keys: for (String k : parameters.keySet()) {
+				if (key.equalsIgnoreCase(k)) {
+					values = parameters.get(k);
+					break keys;
+				}
+			}
+		}
+		if (values == null) // nothing was found
+			return null;
+		if (values.size() != 1) {
+			// although not completely clear from the standard, we assume keys must be
+			// unique
+			// since lists are defined here
+			// https://docs.ogc.org/is/09-026r2/09-026r2.html#10
+			throw new IllegalArgumentException("Key " + key + " as multiple values");
+		}
+		String value = values.get(0);
+		assert value != null;
+		return value;
+	}
+
+	protected void encodeCollectionAsGeoJSon(Stream<Content> features, OutputStream out, List<QName> typeNames)
+			throws IOException {
 		long begin = System.currentTimeMillis();
 		AtomicLong count = new AtomicLong(0);
 		JsonGenerator generator = Json.createGenerator(out);
@@ -137,7 +184,16 @@ public class WfsHttpHandler implements HttpHandler {
 		generator.write("type", "FeatureCollection");
 		generator.writeStartArray("features");
 		features.forEach((c) -> {
-			Geometry defaultGeometry = getDefaultGeometry(c);
+			// TODO deal with multiple type names
+			FeatureAdapter featureAdapter = null;
+			QName typeName = null;
+			if (!typeNames.isEmpty()) {
+				typeName = typeNames.get(0);
+				featureAdapter = featureAdapters.get(typeName);
+			}
+
+			Geometry defaultGeometry = featureAdapter != null ? featureAdapter.getDefaultGeometry(c, typeName)
+					: getDefaultGeometry(c);
 			if (defaultGeometry == null)
 				return;
 			generator.writeStartObject();
@@ -151,6 +207,8 @@ public class WfsHttpHandler implements HttpHandler {
 			generator.writeStartObject("properties");
 			writeTimeProperties(generator, c);
 			writeProperties(generator, c);
+			if (featureAdapter != null)
+				featureAdapter.writeProperties(generator, c, typeName);
 			generator.writeEnd();// properties object
 
 			generator.writeEnd();// feature object
@@ -215,33 +273,6 @@ public class WfsHttpHandler implements HttpHandler {
 			}
 		}
 
-	}
-
-	protected void writeAttr(JsonGenerator g, Content content, String attr) {
-		writeAttr(g, content, NamespaceUtils.parsePrefixedName(attr));
-	}
-
-	protected void writeAttr(JsonGenerator g, Content content, QNamed attr) {
-		writeAttr(g, content, attr.qName());
-	}
-
-	protected void writeAttr(JsonGenerator g, Content content, QName attr) {
-		// String value = content.attr(attr);
-		Object value = content.get(attr);
-		if (value != null) {
-			// TODO specify NamespaceContext
-			String key = NamespaceUtils.toPrefixedName(attr);
-			if (value instanceof Double v)
-				g.write(key, v);
-			else if (value instanceof Long v)
-				g.write(key, v);
-			else if (value instanceof Integer v)
-				g.write(key, v);
-			else if (value instanceof Boolean v)
-				g.write(key, v);
-			else
-				g.write(key, value.toString());
-		}
 	}
 
 	protected void encodeCollectionAsGeoJSonOld(Stream<Content> features, OutputStream out) throws IOException {
@@ -391,6 +422,36 @@ public class WfsHttpHandler implements HttpHandler {
 		gml.encode(out, featureCollection);
 		out.close();
 
+	}
+
+	/*
+	 * DEPENDENCY INJECTION
+	 */
+
+	public void addFeatureAdapter(FeatureAdapter featureAdapter, Map<String, Object> properties) {
+		List<String> typeNames = LangUtils.toStringList(properties.get(TYPE_NAMES));
+		if (typeNames.isEmpty()) {
+			log.warn("FeatureAdapter " + featureAdapter.getClass() + " does not declare type names. Ignoring it...");
+			return;
+		}
+
+		for (String tn : typeNames) {
+			QName typeName = NamespaceUtils.parsePrefixedName(tn);
+			featureAdapters.put(typeName, featureAdapter);
+		}
+	}
+
+	public void removeFeatureAdapter(FeatureAdapter featureAdapter, Map<String, Object> properties) {
+		List<String> typeNames = LangUtils.toStringList(properties.get(TYPE_NAMES));
+		if (!typeNames.isEmpty()) {
+			// ignore if noe type name declared
+			return;
+		}
+
+		for (String tn : typeNames) {
+			QName typeName = NamespaceUtils.parsePrefixedName(tn);
+			featureAdapters.remove(typeName);
+		}
 	}
 
 	public void setContentRepository(ProvidedRepository contentRepository) {
