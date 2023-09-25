@@ -117,8 +117,7 @@ public class WfsHttpHandler implements HttpHandler {
 			if (cql != null) {
 				CqlUtils.filter(search.from(path), cql);
 			} else {
-				search.from(path).where((and) -> {
-				});
+				search.from(path);
 			}
 //			search.getWhere().any((f) -> {
 			for (QName typeName : typeNames) {

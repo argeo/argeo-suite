@@ -18,6 +18,17 @@ public interface FeatureAdapter {
 		// TODO deal with more defaults
 		// TODO deal with target feature
 		if (c.hasContentClass(EntityType.geopoint)) {
+			return getGeoPointGeometry(c);
+		}
+		return null;
+	}
+
+	void writeProperties(JsonGenerator g, Content content, QName targetFeature);
+
+	void addConstraintsForFeature(AndFilter filter, QName targetFeature);
+
+	static Geometry getGeoPointGeometry(Content c) {
+		if (c.hasContentClass(EntityType.geopoint)) {
 			double latitude = c.get(WGS84PosName.lat, Double.class).get();
 			double longitude = c.get(WGS84PosName.lon, Double.class).get();
 
@@ -27,8 +38,4 @@ public interface FeatureAdapter {
 		}
 		return null;
 	}
-
-	void writeProperties(JsonGenerator g, Content content, QName targetFeature);
-
-	void addConstraintsForFeature(AndFilter filter, QName targetFeature);
 }
