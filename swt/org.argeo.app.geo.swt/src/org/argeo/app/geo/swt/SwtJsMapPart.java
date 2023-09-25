@@ -48,6 +48,11 @@ public class SwtJsMapPart extends SwtBrowserJsPart implements MapPart {
 		executeMapMethod("addUrlLayer('%s', '%s', '%s', true)", url, format.name(), style);
 	}
 
+	public void addLayer() {
+		//executeMapMethod("addLayer(\"return new argeo.app.geo.TileLayer({source: new argeo.app.geo.OSM()})\")");
+		executeMapMethod("getMap().addLayer(new argeo.tp.ol.TileLayer({source: new argeo.tp.ol.OSM()}))");
+	}
+
 	@Override
 	public void setZoom(int zoom) {
 		executeMapMethod("setZoom(%d)", zoom);

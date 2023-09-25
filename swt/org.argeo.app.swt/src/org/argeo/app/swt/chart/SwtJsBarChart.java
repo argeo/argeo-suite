@@ -2,6 +2,7 @@ package org.argeo.app.swt.chart;
 
 import java.io.StringWriter;
 
+import org.argeo.app.ux.js.JsClient;
 import org.eclipse.swt.widgets.Composite;
 
 import jakarta.json.Json;
@@ -19,19 +20,19 @@ public class SwtJsBarChart extends AbstractJsChart {
 	}
 
 	public void setLabels(String[] labels) {
-		executeChartMethod("setLabels(%s)", toJsArray(labels));
+		executeChartMethod("setLabels(%s)", JsClient.toJsArray(labels));
 	}
 
 	public void addDataset(String label, int[] values) {
-		executeChartMethod("addDataset('%s', %s)", label, toJsArray(values));
+		executeChartMethod("addDataset('%s', %s)", label, JsClient.toJsArray(values));
 	}
 
 	public void setData(String[] labels, String label, int[] values) {
-		executeChartMethod("setData(%s, '%s', %s)", toJsArray(labels), label, toJsArray(values));
+		executeChartMethod("setData(%s, '%s', %s)", JsClient.toJsArray(labels), label, JsClient.toJsArray(values));
 	}
 
 	public void setDatasets(String[] labels, String[] label, int[][] values) {
-		executeChartMethod("setDatasets(%s, %s)", toJsArray(labels), toDatasets(label, values));
+		executeChartMethod("setDatasets(%s, %s)", JsClient.toJsArray(labels), toDatasets(label, values));
 	}
 
 	protected String toDatasets(String[] label, int[][] values) {

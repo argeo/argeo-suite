@@ -5,7 +5,7 @@ import { getTopLeft } from 'ol/extent';
 import { getWidth } from 'ol/extent';
 import { get as getProjection } from 'ol/proj';
 
-export class SentinelCloudless extends WMTS {
+export default class SentinelCloudless extends WMTS {
 	static source_s2CL2019;
 	static EPSG4326 = getProjection('EPSG:4326');
 

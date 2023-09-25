@@ -69,4 +69,9 @@ export default class MapPart {
 	getMapDivCssClass() {
 		throw new Error("Abstract method");
 	}
+
+	newObject(js) {
+		const func = new Function(js);
+		return (func());
+	}
 }

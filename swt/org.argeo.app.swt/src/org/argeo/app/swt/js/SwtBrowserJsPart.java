@@ -1,16 +1,15 @@
 package org.argeo.app.swt.js;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.StringJoiner;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.argeo.api.cms.CmsLog;
+import org.argeo.app.ux.js.JsClient;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.BrowserFunction;
@@ -26,7 +25,7 @@ import org.eclipse.swt.widgets.Display;
  * A part using a {@link Browser} and remote JavaScript components on the client
  * side.
  */
-public class SwtBrowserJsPart {
+public class SwtBrowserJsPart implements JsClient {
 	private final static CmsLog log = CmsLog.getLog(SwtBrowserJsPart.class);
 
 	private final static String GLOBAL_THIS_ = "globalThis.";
@@ -111,17 +110,8 @@ public class SwtBrowserJsPart {
 	 * JAVASCRIPT ACCESS
 	 */
 
-	/**
-	 * Execute this JavaScript on the client side after making sure that the page
-	 * has been loaded and the map object has been created.
-	 * 
-	 * @param js   the JavaScript code, possibly formatted according to
-	 *             {@link String#format}, with {@link Locale#ROOT} as locale (for
-	 *             stability of decimal separator, as expected by JavaScript.
-	 * @param args the optional arguments of
-	 *             {@link String#format(String, Object...)}
-	 */
-	protected Object evaluate(String js, Object... args) {
+	@Override
+	public Object evaluate(String js, Object... args) {
 		assert browser.getDisplay().equals(Display.findDisplay(Thread.currentThread())) : "Not the proper UI thread.";
 		if (!readyStage.isDone())
 			throw new IllegalStateException("Methods returning a result can only be called after UI initilaisation.");
@@ -133,7 +123,8 @@ public class SwtBrowserJsPart {
 		return result;
 	}
 
-	protected void execute(String js, Object... args) {
+	@Override
+	public void execute(String js, Object... args) {
 		if (readyStage.isDone()) {
 			boolean success = browser.execute(String.format(Locale.ROOT, js, args));
 			if (!success)
@@ -147,8 +138,8 @@ public class SwtBrowserJsPart {
 		}
 	}
 
-	/** @return the globally usable function name. */
-	protected String createJsFunction(String name, Function<Object[], Object> toDo) {
+	@Override
+	public String createJsFunction(String name, Function<Object[], Object> toDo) {
 		// browser functions must be directly on window (RAP specific)
 		new BrowserFunction(browser, name) {
 
@@ -171,51 +162,9 @@ public class SwtBrowserJsPart {
 		browser.execute(String.format(Locale.ROOT, js, args));
 	}
 
-	protected Object callMethod(String jsObject, String methodCall, Object... args) {
-		return evaluate(jsObject + '.' + methodCall, args);
-	}
-
-	protected void executeMethod(String jsObject, String methodCall, Object... args) {
-		execute(jsObject + '.' + methodCall, args);
-	}
-
-	protected String getJsVarName(String name) {
+	@Override
+	public String getJsVarName(String name) {
 		return GLOBAL_THIS_ + name;
-	}
-
-	protected static String toJsArray(int... arr) {
-		return Arrays.toString(arr);
-	}
-
-	protected static String toJsArray(long... arr) {
-		return Arrays.toString(arr);
-	}
-
-	protected static String toJsArray(double... arr) {
-		return Arrays.toString(arr);
-	}
-
-	protected static String toJsArray(String... arr) {
-		return toJsArray((Object[]) arr);
-	}
-
-	protected static String toJsArray(Object... arr) {
-		StringJoiner sj = new StringJoiner(",", "[", "]");
-		for (Object o : arr) {
-			sj.add(toJsValue(o));
-		}
-		return sj.toString();
-	}
-
-	protected static String toJsValue(Object o) {
-		if (o instanceof CharSequence)
-			return '\"' + o.toString() + '\"';
-		else if (o instanceof Number)
-			return o.toString();
-		else if (o instanceof Boolean)
-			return o.toString();
-		else
-			return '\"' + o.toString() + '\"';
 	}
 
 	/*

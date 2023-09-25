@@ -20,7 +20,6 @@ import { Style, Icon } from 'ol/style.js';
 import * as SLDReader from '@nieuwlandgeo/sldreader';
 
 import MapPart from './MapPart.js';
-import { SentinelCloudless } from './OpenLayerTileSources.js';
 
 /** OpenLayers implementation of MapPart. */
 export default class OpenLayersMapPart extends MapPart {
@@ -38,12 +37,16 @@ export default class OpenLayersMapPart extends MapPart {
 				//				new TileLayer({
 				//					source: new SentinelCloudless(),
 				//				}),
-				new TileLayer({
-					source: new OSM(),
-					opacity: 0.4,
-					transition: 0,
-				}),
+//								new TileLayer({
+//									source: new OSM(),
+//									opacity: 0.4,
+//									transition: 0,
+//								}),
 			],
+//			view: new View({
+//				center: [0, 0],
+//				zoom: 2,
+//			}),
 			target: this.getMapName(),
 		});
 	}
@@ -95,6 +98,15 @@ export default class OpenLayersMapPart extends MapPart {
 		this.#map.addLayer(vectorLayer);
 	}
 
+	addLayer(js) {
+		const func = new Function(js);
+		const layer = (func)();
+		this.#map.addLayer(layer);
+	}
+
+	getMap() {
+		return this.#map;
+	}
 
 	/* CALLBACKS */
 	enableFeatureSingleClick() {

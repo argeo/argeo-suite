@@ -2,7 +2,7 @@ package org.argeo.app.geo.ux;
 
 /** Known JavaScript implementations for this package. */
 public enum JsImplementation {
-	OPENLAYERS_MAP_PART("globalThis.argeo.app.geo.OpenLayersMapPart");
+	OPENLAYERS_MAP_PART("argeo.app.geo.OpenLayersMapPart");
 
 	private String jsClass;
 
