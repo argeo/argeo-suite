@@ -2,7 +2,11 @@ package org.argeo.app.ol;
 
 import java.util.Objects;
 
-public abstract class Layer extends AbstractOlObject {
+public class Layer extends AbstractOlObject {
+	public final static String NAME_KEY = "name";
+
+	// cached
+	private String name;
 
 	public Layer(Object... args) {
 		super(args);
@@ -11,10 +15,11 @@ public abstract class Layer extends AbstractOlObject {
 	public void setOpacity(double opacity) {
 		if (opacity < 0 || opacity > 1)
 			throw new IllegalArgumentException("Opacity must be between 0 and 1");
-		if (isNew())
-			getNewOptions().put("opacity", opacity);
-		else
-			executeMethod(getMethodName(), opacity);
+//		if (isNew())
+//			getNewOptions().put("opacity", opacity);
+//		else
+//			executeMethod(getMethodName(), opacity);
+		doSetValue(getMethodName(), "opacity", opacity);
 	}
 
 	public void setSource(Source source) {
@@ -39,4 +44,12 @@ public abstract class Layer extends AbstractOlObject {
 			executeMethod(getMethodName(), maxResolution);
 	}
 
+	public void setName(String name) {
+		set(NAME_KEY, name);
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
 }

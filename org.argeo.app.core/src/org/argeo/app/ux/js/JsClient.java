@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringJoiner;
+import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
 /**
@@ -45,6 +46,12 @@ public interface JsClient {
 	/** Get a global variable name. */
 	public String getJsVarName(String name);
 
+	/**
+	 * Completion stage when the client is ready (typically the page has loaded in
+	 * the browser).
+	 */
+	CompletionStage<Boolean> getReadyStage();
+
 	/*
 	 * DEFAULTS
 	 */
@@ -57,13 +64,17 @@ public interface JsClient {
 		execute(jsObject + '.' + methodCall, args);
 	}
 
+	default boolean isInstanceOf(String reference, String jsClass) {
+		return (Boolean) evaluate(getJsVarName(reference) + " instanceof " + jsClass);
+	}
+
 	/*
 	 * UTILITIES
 	 */
 
 	static String toJsValue(Object o) {
 		if (o instanceof CharSequence)
-			return '\"' + o.toString() + '\"';
+			return '\'' + o.toString() + '\'';
 		else if (o instanceof Number)
 			return o.toString();
 		else if (o instanceof Boolean)
@@ -84,7 +95,7 @@ public interface JsClient {
 			else
 				return jsObject.getJsReference();
 		} else
-			return '\"' + o.toString() + '\"';
+			return '\'' + o.toString() + '\'';
 	}
 
 	static String toJsArgs(Object... arr) {
@@ -126,6 +137,10 @@ public interface JsClient {
 			sj.add("'" + key + "':" + toJsValue(map.get(key)));
 		}
 		return sj.toString();
+	}
+
+	static String escapeQuotes(String str) {
+		return str.replace("'", "\\'").replace("\"", "\\\"");
 	}
 
 }

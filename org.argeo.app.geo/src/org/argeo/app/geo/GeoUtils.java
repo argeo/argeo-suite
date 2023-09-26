@@ -32,6 +32,7 @@ import org.geotools.styling.FeatureTypeConstraint;
 import org.geotools.styling.FeatureTypeStyle;
 import org.geotools.styling.Fill;
 import org.geotools.styling.Graphic;
+import org.geotools.styling.NamedLayer;
 import org.geotools.styling.PointSymbolizer;
 import org.geotools.styling.Rule;
 import org.geotools.styling.Stroke;
@@ -176,7 +177,11 @@ public class GeoUtils {
 		}
 	}
 
-	public static org.opengis.style.Style createStyleFromCss(String css) {
+	/*
+	 * STYLING
+	 */
+
+	public static Style createStyleFromCss(String css) {
 		Stylesheet ss = CssParser.parse(css);
 		CssTranslator translator = new CssTranslator();
 		org.opengis.style.Style style = translator.translate(ss);
@@ -190,31 +195,32 @@ public class GeoUtils {
 //			e.printStackTrace();
 //		}
 
-		return style;
+		return (Style) style;
 	}
 
 	public static String createSldFromCss(String name, String title, String css) {
-
-		StyleFactory sf = CommonFactoryFinder.getStyleFactory();
-
-		StyledLayerDescriptor sld = sf.createStyledLayerDescriptor();
+		StyledLayerDescriptor sld = GeoTools.STYLE_FACTORY.createStyledLayerDescriptor();
 		sld.setName(name);
 		sld.setTitle(title);
 
-		UserLayer layer = sf.createUserLayer();
-		layer.setName("default");
+		NamedLayer layer = GeoTools.STYLE_FACTORY.createNamedLayer();
+		layer.setName(name);
 
-		org.opengis.style.Style style = createStyleFromCss(css);
-		layer.userStyles().add((Style) style);
+		Style style = createStyleFromCss(css);
+		layer.styles().add(style);
 
 		sld.layers().add(layer);
+		return sldToXml(sld);
+	}
+
+	public static String sldToXml(StyledLayerDescriptor sld) {
 		try {
 			SLDTransformer styleTransform = new SLDTransformer();
 			String xml = styleTransform.transform(sld);
 //			System.out.println(xml);
 			return xml;
 		} catch (TransformerException e) {
-			throw new IllegalStateException(e);
+			throw new IllegalStateException("Cannot write SLD as XML", e);
 		}
 	}
 
@@ -333,6 +339,14 @@ public class GeoUtils {
 			throw new IllegalStateException(e);
 		}
 
+	}
+
+	public static long getScaleFromResolution(long resolution) {
+		// see https://gis.stackexchange.com/questions/242424/how-to-get-map-units-to-find-current-scale-in-openlayers
+		final double INCHES_PER_UNIT = 39.37;// m
+		// final double INCHES_PER_UNIT = 4374754;// dd
+		final long DOTS_PER_INCH = 72;
+		return Math.round(INCHES_PER_UNIT * DOTS_PER_INCH * resolution);
 	}
 
 	/** Singleton. */

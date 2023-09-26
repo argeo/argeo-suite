@@ -6,7 +6,6 @@ import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import org.argeo.api.cms.CmsLog;
 import org.argeo.app.ux.js.JsClient;
@@ -37,7 +36,7 @@ public class SwtBrowserJsPart implements JsClient {
 	 * Tasks that were requested before the context was ready. Typically
 	 * configuration methods on the part while the user interfaces is being build.
 	 */
-	private List<Supplier<Boolean>> preReadyToDos = new ArrayList<>();
+	private List<PreReadyToDo> preReadyToDos = new ArrayList<>();
 
 	public SwtBrowserJsPart(Composite parent, int style, String url) {
 		this.browser = new Browser(parent, 0);
@@ -55,10 +54,8 @@ public class SwtBrowserJsPart implements JsClient {
 					init();
 					loadExtensions();
 					// execute todos in order
-					for (Supplier<Boolean> toDo : preReadyToDos) {
-						boolean success = toDo.get();
-						if (!success)
-							throw new IllegalStateException("Post-initalisation JavaScript execution failed");
+					for (PreReadyToDo toDo : preReadyToDos) {
+						toDo.run();
 					}
 					preReadyToDos.clear();
 					readyStage.complete(true);
@@ -87,7 +84,10 @@ public class SwtBrowserJsPart implements JsClient {
 	protected void init() {
 	}
 
-	/** To be overridden with calls to {@link #loadExtension(String)}. */
+	/**
+	 * To be overridden with calls to {@link #loadExtension( Supplier<Boolean> toDo
+	 * = () -> { boolean success = browser.execute(); return success; }; String)}.
+	 */
 	protected void loadExtensions() {
 
 	}
@@ -102,7 +102,7 @@ public class SwtBrowserJsPart implements JsClient {
 		browser.evaluate(String.format(Locale.ROOT, "import('%s')", url));
 	}
 
-	protected CompletionStage<Boolean> getReadyStage() {
+	public CompletionStage<Boolean> getReadyStage() {
 		return readyStage.minimalCompletionStage();
 	}
 
@@ -114,7 +114,7 @@ public class SwtBrowserJsPart implements JsClient {
 	public Object evaluate(String js, Object... args) {
 		assert browser.getDisplay().equals(Display.findDisplay(Thread.currentThread())) : "Not the proper UI thread.";
 		if (!readyStage.isDone())
-			throw new IllegalStateException("Methods returning a result can only be called after UI initilaisation.");
+			throw new IllegalStateException("Methods returning a result can only be called after UI initialisation.");
 		// wait for the context to be ready
 //		boolean ready = readyStage.join();
 //		if (!ready)
@@ -125,15 +125,13 @@ public class SwtBrowserJsPart implements JsClient {
 
 	@Override
 	public void execute(String js, Object... args) {
+		String jsToExecute = String.format(Locale.ROOT, js, args);
 		if (readyStage.isDone()) {
-			boolean success = browser.execute(String.format(Locale.ROOT, js, args));
+			boolean success = browser.execute(jsToExecute);
 			if (!success)
 				throw new RuntimeException("JavaScript execution failed.");
 		} else {
-			Supplier<Boolean> toDo = () -> {
-				boolean success = browser.execute(String.format(Locale.ROOT, js, args));
-				return success;
-			};
+			PreReadyToDo toDo = new PreReadyToDo(jsToExecute);
 			preReadyToDos.add(toDo);
 		}
 	}
@@ -165,6 +163,21 @@ public class SwtBrowserJsPart implements JsClient {
 	@Override
 	public String getJsVarName(String name) {
 		return GLOBAL_THIS_ + name;
+	}
+
+	class PreReadyToDo implements Runnable {
+		private String js;
+
+		public PreReadyToDo(String js) {
+			this.js = js;
+		}
+
+		@Override
+		public void run() {
+			boolean success = browser.execute(js);
+			if (!success)
+				throw new IllegalStateException("Pre-ready JavaScript failed: " + js);
+		}
 	}
 
 	/*

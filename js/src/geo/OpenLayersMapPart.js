@@ -26,6 +26,9 @@ export default class OpenLayersMapPart extends MapPart {
 	/** The OpenLayers Map. */
 	#map;
 
+	/** Styled layer descriptor */
+	#sld;
+
 	/** Externally added callback functions. */
 	callbacks = {};
 
@@ -37,16 +40,16 @@ export default class OpenLayersMapPart extends MapPart {
 				//				new TileLayer({
 				//					source: new SentinelCloudless(),
 				//				}),
-//								new TileLayer({
-//									source: new OSM(),
-//									opacity: 0.4,
-//									transition: 0,
-//								}),
+				//								new TileLayer({
+				//									source: new OSM(),
+				//									opacity: 0.4,
+				//									transition: 0,
+				//								}),
 			],
-//			view: new View({
-//				center: [0, 0],
-//				zoom: 2,
-//			}),
+			//			view: new View({
+			//				center: [0, 0],
+			//				zoom: 2,
+			//			}),
 			target: this.getMapName(),
 		});
 	}
@@ -106,6 +109,19 @@ export default class OpenLayersMapPart extends MapPart {
 
 	getMap() {
 		return this.#map;
+	}
+
+	getLayerByName(name) {
+		let layers = this.#map.getLayers();
+		for (let i = 0; i < layers.getLength(); i++) {
+			let layer = layers.item(i);
+			let n = layer.get('name');
+			if (n !== undefined) {
+				if (name === n)
+					return layer;
+			}
+		}
+		return undefined;
 	}
 
 	/* CALLBACKS */
@@ -210,6 +226,40 @@ export default class OpenLayersMapPart extends MapPart {
 	//
 	// SLD STYLING
 	//
+
+	setSld(xml) {
+		this.#sld = SLDReader.Reader(xml);
+	}
+
+	/** Get a FeatureTypeStyle (https://nieuwlandgeo.github.io/SLDReader/api.html#FeatureTypeStyle).  */
+	getFeatureTypeStyle(styledLayerName, styleName) {
+		const sldLayer = SLDReader.getLayer(this.#sld, styledLayerName);
+		const style = styleName === undefined ? SLDReader.getStyle(sldLayer) : SLDReader.getStyle(sldLayer, styleName);
+		// OpenLayers can only use one definition
+		const featureTypeStyle = style.featuretypestyles[0];
+		return featureTypeStyle;
+	}
+
+	applyStyle(layerName, styledLayerName, styleName) {
+		const layer = this.getLayerByName(layerName);
+		const featureTypeStyle = this.getFeatureTypeStyle(styledLayerName, styleName);
+		const viewProjection = this.#map.getView().getProjection();
+		const olStyleFunction = SLDReader.createOlStyleFunction(featureTypeStyle, {
+			// Use the convertResolution option to calculate a more accurate resolution.
+			convertResolution: viewResolution => {
+				const viewCenter = this.#map.getView().getCenter();
+				return getPointResolution(viewProjection, viewResolution, viewCenter);
+			},
+			// If you use point icons with an ExternalGraphic, you have to use imageLoadCallback
+			// to update the vector layer when an image finishes loading.
+			// If you do not do this, the image will only be visible after next layer pan/zoom.
+			imageLoadedCallback: () => {
+				layer.changed();
+			},
+		});
+		layer.setStyle(olStyleFunction);
+	}
+
 	#applySLD(vectorLayer, text) {
 		const sldObject = SLDReader.Reader(text);
 		const sldLayer = SLDReader.getLayer(sldObject);
