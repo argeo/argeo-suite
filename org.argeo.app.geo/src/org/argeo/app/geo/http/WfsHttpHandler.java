@@ -202,9 +202,11 @@ public class WfsHttpHandler implements HttpHandler {
 			if (featureId != null)
 				generator.write("id", featureId);
 			GeoJSon.writeBBox(generator, defaultGeometry);
+			generator.writeStartObject(GeoJSon.GEOMETRY);
 			GeoJSon.writeGeometry(generator, defaultGeometry);
+			generator.writeEnd();// geometry object
 
-			generator.writeStartObject("properties");
+			generator.writeStartObject(GeoJSon.PROPERTIES);
 			AcrJsonUtils.writeTimeProperties(generator, c);
 			if (featureAdapter != null)
 				featureAdapter.writeProperties(generator, c, typeName);
