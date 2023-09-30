@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.measure.Quantity;
 import javax.measure.quantity.Area;
@@ -44,9 +45,13 @@ import org.geotools.styling.css.CssParser;
 import org.geotools.styling.css.CssTranslator;
 import org.geotools.styling.css.Stylesheet;
 import org.geotools.xml.styling.SLDTransformer;
+import org.locationtech.jts.algorithm.hull.ConcaveHull;
 import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
+import org.locationtech.jts.geom.util.GeometryFixer;
+import org.locationtech.jts.operation.polygonize.Polygonizer;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
@@ -68,17 +73,45 @@ public class GeoUtils {
 	/** In square meters. */
 	public static Quantity<Area> calcArea(SimpleFeature feature) {
 		try {
-			Polygon p = (Polygon) feature.getDefaultGeometry();
-			Point centroid = p.getCentroid();
+			Polygon polygon = (Polygon) feature.getDefaultGeometry();
+			Point centroid = polygon.getCentroid();
+//			CoordinateReferenceSystem crs = feature.getDefaultGeometryProperty().getType()
+//					.getCoordinateReferenceSystem();
+			// TODO convert the centroid
+//			if (!crs.getName().equals(DefaultGeographicCRS.WGS84.getName()))
+//				throw new IllegalArgumentException("Only WGS84 CRS is currently supported");
+
+			// create automatic CRS for optimal computation
 			String code = "AUTO:42001," + centroid.getX() + "," + centroid.getY();
 			CoordinateReferenceSystem auto = CRS.decode(code);
 
 			MathTransform transform = CRS.findMathTransform(DefaultGeographicCRS.WGS84, auto);
 
-			Polygon projed = (Polygon) JTS.transform(p, transform);
+			Polygon projed = (Polygon) JTS.transform(polygon, transform);
 			return Quantities.getQuantity(projed.getArea(), SI.SQUARE_METRE);
 		} catch (MismatchedDimensionException | FactoryException | TransformException e) {
-			throw new IllegalStateException("Cannot claculate area of feature");
+			throw new IllegalStateException("Cannot calculate area of feature", e);
+		}
+	}
+
+	/** In square meters. The {@link Polygon} must use WGS84 coordinates. */
+	public static Quantity<Area> calcArea(Polygon polygon) {
+		assert polygon.getSRID() == 0 || polygon.getSRID() == 4326;
+		return calcArea(polygon, DefaultGeographicCRS.WGS84, polygon.getCentroid());
+	}
+
+	public static Quantity<Area> calcArea(Polygon polygon, CoordinateReferenceSystem crs, Point wgs84centroid) {
+		try {
+			// create automatic CRS for optimal computation
+			String code = "AUTO:42001," + wgs84centroid.getX() + "," + wgs84centroid.getY();
+			CoordinateReferenceSystem auto = CRS.decode(code);
+
+			MathTransform transform = CRS.findMathTransform(crs, auto);
+
+			Polygon projed = (Polygon) JTS.transform(polygon, transform);
+			return Quantities.getQuantity(projed.getArea(), SI.SQUARE_METRE);
+		} catch (MismatchedDimensionException | FactoryException | TransformException e) {
+			throw new IllegalStateException("Cannot calculate area of feature", e);
 		}
 	}
 
@@ -342,11 +375,79 @@ public class GeoUtils {
 	}
 
 	public static long getScaleFromResolution(long resolution) {
-		// see https://gis.stackexchange.com/questions/242424/how-to-get-map-units-to-find-current-scale-in-openlayers
+		// see
+		// https://gis.stackexchange.com/questions/242424/how-to-get-map-units-to-find-current-scale-in-openlayers
 		final double INCHES_PER_UNIT = 39.37;// m
 		// final double INCHES_PER_UNIT = 4374754;// dd
 		final long DOTS_PER_INCH = 72;
 		return Math.round(INCHES_PER_UNIT * DOTS_PER_INCH * resolution);
+	}
+
+	/*
+	 * GEOMETRY
+	 */
+	/**
+	 * Ensure that a {@link Polygon} is valid and simple by removing artefacts
+	 * (typically coming from GPS).
+	 * 
+	 * @return a simple and valid polygon, or null if the ignoredArea ratio is above
+	 *         the provided threshold.
+	 */
+	public static Polygon cleanPolygon(Polygon polygon, double ignoredAreaRatio) {
+		Polygonizer polygonizer = new Polygonizer(true);
+		Geometry fixed = GeometryFixer.fix(polygon, false);
+		polygonizer.add(fixed);
+		@SuppressWarnings("unchecked")
+		List<Polygon> polygons = new ArrayList<>(polygonizer.getPolygons());
+
+		if (polygons.size() == 0) {
+			throw new IllegalStateException("Polygonizer failed to extract any polygon");
+		}
+
+		Polygon best;
+		if (polygons.size() == 1) {
+			best = polygons.get(0);
+		} else {
+			double totalArea = fixed.getArea();
+			best = polygons.get(0);
+			double bestArea = best.getArea();
+			for (int i = 1; i < polygons.size(); i++) {
+				Polygon p = polygons.get(i);
+				double a = p.getArea();
+				if (a > bestArea) {
+					best = p;
+					bestArea = a;
+				} else {
+					// double ratio = a / totalArea;
+				}
+			}
+			double ignoredRatio = (totalArea - bestArea) / totalArea;
+			if (ignoredRatio > ignoredAreaRatio)
+				return null;
+
+			if (!best.isValid() || !best.isSimple()) {
+				throw new IllegalStateException("The polygon is not simple and/or valid after cleaning");
+			}
+		}
+		// while we are here, we make sure that the geometry will be normalised
+		best.normalize();
+		return best;
+	}
+
+	/**
+	 * The smallest polygon without holes containing all the points in this
+	 * geometry.
+	 */
+	public static Polygon concaveHull(Geometry geom, double lengthRatio) {
+		Objects.requireNonNull(geom);
+		if (geom.getNumPoints() < 3)
+			throw new IllegalArgumentException("At least 3 points are reuired to compute the concave hull and geometry "
+					+ geom.getClass() + " contains only " + geom.getNumPoints());
+		Geometry hull = ConcaveHull.concaveHullByLengthRatio(geom, lengthRatio, false);
+		if (hull instanceof Polygon polygon)
+			return polygon;
+		else
+			throw new IllegalStateException("Hull is not a polygon but a " + hull.getClass());
 	}
 
 	/** Singleton. */

@@ -22,6 +22,7 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineString;
+import org.locationtech.jts.geom.MultiPoint;
 import org.locationtech.jts.geom.Polygon;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -52,7 +53,7 @@ public class GpxUtils {
 	 */
 	@SuppressWarnings("unchecked")
 	public static <T> T parseGpxTrackTo(InputStream in, Class<T> clss) throws IOException {
-		GeometryFactory geometryFactory = JTS.GEOMETRY_FACTORY;
+		GeometryFactory geometryFactory = JTS.GEOMETRY_FACTORY_WGS84;
 		List<Coordinate> coordinates = new ArrayList<>();
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -81,14 +82,17 @@ public class GpxUtils {
 			LineString lineString = geometryFactory
 					.createLineString(coordinates.toArray(new Coordinate[coordinates.size()]));
 			return (T) lineString;
+		} else if (MultiPoint.class.isAssignableFrom(clss)) {
+			MultiPoint multiPoint = geometryFactory
+					.createMultiPointFromCoords(coordinates.toArray(new Coordinate[coordinates.size()]));
+			// multiPoint.normalize();
+			return (T) multiPoint;
 		} else if (Polygon.class.isAssignableFrom(clss)) {
 			// close the line string
 			coordinates.add(coordinates.get(0));
 			Polygon polygon = geometryFactory.createPolygon(coordinates.toArray(new Coordinate[coordinates.size()]));
 			return (T) polygon;
-		}
-		// TODO MultiPoint? MultiLine? etc.
-		else if (SimpleFeature.class.isAssignableFrom(clss)) {
+		} else if (SimpleFeature.class.isAssignableFrom(clss)) {
 			SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(LINESTRING_FEATURE_TYPE);
 			LineString lineString = geometryFactory
 					.createLineString(coordinates.toArray(new Coordinate[coordinates.size()]));
@@ -99,7 +103,7 @@ public class GpxUtils {
 			throw new IllegalArgumentException("Unsupported format " + clss);
 		}
 	}
-
+	
 	/** @deprecated Use {@link #parseGpxTrackTo(InputStream, Class)} instead. */
 	@Deprecated
 	public static SimpleFeature parseGpxToPolygon(InputStream in) throws IOException {

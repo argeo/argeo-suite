@@ -28,7 +28,7 @@ import org.argeo.app.api.EntityType;
 import org.argeo.app.api.WGS84PosName;
 import org.argeo.app.api.geo.FeatureAdapter;
 import org.argeo.app.geo.CqlUtils;
-import org.argeo.app.geo.GeoJSon;
+import org.argeo.app.geo.GeoJson;
 import org.argeo.app.geo.GpxUtils;
 import org.argeo.app.geo.JTS;
 import org.argeo.cms.acr.json.AcrJsonUtils;
@@ -201,12 +201,12 @@ public class WfsHttpHandler implements HttpHandler {
 			String featureId = getFeatureId(c);
 			if (featureId != null)
 				generator.write("id", featureId);
-			GeoJSon.writeBBox(generator, defaultGeometry);
-			generator.writeStartObject(GeoJSon.GEOMETRY);
-			GeoJSon.writeGeometry(generator, defaultGeometry);
+//			GeoJson.writeBBox(generator, defaultGeometry);
+			generator.writeStartObject(GeoJson.GEOMETRY);
+			GeoJson.writeGeometry(generator, defaultGeometry);
 			generator.writeEnd();// geometry object
 
-			generator.writeStartObject(GeoJSon.PROPERTIES);
+			generator.writeStartObject(GeoJson.PROPERTIES);
 			AcrJsonUtils.writeTimeProperties(generator, c);
 			if (featureAdapter != null)
 				featureAdapter.writeProperties(generator, c, typeName);

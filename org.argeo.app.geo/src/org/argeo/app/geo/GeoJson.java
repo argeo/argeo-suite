@@ -3,8 +3,10 @@ package org.argeo.app.geo;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.GeometryCollection;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.MultiPoint;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 
@@ -17,13 +19,16 @@ import jakarta.json.stream.JsonGenerator;
  * 
  * @see https://datatracker.ietf.org/doc/html/rfc7946
  */
-public class GeoJSon {
+public class GeoJson {
 	public final static String POINT_TYPE = "Point";
+	public final static String MULTI_POINT_TYPE = "MultiPoint";
 	public final static String LINE_STRING_TYPE = "LineString";
 	public final static String POLYGON_TYPE = "Polygon";
+	public final static String GEOMETRY_COLLECTION_TYPE = "GeometryCollection";
 
 	public final static String TYPE = "type";
 	public final static String GEOMETRY = "geometry";
+	public final static String GEOMETRIES = "geometries";
 	public final static String COORDINATES = "coordinates";
 	public final static String BBOX = "bbox";
 	public final static String PROPERTIES = "properties";
@@ -32,65 +37,81 @@ public class GeoJSon {
 	 * WRITE
 	 */
 	/** Writes a {@link Geometry} as GeoJSON. */
-	public static void writeGeometry(JsonGenerator generator, Geometry geometry) {
+	public static void writeGeometry(JsonGenerator g, Geometry geometry) {
 		if (geometry instanceof Point point) {
-			generator.write(TYPE, POINT_TYPE);
-			generator.writeStartArray(COORDINATES);
-			writeCoordinate(generator, point.getCoordinate());
-			generator.writeEnd();// coordinates array
+			g.write(TYPE, POINT_TYPE);
+			g.writeStartArray(COORDINATES);
+			writeCoordinate(g, point.getCoordinate());
+			g.writeEnd();// coordinates array
+		} else if (geometry instanceof MultiPoint multiPoint) {
+			g.write(TYPE, MULTI_POINT_TYPE);
+			g.writeStartArray(COORDINATES);
+			writeCoordinates(g, multiPoint.getCoordinates());
+			g.writeEnd();// coordinates array
 		} else if (geometry instanceof LineString lineString) {
-			generator.write(TYPE, LINE_STRING_TYPE);
-			generator.writeStartArray(COORDINATES);
-			writeCoordinates(generator, lineString.getCoordinates());
-			generator.writeEnd();// coordinates array
+			g.write(TYPE, LINE_STRING_TYPE);
+			g.writeStartArray(COORDINATES);
+			writeCoordinates(g, lineString.getCoordinates());
+			g.writeEnd();// coordinates array
 		} else if (geometry instanceof Polygon polygon) {
-			generator.write(TYPE, POLYGON_TYPE);
-			generator.writeStartArray(COORDINATES);
+			g.write(TYPE, POLYGON_TYPE);
+			g.writeStartArray(COORDINATES);
 			LinearRing exteriorRing = polygon.getExteriorRing();
-			generator.writeStartArray();
-			writeCoordinates(generator, exteriorRing.getCoordinates());
-			generator.writeEnd();
+			g.writeStartArray();
+			writeCoordinates(g, exteriorRing.getCoordinates());
+			g.writeEnd();
 			for (int i = 0; i < polygon.getNumInteriorRing(); i++) {
 				LinearRing interiorRing = polygon.getInteriorRingN(i);
 				// TODO verify that holes are clockwise
-				generator.writeStartArray();
-				writeCoordinates(generator, interiorRing.getCoordinates());
-				generator.writeEnd();
+				g.writeStartArray();
+				writeCoordinates(g, interiorRing.getCoordinates());
+				g.writeEnd();
 			}
-			generator.writeEnd();// coordinates array
+			g.writeEnd();// coordinates array
+		} else if (geometry instanceof GeometryCollection geometryCollection) {// must be last
+			g.write(TYPE, GEOMETRY_COLLECTION_TYPE);
+			g.writeStartArray(GEOMETRIES);
+			for (int i = 0; i < geometryCollection.getNumGeometries(); i++) {
+				g.writeStartObject();
+				writeGeometry(g, geometryCollection.getGeometryN(i));
+				g.writeEnd();// geometry object
+			}
+			g.writeEnd();// geometries array
+		} else {
+			throw new IllegalArgumentException(geometry.getClass() + " is not supported.");
 		}
 	}
 
 	/** Writes a sequence of coordinates [[lat,lon],[lat,lon]] */
-	public static void writeCoordinates(JsonGenerator generator, Coordinate[] coordinates) {
+	public static void writeCoordinates(JsonGenerator g, Coordinate[] coordinates) {
 		for (Coordinate coordinate : coordinates) {
-			generator.writeStartArray();
-			writeCoordinate(generator, coordinate);
-			generator.writeEnd();
+			g.writeStartArray();
+			writeCoordinate(g, coordinate);
+			g.writeEnd();
 		}
 	}
 
 	/** Writes a pair of coordinates [lat,lon]. */
-	public static void writeCoordinate(JsonGenerator generator, Coordinate coordinate) {
-		generator.write(coordinate.getX());
-		generator.write(coordinate.getY());
+	public static void writeCoordinate(JsonGenerator g, Coordinate coordinate) {
+		g.write(coordinate.getX());
+		g.write(coordinate.getY());
 		double z = coordinate.getZ();
 		if (!Double.isNaN(z)) {
-			generator.write(z);
+			g.write(z);
 		}
 	}
 
 	/**
 	 * Writes the {@link Envelope} of a {@link Geometry} as a bbox GeoJSON object.
 	 */
-	public static void writeBBox(JsonGenerator generator, Geometry geometry) {
-		generator.writeStartArray(BBOX);
+	public static void writeBBox(JsonGenerator g, Geometry geometry) {
+		g.writeStartArray(BBOX);
 		Envelope envelope = geometry.getEnvelopeInternal();
-		generator.write(envelope.getMinX());
-		generator.write(envelope.getMinY());
-		generator.write(envelope.getMaxX());
-		generator.write(envelope.getMaxY());
-		generator.writeEnd();
+		g.write(envelope.getMinX());
+		g.write(envelope.getMinY());
+		g.write(envelope.getMaxX());
+		g.write(envelope.getMaxY());
+		g.writeEnd();
 	}
 
 	/*
@@ -125,7 +146,7 @@ public class GeoJSon {
 			throw new IllegalArgumentException("Unexpected value: " + type);
 		};
 //		res.normalize();
-		return (T)res;
+		return (T) res;
 	}
 
 	/** Reads a coordinate sequence [[lat,lon],[lat,lon]]. */
@@ -143,7 +164,7 @@ public class GeoJSon {
 	}
 
 	/** singleton */
-	private GeoJSon() {
+	private GeoJson() {
 	}
 
 }
