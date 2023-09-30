@@ -35,6 +35,7 @@ import org.argeo.cms.acr.json.AcrJsonUtils;
 import org.argeo.cms.http.HttpHeader;
 import org.argeo.cms.http.server.HttpServerUtils;
 import org.argeo.cms.util.LangUtils;
+import org.argeo.cms.util.StreamUtils;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.geojson.GeoJSONWriter;
 import org.geotools.feature.DefaultFeatureCollection;
@@ -192,20 +193,48 @@ public class WfsHttpHandler implements HttpHandler {
 				featureAdapter = featureAdapters.get(typeName);
 			}
 
-			Geometry defaultGeometry = featureAdapter != null ? featureAdapter.getDefaultGeometry(c, typeName)
-					: getDefaultGeometry(c);
-			if (defaultGeometry == null)
-				return;
-			generator.writeStartObject();
-			generator.write("type", "Feature");
-			String featureId = getFeatureId(c);
-			if (featureId != null)
-				generator.write("id", featureId);
-//			GeoJson.writeBBox(generator, defaultGeometry);
-			generator.writeStartObject(GeoJson.GEOMETRY);
-			GeoJson.writeGeometry(generator, defaultGeometry);
-			generator.writeEnd();// geometry object
+			boolean geometryWritten = false;
+//			if (typeName.getLocalPart().equals("fieldSimpleFeature")) {
+//				Content area = c.getContent("place.geom.json").orElse(null);
+//				if (area != null) {
+//					generator.writeStartObject();
+//					generator.write("type", "Feature");
+//					String featureId = getFeatureId(c);
+//					if (featureId != null)
+//						generator.write("id", featureId);
+//
+//					generator.flush();
+//					try (InputStream in = area.open(InputStream.class)) {
+//						out.write(",\"geometry\":".getBytes());
+//						StreamUtils.copy(in, out);						
+//						//out.flush();
+//					} catch (Exception e) {
+//						log.error(c.getPath() + " : " + e.getMessage());
+//					} finally {
+//					}
+//					geometryWritten = true;
+//				}else {
+//					return;
+//				}
+//			}
 
+			if (!geometryWritten) {
+
+				Geometry defaultGeometry = featureAdapter != null ? featureAdapter.getDefaultGeometry(c, typeName)
+						: getDefaultGeometry(c);
+				if (defaultGeometry == null)
+					return;
+				generator.writeStartObject();
+				generator.write("type", "Feature");
+				String featureId = getFeatureId(c);
+				if (featureId != null)
+					generator.write("id", featureId);
+
+//			GeoJson.writeBBox(generator, defaultGeometry);
+				generator.writeStartObject(GeoJson.GEOMETRY);
+				GeoJson.writeGeometry(generator, defaultGeometry);
+				generator.writeEnd();// geometry object
+			}
 			generator.writeStartObject(GeoJson.PROPERTIES);
 			AcrJsonUtils.writeTimeProperties(generator, c);
 			if (featureAdapter != null)
