@@ -18,4 +18,8 @@ public class View extends AbstractOlObject {
 		else
 			executeMethod(getMethodName(), zoom);
 	}
+
+//	public void setProjection(String projection) {
+//		doSetValue(getMethodName(), "projection", projection);
+//	}
 }

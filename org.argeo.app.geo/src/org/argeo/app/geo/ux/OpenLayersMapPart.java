@@ -28,6 +28,10 @@ public class OpenLayersMapPart extends AbstractGeoJsObject {
 		executeMethod(getMethodName(), layerName, styledLayerName);
 	}
 
+	public void applyBboxStrategy(String layerName) {
+		executeMethod(getMethodName(), layerName);
+	}
+
 	public Layer getLayer(String name) {
 		// TODO deal with not found
 		String reference = "getLayerByName('" + name + "')";

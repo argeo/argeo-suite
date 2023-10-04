@@ -35,7 +35,6 @@ import org.argeo.cms.acr.json.AcrJsonUtils;
 import org.argeo.cms.http.HttpHeader;
 import org.argeo.cms.http.server.HttpServerUtils;
 import org.argeo.cms.util.LangUtils;
-import org.argeo.cms.util.StreamUtils;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.geojson.GeoJSONWriter;
 import org.geotools.feature.DefaultFeatureCollection;
@@ -43,10 +42,12 @@ import org.geotools.feature.NameImpl;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.geometry.jts.JTSFactoryFinder;
+import org.geotools.referencing.CRS;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.geotools.wfs.GML;
 import org.geotools.wfs.GML.Version;
 import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
@@ -56,6 +57,10 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.Name;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.TransformException;
 
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -72,6 +77,7 @@ public class WfsHttpHandler implements HttpHandler {
 	final static String OUTPUT_FORMAT = "outputFormat";
 	final static String TYPE_NAMES = "typeNames";
 	final static String CQL_FILTER = "cql_filter";
+	final static String BBOX = "bbox";
 
 	private final Map<QName, FeatureAdapter> featureAdapters = new HashMap<>();
 
@@ -81,12 +87,47 @@ public class WfsHttpHandler implements HttpHandler {
 		ContentSession session = HttpServerUtils.getContentSession(contentRepository, exchange);
 		// Content content = session.get(path);
 
+		// PARAMETERS
 		Map<String, List<String>> parameters = HttpServerUtils.parseParameters(exchange);
 		String cql = getKvpParameter(parameters, CQL_FILTER);
 		String typeNamesStr = getKvpParameter(parameters, TYPE_NAMES);
 		String outputFormat = getKvpParameter(parameters, OUTPUT_FORMAT);
 		if (outputFormat == null) {
 			outputFormat = "application/json";
+		}
+		String bboxStr = getKvpParameter(parameters, BBOX);
+		log.debug(bboxStr);
+		final Envelope bbox;
+		if (bboxStr != null) {
+			String srs;
+			String[] arr = bboxStr.split(",");
+			// TODO check SRS and convert to WGS84
+			double minLat = Double.parseDouble(arr[0]);
+			double minLon = Double.parseDouble(arr[1]);
+			double maxLat = Double.parseDouble(arr[2]);
+			double maxLon = Double.parseDouble(arr[3]);
+			if (arr.length == 5) {
+				srs = arr[4];
+			} else {
+				srs = null;
+			}
+
+			if (srs != null) {
+				try {
+					CoordinateReferenceSystem sourceCRS = CRS.decode(srs);
+					CoordinateReferenceSystem targetCRS = CRS.decode("EPSG:4326");
+					MathTransform transform = CRS.findMathTransform(sourceCRS, targetCRS, true);
+					bbox = org.geotools.geometry.jts.JTS.transform(
+							new Envelope(new Coordinate(minLat, minLon), new Coordinate(maxLat, maxLon)), transform);
+				} catch (FactoryException | TransformException e) {
+					throw new IllegalArgumentException("Cannot convert bounding box", e);
+					// bbox = null;
+				}
+			} else {
+				bbox = new Envelope(new Coordinate(minLat, minLon), new Coordinate(maxLat, maxLon));
+			}
+		} else {
+			bbox = null;
 		}
 
 		switch (outputFormat) {
@@ -114,13 +155,13 @@ public class WfsHttpHandler implements HttpHandler {
 		if (typeNames.size() > 1)
 			throw new UnsupportedOperationException("Only one type name is currently supported");
 
+		// QUERY
 		Stream<Content> res = session.search((search) -> {
 			if (cql != null) {
 				CqlUtils.filter(search.from(path), cql);
 			} else {
 				search.from(path);
 			}
-//			search.getWhere().any((f) -> {
 			for (QName typeName : typeNames) {
 				FeatureAdapter featureAdapter = featureAdapters.get(typeName);
 				if (featureAdapter == null)
@@ -128,7 +169,13 @@ public class WfsHttpHandler implements HttpHandler {
 				// f.isContentClass(typeName);
 				featureAdapter.addConstraintsForFeature((AndFilter) search.getWhere(), typeName);
 			}
-//			});
+
+			if (bbox != null) {
+				search.getWhere().gte(EntityName.minLat, bbox.getMinX());
+				search.getWhere().gte(EntityName.minLon, bbox.getMinY());
+				search.getWhere().lte(EntityName.maxLat, bbox.getMaxX());
+				search.getWhere().lte(EntityName.maxLon, bbox.getMaxY());
+			}
 		});
 
 		exchange.sendResponseHeaders(200, 0);
@@ -230,7 +277,7 @@ public class WfsHttpHandler implements HttpHandler {
 				if (featureId != null)
 					generator.write("id", featureId);
 
-//			GeoJson.writeBBox(generator, defaultGeometry);
+				GeoJson.writeBBox(generator, defaultGeometry);
 				generator.writeStartObject(GeoJson.GEOMETRY);
 				GeoJson.writeGeometry(generator, defaultGeometry);
 				generator.writeEnd();// geometry object

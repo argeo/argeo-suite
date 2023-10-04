@@ -94,6 +94,8 @@ public interface JsClient {
 				return jsObject.newJs();
 			else
 				return jsObject.getJsReference();
+		} else if (o instanceof JsReference jsReference) {
+			return jsReference.get();
 		} else
 			return '\'' + o.toString() + '\'';
 	}

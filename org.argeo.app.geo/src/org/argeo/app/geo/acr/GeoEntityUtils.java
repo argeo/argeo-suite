@@ -55,7 +55,7 @@ public class GeoEntityUtils {
 		} catch (IOException e) {
 			throw new UncheckedIOException("Cannot add geometry " + name + " to " + c, e);
 		}
-		updateBoundingBox(c);
+		// updateBoundingBox(c);
 	}
 
 	public static <T extends Geometry> T getGeometry(Content c, QNamed name, Class<T> clss) {
@@ -81,9 +81,10 @@ public class GeoEntityUtils {
 		if (c.hasContentClass(EntityType.geopoint)) {
 			Double lat = c.get(WGS84PosName.lat, Double.class).orElseThrow();
 			Double lon = c.get(WGS84PosName.lon, Double.class).orElseThrow();
-			Double alt = c.get(WGS84PosName.alt, Double.class).orElse(null);
-			return JTS.GEOMETRY_FACTORY_WGS84
-					.createPoint(alt != null ? new Coordinate(lat, lon, alt) : new Coordinate(lat, lon));
+			return JTS.GEOMETRY_FACTORY_WGS84.createPoint(new Coordinate(lat, lon));
+//			Double alt = c.get(WGS84PosName.alt, Double.class).orElse(null);
+//			return JTS.GEOMETRY_FACTORY_WGS84
+//					.createPoint(alt != null ? new Coordinate(lat, lon, alt) : new Coordinate(lat, lon));
 		}
 		return null;
 	}
@@ -112,6 +113,19 @@ public class GeoEntityUtils {
 		entity.addContentClasses(EntityType.geobounded.qName());
 
 		Envelope bbox = geometryCollection.getEnvelopeInternal();
+		entity.put(EntityName.minLat, bbox.getMinX());
+		entity.put(EntityName.minLon, bbox.getMinY());
+		entity.put(EntityName.maxLat, bbox.getMaxX());
+		entity.put(EntityName.maxLon, bbox.getMaxY());
+	}
+
+	public static void updateBoundingBox(Content entity, QName prop) {
+		Geometry geom = getGeometry(entity, prop, Geometry.class);
+		if (geom == null)
+			return;
+		entity.addContentClasses(EntityType.geobounded.qName());
+
+		Envelope bbox = geom.getEnvelopeInternal();
 		entity.put(EntityName.minLat, bbox.getMinX());
 		entity.put(EntityName.minLon, bbox.getMinY());
 		entity.put(EntityName.maxLat, bbox.getMaxX());

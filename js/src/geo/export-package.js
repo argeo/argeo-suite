@@ -8,6 +8,7 @@ import TileLayer from 'ol/layer/Tile.js';
 import VectorSource from 'ol/source/Vector.js';
 import VectorLayer from 'ol/layer/Vector.js';
 import GeoJSON from 'ol/format/GeoJSON.js';
+import {bbox} from 'ol/loadingstrategy';
 
 // PSEUDO PACKAGE
 if (typeof globalThis.argeo === 'undefined')
@@ -34,6 +35,7 @@ globalThis.argeo.tp.ol.OSM = OSM;
 globalThis.argeo.tp.ol.VectorSource = VectorSource;
 globalThis.argeo.tp.ol.VectorLayer = VectorLayer;
 globalThis.argeo.tp.ol.GeoJSON = GeoJSON;
+globalThis.argeo.tp.ol.bbox = bbox;
 
 "use strict";
 
