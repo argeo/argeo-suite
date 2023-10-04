@@ -2,8 +2,14 @@ package org.argeo.app.api;
 
 import org.argeo.api.acr.QNamed;
 
+/** Names used in the entity namespace http://www.argeo.org/ns/entity. */
 public enum EntityName implements QNamed {
 	type, //
+	// geography
+	minLat, minLon, maxLat, maxLon,
+	// geo entities
+	place,
+	//
 	;
 
 	@Override
