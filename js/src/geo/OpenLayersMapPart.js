@@ -52,8 +52,8 @@ export default class OpenLayersMapPart extends MapPart {
 		this.#map.getView().setZoom(zoom);
 	}
 
-	setCenter(lng, lat) {
-		this.#map.getView().setCenter(fromLonLat([lng, lat]));
+	setCenter(lat, lon) {
+		this.#map.getView().setCenter(fromLonLat([lon, lat]));
 	}
 
 	addPoint(lng, lat, style) {
@@ -274,5 +274,4 @@ export default class OpenLayersMapPart extends MapPart {
 		});
 		vectorLayer.setStyle(olStyleFunction);
 	}
-
 }

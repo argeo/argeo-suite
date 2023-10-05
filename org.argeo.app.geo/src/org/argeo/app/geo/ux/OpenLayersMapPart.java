@@ -28,6 +28,10 @@ public class OpenLayersMapPart extends AbstractGeoJsObject {
 		executeMethod(getMethodName(), JsClient.escapeQuotes(xml));
 	}
 
+	public void setCenter(Double lat, Double lon) {
+		executeMethod(getMethodName(), lat, lon);
+	}
+
 	public void applyStyle(String layerName, String styledLayerName) {
 		executeMethod(getMethodName(), layerName, styledLayerName);
 	}

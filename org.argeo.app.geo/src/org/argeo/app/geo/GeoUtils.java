@@ -69,6 +69,7 @@ import tech.units.indriya.quantity.Quantities;
 
 /** Utilities around geographical format, mostly wrapping GeoTools patterns. */
 public class GeoUtils {
+	public final static String EPSG_4326 = "EPSG:4326";
 
 	/** In square meters. */
 	public static Quantity<Area> calcArea(SimpleFeature feature) {

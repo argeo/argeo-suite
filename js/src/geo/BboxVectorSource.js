@@ -1,7 +1,7 @@
 
 import VectorSource from 'ol/source/Vector.js';
 import { bbox } from 'ol/loadingstrategy';
-import { transformExtent } from 'ol/proj.js';
+import { transformToLatLonExtent } from './OpenLayersUtils.js';
 
 export default class BboxVectorSource extends VectorSource {
 	constructor(options) {
@@ -11,13 +11,15 @@ export default class BboxVectorSource extends VectorSource {
 	static processOptions(options) {
 		options.strategy = bbox;
 		options.url = function(extent, resolution, projection) {
-			const proj = projection.getCode();
-			var bbox = transformExtent(extent, proj, 'EPSG:4326');
+			var bbox = transformToLatLonExtent(extent, projection);
 
 			const baseUrl = options.baseUrl;
-			const url = baseUrl + '&bbox=' + bbox.join(',');
+			// invert bbox order in order to have minLat,minLon,maxLat,maxLon as required by WFS 2.0.0
+			const url = baseUrl + '&bbox=' + bbox.join(',') + ',EPSG:4326';
 			return url;
 		}
 		return options;
 	}
+
+
 }

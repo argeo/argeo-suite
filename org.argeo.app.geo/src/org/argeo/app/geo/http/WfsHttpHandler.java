@@ -29,19 +29,16 @@ import org.argeo.app.api.WGS84PosName;
 import org.argeo.app.api.geo.FeatureAdapter;
 import org.argeo.app.geo.CqlUtils;
 import org.argeo.app.geo.GeoJson;
+import org.argeo.app.geo.GeoUtils;
 import org.argeo.app.geo.GpxUtils;
 import org.argeo.app.geo.JTS;
 import org.argeo.cms.acr.json.AcrJsonUtils;
 import org.argeo.cms.http.HttpHeader;
 import org.argeo.cms.http.server.HttpServerUtils;
 import org.argeo.cms.util.LangUtils;
-import org.geotools.data.DataUtilities;
-import org.geotools.data.geojson.GeoJSONWriter;
 import org.geotools.feature.DefaultFeatureCollection;
 import org.geotools.feature.NameImpl;
-import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.geotools.wfs.GML;
@@ -49,7 +46,6 @@ import org.geotools.wfs.GML.Version;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 import org.opengis.feature.GeometryAttribute;
@@ -112,10 +108,11 @@ public class WfsHttpHandler implements HttpHandler {
 				srs = null;
 			}
 
-			if (srs != null) {
+			if (srs != null && !srs.equals(GeoUtils.EPSG_4326)) {
 				try {
+					// TODO optimise
 					CoordinateReferenceSystem sourceCRS = CRS.decode(srs);
-					CoordinateReferenceSystem targetCRS = CRS.decode("EPSG:4326");
+					CoordinateReferenceSystem targetCRS = CRS.decode(GeoUtils.EPSG_4326);
 					MathTransform transform = CRS.findMathTransform(sourceCRS, targetCRS, true);
 					bbox = org.geotools.geometry.jts.JTS.transform(
 							new Envelope(new Coordinate(minLat, minLon), new Coordinate(maxLat, maxLon)), transform);
@@ -171,10 +168,20 @@ public class WfsHttpHandler implements HttpHandler {
 			}
 
 			if (bbox != null) {
-				search.getWhere().gte(EntityName.minLat, bbox.getMinX());
-				search.getWhere().gte(EntityName.minLon, bbox.getMinY());
-				search.getWhere().lte(EntityName.maxLat, bbox.getMaxX());
-				search.getWhere().lte(EntityName.maxLon, bbox.getMaxY());
+				search.getWhere().any((or) -> {
+					or.all((and) -> {
+						and.gte(EntityName.minLat, bbox.getMinX());
+						and.gte(EntityName.minLon, bbox.getMinY());
+						and.lte(EntityName.maxLat, bbox.getMaxX());
+						and.lte(EntityName.maxLon, bbox.getMaxY());
+					});
+					or.all((and) -> {
+						and.gte(WGS84PosName.lat, bbox.getMinX());
+						and.gte(WGS84PosName.lon, bbox.getMinY());
+						and.lte(WGS84PosName.lat, bbox.getMaxX());
+						and.lte(WGS84PosName.lon, bbox.getMaxY());
+					});
+				});
 			}
 		});
 
@@ -335,78 +342,6 @@ public class WfsHttpHandler implements HttpHandler {
 			}
 		}
 
-	}
-
-	protected void encodeCollectionAsGeoJSonOld(Stream<Content> features, OutputStream out) throws IOException {
-
-		// BODY PROCESSING
-		try (GeoJSONWriter geoJSONWriter = new GeoJSONWriter(out)) {
-			geoJSONWriter.setPrettyPrinting(true);
-			geoJSONWriter.setEncodeFeatureBounds(true);
-
-			boolean gpx = true;
-			SimpleFeatureType TYPE;
-			try {
-				if (gpx)
-					TYPE = DataUtilities.createType("Content",
-							"the_geom:Polygon:srid=4326,path:String,type:String,name:String");
-				else
-					TYPE = DataUtilities.createType("Content",
-							"the_geom:Point:srid=4326,path:String,type:String,name:String");
-			} catch (SchemaException e) {
-				throw new RuntimeException(e);
-			}
-			SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(TYPE);
-			GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
-
-			features.forEach((c) -> {
-				Geometry the_geom;
-				if (gpx) {// experimental
-					Content area = c.getContent("gpx/area.gpx").orElse(null);
-					if (area == null)
-						return;
-					try (InputStream in = area.open(InputStream.class)) {
-						SimpleFeature feature = GpxUtils.parseGpxToPolygon(in);
-						the_geom = (Geometry) feature.getDefaultGeometry();
-					} catch (IOException e) {
-						throw new UncheckedIOException("Cannot parse " + c, e);
-					}
-				} else {
-					if (!c.hasContentClass(EntityType.geopoint))
-						return;
-
-					double latitude = c.get(WGS84PosName.lat, Double.class).get();
-					double longitude = c.get(WGS84PosName.lon, Double.class).get();
-
-					Coordinate coordinate = new Coordinate(longitude, latitude);
-					the_geom = geometryFactory.createPoint(coordinate);
-
-				}
-
-				featureBuilder.add(the_geom);
-				String pth = c.getPath();
-				featureBuilder.add(pth);
-				if (c.hasContentClass(EntityType.local)) {
-					String type = c.attr(EntityName.type);
-					featureBuilder.add(type);
-				} else {
-					List<QName> contentClasses = c.getContentClasses();
-					if (!contentClasses.isEmpty()) {
-						featureBuilder.add(NamespaceUtils.toPrefixedName(contentClasses.get(0)));
-					}
-				}
-				featureBuilder.add(NamespaceUtils.toPrefixedName(c.getName()));
-
-				String uuid = c.attr(LdapAttr.entryUUID);
-
-				SimpleFeature feature = featureBuilder.buildFeature(uuid);
-				try {
-					geoJSONWriter.write(feature);
-				} catch (IOException e) {
-					throw new UncheckedIOException(e);
-				}
-			});
-		}
 	}
 
 	protected void encodeCollectionAsGML(Stream<Content> features, OutputStream out) throws IOException {
