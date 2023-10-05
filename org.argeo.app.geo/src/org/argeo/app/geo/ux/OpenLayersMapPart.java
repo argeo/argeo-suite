@@ -7,8 +7,12 @@ import org.argeo.app.ol.TileLayer;
 import org.argeo.app.ol.VectorLayer;
 import org.argeo.app.ux.js.JsClient;
 
+/**
+ * A wrapper around an OpenLayers map, adding specific features, such as SLD
+ * styling.
+ */
 public class OpenLayersMapPart extends AbstractGeoJsObject {
-	private String mapPartName;
+	private final String mapPartName;
 
 	public OpenLayersMapPart(JsClient jsClient, String mapPartName) {
 		super(mapPartName);
@@ -28,13 +32,9 @@ public class OpenLayersMapPart extends AbstractGeoJsObject {
 		executeMethod(getMethodName(), layerName, styledLayerName);
 	}
 
-	public void applyBboxStrategy(String layerName) {
-		executeMethod(getMethodName(), layerName);
-	}
-
 	public Layer getLayer(String name) {
 		// TODO deal with not found
-		String reference = "getLayerByName('" + name + "')";
+		String reference = getReference() + ".getLayerByName('" + name + "')";
 		if (getJsClient().isInstanceOf(reference, AbstractOlObject.getJsClassName(VectorLayer.class))) {
 			return new VectorLayer(getJsClient(), reference);
 		} else if (getJsClient().isInstanceOf(reference, AbstractOlObject.getJsClassName(TileLayer.class))) {
@@ -43,4 +43,9 @@ public class OpenLayersMapPart extends AbstractGeoJsObject {
 			return new Layer(getJsClient(), reference);
 		}
 	}
+
+	public String getMapPartName() {
+		return mapPartName;
+	}
+
 }

@@ -4,9 +4,7 @@
 
 import Map from 'ol/Map.js';
 import View from 'ol/View.js';
-import OSM from 'ol/source/OSM.js';
-import TileLayer from 'ol/layer/Tile.js';
-import { fromLonLat, getPointResolution, transformExtent } from 'ol/proj.js';
+import { fromLonLat, getPointResolution } from 'ol/proj.js';
 import VectorSource from 'ol/source/Vector.js';
 import Feature from 'ol/Feature.js';
 import { Point } from 'ol/geom.js';
@@ -20,8 +18,6 @@ import { Style, Icon } from 'ol/style.js';
 import * as SLDReader from '@nieuwlandgeo/sldreader';
 
 import MapPart from './MapPart.js';
-
-import { bbox } from 'ol/loadingstrategy';
 
 /** OpenLayers implementation of MapPart. */
 export default class OpenLayersMapPart extends MapPart {
@@ -39,14 +35,6 @@ export default class OpenLayersMapPart extends MapPart {
 		super(mapName);
 		this.#map = new Map({
 			layers: [
-				//				new TileLayer({
-				//					source: new SentinelCloudless(),
-				//				}),
-				//								new TileLayer({
-				//									source: new OSM(),
-				//									opacity: 0.4,
-				//									transition: 0,
-				//								}),
 			],
 			//						view: new View({
 			//							projection: 'EPSG:4326',
@@ -287,43 +275,4 @@ export default class OpenLayersMapPart extends MapPart {
 		vectorLayer.setStyle(olStyleFunction);
 	}
 
-	//
-	// BBOX
-	//
-	applyBboxStrategy(layerName) {
-		const layer = this.getLayerByName(layerName);
-		const vectorSource = layer.getSource();
-		const baseUrl = vectorSource.getUrl();
-		if (typeof baseUrl === 'function')
-			throw new Error('A strategy was already applied to layer ' + layerName);
-
-		const loadFunction = function(extent, resolution, projection, success, failure) {
-
-			const proj = projection.getCode();
-			var bbox = transformExtent(extent, proj, 'EPSG:4326');
-
-			const url = baseUrl + '&' +
-				'bbox=' + bbox.join(',') ;
-//				'bbox=' + extent.join(',') + ',' + proj;
-			const xhr = new XMLHttpRequest();
-			xhr.open('GET', url);
-			const onError = function() {
-				vectorSource.removeLoadedExtent(extent);
-				failure();
-			}
-			xhr.onerror = onError;
-			xhr.onload = function() {
-				if (xhr.status == 200) {
-					const features = vectorSource.getFormat().readFeatures(xhr.responseText);
-					vectorSource.addFeatures(features);
-					success(features);
-				} else {
-					onError();
-				}
-			}
-			xhr.send();
-		}
-
-		vectorSource.setLoader(loadFunction);
-	}
 }
