@@ -88,8 +88,12 @@ public class GpxUtils {
 			// multiPoint.normalize();
 			return (T) multiPoint;
 		} else if (Polygon.class.isAssignableFrom(clss)) {
-			// close the line string
-			coordinates.add(coordinates.get(0));
+			Coordinate first = coordinates.get(0);
+			Coordinate last = coordinates.get(coordinates.size() - 1);
+			if (!(first.getX() == last.getX() && first.getY() == last.getY())) {
+				// close the line string
+				coordinates.add(first);
+			}
 			Polygon polygon = geometryFactory.createPolygon(coordinates.toArray(new Coordinate[coordinates.size()]));
 			return (T) polygon;
 		} else if (SimpleFeature.class.isAssignableFrom(clss)) {
@@ -114,7 +118,7 @@ public class GpxUtils {
 		return area;
 	}
 
-	/** Write ODK GepShape as a GPX file. */
+	/** Write ODK GeoShape as a GPX file. */
 	public static void writeGeoShapeAsGpx(String geoShape, OutputStream out) throws IOException {
 		Objects.requireNonNull(geoShape);
 		Writer writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
