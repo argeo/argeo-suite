@@ -5,7 +5,7 @@ A2_CATEGORY = org.argeo.suite
 BUNDLES = \
 org.argeo.app.js \
 
-all: webpack osgi
+all: npm-install webpack osgi
 
 webpack:
 	npm run build-prod
