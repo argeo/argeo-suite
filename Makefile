@@ -46,6 +46,9 @@ clean:
 	rm -rf $(BUILD_BASE)
 	make -C js clean
 
+native-deps-debian:
+	sudo apt install npm
+
 ## WEB
 web:
 	make -C js all
