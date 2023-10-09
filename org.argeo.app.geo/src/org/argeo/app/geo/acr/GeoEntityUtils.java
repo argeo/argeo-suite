@@ -55,7 +55,7 @@ public class GeoEntityUtils {
 		} catch (IOException e) {
 			throw new UncheckedIOException("Cannot add geometry " + name + " to " + c, e);
 		}
-		// updateBoundingBox(c);
+		updateBoundingBox(c);
 	}
 
 	public static <T extends Geometry> T getGeometry(Content c, QNamed name, Class<T> clss) {

@@ -19,6 +19,9 @@ public class View extends AbstractOlObject {
 			executeMethod(getMethodName(), zoom);
 	}
 
+//	public void fit(double[] extent) {
+//		executeMethod(getMethodName(), extent);
+//	}
 //	public void setProjection(String projection) {
 //		doSetValue(getMethodName(), "projection", projection);
 //	}

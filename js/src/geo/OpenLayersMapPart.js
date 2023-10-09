@@ -14,6 +14,7 @@ import GPX from 'ol/format/GPX.js';
 import Select from 'ol/interaction/Select.js';
 import Overlay from 'ol/Overlay.js';
 import { Style, Icon } from 'ol/style.js';
+import { transformExtent } from 'ol/proj.js';
 
 import * as SLDReader from '@nieuwlandgeo/sldreader';
 
@@ -54,6 +55,11 @@ export default class OpenLayersMapPart extends MapPart {
 
 	setCenter(lat, lon) {
 		this.#map.getView().setCenter(fromLonLat([lon, lat]));
+	}
+
+	fit(extent, options) {
+		var transformed = transformExtent(extent, 'EPSG:4326', this.#map.getView().getProjection());
+		this.#map.getView().fit(transformed, options);
 	}
 
 	addPoint(lng, lat, style) {

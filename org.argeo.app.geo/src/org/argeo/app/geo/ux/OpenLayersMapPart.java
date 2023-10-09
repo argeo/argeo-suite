@@ -1,11 +1,14 @@
 package org.argeo.app.geo.ux;
 
+import java.util.Map;
+
 import org.argeo.app.ol.AbstractOlObject;
 import org.argeo.app.ol.Layer;
 import org.argeo.app.ol.OlMap;
 import org.argeo.app.ol.TileLayer;
 import org.argeo.app.ol.VectorLayer;
 import org.argeo.app.ux.js.JsClient;
+import org.locationtech.jts.geom.Envelope;
 
 /**
  * A wrapper around an OpenLayers map, adding specific features, such as SLD
@@ -30,6 +33,14 @@ public class OpenLayersMapPart extends AbstractGeoJsObject {
 
 	public void setCenter(Double lat, Double lon) {
 		executeMethod(getMethodName(), lat, lon);
+	}
+
+	public void fit(double[] extent, Map<String, Object> options) {
+		executeMethod(getMethodName(), extent, options);
+	}
+
+	public void fit(Envelope extent, Map<String, Object> options) {
+		fit(new double[] { extent.getMinX(), extent.getMinY(), extent.getMaxX(), extent.getMaxY() }, options);
 	}
 
 	public void applyStyle(String layerName, String styledLayerName) {
