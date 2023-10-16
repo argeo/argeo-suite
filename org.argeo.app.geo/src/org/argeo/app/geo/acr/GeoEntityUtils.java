@@ -35,7 +35,6 @@ import jakarta.json.stream.JsonGenerator;
 
 /** Utilities around entity types related to geography. */
 public class GeoEntityUtils {
-	public static final String PLACE_GEOM_JSON = "place.geom.json";
 	public static final String _GEOM_JSON = ".geom.json";
 
 	public static void putGeometry(Content c, QNamed name, Geometry geometry) {

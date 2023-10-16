@@ -47,7 +47,6 @@ import org.geotools.data.collection.ListFeatureCollection;
 import org.geotools.data.shapefile.ShapefileDataStore;
 import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.data.simple.SimpleFeatureCollection;
-import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.factory.CommonFactoryFinder;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
@@ -116,44 +115,45 @@ public class GeoUtils {
 		}
 	}
 
-	public static void exportToSvg(SimpleFeatureCollection features, Writer out, int width, int height) {
+	public static void exportToSvg(Geometry[] geometries, Writer out, int width, int height) {
 		try {
 			double minY = Double.POSITIVE_INFINITY;
 			double maxY = Double.NEGATIVE_INFINITY;
 			double minX = Double.POSITIVE_INFINITY;
 			double maxX = Double.NEGATIVE_INFINITY;
 			List<String> shapes = new ArrayList<>();
-			for (SimpleFeatureIterator it = features.features(); it.hasNext();) {
-				SimpleFeature feature = it.next();
+			for (Geometry geometry : geometries) {
 				StringBuffer sb = new StringBuffer();
 				sb.append("<polyline style=\"stroke-width:1;stroke:#000000;fill:none;\" points=\"");
 
-				Polygon p = (Polygon) feature.getDefaultGeometry();
-				Point centroid = p.getCentroid();
-				String code = "AUTO:42001," + centroid.getX() + "," + centroid.getY();
-				CoordinateReferenceSystem auto = CRS.decode(code);
+				if (geometry instanceof Polygon p) {
+					Point centroid = p.getCentroid();
+					String code = "AUTO:42001," + centroid.getX() + "," + centroid.getY();
+					CoordinateReferenceSystem auto = CRS.decode(code);
 
-				MathTransform transform = CRS.findMathTransform(DefaultGeographicCRS.WGS84, auto);
+					MathTransform transform = CRS.findMathTransform(DefaultGeographicCRS.WGS84, auto);
 
-				Polygon projed = (Polygon) JTS.transform(p, transform);
+					Polygon projed = (Polygon) JTS.transform(p, transform);
 
-				for (Coordinate coord : projed.getCoordinates()) {
-					double x = coord.x;
-					if (x < minX)
-						minX = x;
-					if (x > maxX)
-						maxX = x;
-					double y = -coord.y;
-					if (y < minY)
-						minY = y;
-					if (y > maxY)
-						maxY = y;
-					sb.append(x + "," + y + " ");
+					for (Coordinate coord : projed.getCoordinates()) {
+						double x = coord.x;
+						if (x < minX)
+							minX = x;
+						if (x > maxX)
+							maxX = x;
+						double y = -coord.y;
+						if (y < minY)
+							minY = y;
+						if (y > maxY)
+							maxY = y;
+						sb.append(x + "," + y + " ");
+					}
+					sb.append("\">");
+					sb.append("</polyline>\n");
+					shapes.add(sb.toString());
+				} else {
+					throw new IllegalArgumentException("Unsuppported geometry type " + geometry.getClass().getName());
 				}
-				sb.append("\">");
-				sb.append("</polyline>\n");
-				shapes.add(sb.toString());
-
 			}
 			double viewportHeight = maxY - minY;
 			double viewportWidth = maxX - minX;

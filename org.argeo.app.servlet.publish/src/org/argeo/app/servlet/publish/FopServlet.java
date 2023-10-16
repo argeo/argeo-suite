@@ -40,15 +40,16 @@ import org.apache.xmlgraphics.io.ResourceResolver;
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentRepository;
 import org.argeo.api.acr.ContentSession;
+import org.argeo.api.acr.NamespaceUtils;
 import org.argeo.app.geo.GeoUtils;
 import org.argeo.app.geo.GpxUtils;
+import org.argeo.app.geo.acr.GeoEntityUtils;
 import org.argeo.cms.acr.xml.XmlNormalizer;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.servlet.ServletHttpRequest;
 import org.argeo.cms.util.LangUtils;
-import org.geotools.api.feature.simple.SimpleFeature;
-import org.geotools.data.collection.ListFeatureCollection;
-import org.geotools.data.simple.SimpleFeatureCollection;
+import org.locationtech.jts.geom.Geometry;
+import org.locationtech.jts.geom.Polygon;
 
 import net.sf.saxon.BasicTransformerFactory;
 
@@ -81,7 +82,7 @@ public class FopServlet extends HttpServlet {
 		Content content = session.get(path);
 
 		// dev only
-		final boolean DEV = false;
+		final boolean DEV = true;
 		if (DEV) {
 			try (InputStream in = xslUrl.openStream()) {
 				Source xslSource = new StreamSource(in);
@@ -109,21 +110,35 @@ public class FopServlet extends HttpServlet {
 						return new StreamSource(in);
 					}
 					if (url.getScheme().equals("geo2svg")) {
-						String includePath = path + url.getPath();
-						String geoExt = includePath.substring(includePath.lastIndexOf('.'));
-						Content geoContent = session.get(includePath);
-						if (".gpx".equals(geoExt)) {
-							try (InputStream in = geoContent.open(InputStream.class)) {
-								SimpleFeature field = GpxUtils.parseGpxToPolygon(in);
-								SimpleFeatureCollection features = new ListFeatureCollection(field.getType(), field);
-								try (StringWriter writer = new StringWriter()) {
-									GeoUtils.exportToSvg(features, writer, 100, 100);
-									StreamSource res = new StreamSource(new StringReader(writer.toString()));
-									return res;
+						int lastDot = url.getPath().lastIndexOf('.');
+						Polygon polygon;
+						if (lastDot > 0) {
+							String includePath = path + url.getPath();
+							Content geoContent = session.get(includePath);
+							String geoExt = includePath.substring(lastDot);
+							if (".gpx".equals(geoExt)) {
+								try (InputStream in = geoContent.open(InputStream.class)) {
+									polygon = GpxUtils.parseGpxTrackTo(in, Polygon.class);
 								}
+							} else {
+								throw new UnsupportedOperationException(geoExt + " is not supported");
 							}
 						} else {
-							throw new UnsupportedOperationException(geoExt + " is not supported");
+							Content geoContent;
+							String attrName;
+							if (url.getPath().startsWith("/@")) {
+								geoContent = content;
+								attrName = url.getPath().substring(2);// remove /@
+							} else {
+								throw new IllegalArgumentException("Only direct attributes are currently supported");
+							}
+							polygon = GeoEntityUtils.getGeometry(geoContent, NamespaceUtils.parsePrefixedName(attrName),
+									Polygon.class);
+						}
+						try (StringWriter writer = new StringWriter()) {
+							GeoUtils.exportToSvg(new Geometry[] { polygon }, writer, 100, 100);
+							StreamSource res = new StreamSource(new StringReader(writer.toString()));
+							return res;
 						}
 					}
 				}
