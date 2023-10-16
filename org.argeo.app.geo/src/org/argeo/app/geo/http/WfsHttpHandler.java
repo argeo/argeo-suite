@@ -13,6 +13,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.xml.namespace.QName;
 
@@ -80,6 +82,24 @@ public class WfsHttpHandler implements HttpHandler {
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 		String path = HttpServerUtils.subPath(exchange);
+
+		// content path
+		final String pathToUse;
+		int lastSlash = path.lastIndexOf('/');
+		String fileName = null;
+		if (lastSlash > 0) {
+			fileName = path.substring(lastSlash + 1);
+		}
+		boolean zipped = false;
+		if (fileName != null) {
+			pathToUse = path.substring(0, lastSlash);
+			if (path.endsWith(".zip")) {
+				zipped = true;
+			}
+		} else {
+			pathToUse = path;
+		}
+
 		ContentSession session = HttpServerUtils.getContentSession(contentRepository, exchange);
 		// Content content = session.get(path);
 
@@ -127,16 +147,31 @@ public class WfsHttpHandler implements HttpHandler {
 			bbox = null;
 		}
 
-		switch (outputFormat) {
-		case "application/json" -> {
-			exchange.getResponseHeaders().set(HttpHeader.CONTENT_TYPE.getHeaderName(), "application/json");
-		}
-		case "GML3" -> {
-//			exchange.getResponseHeaders().set(HttpHeader.CONTENT_TYPE.getHeaderName(), "application/gml+xml");
-			exchange.getResponseHeaders().set(HttpHeader.CONTENT_TYPE.getHeaderName(), "application/xml");
+		// response headers
+		exchange.getResponseHeaders().set(HttpHeader.DATE.getHeaderName(), Long.toString(System.currentTimeMillis()));
+
+		if (fileName != null) {
+			exchange.getResponseHeaders().set(HttpHeader.CONTENT_DISPOSITION.getHeaderName(),
+					HttpHeader.ATTACHMENT + ";" + HttpHeader.FILENAME + "=\"" + fileName + "\"");
+
 		}
 
-		default -> throw new IllegalArgumentException("Unexpected value: " + outputFormat);
+		// content type
+		if (zipped) {
+			exchange.getResponseHeaders().set(HttpHeader.CONTENT_TYPE.getHeaderName(), "application/zip");
+
+		} else {
+			switch (outputFormat) {
+			case "application/json" -> {
+				exchange.getResponseHeaders().set(HttpHeader.CONTENT_TYPE.getHeaderName(), "application/json");
+			}
+			case "GML3" -> {
+//			exchange.getResponseHeaders().set(HttpHeader.CONTENT_TYPE.getHeaderName(), "application/gml+xml");
+				exchange.getResponseHeaders().set(HttpHeader.CONTENT_TYPE.getHeaderName(), "application/xml");
+			}
+
+			default -> throw new IllegalArgumentException("Unexpected value: " + outputFormat);
+			}
 		}
 
 		List<QName> typeNames = new ArrayList<>();
@@ -155,9 +190,9 @@ public class WfsHttpHandler implements HttpHandler {
 		// QUERY
 		Stream<Content> res = session.search((search) -> {
 			if (cql != null) {
-				CqlUtils.filter(search.from(path), cql);
+				CqlUtils.filter(search.from(pathToUse), cql);
 			} else {
-				search.from(path);
+				search.from(pathToUse);
 			}
 			for (QName typeName : typeNames) {
 				FeatureAdapter featureAdapter = featureAdapters.get(typeName);
@@ -188,7 +223,13 @@ public class WfsHttpHandler implements HttpHandler {
 		exchange.sendResponseHeaders(200, 0);
 
 		final int BUFFER_SIZE = 100 * 1024;
-		try (BufferedOutputStream out = new BufferedOutputStream(exchange.getResponseBody(), BUFFER_SIZE)) {
+		try (OutputStream out = zipped ? new ZipOutputStream(exchange.getResponseBody())
+				: new BufferedOutputStream(exchange.getResponseBody(), BUFFER_SIZE)) {
+			if (out instanceof ZipOutputStream zipOut) {
+				String unzippedFileName = fileName.substring(0, fileName.length() - ".zip".length());
+				zipOut.putNextEntry(new ZipEntry(unzippedFileName));
+			}
+
 			if ("GML3".equals(outputFormat)) {
 				encodeCollectionAsGML(res, out);
 			} else if ("application/json".equals(outputFormat)) {
