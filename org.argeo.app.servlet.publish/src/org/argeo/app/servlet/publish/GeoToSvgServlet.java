@@ -18,9 +18,9 @@ import org.argeo.app.geo.GeoUtils;
 import org.argeo.app.geo.GpxUtils;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.servlet.ServletHttpRequest;
+import org.geotools.api.feature.simple.SimpleFeature;
 import org.geotools.data.collection.ListFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureCollection;
-import org.opengis.feature.simple.SimpleFeature;
 
 /**
  * A servlet transforming an geographical data to SVG.

@@ -46,9 +46,9 @@ import org.argeo.cms.acr.xml.XmlNormalizer;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.servlet.ServletHttpRequest;
 import org.argeo.cms.util.LangUtils;
+import org.geotools.api.feature.simple.SimpleFeature;
 import org.geotools.data.collection.ListFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureCollection;
-import org.opengis.feature.simple.SimpleFeature;
 
 import net.sf.saxon.BasicTransformerFactory;
 
