@@ -2,19 +2,26 @@
  * @module OpenLayersMapPart
  */
 
-import Map from 'ol/Map.js';
-import View from 'ol/View.js';
 import { fromLonLat, getPointResolution } from 'ol/proj.js';
-import VectorSource from 'ol/source/Vector.js';
 import Feature from 'ol/Feature.js';
 import { Point } from 'ol/geom.js';
+import { transformExtent } from 'ol/proj.js';
+
 import VectorLayer from 'ol/layer/Vector.js';
+import TileLayer from 'ol/layer/Tile.js';
+
+import VectorSource from 'ol/source/Vector.js';
 import GeoJSON from 'ol/format/GeoJSON.js';
 import GPX from 'ol/format/GPX.js';
+import OSM from 'ol/source/OSM.js';
+
 import Select from 'ol/interaction/Select.js';
 import Overlay from 'ol/Overlay.js';
 import { Style, Icon } from 'ol/style.js';
-import { transformExtent } from 'ol/proj.js';
+
+import Map from 'ol/Map.js';
+import View from 'ol/View.js';
+import { OverviewMap, ScaleLine, defaults as defaultControls } from 'ol/control.js';
 
 import * as SLDReader from '@nieuwlandgeo/sldreader';
 
@@ -25,6 +32,8 @@ export default class OpenLayersMapPart extends MapPart {
 	/** The OpenLayers Map. */
 	#map;
 
+	#overviewMap;
+
 	/** Styled layer descriptor */
 	#sld;
 
@@ -34,7 +43,24 @@ export default class OpenLayersMapPart extends MapPart {
 	/** Constructor taking the mapName as an argument. */
 	constructor(mapName) {
 		super(mapName);
+		this.#overviewMap = new OverviewMap({
+			layers: [
+				new TileLayer({
+					source: new OSM(),
+				}),
+			],
+		});
 		this.#map = new Map({
+			controls: defaultControls({
+				attribution: false,
+				rotate: false,
+			}).extend([this.#overviewMap, new ScaleLine({
+				bar: false,
+				steps: 2,
+				text: false,
+				minWidth: 150,
+				maxWidth: 200,
+			})]),
 			layers: [
 			],
 			//						view: new View({

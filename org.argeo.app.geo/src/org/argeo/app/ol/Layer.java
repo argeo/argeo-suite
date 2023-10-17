@@ -30,14 +30,14 @@ public class Layer extends AbstractOlObject {
 			executeMethod(getMethodName(), source);
 	}
 
-	public void setMinResolution(long minResolution) {
+	public void setMinResolution(double minResolution) {
 		if (isNew())
 			getNewOptions().put("minResolution", minResolution);
 		else
 			executeMethod(getMethodName(), minResolution);
 	}
 
-	public void setMaxResolution(long maxResolution) {
+	public void setMaxResolution(double maxResolution) {
 		if (isNew())
 			getNewOptions().put("maxResolution", maxResolution);
 		else
