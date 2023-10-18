@@ -14,6 +14,7 @@ import VectorSource from 'ol/source/Vector.js';
 import GeoJSON from 'ol/format/GeoJSON.js';
 import GPX from 'ol/format/GPX.js';
 import OSM from 'ol/source/OSM.js';
+import { isEmpty } from 'ol/extent';
 
 import Select from 'ol/interaction/Select.js';
 import Overlay from 'ol/Overlay.js';
@@ -22,6 +23,7 @@ import { Style, Icon } from 'ol/style.js';
 import Map from 'ol/Map.js';
 import View from 'ol/View.js';
 import { OverviewMap, ScaleLine, defaults as defaultControls } from 'ol/control.js';
+import { easeOut } from 'ol/easing';
 
 import * as SLDReader from '@nieuwlandgeo/sldreader';
 
@@ -258,6 +260,24 @@ export default class OpenLayersMapPart extends MapPart {
 				this.select.getFeatures().push(feature);
 			}
 		}
+	}
+
+	fitToLayer(layerName) {
+		// we cannot use 'this' in the function provided to OpenLayers
+		let mapPart = this;
+		const layer = this.getLayerByName(layerName);
+		const source = layer.getSource();
+		const extent = source.getExtent();
+		const options = {
+			duration: 1000,
+			padding: [20, 20, 20, 20],
+			easing: easeOut,
+		};
+		if (!isEmpty(extent))
+			this.#map.getView().fit(source.getExtent(), options);
+		source.on('featuresloadend', function(e) {
+			mapPart.getMap().getView().fit(source.getExtent(), options);
+		});
 	}
 
 	//

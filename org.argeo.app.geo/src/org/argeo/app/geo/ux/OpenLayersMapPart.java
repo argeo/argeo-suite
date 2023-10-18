@@ -72,6 +72,10 @@ public class OpenLayersMapPart extends AbstractGeoJsObject {
 		executeMethod(getMethodName(), layerName, (Object[]) ids);
 	}
 
+	public void fitToLayer(String layerName) {
+		executeMethod(getMethodName(), layerName);
+	}
+
 	/*
 	 * CALLBACKS
 	 */

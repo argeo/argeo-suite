@@ -85,20 +85,13 @@ public class SwtBrowserJsPart implements JsClient {
 	}
 
 	/**
-	 * To be overridden with calls to {@link #loadExtension( Supplier<Boolean> toDo
-	 * = () -> { boolean success = browser.execute(); return success; }; String)}.
+	 * To be overridden with calls to {@link #loadExtension(String)}.
 	 */
 	protected void loadExtensions() {
 
 	}
 
 	protected void loadExtension(String url) {
-//			String js = """
-//					var script = document.createElement("script");
-//					script.src = '%s';
-//					document.head.appendChild(script);
-//					""";
-//			browser.evaluate(String.format(Locale.ROOT, js, url));
 		browser.evaluate(String.format(Locale.ROOT, "import('%s')", url));
 	}
 
