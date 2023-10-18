@@ -35,7 +35,9 @@ import org.argeo.app.geo.GeoUtils;
 import org.argeo.app.geo.GpxUtils;
 import org.argeo.app.geo.JTS;
 import org.argeo.cms.acr.json.AcrJsonUtils;
+import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.http.HttpHeader;
+import org.argeo.cms.http.RemoteAuthHttpExchange;
 import org.argeo.cms.http.server.HttpServerUtils;
 import org.argeo.cms.util.LangUtils;
 import org.geotools.api.feature.GeometryAttribute;
@@ -200,7 +202,10 @@ public class WfsHttpHandler implements HttpHandler {
 				if (featureAdapter == null)
 					throw new IllegalStateException("No feature adapter found for " + typeName);
 				// f.isContentClass(typeName);
-				featureAdapter.addConstraintsForFeature((AndFilter) search.getWhere(), typeName);
+				RemoteAuthUtils.doAs(() -> {
+					featureAdapter.addConstraintsForFeature((AndFilter) search.getWhere(), typeName);
+					return null;
+				}, new RemoteAuthHttpExchange(exchange));
 			}
 
 			if (bbox != null) {
