@@ -16,23 +16,8 @@ export default class MapPart {
 	//
 	// ABSTRACT METHODS
 	//
-
-	/** Zoom the map to the given value. */
-	setZoom(zoom) {
-		throw new Error("Abstract method");
-	}
-
 	/** Set the center of the map to the given coordinates. */
 	setCenter(lng, lat) {
-		throw new Error("Abstract method");
-	}
-
-	/** Add a single point. */
-	addPoint(lng, lat, style) {
-		throw new Error("Abstract method");
-	}
-
-	addUrlLayer(url, format) {
 		throw new Error("Abstract method");
 	}
 

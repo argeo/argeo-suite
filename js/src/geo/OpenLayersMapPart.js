@@ -3,25 +3,18 @@
  */
 
 import { fromLonLat, getPointResolution } from 'ol/proj.js';
-import Feature from 'ol/Feature.js';
-import { Point } from 'ol/geom.js';
 import { transformExtent } from 'ol/proj.js';
 
-import VectorLayer from 'ol/layer/Vector.js';
 import TileLayer from 'ol/layer/Tile.js';
 
-import VectorSource from 'ol/source/Vector.js';
-import GeoJSON from 'ol/format/GeoJSON.js';
-import GPX from 'ol/format/GPX.js';
 import OSM from 'ol/source/OSM.js';
 import { isEmpty } from 'ol/extent';
 
 import Select from 'ol/interaction/Select.js';
 import Overlay from 'ol/Overlay.js';
-import { Style, Icon } from 'ol/style.js';
 
 import Map from 'ol/Map.js';
-import View from 'ol/View.js';
+
 import { OverviewMap, ScaleLine, defaults as defaultControls } from 'ol/control.js';
 import { easeOut } from 'ol/easing';
 
@@ -34,12 +27,14 @@ export default class OpenLayersMapPart extends MapPart {
 	/** The OpenLayers Map. */
 	#map;
 
+	/** The overview map */
 	#overviewMap;
-
-	select;
 
 	/** Styled layer descriptor */
 	#sld;
+
+	/** The select interaction */
+	select;
 
 	/** Externally added callback functions. */
 	callbacks = {};
@@ -81,10 +76,6 @@ export default class OpenLayersMapPart extends MapPart {
 
 	/* GEOGRAPHICAL METHODS */
 
-	setZoom(zoom) {
-		this.#map.getView().setZoom(zoom);
-	}
-
 	setCenter(lat, lon) {
 		this.#map.getView().setCenter(fromLonLat([lon, lat]));
 	}
@@ -94,49 +85,7 @@ export default class OpenLayersMapPart extends MapPart {
 		this.#map.getView().fit(transformed, options);
 	}
 
-	addPoint(lng, lat, style) {
-		let vectorSource = new VectorSource({
-			features: [new Feature({
-				geometry: new Point(fromLonLat([lng, lat]))
-			})]
-		});
-		this.#map.addLayer(new VectorLayer({
-			source: vectorSource,
-			style: style,
-		}));
-	}
-
-	addUrlLayer(url, format, style, sld) {
-		let featureFormat;
-		if (format === 'GEOJSON') {
-			featureFormat = new GeoJSON();
-		}
-		else if (format === 'GPX') {
-			featureFormat = new GPX();
-		} else {
-			throw new Error("Unsupported format " + format);
-		}
-		const vectorSource = new VectorSource({
-			url: url,
-			format: featureFormat,
-		});
-		const vectorLayer = new VectorLayer({
-			source: vectorSource,
-		});
-		if (sld) {
-			this.#applySLD(vectorLayer, style);
-		} else if (style !== null) {
-			vectorLayer.setStyle(style);
-		}
-		this.#map.addLayer(vectorLayer);
-	}
-
-	addLayer(js) {
-		const func = new Function(js);
-		const layer = (func)();
-		this.#map.addLayer(layer);
-	}
-
+	/** Accessors */
 	getMap() {
 		return this.#map;
 	}
@@ -235,13 +184,6 @@ export default class OpenLayersMapPart extends MapPart {
 		});
 	}
 
-	//
-	// HTML
-	//
-	getMapDivCssClass() {
-		return 'map';
-	}
-
 	selectFeatures(layerName, featureIds) {
 		// we cannot use 'this' in the function provided to OpenLayers
 		let mapPart = this;
@@ -279,6 +221,14 @@ export default class OpenLayersMapPart extends MapPart {
 			mapPart.getMap().getView().fit(source.getExtent(), options);
 		});
 	}
+
+	//
+	// HTML
+	//
+	getMapDivCssClass() {
+		return 'map';
+	}
+
 
 	//
 	// STATIC FOR EXTENSION

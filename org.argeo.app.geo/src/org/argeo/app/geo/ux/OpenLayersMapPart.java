@@ -4,9 +4,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.argeo.app.geo.ux.MapPart.FeaturePopupEvent;
-import org.argeo.app.geo.ux.MapPart.FeatureSelectedEvent;
-import org.argeo.app.geo.ux.MapPart.FeatureSingleClickEvent;
 import org.argeo.app.ol.AbstractOlObject;
 import org.argeo.app.ol.Layer;
 import org.argeo.app.ol.OlMap;
@@ -19,7 +16,7 @@ import org.locationtech.jts.geom.Envelope;
  * A wrapper around an OpenLayers map, adding specific features, such as SLD
  * styling.
  */
-public class OpenLayersMapPart extends AbstractGeoJsObject {
+public class OpenLayersMapPart extends AbstractGeoJsObject implements MapPart {
 	private final String mapPartName;
 
 	public OpenLayersMapPart(JsClient jsClient, String mapPartName) {
@@ -36,7 +33,7 @@ public class OpenLayersMapPart extends AbstractGeoJsObject {
 		executeMethod(getMethodName(), JsClient.escapeQuotes(xml));
 	}
 
-	public void setCenter(Double lat, Double lon) {
+	public void setCenter(double lat, double lon) {
 		executeMethod(getMethodName(), lat, lon);
 	}
 
