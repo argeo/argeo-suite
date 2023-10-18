@@ -65,7 +65,7 @@ public abstract class AbstractJsObject {
 		return reference;
 	}
 
-	String getJsReference() {
+	protected String getJsReference() {
 		return jsClient.getJsVarName(reference);
 	}
 

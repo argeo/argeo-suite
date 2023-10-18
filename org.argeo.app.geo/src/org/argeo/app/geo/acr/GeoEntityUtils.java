@@ -42,7 +42,7 @@ public class GeoEntityUtils {
 	}
 
 	public static void putGeometry(Content c, QName name, Geometry geometry) {
-		QName jsonFileName = new ContentName(name.getNamespaceURI(), name.getLocalPart() + _GEOM_JSON);
+		QName jsonFileName = getJsonFileName(name);
 		Content geom = c.soleChild(jsonFileName).orElseGet(
 				() -> c.add(jsonFileName, Collections.singletonMap(DName.getcontenttype.qName(), "application/json")));
 		try (OutputStream out = geom.open(OutputStream.class)) {
@@ -57,12 +57,21 @@ public class GeoEntityUtils {
 		updateBoundingBox(c);
 	}
 
+	public static boolean hasGeometry(Content c, QNamed name) {
+		return hasGeometry(c, name.qName());
+	}
+
+	public static boolean hasGeometry(Content c, QName name) {
+		QName jsonFileName = getJsonFileName(name);
+		return c.hasChild(jsonFileName);
+	}
+
 	public static <T extends Geometry> T getGeometry(Content c, QNamed name, Class<T> clss) {
 		return getGeometry(c, name.qName(), clss);
 	}
 
 	public static <T extends Geometry> T getGeometry(Content c, QName name, Class<T> clss) {
-		QName jsonFileName = new ContentName(name.getNamespaceURI(), name.getLocalPart() + _GEOM_JSON);
+		QName jsonFileName = getJsonFileName(name);
 		Content geom = c.soleChild(jsonFileName).orElse(null);
 		if (geom == null)
 			return null;
@@ -74,6 +83,11 @@ public class GeoEntityUtils {
 		} catch (IOException e) {
 			throw new UncheckedIOException("Cannot parse " + c, e);
 		}
+	}
+
+	private static QName getJsonFileName(QName name) {
+		QName jsonFileName = new ContentName(name.getNamespaceURI(), name.getLocalPart() + _GEOM_JSON);
+		return jsonFileName;
 	}
 
 	public static Point toPoint(Content c) {

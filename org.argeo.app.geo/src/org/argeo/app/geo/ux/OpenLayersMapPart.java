@@ -1,7 +1,12 @@
 package org.argeo.app.geo.ux;
 
 import java.util.Map;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
+import org.argeo.app.geo.ux.MapPart.FeaturePopupEvent;
+import org.argeo.app.geo.ux.MapPart.FeatureSelectedEvent;
+import org.argeo.app.geo.ux.MapPart.FeatureSingleClickEvent;
 import org.argeo.app.ol.AbstractOlObject;
 import org.argeo.app.ol.Layer;
 import org.argeo.app.ol.OlMap;
@@ -61,6 +66,41 @@ public class OpenLayersMapPart extends AbstractGeoJsObject {
 
 	public String getMapPartName() {
 		return mapPartName;
+	}
+
+	public void selectFeatures(String layerName, Object... ids) {
+		executeMethod(getMethodName(), layerName, (Object[]) ids);
+	}
+
+	/*
+	 * CALLBACKS
+	 */
+	public void onFeatureSelected(Consumer<FeatureSelectedEvent> toDo) {
+		addCallback("FeatureSelected", (arr) -> {
+			toDo.accept(new FeatureSelectedEvent((String) arr[0]));
+			return null;
+		});
+	}
+
+	public void onFeatureSingleClick(Consumer<FeatureSingleClickEvent> toDo) {
+		addCallback("FeatureSingleClick", (arr) -> {
+			toDo.accept(new FeatureSingleClickEvent((String) arr[0]));
+			return null;
+		});
+	}
+
+	public void onFeaturePopup(Function<FeaturePopupEvent, String> toDo) {
+		addCallback("FeaturePopup", (arr) -> {
+			return toDo.apply(new FeaturePopupEvent((String) arr[0]));
+		});
+	}
+
+	protected void addCallback(String suffix, Function<Object[], Object> toDo) {
+		getJsClient().getReadyStage().thenAccept((ready) -> {
+			String functionName = getJsClient().createJsFunction(getMapPartName() + "__on" + suffix, toDo);
+			getJsClient().execute(getJsReference() + ".callbacks['on" + suffix + "']=" + functionName + ";");
+			executeMethod("enable" + suffix);
+		});
 	}
 
 }

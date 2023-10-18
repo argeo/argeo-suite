@@ -34,6 +34,8 @@ export default class OpenLayersMapPart extends MapPart {
 
 	#overviewMap;
 
+	select;
+
 	/** Styled layer descriptor */
 	#sld;
 
@@ -50,6 +52,7 @@ export default class OpenLayersMapPart extends MapPart {
 				}),
 			],
 		});
+		this.select = new Select();
 		this.#map = new Map({
 			controls: defaultControls({
 				attribution: false,
@@ -70,6 +73,7 @@ export default class OpenLayersMapPart extends MapPart {
 			//						}),
 			target: this.getMapName(),
 		});
+		this.#map.addInteraction(this.select);
 		//this.#map.getView().set('projection', 'EPSG:4326', true);
 	}
 
@@ -160,7 +164,7 @@ export default class OpenLayersMapPart extends MapPart {
 				return true;
 			});
 			if (feature !== null)
-				mapPart.callbacks['onFeatureSingleClick'](feature.get('path'));
+				mapPart.callbacks['onFeatureSingleClick'](feature.get('cr:path'));
 		});
 	}
 
@@ -172,7 +176,7 @@ export default class OpenLayersMapPart extends MapPart {
 		select.on('select', function(e) {
 			if (e.selected.length > 0) {
 				let feature = e.selected[0];
-				mapPart.callbacks['onFeatureSelected'](feature.get('path'));
+				mapPart.callbacks['onFeatureSelected'](feature.get('cr:path'));
 			}
 		});
 	}
@@ -216,7 +220,7 @@ export default class OpenLayersMapPart extends MapPart {
 				return;
 			}
 			const coordinate = e.coordinate;
-			const path = selected.get('path');
+			const path = selected.get('cr:path');
 			if (path === null)
 				return true;
 			const res = mapPart.callbacks['onFeaturePopup'](path);
@@ -234,6 +238,26 @@ export default class OpenLayersMapPart extends MapPart {
 	//
 	getMapDivCssClass() {
 		return 'map';
+	}
+
+	selectFeatures(layerName, featureIds) {
+		// we cannot use 'this' in the function provided to OpenLayers
+		let mapPart = this;
+		this.select.getFeatures().clear();
+		const layer = this.getLayerByName(layerName);
+		const source = layer.getSource();
+		for (const featureId of featureIds) {
+			let feature = source.getFeatureById(featureId);
+			if (feature === null) {
+				source.on('featuresloadend', function(e) {
+					feature = source.getFeatureById(featureId);
+					if (feature !== null)
+						mapPart.select.getFeatures().push(feature);
+				});
+			} else {
+				this.select.getFeatures().push(feature);
+			}
+		}
 	}
 
 	//

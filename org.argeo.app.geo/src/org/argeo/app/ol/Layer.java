@@ -30,6 +30,11 @@ public class Layer extends AbstractOlObject {
 			executeMethod(getMethodName(), source);
 	}
 
+	public Source getSource() {
+		String reference = getReference() + ".getSource()";
+		return new Source(getJsClient(), reference);
+	}
+
 	public void setMinResolution(double minResolution) {
 		if (isNew())
 			getNewOptions().put("minResolution", minResolution);

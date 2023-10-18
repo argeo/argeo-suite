@@ -112,7 +112,8 @@ public class WfsHttpHandler implements HttpHandler {
 			outputFormat = "application/json";
 		}
 		String bboxStr = getKvpParameter(parameters, BBOX);
-		log.debug(bboxStr);
+		if (log.isTraceEnabled())
+			log.trace(bboxStr);
 		final Envelope bbox;
 		if (bboxStr != null) {
 			String srs;

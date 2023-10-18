@@ -44,7 +44,7 @@ public interface JsClient {
 	String createJsFunction(String name, Function<Object[], Object> toDo);
 
 	/** Get a global variable name. */
-	public String getJsVarName(String name);
+	String getJsVarName(String name);
 
 	/**
 	 * Completion stage when the client is ready (typically the page has loaded in
@@ -65,7 +65,7 @@ public interface JsClient {
 	}
 
 	default boolean isInstanceOf(String reference, String jsClass) {
-		return (Boolean) evaluate(getJsVarName(reference) + " instanceof " + jsClass);
+		return (Boolean) evaluate("return "+getJsVarName(reference) + " instanceof " + jsClass);
 	}
 
 	/*
