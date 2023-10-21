@@ -1,5 +1,6 @@
 package org.argeo.app.swt.js;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -8,7 +9,9 @@ import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
 import org.argeo.api.cms.CmsLog;
+import org.argeo.api.cms.ux.CmsView;
 import org.argeo.app.ux.js.JsClient;
+import org.argeo.cms.swt.CmsSwtUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.BrowserFunction;
@@ -39,12 +42,14 @@ public class SwtBrowserJsPart implements JsClient {
 	private List<PreReadyToDo> preReadyToDos = new ArrayList<>();
 
 	public SwtBrowserJsPart(Composite parent, int style, String url) {
+		CmsView cmsView = CmsSwtUtils.getCmsView(parent);
 		this.browser = new Browser(parent, 0);
 		if (parent.getLayout() instanceof GridLayout)
 			browser.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		// TODO other layouts
 
-		browser.setUrl(url);
+		URI u = cmsView.toBackendUri(url);
+		browser.setUrl(u.toString());
 		browser.addProgressListener(new ProgressListener() {
 			static final long serialVersionUID = 1L;
 
@@ -92,7 +97,8 @@ public class SwtBrowserJsPart implements JsClient {
 	}
 
 	protected void loadExtension(String url) {
-		browser.evaluate(String.format(Locale.ROOT, "import('%s')", url));
+		URI u = CmsSwtUtils.getCmsView(getControl()).toBackendUri(url);
+		browser.evaluate(String.format(Locale.ROOT, "import('%s')", u.toString()));
 	}
 
 	public CompletionStage<Boolean> getReadyStage() {
@@ -168,8 +174,8 @@ public class SwtBrowserJsPart implements JsClient {
 		@Override
 		public void run() {
 			boolean success = browser.execute(js);
-			if (!success)
-				throw new IllegalStateException("Pre-ready JavaScript failed: " + js);
+			if (!success && log.isTraceEnabled())
+				log.error("Pre-ready JavaScript failed: " + js);
 		}
 	}
 
