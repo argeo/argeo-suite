@@ -118,9 +118,9 @@ mixin
 
 [entity:geobounded]
 mixin
-- entity:minLat (DOUBLE) m
-- entity:minLon (DOUBLE) m
-- entity:maxLat (DOUBLE) m
-- entity:maxLon (DOUBLE) m
+- entity:minLat (DOUBLE)
+- entity:minLon (DOUBLE)
+- entity:maxLat (DOUBLE)
+- entity:maxLon (DOUBLE)
 - entity:minAlt (DOUBLE)
 - entity:maxAlt (DOUBLE)
