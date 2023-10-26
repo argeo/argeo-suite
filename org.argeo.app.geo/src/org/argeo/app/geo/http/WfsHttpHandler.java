@@ -34,6 +34,7 @@ import org.argeo.app.geo.GeoJson;
 import org.argeo.app.geo.GeoUtils;
 import org.argeo.app.geo.GpxUtils;
 import org.argeo.app.geo.JTS;
+import org.argeo.app.geo.acr.GeoEntityUtils;
 import org.argeo.cms.acr.json.AcrJsonUtils;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.http.HttpHeader;
@@ -59,7 +60,6 @@ import org.geotools.wfs.GML.Version;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
-import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
 
 import com.sun.net.httpserver.HttpExchange;
@@ -361,12 +361,7 @@ public class WfsHttpHandler implements HttpHandler {
 
 	protected Geometry getDefaultGeometry(Content content) {
 		if (content.hasContentClass(EntityType.geopoint)) {
-			double latitude = content.get(WGS84PosName.lat, Double.class).get();
-			double longitude = content.get(WGS84PosName.lon, Double.class).get();
-
-			Coordinate coordinate = new Coordinate(longitude, latitude);
-			Point the_geom = JTS.GEOMETRY_FACTORY.createPoint(coordinate);
-			return the_geom;
+			return GeoEntityUtils.toPoint(content);
 		}
 		return null;
 	}

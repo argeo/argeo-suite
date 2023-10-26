@@ -68,7 +68,7 @@ public class GpxUtils {
 						Double latitude = Double.parseDouble(attributes.getValue("lat"));
 						Double longitude = Double.parseDouble(attributes.getValue("lon"));
 						// TODO elevation in 3D context
-						Coordinate coordinate = new Coordinate(longitude, latitude);
+						Coordinate coordinate = new Coordinate(latitude, longitude);
 						coordinates.add(coordinate);
 					}
 				}
@@ -107,7 +107,7 @@ public class GpxUtils {
 			throw new IllegalArgumentException("Unsupported format " + clss);
 		}
 	}
-	
+
 	/** @deprecated Use {@link #parseGpxTrackTo(InputStream, Class)} instead. */
 	@Deprecated
 	public static SimpleFeature parseGpxToPolygon(InputStream in) throws IOException {

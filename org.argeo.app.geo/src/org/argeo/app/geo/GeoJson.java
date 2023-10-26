@@ -93,8 +93,9 @@ public class GeoJson {
 
 	/** Writes a pair of coordinates [lat,lon]. */
 	public static void writeCoordinate(JsonGenerator g, Coordinate coordinate) {
-		g.write(coordinate.getX());
+		// !! longitude is first in GeoJSON
 		g.write(coordinate.getY());
+		g.write(coordinate.getX());
 		double z = coordinate.getZ();
 		if (!Double.isNaN(z)) {
 			g.write(z);
@@ -149,13 +150,14 @@ public class GeoJson {
 		return (T) res;
 	}
 
-	/** Reads a coordinate sequence [[lat,lon],[lat,lon]]. */
+	/** Reads a coordinate pair [lon,lat]. */
 	public static Coordinate readCoordinate(JsonArray arr) {
 		assert arr.size() >= 2;
-		return new Coordinate(arr.getJsonNumber(0).doubleValue(), arr.getJsonNumber(1).doubleValue());
+		// !! longitude is first in GeoJSon
+		return new Coordinate(arr.getJsonNumber(1).doubleValue(), arr.getJsonNumber(0).doubleValue());
 	}
 
-	/** Reads a coordinate pair [lat,lon]. */
+	/** Reads a coordinate sequence [[lon,lat],[lon,lat]]. */
 	public static Coordinate[] readCoordinates(JsonArray arr) {
 		Coordinate[] coords = new Coordinate[arr.size()];
 		for (int i = 0; i < arr.size(); i++)

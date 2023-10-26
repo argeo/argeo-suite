@@ -3,7 +3,6 @@
  */
 
 import { fromLonLat, getPointResolution } from 'ol/proj.js';
-import { transformExtent } from 'ol/proj.js';
 
 import TileLayer from 'ol/layer/Tile.js';
 
@@ -21,6 +20,7 @@ import { easeOut } from 'ol/easing';
 import * as SLDReader from '@nieuwlandgeo/sldreader';
 
 import MapPart from './MapPart.js';
+import { transformToOlLonLatExtent } from './OpenLayersUtils.js';
 
 /** OpenLayers implementation of MapPart. */
 export default class OpenLayersMapPart extends MapPart {
@@ -81,7 +81,7 @@ export default class OpenLayersMapPart extends MapPart {
 	}
 
 	fit(extent, options) {
-		var transformed = transformExtent(extent, 'EPSG:4326', this.#map.getView().getProjection());
+		var transformed = transformToOlLonLatExtent(extent, this.#map.getView().getProjection());
 		this.#map.getView().fit(transformed, options);
 	}
 
