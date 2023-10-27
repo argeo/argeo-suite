@@ -298,7 +298,7 @@ public class SuiteSwtUtils {
 		Text txt = SuiteSwtUtils.addFormTextField(parent, text, null, 0);
 		if (cmsEditable != null && cmsEditable.isEditing()) {
 			txt.addModifyListener((e) -> {
-				content.put(property, txt.getText());
+				content.put(property, txt.getText().trim());
 			});
 		} else {
 			txt.setEditable(false);
