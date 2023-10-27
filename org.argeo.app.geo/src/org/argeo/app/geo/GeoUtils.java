@@ -135,13 +135,14 @@ public class GeoUtils {
 
 					Polygon projed = (Polygon) JTS.transform(p, transform);
 
+					// EPSG4326 are in lat/lon order, so we invert coordinates
 					for (Coordinate coord : projed.getCoordinates()) {
-						double x = coord.x;
+						double x = coord.y;
 						if (x < minX)
 							minX = x;
 						if (x > maxX)
 							maxX = x;
-						double y = -coord.y;
+						double y = -coord.x;
 						if (y < minY)
 							minY = y;
 						if (y > maxY)
