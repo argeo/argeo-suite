@@ -29,6 +29,7 @@ import org.argeo.app.api.EntityName;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.api.WGS84PosName;
 import org.argeo.app.api.geo.FeatureAdapter;
+import org.argeo.app.api.geo.WfsKvp;
 import org.argeo.app.geo.CqlUtils;
 import org.argeo.app.geo.GeoJson;
 import org.argeo.app.geo.GeoUtils;
@@ -73,47 +74,52 @@ public class WfsHttpHandler implements HttpHandler {
 	private final static CmsLog log = CmsLog.getLog(WfsHttpHandler.class);
 	private ProvidedRepository contentRepository;
 
-	// HTTP parameters
-	final static String OUTPUT_FORMAT = "outputFormat";
-	final static String TYPE_NAMES = "typeNames";
-	final static String CQL_FILTER = "cql_filter";
-	final static String BBOX = "bbox";
-
 	private final Map<QName, FeatureAdapter> featureAdapters = new HashMap<>();
 
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
+		ContentSession session = HttpServerUtils.getContentSession(contentRepository, exchange);
+
 		String path = HttpServerUtils.subPath(exchange);
 
 		// content path
-		final String pathToUse;
-		int lastSlash = path.lastIndexOf('/');
+		final String pathToUse = path;
 		String fileName = null;
-		if (lastSlash > 0) {
-			fileName = path.substring(lastSlash + 1);
-		}
 		boolean zipped = false;
-		if (fileName != null) {
-			pathToUse = path.substring(0, lastSlash);
-			if (path.endsWith(".zip")) {
-				zipped = true;
-			}
-		} else {
-			pathToUse = path;
-		}
+//		int lastSlash = path.lastIndexOf('/');
+//		if (lastSlash > 0) {
+//			fileName = path.substring(lastSlash + 1);
+//		}
+//		if (fileName != null) {
+//			pathToUse = path.substring(0, lastSlash);
+//			if (path.endsWith(".zip")) {
+//				zipped = true;
+//			}
+//		} else {
+//			pathToUse = path;
+//		}
 
-		ContentSession session = HttpServerUtils.getContentSession(contentRepository, exchange);
-		// Content content = session.get(path);
+		Map<String, List<String>> parameters = HttpServerUtils.parseParameters(exchange);
 
 		// PARAMETERS
-		Map<String, List<String>> parameters = HttpServerUtils.parseParameters(exchange);
-		String cql = getKvpParameter(parameters, CQL_FILTER);
-		String typeNamesStr = getKvpParameter(parameters, TYPE_NAMES);
-		String outputFormat = getKvpParameter(parameters, OUTPUT_FORMAT);
+		String cql = getKvpParameter(parameters, WfsKvp.CQL_FILTER);
+		String typeNamesStr = getKvpParameter(parameters, WfsKvp.TYPE_NAMES);
+		String outputFormat = getKvpParameter(parameters, WfsKvp.OUTPUT_FORMAT);
 		if (outputFormat == null) {
 			outputFormat = "application/json";
 		}
-		String bboxStr = getKvpParameter(parameters, BBOX);
+
+		// TODO deal with multiple
+		String formatOption = getKvpParameter(parameters, WfsKvp.FORMAT_OPTIONS);
+		if (formatOption != null) {
+			if (formatOption.startsWith(WfsKvp.FILENAME_))
+				fileName = formatOption.substring(WfsKvp.FILENAME_.length());
+		}
+		if (fileName != null && fileName.endsWith(".zip"))
+			zipped = true;
+
+		// bbox
+		String bboxStr = getKvpParameter(parameters, WfsKvp.BBOX);
 		if (log.isTraceEnabled())
 			log.trace(bboxStr);
 		final Envelope bbox;
@@ -250,14 +256,14 @@ public class WfsHttpHandler implements HttpHandler {
 	 * 
 	 * @see https://docs.ogc.org/is/09-025r2/09-025r2.html#19
 	 */
-	protected String getKvpParameter(Map<String, List<String>> parameters, String key) {
+	protected String getKvpParameter(Map<String, List<String>> parameters, WfsKvp key) {
 		Objects.requireNonNull(key, "KVP key cannot be null");
 		// let's first try the default (CAML case) which should be more efficient
-		List<String> values = parameters.get(key);
+		List<String> values = parameters.get(key.getKey());
 		if (values == null) {
 			// then let's do an ignore case comparison of the key
 			keys: for (String k : parameters.keySet()) {
-				if (key.equalsIgnoreCase(k)) {
+				if (key.getKey().equalsIgnoreCase(k)) {
 					values = parameters.get(k);
 					break keys;
 				}
@@ -468,7 +474,7 @@ public class WfsHttpHandler implements HttpHandler {
 	 */
 
 	public void addFeatureAdapter(FeatureAdapter featureAdapter, Map<String, Object> properties) {
-		List<String> typeNames = LangUtils.toStringList(properties.get(TYPE_NAMES));
+		List<String> typeNames = LangUtils.toStringList(properties.get(WfsKvp.TYPE_NAMES.getKey()));
 		if (typeNames.isEmpty()) {
 			log.warn("FeatureAdapter " + featureAdapter.getClass() + " does not declare type names. Ignoring it...");
 			return;
@@ -481,7 +487,7 @@ public class WfsHttpHandler implements HttpHandler {
 	}
 
 	public void removeFeatureAdapter(FeatureAdapter featureAdapter, Map<String, Object> properties) {
-		List<String> typeNames = LangUtils.toStringList(properties.get(TYPE_NAMES));
+		List<String> typeNames = LangUtils.toStringList(properties.get(WfsKvp.TYPE_NAMES.getKey()));
 		if (!typeNames.isEmpty()) {
 			// ignore if noe type name declared
 			return;
