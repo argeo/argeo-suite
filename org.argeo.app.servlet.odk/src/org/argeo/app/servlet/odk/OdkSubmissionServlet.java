@@ -39,12 +39,10 @@ public class OdkSubmissionServlet extends HttpServlet {
 	private final static CmsLog log = CmsLog.getLog(OdkSubmissionServlet.class);
 
 	private final static String XML_SUBMISSION_FILE = "xml_submission_file";
+	private final static String IS_INCOMPLETE = "*isIncomplete*";
 
 	private DateTimeFormatter submissionNameFormatter = DateTimeFormatter.ofPattern("YYYY-MM-dd-HHmmssSSS")
 			.withZone(ZoneId.from(ZoneOffset.UTC));
-
-//	private Repository repository;
-//	private ContentRepository contentRepository;
 
 	private Set<FormSubmissionListener> submissionListeners = new HashSet<>();
 
@@ -56,30 +54,18 @@ public class OdkSubmissionServlet extends HttpServlet {
 		resp.setHeader("X-OpenRosa-Version", "1.0");
 		resp.setDateHeader("Date", System.currentTimeMillis());
 
-		// should be set in HEAD? Let's rather use defaults.
-		// resp.setIntHeader("X-OpenRosa-Accept-Content-Length", 1024 * 1024);
-
 		RemoteAuthRequest request = new ServletHttpRequest(req);
-//		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), request);
-//
 		CmsSession cmsSession = RemoteAuthUtils.getCmsSession(request);
 
-//		Session adminSession = null;
-//		try {
-//			// TODO centralise at a deeper level
-//			adminSession = CmsJcrUtils.openDataAdminSession(repository, null);
-//			SuiteJcrUtils.getOrCreateCmsSessionNode(adminSession, cmsSession);
-//		} finally {
-//			Jcr.logout(adminSession);
-//		}
-
+		boolean isIncomplete = false;
 		try {
 			Content sessionDir = appUserState.getOrCreateSessionDir(cmsSession);
 			Node cmsSessionNode = sessionDir.adapt(Node.class);
-			// Node cmsSessionNode = SuiteJcrUtils.getCmsSessionNode(session, cmsSession);
-			Node submission = cmsSessionNode.addNode(submissionNameFormatter.format(Instant.now()),
-					OrxType.submission.get());
+			String submissionName = submissionNameFormatter.format(Instant.now());
+			Node submission = cmsSessionNode.addNode(submissionName, OrxType.submission.get());
+			String submissionPath = submission.getPath();
 			for (Part part : req.getParts()) {
+				String partNameSane = JcrUtils.replaceInvalidChars(part.getName());
 				if (log.isTraceEnabled())
 					log.trace("Part: " + part.getName() + ", " + part.getContentType());
 
@@ -88,6 +74,9 @@ public class OdkSubmissionServlet extends HttpServlet {
 					cmsSessionNode.getSession().importXML(xml.getPath(), part.getInputStream(),
 							ImportUUIDBehavior.IMPORT_UUID_COLLISION_REPLACE_EXISTING);
 
+				} else if (part.getName().equals(IS_INCOMPLETE)) {
+					isIncomplete = true;
+					log.debug("Form submission " + submissionPath + " is incomplete, expecting more to be uploaded...");
 				} else {
 					Node fileNode;
 					if (part.getName().endsWith(".jpg")) {
@@ -97,19 +86,17 @@ public class OdkSubmissionServlet extends HttpServlet {
 							ImageProcessor imageProcessor = new ImageProcessor(() -> part.getInputStream(),
 									() -> Files.newOutputStream(temp));
 							imageProcessor.process();
-							fileNode = JcrUtils.copyStreamAsFile(submission, part.getName(),
-									Files.newInputStream(temp));
+							fileNode = JcrUtils.copyStreamAsFile(submission, partNameSane, Files.newInputStream(temp));
 						} finally {
 							Files.deleteIfExists(temp);
 						}
 					} else {
-						fileNode = JcrUtils.copyStreamAsFile(submission, part.getName(), part.getInputStream());
+						fileNode = JcrUtils.copyStreamAsFile(submission, partNameSane, part.getInputStream());
 					}
 					String contentType = part.getContentType();
 					if (contentType != null) {
 						fileNode.addMixin(NodeType.MIX_MIMETYPE);
 						fileNode.setProperty(Property.JCR_MIMETYPE, contentType);
-
 					}
 					if (part.getName().endsWith(".jpg") || part.getName().endsWith(".png")) {
 						// TODO meta data and thumbnails
@@ -120,11 +107,14 @@ public class OdkSubmissionServlet extends HttpServlet {
 			cmsSessionNode.getSession().save();
 			try {
 				for (FormSubmissionListener submissionListener : submissionListeners) {
-					submissionListener.formSubmissionReceived(JcrContent.nodeToContent(submission));
+					submissionListener.formSubmissionReceived(JcrContent.nodeToContent(submission), isIncomplete);
 				}
 			} catch (Exception e) {
 				log.error("Cannot save submission, cancelling...", e);
-				submission.remove();
+				if (cmsSessionNode.getSession().hasPendingChanges())
+					cmsSessionNode.getSession().refresh(false);// discard
+				if (cmsSessionNode.getSession().itemExists(submissionPath))
+					submission.remove();
 				cmsSessionNode.getSession().save();
 				resp.setStatus(503);
 				return;
@@ -134,8 +124,6 @@ public class OdkSubmissionServlet extends HttpServlet {
 			log.error("Cannot save submission", e);
 			resp.setStatus(503);
 			return;
-//		} finally {
-//			Jcr.logout(session);
 		}
 
 		resp.setStatus(201);
@@ -144,10 +132,6 @@ public class OdkSubmissionServlet extends HttpServlet {
 
 	}
 
-//	public void setRepository(Repository repository) {
-//		this.repository = repository;
-//	}
-
 	public synchronized void addSubmissionListener(FormSubmissionListener listener) {
 		submissionListeners.add(listener);
 	}
@@ -155,10 +139,6 @@ public class OdkSubmissionServlet extends HttpServlet {
 	public synchronized void removeSubmissionListener(FormSubmissionListener listener) {
 		submissionListeners.remove(listener);
 	}
-
-//	public void setContentRepository(ContentRepository contentRepository) {
-//		this.contentRepository = contentRepository;
-//	}
 
 	public void setAppUserState(AppUserState appUserState) {
 		this.appUserState = appUserState;
