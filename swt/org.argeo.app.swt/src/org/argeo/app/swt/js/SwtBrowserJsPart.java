@@ -114,10 +114,8 @@ public class SwtBrowserJsPart implements JsClient {
 		assert browser.getDisplay().equals(Display.findDisplay(Thread.currentThread())) : "Not the proper UI thread.";
 		if (!readyStage.isDone())
 			throw new IllegalStateException("Methods returning a result can only be called after UI initialisation.");
-		// wait for the context to be ready
-//		boolean ready = readyStage.join();
-//		if (!ready)
-//			throw new IllegalStateException("Component is not initialised.");
+		if (browser.isDisposed())
+			return null;
 		Object result = browser.evaluate(String.format(Locale.ROOT, js, args));
 		return result;
 	}
@@ -126,6 +124,8 @@ public class SwtBrowserJsPart implements JsClient {
 	public void execute(String js, Object... args) {
 		String jsToExecute = String.format(Locale.ROOT, js, args);
 		if (readyStage.isDone()) {
+			if (browser.isDisposed())
+				return;
 			boolean success = browser.execute(jsToExecute);
 			if (!success)
 				throw new RuntimeException("JavaScript execution failed.");
@@ -156,6 +156,8 @@ public class SwtBrowserJsPart implements JsClient {
 	 * instead.
 	 */
 	protected void doExecute(String js, Object... args) {
+		if (browser.isDisposed())
+			return;
 		browser.execute(String.format(Locale.ROOT, js, args));
 	}
 
@@ -173,6 +175,8 @@ public class SwtBrowserJsPart implements JsClient {
 
 		@Override
 		public void run() {
+			if (browser.isDisposed())
+				return;
 			boolean success = browser.execute(js);
 			if (!success && log.isTraceEnabled())
 				log.error("Pre-ready JavaScript failed: " + js);
