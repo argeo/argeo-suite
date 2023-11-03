@@ -216,11 +216,14 @@ public class WfsHttpHandler implements HttpHandler {
 
 			if (bbox != null) {
 				search.getWhere().any((or) -> {
+					// box overlap, see https://stackoverflow.com/questions/20925818/algorithm-to-check-if-two-boxes-overlap
+					// isOverlapping = (x1min < x2max AND x2min < x1max AND y1min < y2max AND y2min < y1max)
+					// x1 = entity, x2 = bbox
 					or.all((and) -> {
-						and.gte(EntityName.minLat, bbox.getMinX());
-						and.gte(EntityName.minLon, bbox.getMinY());
-						and.lte(EntityName.maxLat, bbox.getMaxX());
-						and.lte(EntityName.maxLon, bbox.getMaxY());
+						and.lte(EntityName.minLat, bbox.getMaxX());
+						and.gte(EntityName.maxLat, bbox.getMinX());
+						and.lte(EntityName.minLon, bbox.getMaxY());
+						and.gte(EntityName.maxLon, bbox.getMinY());
 					});
 					or.all((and) -> {
 						and.gte(WGS84PosName.lat, bbox.getMinX());
