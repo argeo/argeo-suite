@@ -54,6 +54,13 @@ public class GeoEntityUtils {
 		} catch (IOException e) {
 			throw new UncheckedIOException("Cannot add geometry " + name + " to " + c, e);
 		}
+
+//		try (BufferedReader in = new BufferedReader(
+//				new InputStreamReader(geom.open(InputStream.class), StandardCharsets.UTF_8))) {
+//			System.out.println(in.readLine());
+//		} catch (IOException e) {
+//			throw new UncheckedIOException("Cannot parse " + c, e);
+//		}
 		updateBoundingBox(c);
 	}
 
@@ -91,7 +98,7 @@ public class GeoEntityUtils {
 	}
 
 	public static Point toPoint(Content c) {
-		if (c.hasContentClass(EntityType.geopoint)) {
+		if (c.containsKey(WGS84PosName.lon) && c.containsKey(WGS84PosName.lat)) {
 			Double lat = c.get(WGS84PosName.lat, Double.class).orElseThrow();
 			Double lon = c.get(WGS84PosName.lon, Double.class).orElseThrow();
 			return JTS.GEOMETRY_FACTORY_WGS84.createPoint(new Coordinate(lat, lon));
