@@ -1,0 +1,7 @@
+Import-Package:\
+org.eclipse.swt,\
+org.argeo.cms.acr,\
+*
+
+Provide-Capability:\
+cms.publish;pkg=org.argeo.app.geo.swt.openlayers;file="*.png,*.js,*.css"

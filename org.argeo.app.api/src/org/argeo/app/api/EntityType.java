@@ -2,7 +2,7 @@ package org.argeo.app.api;
 
 import org.argeo.api.acr.QNamed;
 
-/** Types related to entities. */
+/** Types used in the entity namespace http://www.argeo.org/ns/entity. */
 public enum EntityType implements QNamed {
 	// entity
 	entity, local, relatedTo,
@@ -15,7 +15,7 @@ public enum EntityType implements QNamed {
 	// graphics
 	box,
 	// geography
-	geopoint, bearing,
+	geopoint, bearing, geobounded,
 	// ldap
 	person, user;
 

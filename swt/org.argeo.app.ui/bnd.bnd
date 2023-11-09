@@ -20,6 +20,7 @@ OSGI-INF/documentsFolder.xml,\
 OSGI-INF/fsEntryArea.xml,\
 OSGI-INF/mapLayer.xml,\
 OSGI-INF/overviewMap.xml,\
+OSGI-INF/defaultMap.xml,\
 OSGI-INF/wwwLayer.xml,\
 OSGI-INF/documentUiProvider.xml,\
 OSGI-INF/publishEntryArea.xml,\
@@ -36,6 +37,7 @@ org.eclipse.core.commands.common,\
 org.eclipse.jface.window,\
 org.eclipse.jface.dialogs,\
 org.eclipse.rap.rwt,\
+org.argeo.app.geo.swt,\
 javax.servlet.*;version="[3,5)",\
 javax.jcr.nodetype,\
 *

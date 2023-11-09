@@ -19,6 +19,7 @@ import org.argeo.app.api.EntityNames;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.swt.ux.SuiteSwtUtils;
 import org.argeo.app.ux.SuiteUxEvent;
+import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.dialogs.LightweightDialog;
@@ -220,7 +221,7 @@ public class SuiteUiUtils {
 	}
 
 	public static String toLink(Node node) {
-		return node != null ? "#" + CmsSwtUtils.cleanPathForUrl(JcrContent.nodeToContent(node).getPath()) : null;
+		return node != null ? "#" + ContentUtils.cleanPathForUrl(JcrContent.nodeToContent(node).getPath()) : null;
 	}
 
 	public static Control addLink(Composite parent, String label, Node node, CmsStyle style)

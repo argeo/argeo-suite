@@ -11,6 +11,7 @@ import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.api.cms.ux.CmsStyle;
 import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.Localized;
+import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.acr.Img;
 import org.argeo.cms.swt.dialogs.CmsFeedback;
@@ -182,7 +183,7 @@ public class SuiteSwtUtils {
 	 * CONTENT
 	 */
 	public static String toLink(Content content) {
-		return content != null ? "#" + CmsSwtUtils.cleanPathForUrl(content.getPath()) : null;
+		return content != null ? "#" + ContentUtils.cleanPathForUrl(content.getPath()) : null;
 	}
 
 	public static Text addFormLine(Composite parent, Localized label, Content content, QNamed property,
@@ -297,7 +298,7 @@ public class SuiteSwtUtils {
 		Text txt = SuiteSwtUtils.addFormTextField(parent, text, null, 0);
 		if (cmsEditable != null && cmsEditable.isEditing()) {
 			txt.addModifyListener((e) -> {
-				content.put(property, txt.getText());
+				content.put(property, txt.getText().trim());
 			});
 		} else {
 			txt.setEditable(false);

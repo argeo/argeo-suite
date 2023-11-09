@@ -2,7 +2,6 @@ package org.argeo.app.jcr;
 
 import java.util.Map;
 
-import javax.jcr.Node;
 import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
@@ -14,11 +13,12 @@ import org.argeo.jcr.Jcr;
 import org.osgi.framework.BundleContext;
 
 /** An entity definition based on a JCR data structure. */
+@Deprecated
 public class JcrEntityDefinition implements EntityDefinition {
 	private Repository repository;
 
 	private String type;
-	private String defaultEditorId;
+//	private String defaultEditorId;
 
 	public void init(BundleContext bundleContext, Map<String, String> properties) throws RepositoryException {
 		Session adminSession = CmsJcrUtils.openDataAdminSession(repository, null);
@@ -26,7 +26,7 @@ public class JcrEntityDefinition implements EntityDefinition {
 			type = properties.get(EntityConstants.TYPE);
 			if (type == null)
 				throw new IllegalArgumentException("Entity type property " + EntityConstants.TYPE + " must be set.");
-			defaultEditorId = properties.get(EntityConstants.DEFAULT_EDITOR_ID);
+//			defaultEditorId = properties.get(EntityConstants.DEFAULT_EDITOR_ID);
 //			String definitionPath = EntityNames.ENTITY_DEFINITIONS_PATH + '/' + type;
 //			if (!adminSession.itemExists(definitionPath)) {
 //				Node entityDefinition = JcrUtils.mkdirs(adminSession, definitionPath, EntityTypes.ENTITY_DEFINITION);
@@ -48,10 +48,10 @@ public class JcrEntityDefinition implements EntityDefinition {
 
 	}
 
-	@Override
-	public String getEditorId(Node entity) {
-		return defaultEditorId;
-	}
+//	@Override
+//	public String getEditorId(Node entity) {
+//		return defaultEditorId;
+//	}
 
 	@Override
 	public String getType() {

@@ -115,3 +115,12 @@ mixin
 [entity:bearing]
 mixin
 - svg:direction (DOUBLE)
+
+[entity:geobounded]
+mixin
+- entity:minLat (DOUBLE)
+- entity:minLon (DOUBLE)
+- entity:maxLat (DOUBLE)
+- entity:maxLon (DOUBLE)
+- entity:minAlt (DOUBLE)
+- entity:maxAlt (DOUBLE)

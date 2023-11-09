@@ -18,16 +18,16 @@ public interface EntityNames {
 	final String ADM = "adm";
 
 	@Deprecated
-	final String ENTITY_TYPE = "entity:type";
+	final String ENTITY_TYPE = EntityName.type.get();
 
 	// GENERIC CONCEPTS
 //	/** The language which is relevant. */
 //	final String XML_LANG = "xml:lang";
 	/** The date which is relevant. */
 	@Deprecated
-	final String ENTITY_DATE = "entity:date";
+	final String ENTITY_DATE = EntityName.date.get();
 	@Deprecated
-	final String ENTITY_RELATED_TO = "entity:relatedTo";
+	final String ENTITY_RELATED_TO = EntityName.relatedTo.get();
 
 	// DEFAULT FOLDER NAMES
 	final String MEDIA = "media";
@@ -35,22 +35,22 @@ public interface EntityNames {
 
 	// LDAP-LIKE ENTITIES
 	@Deprecated
-	final String DISPLAY_NAME = LdapAttr.displayName.property();
+	final String DISPLAY_NAME = LdapAttr.displayName.get();
 	// Persons
 	@Deprecated
-	final String GIVEN_NAME = LdapAttr.givenName.property();
+	final String GIVEN_NAME = LdapAttr.givenName.get();
 	@Deprecated
-	final String SURNAME = LdapAttr.sn.property();
+	final String SURNAME = LdapAttr.sn.get();
 	@Deprecated
-	final String EMAIL = LdapAttr.mail.property();
+	final String EMAIL = LdapAttr.mail.get();
 	@Deprecated
-	final String OU = LdapAttr.ou.property();
+	final String OU = LdapAttr.ou.get();
 
 	// WGS84
 	@Deprecated
 	final String GEO_LAT = WGS84PosName.lat.get();
 	@Deprecated
-	final String GEO_LONG = WGS84PosName.lng.get();
+	final String GEO_LONG = WGS84PosName.lon.get();
 	@Deprecated
 	final String GEO_ALT = WGS84PosName.alt.get();
 

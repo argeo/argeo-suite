@@ -16,6 +16,7 @@ import org.argeo.cms.swt.acr.SwtUiProvider;
 import org.argeo.cms.util.LangUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -59,6 +60,8 @@ public class DefaultEditionLayer implements SwtAppLayer {
 		} else {
 			if (this.workArea != null) {
 				Composite area = new Composite(parent, SWT.NONE);
+				// we set fill layout by default but it can be overridden
+				area.setLayout(new FillLayout());
 				this.workArea.createUiPart(area, context);
 				return area;
 			}
