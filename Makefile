@@ -27,8 +27,11 @@ swt/org.argeo.app.ui \
 DEP_CATEGORIES = \
 org.argeo.tp \
 org.argeo.tp.httpd \
+org.argeo.tp.sys \
+org.argeo.tp.sdk \
 org.argeo.tp.jcr \
 org.argeo.tp.utils \
+org.argeo.tp.img \
 org.argeo.tp.publish \
 org.argeo.tp.math \
 org.argeo.tp.earth \
