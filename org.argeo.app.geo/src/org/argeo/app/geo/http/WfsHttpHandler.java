@@ -216,8 +216,10 @@ public class WfsHttpHandler implements HttpHandler {
 
 			if (bbox != null) {
 				search.getWhere().any((or) -> {
-					// box overlap, see https://stackoverflow.com/questions/20925818/algorithm-to-check-if-two-boxes-overlap
-					// isOverlapping = (x1min < x2max AND x2min < x1max AND y1min < y2max AND y2min < y1max)
+					// box overlap, see
+					// https://stackoverflow.com/questions/20925818/algorithm-to-check-if-two-boxes-overlap
+					// isOverlapping = (x1min < x2max AND x2min < x1max AND y1min < y2max AND y2min
+					// < y1max)
 					// x1 = entity, x2 = bbox
 					or.all((and) -> {
 						and.lte(EntityName.minLat, bbox.getMaxX());
@@ -365,7 +367,8 @@ public class WfsHttpHandler implements HttpHandler {
 		generator.writeEnd();// features array
 		generator.writeEnd().close();
 
-		log.debug("GeoJSon encoding took " + (System.currentTimeMillis() - begin) + " ms.");
+		if (log.isTraceEnabled())
+			log.trace("GeoJSon encoding took " + (System.currentTimeMillis() - begin) + " ms.");
 	}
 
 	protected Geometry getDefaultGeometry(Content content) {
