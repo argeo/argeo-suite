@@ -123,7 +123,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 				pidPrefix = appPid.substring(0, lastDotIndex);
 			}
 		} else {
-			// TODO doe it make sense to accept that?
+			// TODO does it make sense to accept that?
 			appPid = "<unknown>";
 		}
 
@@ -137,6 +137,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 //		leadPanePid = pidPrefix + "leadPane";
 //		adminLeadPanePid = pidPrefix + "adminLeadPane";
 //		loginScreenPid = pidPrefix + "loginScreen";
+
 	}
 
 	public void stop(Map<String, Object> properties) {
@@ -173,18 +174,6 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 		String uid = cmsView.getUid();
 		managedUis.put(uid, argeoSuiteUi);
 		argeoSuiteUi.addDisposeListener(new CleanUpUi(uid));
-//		argeoSuiteUi.addDisposeListener((e) -> {
-//			managedUis.remove(uid);
-//			if (log.isDebugEnabled())
-//				log.debug("Suite UI " + uid + " has been disposed.");
-//		});
-//		Display.getCurrent().disposeExec(() -> {
-//			if (managedUis.containsKey(uid)) {
-//				managedUis.remove(uid);
-//				if (log.isDebugEnabled())
-//					log.debug("Suite UI " + uid + " has been disposed from Display#disposeExec().");
-//			}
-//		});
 		return argeoSuiteUi;
 	}
 
@@ -201,6 +190,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 		try {
 			Content context = null;
 			SwtAppUi ui = (SwtAppUi) cmsUi;
+			ui.updateLastAccess();
 
 			String uiName = Objects.toString(ui.getParent().getData(UI_NAME_PROPERTY), null);
 			if (uiName == null)
@@ -496,6 +486,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 		SwtAppUi ui = getRelatedUi(event);
 		if (ui == null)
 			return;
+		ui.updateLastAccess();
 		ui.getCmsView().runAs(() -> {
 			try {
 				String appTitle = "";
