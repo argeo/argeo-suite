@@ -1,6 +1,5 @@
 package org.argeo.app.geo.acr;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,7 +23,6 @@ import org.argeo.app.api.EntityType;
 import org.argeo.app.api.WGS84PosName;
 import org.argeo.app.geo.GeoJson;
 import org.argeo.app.geo.JTS;
-import org.argeo.cms.util.StreamUtils;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Geometry;
@@ -61,12 +59,12 @@ public class GeoEntityUtils {
 			throw new UncheckedIOException("Cannot add geometry " + name + " to " + c, e);
 		}
 
-		try (BufferedReader in = new BufferedReader(
-				new InputStreamReader(geom.open(InputStream.class), StandardCharsets.UTF_8))) {
-			System.out.println(in.readLine());
-		} catch (IOException e) {
-			throw new UncheckedIOException("Cannot parse " + c, e);
-		}
+//		try (BufferedReader in = new BufferedReader(
+//				new InputStreamReader(geom.open(InputStream.class), StandardCharsets.UTF_8))) {
+//			System.out.println(in.readLine());
+//		} catch (IOException e) {
+//			throw new UncheckedIOException("Cannot parse " + c, e);
+//		}
 		updateBoundingBox(c);
 	}
 
@@ -88,13 +86,13 @@ public class GeoEntityUtils {
 		Content geom = c.soleChild(jsonFileName).orElse(null);
 		if (geom == null)
 			return null;
-		try (Reader in = new InputStreamReader(geom.open(InputStream.class), StandardCharsets.UTF_8)) {
-			String json = StreamUtils.toString(new BufferedReader(in));
-			System.out.println("JSON:\n" + json);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+//		try (Reader in = new InputStreamReader(geom.open(InputStream.class), StandardCharsets.UTF_8)) {
+//			String json = StreamUtils.toString(new BufferedReader(in));
+//			System.out.println("JSON:\n" + json);
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 		try (Reader in = new InputStreamReader(geom.open(InputStream.class), StandardCharsets.UTF_8)) {
 			JsonReader jsonReader = Json.createReader(in);
 			JsonObject jsonObject = jsonReader.readObject();
@@ -103,7 +101,8 @@ public class GeoEntityUtils {
 		} catch (IOException e) {
 			throw new UncheckedIOException("Cannot parse " + c, e);
 		} catch (JsonParsingException e) {
-			log.warn("Invalid GeoJson for " + geom);
+			if (log.isTraceEnabled())
+				log.warn("Invalid GeoJson for " + geom);
 			// json is invalid, returning null
 			return null;
 		}
