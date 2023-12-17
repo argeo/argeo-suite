@@ -6,6 +6,7 @@ import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -132,20 +133,28 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 
 		Objects.requireNonNull(contentRepository, "Content repository must be provided");
 		Objects.requireNonNull(appUserState, "App user state must be provided");
-		
-		long janitorPeriod = 12 * 60 * 60 * 1000;// 12h
+
+		long janitorPeriod = 60 * 60 * 1000;// 1h
 		janitorTimer.schedule(new TimerTask() {
 
 			@Override
 			public void run() {
-				refs: for (WeakReference<SwtAppUi> uiRef : managedUis.values()) {
+				Iterator<WeakReference<SwtAppUi>> uiRefs = managedUis.values().iterator();
+				refs: while (uiRefs.hasNext()) {
+					WeakReference<SwtAppUi> uiRef = uiRefs.next();
 					SwtAppUi ui = uiRef.get();
-					if (ui == null)
+					if (ui == null) {
+						if (log.isTraceEnabled())
+							log.warn("Unreferenced UI in " + appPid + ", removing it");
+						uiRefs.remove();
 						continue refs;
-					ui.disposeIfTimedout();
+					}
+					if (!ui.isDisposed() && !ui.getDisplay().isDisposed()) {
+						ui.getDisplay().asyncExec(() -> ui.disposeIfTimedout());
+					}
 				}
-				if (log.isDebugEnabled())
-					log.debug(managedUis.size() + " UIs being managed by app " + appPid);
+				if (log.isTraceEnabled())
+					log.trace(managedUis.size() + " UIs being managed by app " + appPid);
 			}
 		}, janitorPeriod, janitorPeriod);
 
@@ -187,7 +196,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 			CmsSwtUtils.registerCmsTheme(uiParent.getShell(), theme);
 		SwtAppUi argeoSuiteUi = new SwtAppUi(uiParent, SWT.INHERIT_DEFAULT);
 		// TODO make timeout configurable
-		argeoSuiteUi.setUiTimeout(12 * 60 * 60 * 1000);// 12 hours
+		argeoSuiteUi.setUiTimeout(6 * 60 * 60 * 1000);// 6 hours
 		String uid = cmsView.getUid();
 		argeoSuiteUi.addDisposeListener(new CleanUpUi(uid));
 		managedUis.put(uid, new WeakReference<>(argeoSuiteUi));
