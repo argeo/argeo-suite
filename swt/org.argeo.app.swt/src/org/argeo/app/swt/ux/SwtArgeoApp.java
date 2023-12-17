@@ -95,7 +95,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 //	private CmsUserManager cmsUserManager;
 
 	// TODO make more optimal or via CmsSession/CmsView
-	private static Timer janitorTimer = new Timer(true);
+	private Timer janitorTimer = new Timer(true);
 	private Map<String, WeakReference<SwtAppUi>> managedUis = new HashMap<>();
 
 	// ACR
@@ -128,9 +128,6 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 			// TODO does it make sense to accept that?
 			appPid = "<unknown>";
 		}
-		if (log.isDebugEnabled())
-			log.info("Argeo Suite App " + appPid + " started");
-
 		Objects.requireNonNull(contentRepository, "Content repository must be provided");
 		Objects.requireNonNull(appUserState, "App user state must be provided");
 
@@ -139,25 +136,34 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 
 			@Override
 			public void run() {
-				Iterator<WeakReference<SwtAppUi>> uiRefs = managedUis.values().iterator();
-				refs: while (uiRefs.hasNext()) {
-					WeakReference<SwtAppUi> uiRef = uiRefs.next();
-					SwtAppUi ui = uiRef.get();
-					if (ui == null) {
-						if (log.isTraceEnabled())
-							log.warn("Unreferenced UI in " + appPid + ", removing it");
-						uiRefs.remove();
-						continue refs;
+				try {
+					Iterator<WeakReference<SwtAppUi>> uiRefs = managedUis.values().iterator();
+					refs: while (uiRefs.hasNext()) {
+						WeakReference<SwtAppUi> uiRef = uiRefs.next();
+						SwtAppUi ui = uiRef.get();
+						if (ui == null) {
+							if (log.isTraceEnabled())
+								log.warn("Unreferenced UI in " + appPid + ", removing it");
+							uiRefs.remove();
+							continue refs;
+						}
+						if (!ui.isDisposed() && !ui.getDisplay().isDisposed()) {
+							ui.getDisplay().asyncExec(() -> {
+								ui.disposeIfTimedout();
+							});
+							ui.getDisplay().wake();
+						}
 					}
-					if (!ui.isDisposed() && !ui.getDisplay().isDisposed()) {
-						ui.getDisplay().asyncExec(() -> ui.disposeIfTimedout());
-					}
+					if (log.isTraceEnabled())
+						log.trace(managedUis.size() + " UIs being managed by app " + appPid);
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				if (log.isTraceEnabled())
-					log.trace(managedUis.size() + " UIs being managed by app " + appPid);
 			}
 		}, janitorPeriod, janitorPeriod);
 
+		if (log.isDebugEnabled())
+			log.info("Argeo Suite App " + appPid + " started");
 	}
 
 	public void stop(Map<String, Object> properties) {
@@ -196,7 +202,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 			CmsSwtUtils.registerCmsTheme(uiParent.getShell(), theme);
 		SwtAppUi argeoSuiteUi = new SwtAppUi(uiParent, SWT.INHERIT_DEFAULT);
 		// TODO make timeout configurable
-		argeoSuiteUi.setUiTimeout(6 * 60 * 60 * 1000);// 6 hours
+		argeoSuiteUi.setUiTimeout(12 * 60 * 60 * 1000);// 12 hours
 		String uid = cmsView.getUid();
 		argeoSuiteUi.addDisposeListener(new CleanUpUi(uid));
 		managedUis.put(uid, new WeakReference<>(argeoSuiteUi));
