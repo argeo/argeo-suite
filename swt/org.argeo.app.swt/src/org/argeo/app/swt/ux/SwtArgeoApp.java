@@ -95,7 +95,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 //	private CmsUserManager cmsUserManager;
 
 	// TODO make more optimal or via CmsSession/CmsView
-	private Timer janitorTimer = new Timer(true);
+	private static Timer janitorTimer = new Timer(true);
 	private Map<String, WeakReference<SwtAppUi>> managedUis = new HashMap<>();
 
 	// ACR
@@ -137,21 +137,28 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 			@Override
 			public void run() {
 				try {
-					Iterator<WeakReference<SwtAppUi>> uiRefs = managedUis.values().iterator();
+					Iterator<Map.Entry<String, WeakReference<SwtAppUi>>> uiRefs = managedUis.entrySet().iterator();
 					refs: while (uiRefs.hasNext()) {
-						WeakReference<SwtAppUi> uiRef = uiRefs.next();
+						Map.Entry<String, WeakReference<SwtAppUi>> entry = uiRefs.next();
+						String uiUuid = entry.getKey();
+						WeakReference<SwtAppUi> uiRef = entry.getValue();
 						SwtAppUi ui = uiRef.get();
 						if (ui == null) {
 							if (log.isTraceEnabled())
-								log.warn("Unreferenced UI in " + appPid + ", removing it");
+								log.warn("Unreferenced UI " + uiUuid + " in " + appPid + ", removing it");
 							uiRefs.remove();
 							continue refs;
 						}
 						if (!ui.isDisposed() && !ui.getDisplay().isDisposed()) {
-							ui.getDisplay().asyncExec(() -> {
-								ui.disposeIfTimedout();
-							});
-							ui.getDisplay().wake();
+							if (ui.isTimedOut()) {
+								if (log.isTraceEnabled())
+									log.trace("Killing timed-out UI " + uiUuid + " in " + appPid);
+								UiContext.killDisplay(ui.getDisplay());
+							}
+						} else {
+							if (log.isTraceEnabled())
+								log.warn("Disposed UI " + uiUuid + " still in " + appPid + ", removing it");
+							uiRefs.remove();
 						}
 					}
 					if (log.isTraceEnabled())
@@ -202,7 +209,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 			CmsSwtUtils.registerCmsTheme(uiParent.getShell(), theme);
 		SwtAppUi argeoSuiteUi = new SwtAppUi(uiParent, SWT.INHERIT_DEFAULT);
 		// TODO make timeout configurable
-		argeoSuiteUi.setUiTimeout(12 * 60 * 60 * 1000);// 12 hours
+		argeoSuiteUi.setUiTimeout(6 * 60 * 60 * 1000);// 6 hours
 		String uid = cmsView.getUid();
 		argeoSuiteUi.addDisposeListener(new CleanUpUi(uid));
 		managedUis.put(uid, new WeakReference<>(argeoSuiteUi));
