@@ -1,5 +1,0 @@
-Require-Capability:\
-cms.datamodel;filter:="(name=jcrx)"
-
-Provide-Capability:\
-cms.datamodel; name=entity; cnd=/org/argeo/app/api/entity.cnd

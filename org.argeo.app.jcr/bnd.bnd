@@ -9,3 +9,12 @@ javax.jcr.security,\
 org.apache.jackrabbit.*;version="[1,4)",\
 org.argeo.cms.acr,\
 *
+
+Require-Capability:\
+cms.datamodel;filter:="(name=jcrx)"
+
+Provide-Capability:\
+cms.datamodel; name=entity; cnd=/org/argeo/app/jcr/entity.cnd,\
+cms.datamodel; name=xforms; cnd=/org/argeo/app/jcr/xforms/xforms.cnd; abstract=true,\
+cms.datamodel; name=odk; cnd=/org/argeo/app/jcr/odk/odk.cnd; abstract=true,\
+cms.datamodel; name=docbook; cnd=/org/argeo/app/jcr/docbook/docbook.cnd; abstract=true,\

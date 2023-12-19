@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="init" deactivate="destroy" name="Argeo Suite Default Theme">
-   <implementation class="org.argeo.cms.swt.osgi.BundleSvgTheme"/>
+   <implementation class="org.argeo.app.swt.osgi.BundleSvgTheme"/>
    <service>
       <provide interface="org.argeo.api.cms.ux.CmsTheme"/>
    </service>

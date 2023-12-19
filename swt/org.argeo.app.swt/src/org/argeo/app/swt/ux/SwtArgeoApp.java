@@ -2,14 +2,18 @@ package org.argeo.app.swt.ux;
 
 import static org.argeo.api.cms.ux.CmsView.CMS_VIEW_UID_PROPERTY;
 
+import java.lang.ref.WeakReference;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -91,7 +95,8 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 //	private CmsUserManager cmsUserManager;
 
 	// TODO make more optimal or via CmsSession/CmsView
-	private Map<String, SwtAppUi> managedUis = Collections.synchronizedMap(new HashMap<>());
+	private static Timer janitorTimer = new Timer(true);
+	private Map<String, WeakReference<SwtAppUi>> managedUis = new HashMap<>();
 
 	// ACR
 	private ContentRepository contentRepository;
@@ -103,9 +108,6 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 		for (SuiteUxEvent event : SuiteUxEvent.values()) {
 			getCmsContext().getCmsEventBus().addEventSubscriber(event.topic(), this);
 		}
-
-		if (log.isDebugEnabled())
-			log.info("Argeo Suite App started");
 
 		if (properties.containsKey(DEFAULT_UI_NAME_PROPERTY))
 			defaultUiName = LangUtils.get(properties, DEFAULT_UI_NAME_PROPERTY);
@@ -123,27 +125,63 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 				pidPrefix = appPid.substring(0, lastDotIndex);
 			}
 		} else {
-			// TODO doe it make sense to accept that?
+			// TODO does it make sense to accept that?
 			appPid = "<unknown>";
 		}
-
 		Objects.requireNonNull(contentRepository, "Content repository must be provided");
 		Objects.requireNonNull(appUserState, "App user state must be provided");
-//		if (pidPrefix == null)
-//			throw new IllegalArgumentException("PID prefix must be set.");
 
-//		headerPid = pidPrefix + "header";
-//		footerPid = pidPrefix + "footer";
-//		leadPanePid = pidPrefix + "leadPane";
-//		adminLeadPanePid = pidPrefix + "adminLeadPane";
-//		loginScreenPid = pidPrefix + "loginScreen";
+		long janitorPeriod = 60 * 60 * 1000;// 1h
+		janitorTimer.schedule(new TimerTask() {
+
+			@Override
+			public void run() {
+				try {
+					Iterator<Map.Entry<String, WeakReference<SwtAppUi>>> uiRefs = managedUis.entrySet().iterator();
+					refs: while (uiRefs.hasNext()) {
+						Map.Entry<String, WeakReference<SwtAppUi>> entry = uiRefs.next();
+						String uiUuid = entry.getKey();
+						WeakReference<SwtAppUi> uiRef = entry.getValue();
+						SwtAppUi ui = uiRef.get();
+						if (ui == null) {
+							if (log.isTraceEnabled())
+								log.warn("Unreferenced UI " + uiUuid + " in " + appPid + ", removing it");
+							uiRefs.remove();
+							continue refs;
+						}
+						if (!ui.isDisposed() && !ui.getDisplay().isDisposed()) {
+							if (ui.isTimedOut()) {
+								if (log.isTraceEnabled())
+									log.trace("Killing timed-out UI " + uiUuid + " in " + appPid);
+								UiContext.killDisplay(ui.getDisplay());
+							}
+						} else {
+							if (log.isTraceEnabled())
+								log.warn("Disposed UI " + uiUuid + " still in " + appPid + ", removing it");
+							uiRefs.remove();
+						}
+					}
+					if (log.isTraceEnabled())
+						log.trace(managedUis.size() + " UIs being managed by app " + appPid);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}, janitorPeriod, janitorPeriod);
+
+		if (log.isDebugEnabled())
+			log.info("Argeo Suite App " + appPid + " started");
 	}
 
 	public void stop(Map<String, Object> properties) {
-		for (SwtAppUi ui : managedUis.values())
+		refs: for (WeakReference<SwtAppUi> uiRef : managedUis.values()) {
+			SwtAppUi ui = uiRef.get();
+			if (ui == null)
+				continue refs;
 			if (!ui.isDisposed() && !ui.getDisplay().isDisposed()) {
 				ui.getDisplay().syncExec(() -> ui.dispose());
 			}
+		}
 		managedUis.clear();
 		if (log.isDebugEnabled())
 			log.info("Argeo Suite App stopped");
@@ -170,21 +208,11 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 		if (theme != null)
 			CmsSwtUtils.registerCmsTheme(uiParent.getShell(), theme);
 		SwtAppUi argeoSuiteUi = new SwtAppUi(uiParent, SWT.INHERIT_DEFAULT);
+		// TODO make timeout configurable
+		argeoSuiteUi.setUiTimeout(6 * 60 * 60 * 1000);// 6 hours
 		String uid = cmsView.getUid();
-		managedUis.put(uid, argeoSuiteUi);
 		argeoSuiteUi.addDisposeListener(new CleanUpUi(uid));
-//		argeoSuiteUi.addDisposeListener((e) -> {
-//			managedUis.remove(uid);
-//			if (log.isDebugEnabled())
-//				log.debug("Suite UI " + uid + " has been disposed.");
-//		});
-//		Display.getCurrent().disposeExec(() -> {
-//			if (managedUis.containsKey(uid)) {
-//				managedUis.remove(uid);
-//				if (log.isDebugEnabled())
-//					log.debug("Suite UI " + uid + " has been disposed from Display#disposeExec().");
-//			}
-//		});
+		managedUis.put(uid, new WeakReference<>(argeoSuiteUi));
 		return argeoSuiteUi;
 	}
 
@@ -201,6 +229,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 		try {
 			Content context = null;
 			SwtAppUi ui = (SwtAppUi) cmsUi;
+			ui.updateLastAccess();
 
 			String uiName = Objects.toString(ui.getParent().getData(UI_NAME_PROPERTY), null);
 			if (uiName == null)
@@ -496,6 +525,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 		SwtAppUi ui = getRelatedUi(event);
 		if (ui == null)
 			return;
+		ui.updateLastAccess();
 		ui.getCmsView().runAs(() -> {
 			try {
 				String appTitle = "";
@@ -599,7 +629,10 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 	}
 
 	private SwtAppUi getRelatedUi(Map<String, Object> eventProperties) {
-		return managedUis.get(get(eventProperties, CMS_VIEW_UID_PROPERTY));
+		WeakReference<SwtAppUi> uiRef = managedUis.get(get(eventProperties, CMS_VIEW_UID_PROPERTY));
+		if (uiRef == null)
+			return null;
+		return uiRef.get();
 	}
 
 	public static String get(Map<String, Object> eventProperties, String key) {
@@ -681,14 +714,6 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 		}
 	}
 
-//	public void setCmsUserManager(CmsUserManager cmsUserManager) {
-//		this.cmsUserManager = cmsUserManager;
-//	}
-
-//	protected ContentRepository getContentRepository() {
-//		return contentRepository;
-//	}
-
 	public void setContentRepository(ContentRepository contentRepository) {
 		this.contentRepository = contentRepository;
 	}
@@ -706,7 +731,6 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 		final String uid;
 
 		public CleanUpUi(String uid) {
-			super();
 			this.uid = uid;
 		}
 

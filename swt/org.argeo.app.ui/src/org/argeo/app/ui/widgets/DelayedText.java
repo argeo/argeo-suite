@@ -50,8 +50,9 @@ public class DelayedText {
 		this.delay = delayInMs;
 		this.modifyListener = new InternalModifyListener();
 		pushSession = new ServerPushSession();
-		pushSession.start();
 		text = new Text(parent, style);
+		pushSession.start();
+		text.addDisposeListener((e) -> pushSession.stop());
 		text.addModifyListener(modifyListener);
 	}
 

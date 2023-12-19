@@ -17,6 +17,7 @@ import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentName;
 import org.argeo.api.acr.DName;
 import org.argeo.api.acr.QNamed;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.app.api.EntityName;
 import org.argeo.app.api.EntityType;
 import org.argeo.app.api.WGS84PosName;
@@ -32,9 +33,12 @@ import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import jakarta.json.stream.JsonGenerator;
+import jakarta.json.stream.JsonParsingException;
 
 /** Utilities around entity types related to geography. */
 public class GeoEntityUtils {
+	private final static CmsLog log = CmsLog.getLog(GeoEntityUtils.class);
+
 	public static final String _GEOM_JSON = ".geom.json";
 
 	public static void putGeometry(Content c, QNamed name, Geometry geometry) {
@@ -82,6 +86,13 @@ public class GeoEntityUtils {
 		Content geom = c.soleChild(jsonFileName).orElse(null);
 		if (geom == null)
 			return null;
+//		try (Reader in = new InputStreamReader(geom.open(InputStream.class), StandardCharsets.UTF_8)) {
+//			String json = StreamUtils.toString(new BufferedReader(in));
+//			System.out.println("JSON:\n" + json);
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 		try (Reader in = new InputStreamReader(geom.open(InputStream.class), StandardCharsets.UTF_8)) {
 			JsonReader jsonReader = Json.createReader(in);
 			JsonObject jsonObject = jsonReader.readObject();
@@ -89,6 +100,11 @@ public class GeoEntityUtils {
 			return readGeom;
 		} catch (IOException e) {
 			throw new UncheckedIOException("Cannot parse " + c, e);
+		} catch (JsonParsingException e) {
+			if (log.isTraceEnabled())
+				log.warn("Invalid GeoJson for " + geom);
+			// json is invalid, returning null
+			return null;
 		}
 	}
 

@@ -1,14 +1,10 @@
 package org.argeo.app.core;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import javax.measure.Quantity;
 import javax.measure.quantity.Area;
 
-import org.argeo.api.acr.spi.ContentNamespace;
 import org.argeo.api.acr.spi.ProvidedRepository;
-import org.geotools.gml3.v3_2.GML;
+//import org.geotools.gml3.v3_2.GML;
 
 import si.uom.SI;
 import tech.units.indriya.quantity.Quantities;
@@ -31,27 +27,27 @@ public class SuiteMaintenance {
 //		}
 
 		// GML schema import fails because of xlinks issues
-		getContentRepository().registerTypes(new ContentNamespace() {
-
-			@Override
-			public URL getSchemaResource() {
-				try {
-					return new URL(GML.getInstance().getSchemaLocation());
-				} catch (MalformedURLException e) {
-					throw new IllegalArgumentException(e);
-				}
-			}
-
-			@Override
-			public String getNamespaceURI() {
-				return GML.getInstance().getNamespaceURI();
-			}
-
-			@Override
-			public String getDefaultPrefix() {
-				return "gml";
-			}
-		});
+//		getContentRepository().registerTypes(new ContentNamespace() {
+//
+//			@Override
+//			public URL getSchemaResource() {
+//				try {
+//					return new URL(GML.getInstance().getSchemaLocation());
+//				} catch (MalformedURLException e) {
+//					throw new IllegalArgumentException(e);
+//				}
+//			}
+//
+//			@Override
+//			public String getNamespaceURI() {
+//				return GML.getInstance().getNamespaceURI();
+//			}
+//
+//			@Override
+//			public String getDefaultPrefix() {
+//				return "gml";
+//			}
+//		});
 
 	}
 
