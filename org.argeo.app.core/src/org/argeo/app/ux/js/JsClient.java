@@ -65,7 +65,12 @@ public interface JsClient {
 	}
 
 	default boolean isInstanceOf(String reference, String jsClass) {
-		return (Boolean) evaluate("return "+getJsVarName(reference) + " instanceof " + jsClass);
+		try {
+			return (Boolean) evaluate("return " + getJsVarName(reference) + " instanceof " + jsClass);
+		} catch (Exception e) {
+			// TODO better understand why instanceof is often failing with SWT Browser
+			return false;
+		}
 	}
 
 	/*

@@ -185,7 +185,8 @@ public class MultiTermsPart extends AbstractTermsPart {
 			terms: for (String str : curr) {
 				Term term = termsManager.getTerm(str);
 				if (term == null) {
-					log.warn("Ignoring term " + str + " for " + getNode() + ", as it was not found.");
+					if (log.isTraceEnabled())
+						log.warn("Ignoring term " + str + " for " + getNode() + ", as it was not found.");
 					continue terms;
 				}
 				res.add(term);
