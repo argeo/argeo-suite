@@ -1,7 +1,7 @@
 major=2
 minor=1
-micro=30
-qualifier=.next
+micro=31
+qualifier=
 
 Bundle-Copyright= \
 Copyright 2014-2023 Argeo GmbH, \
