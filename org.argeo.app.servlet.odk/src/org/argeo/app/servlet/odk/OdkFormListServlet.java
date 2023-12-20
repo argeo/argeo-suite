@@ -93,8 +93,8 @@ public class OdkFormListServlet extends HttpServlet {
 				}
 				String str = sb.toString();
 				if (!str.equals("")) {
-					if (log.isDebugEnabled())
-						log.debug(str);
+					if (log.isTraceEnabled())
+						log.trace(str);
 					writer.append(str);
 				}
 			}
