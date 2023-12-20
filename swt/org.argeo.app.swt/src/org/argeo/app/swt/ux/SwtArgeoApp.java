@@ -132,12 +132,15 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 		Objects.requireNonNull(appUserState, "App user state must be provided");
 
 		long janitorPeriod = 60 * 60 * 1000;// 1h
+		// long janitorPeriod = 60 * 1000;// min
 		janitorTimer.schedule(new TimerTask() {
 
 			@Override
 			public void run() {
 				try {
-					Iterator<Map.Entry<String, WeakReference<SwtAppUi>>> uiRefs = managedUis.entrySet().iterator();
+					// copy Map in order to avoid concurrent modification exception
+					Iterator<Map.Entry<String, WeakReference<SwtAppUi>>> uiRefs = new HashMap<>(managedUis).entrySet()
+							.iterator();
 					refs: while (uiRefs.hasNext()) {
 						Map.Entry<String, WeakReference<SwtAppUi>> entry = uiRefs.next();
 						String uiUuid = entry.getKey();
@@ -146,7 +149,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 						if (ui == null) {
 							if (log.isTraceEnabled())
 								log.warn("Unreferenced UI " + uiUuid + " in " + appPid + ", removing it");
-							uiRefs.remove();
+							managedUis.remove(uiUuid);
 							continue refs;
 						}
 						if (!ui.isDisposed() && !ui.getDisplay().isDisposed()) {
@@ -157,14 +160,14 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 							}
 						} else {
 							if (log.isTraceEnabled())
-								log.warn("Disposed UI " + uiUuid + " still in " + appPid + ", removing it");
-							uiRefs.remove();
+								log.warn("Disposed UI " + uiUuid + " still referenced in " + appPid + ", removing it");
+							managedUis.remove(uiUuid);
 						}
 					}
 					if (log.isTraceEnabled())
 						log.trace(managedUis.size() + " UIs being managed by app " + appPid);
 				} catch (Exception e) {
-					e.printStackTrace();
+					log.error("Could not clean up timed-out UIs", e);
 				}
 			}
 		}, janitorPeriod, janitorPeriod);
@@ -210,6 +213,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 		SwtAppUi argeoSuiteUi = new SwtAppUi(uiParent, SWT.INHERIT_DEFAULT);
 		// TODO make timeout configurable
 		argeoSuiteUi.setUiTimeout(6 * 60 * 60 * 1000);// 6 hours
+		// argeoSuiteUi.setUiTimeout(60 * 1000);// 1 min
 		String uid = cmsView.getUid();
 		argeoSuiteUi.addDisposeListener(new CleanUpUi(uid));
 		managedUis.put(uid, new WeakReference<>(argeoSuiteUi));
@@ -434,39 +438,12 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 //		}
 	}
 
-//	private static String listTypes(Node context) {
-//		try {
-//			StringBuilder sb = new StringBuilder();
-//			sb.append(context.getPrimaryNodeType().getName());
-//			for (NodeType superType : context.getPrimaryNodeType().getDeclaredSupertypes()) {
-//				sb.append(' ');
-//				sb.append(superType.getName());
-//			}
-//
-//			for (NodeType nodeType : context.getMixinNodeTypes()) {
-//				sb.append(' ');
-//				sb.append(nodeType.getName());
-//				if (nodeType.getName().equals(EntityType.local.get()))
-//					sb.append('/').append(context.getProperty(EntityNames.ENTITY_TYPE).getString());
-//				for (NodeType superType : nodeType.getDeclaredSupertypes()) {
-//					sb.append(' ');
-//					sb.append(superType.getName());
-//				}
-//			}
-//			return sb.toString();
-//		} catch (RepositoryException e) {
-//			throw new JcrException(e);
-//		}
-//	}
-
 	@Override
 	public void setState(CmsUi cmsUi, String state) {
 		AppUi ui = (AppUi) cmsUi;
 		if (state == null)
 			return;
 		if (!state.startsWith("/")) {
-//			if (cmsUi instanceof SwtAppUi) {
-//				SwtAppUi ui = (SwtAppUi) cmsUi;
 			if (LOGIN.equals(state)) {
 				String appTitle = "";
 				if (ui.getTitle() != null)
@@ -479,10 +456,8 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 			properties.put(SuiteUxEvent.LAYER, layerId);
 			properties.put(SuiteUxEvent.CONTENT_PATH, HOME_STATE);
 			ui.getCmsView().sendEvent(SuiteUxEvent.switchLayer.topic(), properties);
-//			}
 			return;
 		}
-//		SwtAppUi suiteUi = (SwtAppUi) cmsUi;
 		if (ui.isLoginScreen()) {
 			return;
 		}
@@ -552,7 +527,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 					ui.getCmsView().stateChanged(nodeToState(node), stateTitle(appTitle, CmsUxUtils.getTitle(node)));
 				} else if (isTopic(topic, SuiteUxEvent.switchLayer)) {
 					String layerId = get(event, SuiteUxEvent.LAYER);
-					if (layerId != null) {
+					if (layerId != null && !"".equals(layerId.trim())) {
 						SwtAppLayer suiteLayer = findLayer(layerId);
 						if (suiteLayer == null)
 							throw new IllegalArgumentException("No layer '" + layerId + "' available.");
