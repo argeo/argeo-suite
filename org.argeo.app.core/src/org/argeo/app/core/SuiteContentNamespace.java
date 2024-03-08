@@ -1,6 +1,7 @@
 package org.argeo.app.core;
 
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Objects;
 
@@ -10,7 +11,8 @@ public enum SuiteContentNamespace implements ContentNamespace {
 	//
 	// ARGEO
 	//
-	ENTITY("entity", "http://www.argeo.org/ns/entity", "/org/argeo/app/api/entity.xsd", null),
+	ENTITY("entity", "http://www.argeo.org/ns/entity",
+			"platform:/plugin/org.argeo.app.api/org/argeo/app/api/entity.xsd", null),
 	//
 	ARGEO_DBK("argeodbk", "http://www.argeo.org/ns/argeodbk", null, null),
 	//
@@ -46,7 +48,10 @@ public enum SuiteContentNamespace implements ContentNamespace {
 	ODK("odk", "http://www.opendatakit.org/xforms", null, null),
 	//
 	WGS84("geo", "http://www.w3.org/2003/01/geo/wgs84_pos#", null, null),
+	// Re-add XML in order to solve import issue with xlink
+	XML("xml", "http://www.w3.org/XML/1998/namespace", "xml.xsd", "http://www.w3.org/2001/xml.xsd"),
 	//
+	
 	;
 
 	private final static String RESOURCE_BASE = "/org/argeo/app/core/schemas/";
@@ -62,10 +67,19 @@ public enum SuiteContentNamespace implements ContentNamespace {
 		Objects.requireNonNull(namespace);
 		this.namespace = namespace;
 		if (resourceFileName != null) {
-			if (!resourceFileName.startsWith("/"))
-				resource = getClass().getResource(RESOURCE_BASE + resourceFileName);
-			else
-				resource = getClass().getResource(resourceFileName);
+			try {
+				// FIXME workaround when in nested OSGi frameworks
+				// we should use class path, as before
+				if (!resourceFileName.startsWith("platform:")) {
+					resource = URI.create("platform:/plugin/org.argeo.app.core" + RESOURCE_BASE + resourceFileName)
+							.toURL();
+				} else {
+					resource = URI.create(resourceFileName).toURL();
+				}
+			} catch (MalformedURLException e) {
+				throw new IllegalArgumentException("Cannot convert " + resourceFileName + " to URL");
+			}
+
 			Objects.requireNonNull(resource);
 		}
 		if (publicUrl != null)
