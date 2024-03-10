@@ -3,6 +3,7 @@ package org.argeo.app.swt.ux;
 import static org.argeo.api.cms.ux.CmsView.CMS_VIEW_UID_PROPERTY;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -15,7 +16,6 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
-import java.util.TreeSet;
 
 import javax.xml.namespace.QName;
 
@@ -357,65 +357,10 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 		return layersByPid.get(pid).get();
 	}
 
-	private <T> T findByType(Map<String, RankedObject<T>> byType, Content content) {
+	private List<String> listTypes(Map<String, ? extends Object> byType, Content content) {
 		if (content == null)
-			throw new IllegalArgumentException("A node should be provided");
-
-//		boolean checkJcr = false;
-//		if (checkJcr && content instanceof JcrContent) {
-//			Node context = ((JcrContent) content).getJcrNode();
-//			try {
-//				// mixins
-//				Set<String> types = new TreeSet<>();
-//				for (NodeType mixinType : context.getMixinNodeTypes()) {
-//					String mixinTypeName = mixinType.getName();
-//					if (byType.containsKey(mixinTypeName)) {
-//						types.add(mixinTypeName);
-//					}
-//					for (NodeType superType : mixinType.getDeclaredSupertypes()) {
-//						if (byType.containsKey(superType.getName())) {
-//							types.add(superType.getName());
-//						}
-//					}
-//				}
-//				// primary node type
-//				NodeType primaryType = context.getPrimaryNodeType();
-//				String primaryTypeName = primaryType.getName();
-//				if (byType.containsKey(primaryTypeName)) {
-//					types.add(primaryTypeName);
-//				}
-//				for (NodeType superType : primaryType.getDeclaredSupertypes()) {
-//					if (byType.containsKey(superType.getName())) {
-//						types.add(superType.getName());
-//					}
-//				}
-//				// entity type
-//				if (context.isNodeType(EntityType.entity.get())) {
-//					if (context.hasProperty(EntityNames.ENTITY_TYPE)) {
-//						String entityTypeName = context.getProperty(EntityNames.ENTITY_TYPE).getString();
-//						if (byType.containsKey(entityTypeName)) {
-//							types.add(entityTypeName);
-//						}
-//					}
-//				}
-//
-//				if (CmsJcrUtils.isUserHome(context) && byType.containsKey("nt:folder")) {// home node
-//					types.add("nt:folder");
-//				}
-//
-//				if (types.size() == 0)
-//					throw new IllegalArgumentException(
-//							"No type found for " + context + " (" + listTypes(context) + ")");
-//				String type = types.iterator().next();
-//				if (!byType.containsKey(type))
-//					throw new IllegalArgumentException("No component found for " + context + " with type " + type);
-//				return byType.get(type).get();
-//			} catch (RepositoryException e) {
-//				throw new IllegalStateException(e);
-//			}
-//
-//		} else {
-		Set<String> types = new TreeSet<>();
+			throw new IllegalArgumentException("A content should be provided");
+		List<String> types = new ArrayList<>();
 		if (content.hasContentClass(EntityType.entity.qName())) {
 			String type = content.attr(EntityName.type.qName());
 			if (type != null && byType.containsKey(type))
@@ -428,14 +373,32 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 			if (byType.containsKey(type))
 				types.add(type);
 		}
-		if (types.size() == 0) {
+		if (types.isEmpty())
 			throw new IllegalArgumentException("No type found for " + content + " (" + objectClasses + ")");
+		return types;
+	}
+
+	private RankedObject<SwtAppLayer> findLayerByType(Content content) {
+		List<String> types = listTypes(layersByType, content);
+		// we assume the types will be ordered by priority
+		// (no possible for LDAP at this stage)
+		for (String type : types) {
+			if (layersByType.containsKey(type))
+				return layersByType.get(type);
 		}
-		String type = types.iterator().next();
-		if (!byType.containsKey(type))
-			throw new IllegalArgumentException("No component found for " + content + " with type " + type);
-		return byType.get(type).get();
-//		}
+		throw new IllegalArgumentException("No layer found for " + content + " with type " + types);
+	}
+
+	private RankedObject<SwtUiProvider> findUiProviderByType(Content content) {
+		RankedObject<SwtAppLayer> layerRO = findLayerByType(content);
+		List<String> layerTypes = LangUtils.toStringList(layerRO.getProperties().get(EntityConstants.TYPE));
+		List<String> types = listTypes(uiProvidersByType, content);
+		// layer types are ordered by priority
+		for (String type : layerTypes) {
+			if (types.contains(type) && uiProvidersByType.containsKey(type))
+				return uiProvidersByType.get(type);
+		}
+		throw new IllegalArgumentException("No UI provider found for " + content + " with types " + types);
 	}
 
 	@Override
@@ -508,23 +471,25 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 					appTitle = ui.getTitle().lead();
 
 				if (isTopic(topic, SuiteUxEvent.refreshPart)) {
-					Content node = getContentFromEvent(ui, event);
-					if (node == null)
+					Content content = getContentFromEvent(ui, event);
+					if (content == null)
 						return;
-					SwtUiProvider uiProvider = findByType(uiProvidersByType, node);
-					SwtAppLayer layer = findByType(layersByType, node);
-					ui.switchToLayer(layer, node);
-					layer.view(uiProvider, ui.getCurrentWorkArea(), node);
-					ui.getCmsView().stateChanged(nodeToState(node), stateTitle(appTitle, CmsUxUtils.getTitle(node)));
+					SwtUiProvider uiProvider = findUiProviderByType(content).get();
+					SwtAppLayer layer = findLayerByType(content).get();
+					ui.switchToLayer(layer, content);
+					layer.view(uiProvider, ui.getCurrentWorkArea(), content);
+					ui.getCmsView().stateChanged(nodeToState(content),
+							stateTitle(appTitle, CmsUxUtils.getTitle(content)));
 				} else if (isTopic(topic, SuiteUxEvent.openNewPart)) {
-					Content node = getContentFromEvent(ui, event);
-					if (node == null)
+					Content content = getContentFromEvent(ui, event);
+					if (content == null)
 						return;
-					SwtUiProvider uiProvider = findByType(uiProvidersByType, node);
-					SwtAppLayer layer = findByType(layersByType, node);
-					ui.switchToLayer(layer, node);
-					layer.open(uiProvider, ui.getCurrentWorkArea(), node);
-					ui.getCmsView().stateChanged(nodeToState(node), stateTitle(appTitle, CmsUxUtils.getTitle(node)));
+					SwtUiProvider uiProvider = findUiProviderByType(content).get();
+					SwtAppLayer layer = findLayerByType(content).get();
+					ui.switchToLayer(layer, content);
+					layer.open(uiProvider, ui.getCurrentWorkArea(), content);
+					ui.getCmsView().stateChanged(nodeToState(content),
+							stateTitle(appTitle, CmsUxUtils.getTitle(content)));
 				} else if (isTopic(topic, SuiteUxEvent.switchLayer)) {
 					String layerId = get(event, SuiteUxEvent.LAYER);
 					if (layerId != null && !"".equals(layerId.trim())) {
@@ -555,10 +520,10 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 							}
 						}
 					} else {
-						Content node = getContentFromEvent(ui, event);
-						if (node != null) {
-							SwtAppLayer layer = findByType(layersByType, node);
-							ui.switchToLayer(layer, node);
+						Content content = getContentFromEvent(ui, event);
+						if (content != null) {
+							SwtAppLayer layer = findLayerByType(content).get();
+							ui.switchToLayer(layer, content);
 						}
 					}
 				}
@@ -589,14 +554,6 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 		Content node;
 		if (path == null) {
 			return null;
-//			// look for a user
-//			String username = get(event, SuiteUxEvent.USERNAME);
-//			if (username == null)
-//				return null;
-//			User user = cmsUserManager.getUser(username);
-//			if (user == null)
-//				return null;
-//			node = ContentUtils.roleToContent(cmsUserManager, contentSession, user);
 		} else {
 			node = contentSession.get(path);
 		}
@@ -662,6 +619,7 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 			RankedObject.putIfHigherRank(layersByPid, pid, layer, properties);
 		}
 		if (properties.containsKey(EntityConstants.TYPE)) {
+			// TODO check consistency of entity types with overridden ?
 			List<String> types = LangUtils.toStringList(properties.get(EntityConstants.TYPE));
 			for (String type : types)
 				RankedObject.putIfHigherRank(layersByType, type, layer, properties);
