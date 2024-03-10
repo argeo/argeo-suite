@@ -19,7 +19,6 @@ OSGI-INF/contentLayer.xml,\
 OSGI-INF/documentsFolder.xml,\
 OSGI-INF/fsEntryArea.xml,\
 OSGI-INF/mapLayer.xml,\
-OSGI-INF/overviewMap.xml,\
 OSGI-INF/defaultMap.xml,\
 OSGI-INF/wwwLayer.xml,\
 OSGI-INF/documentUiProvider.xml,\
