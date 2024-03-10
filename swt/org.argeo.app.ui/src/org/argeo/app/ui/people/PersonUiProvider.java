@@ -22,7 +22,7 @@ import org.argeo.cms.CurrentUser;
 import org.argeo.cms.Localized;
 import org.argeo.cms.RoleNameUtils;
 import org.argeo.cms.SystemRole;
-import org.argeo.cms.auth.CmsRole;
+import org.argeo.cms.auth.CmsSystemRole;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.Selected;
 import org.argeo.cms.swt.acr.SwtSection;
@@ -77,7 +77,7 @@ public class PersonUiProvider implements SwtUiProvider {
 						roleContext, roles);
 				addRoleCheckBox(rolesSection, hierarchyUnit, user, SuiteMsg.publisherRole, SuiteRole.publisher,
 						roleContext, roles);
-				addRoleCheckBox(rolesSection, hierarchyUnit, user, SuiteMsg.userAdminRole, CmsRole.userAdmin,
+				addRoleCheckBox(rolesSection, hierarchyUnit, user, SuiteMsg.userAdminRole, CmsSystemRole.userAdmin,
 						roleContext, roles);
 			}
 //			Composite facetsSection = new Composite(main, SWT.NONE);
@@ -89,7 +89,7 @@ public class PersonUiProvider implements SwtUiProvider {
 //					new Label(facetsSection, SWT.NONE).setText(member);
 //				}
 //			}
-			if (CurrentUser.implies(CmsRole.userAdmin, roleContext)) {
+			if (CurrentUser.implies(CmsSystemRole.userAdmin, roleContext)) {
 				SwtSection changePasswordSection = new SwtSection(main, SWT.BORDER);
 				changePasswordSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
 				changePasswordSection.setLayout(new GridLayout(2, false));
@@ -177,15 +177,15 @@ public class PersonUiProvider implements SwtUiProvider {
 			}
 		}
 
-		if (systemRole.equals(CmsRole.userAdmin)) {
-			if (!CurrentUser.isUserContext(roleContext) && CurrentUser.implies(CmsRole.userAdmin, roleContext)) {
+		if (systemRole.equals(CmsSystemRole.userAdmin)) {
+			if (!CurrentUser.isUserContext(roleContext) && CurrentUser.implies(CmsSystemRole.userAdmin, roleContext)) {
 				// a user admin cannot modify the user admins of their own context
 				radio.setEnabled(true);
 			} else {
 				radio.setEnabled(false);
 			}
 		} else {
-			radio.setEnabled(CurrentUser.implies(CmsRole.userAdmin, roleContext));
+			radio.setEnabled(CurrentUser.implies(CmsSystemRole.userAdmin, roleContext));
 		}
 
 		radio.addSelectionListener((Selected) (e) -> {
