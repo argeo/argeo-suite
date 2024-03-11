@@ -1,17 +1,15 @@
-package org.argeo.app.api.geo;
+package org.argeo.app.geo.acr;
 
 import javax.xml.namespace.QName;
 
 import org.argeo.api.acr.Content;
-import org.argeo.api.acr.search.AndFilter;
 import org.argeo.api.app.EntityType;
-import org.argeo.app.geo.acr.GeoEntityUtils;
+import org.argeo.api.app.geo.FeatureAdapter;
 import org.locationtech.jts.geom.Geometry;
 
-import jakarta.json.stream.JsonGenerator;
-
-public interface FeatureAdapter {
-	default Geometry getDefaultGeometry(Content c, QName targetFeature) {
+public abstract class AbstractFeatureAdapter implements FeatureAdapter {
+	@Override
+	public Geometry getDefaultGeometry(Content c, QName targetFeature) {
 		// TODO deal with more defaults
 		// TODO deal with target feature
 		if (c.hasContentClass(EntityType.geopoint)) {
@@ -20,11 +18,7 @@ public interface FeatureAdapter {
 		return null;
 	}
 
-	void writeProperties(JsonGenerator g, Content content, QName targetFeature);
-
-	void addConstraintsForFeature(AndFilter filter, QName targetFeature);
-
-	static Geometry getGeoPointGeometry(Content c) {
+	protected Geometry getGeoPointGeometry(Content c) {
 		if (c.hasContentClass(EntityType.geopoint)) {
 			return GeoEntityUtils.toPoint(c);
 //			double latitude = c.get(WGS84PosName.lat, Double.class).get();
@@ -36,4 +30,5 @@ public interface FeatureAdapter {
 		}
 		return null;
 	}
+
 }
