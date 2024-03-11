@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.NamespaceUtils;
+import org.argeo.api.app.Term;
+import org.argeo.api.app.TermsManager;
 import org.argeo.api.cms.CmsLog;
-import org.argeo.app.api.Term;
-import org.argeo.app.api.TermsManager;
 import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.MouseDoubleClick;

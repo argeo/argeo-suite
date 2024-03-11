@@ -8,5 +8,5 @@
    <property name="osgi.http.whiteboard.context.select" type="String" value="(osgi.http.whiteboard.context.name=odkServletContext)"/>
    <property name="osgi.http.whiteboard.servlet.multipart.enabled" type="String" value="true"/>
    <reference bind="addSubmissionListener" cardinality="0..n" interface="org.argeo.app.xforms.FormSubmissionListener" name="FormSubmissionListener" policy="dynamic" unbind="removeSubmissionListener"/>
-   <reference bind="setAppUserState" cardinality="1..1" interface="org.argeo.app.api.AppUserState" name="AppUserState" policy="static"/>
+   <reference bind="setAppUserState" cardinality="1..1" interface="org.argeo.api.app.AppUserState" name="AppUserState" policy="static"/>
 </scr:component>

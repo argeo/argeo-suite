@@ -8,7 +8,7 @@ import org.argeo.api.acr.Content;
 import org.argeo.api.acr.NamespaceUtils;
 import org.argeo.api.acr.spi.ContentProvider;
 import org.argeo.api.acr.spi.ProvidedSession;
-import org.argeo.app.api.Typology;
+import org.argeo.api.app.Typology;
 import org.argeo.cms.acr.AbstractContent;
 
 public class TypologyContent extends AbstractContent {

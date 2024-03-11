@@ -13,8 +13,8 @@ import javax.jcr.Node;
 import javax.jcr.NodeIterator;
 import javax.jcr.RepositoryException;
 
+import org.argeo.api.app.EntityType;
 import org.argeo.api.cms.CmsLog;
-import org.argeo.app.api.EntityType;
 import org.argeo.app.docbook.DbkAttr;
 import org.argeo.app.docbook.DbkType;
 import org.argeo.jcr.Jcr;

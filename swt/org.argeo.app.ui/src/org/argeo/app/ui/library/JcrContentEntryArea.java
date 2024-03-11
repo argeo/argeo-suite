@@ -11,8 +11,8 @@ import javax.jcr.nodetype.NodeType;
 import javax.jcr.query.Query;
 
 import org.argeo.api.acr.Content;
+import org.argeo.api.app.EntityType;
 import org.argeo.api.cms.CmsConstants;
-import org.argeo.app.api.EntityType;
 import org.argeo.app.ui.SuiteUiUtils;
 import org.argeo.app.ui.widgets.TreeOrSearchArea;
 import org.argeo.app.ux.SuiteIcon;

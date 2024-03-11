@@ -8,8 +8,8 @@ import javax.xml.namespace.QName;
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ldap.LdapAttr;
 import org.argeo.api.acr.ldap.LdapObj;
-import org.argeo.app.api.EntityType;
-import org.argeo.cms.RoleNameUtils;
+import org.argeo.api.app.EntityType;
+import org.argeo.api.cms.auth.RoleNameUtils;
 
 /** Utilities around the Argeo Suite APIs. */
 public class SuiteUtils {

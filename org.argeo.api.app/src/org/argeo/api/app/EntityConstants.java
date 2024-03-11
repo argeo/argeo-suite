@@ -1,4 +1,4 @@
-package org.argeo.app.api;
+package org.argeo.api.app;
 
 /** Constant related to entities, typically used in an OSGi context. */
 public interface EntityConstants {

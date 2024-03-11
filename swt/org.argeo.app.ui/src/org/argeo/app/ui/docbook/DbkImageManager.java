@@ -17,10 +17,10 @@ import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 import javax.jcr.nodetype.NodeType;
 
+import org.argeo.api.app.EntityNames;
+import org.argeo.api.app.EntityType;
 import org.argeo.api.cms.ux.Cms2DSize;
 import org.argeo.api.cms.ux.CmsImageManager;
-import org.argeo.app.api.EntityNames;
-import org.argeo.app.api.EntityType;
 import org.argeo.app.docbook.DbkAttr;
 import org.argeo.app.docbook.DbkType;
 import org.argeo.app.jcr.docbook.DbkJcrUtils;

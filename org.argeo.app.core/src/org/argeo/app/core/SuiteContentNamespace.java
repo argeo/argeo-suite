@@ -12,7 +12,7 @@ public enum SuiteContentNamespace implements ContentNamespace {
 	// ARGEO
 	//
 	ENTITY("entity", "http://www.argeo.org/ns/entity",
-			"platform:/plugin/org.argeo.app.api/org/argeo/app/api/entity.xsd", null),
+			"platform:/plugin/org.argeo.app.api/org/argeo/api/app/entity.xsd", null),
 	//
 	ARGEO_DBK("argeodbk", "http://www.argeo.org/ns/argeodbk", null, null),
 	//

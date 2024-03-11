@@ -6,5 +6,5 @@
    </service>
    <property name="service.ranking" type="Integer" value="-1000"/>
    <properties entry="config/termsEntryArea.properties"/>
-   <reference bind="setTermsManager" cardinality="1..1" interface="org.argeo.app.api.TermsManager" name="TermsManager" policy="static"/>
+   <reference bind="setTermsManager" cardinality="1..1" interface="org.argeo.api.app.TermsManager" name="TermsManager" policy="static"/>
 </scr:component>

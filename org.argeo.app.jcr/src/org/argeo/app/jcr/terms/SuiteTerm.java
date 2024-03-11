@@ -3,7 +3,7 @@ package org.argeo.app.jcr.terms;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.argeo.app.api.Term;
+import org.argeo.api.app.Term;
 
 /**
  * A single term. Helper to optimise {@link SuiteTermsManager} implementation.

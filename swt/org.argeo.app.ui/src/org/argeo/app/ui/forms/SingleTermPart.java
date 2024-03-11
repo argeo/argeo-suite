@@ -4,8 +4,8 @@ import java.util.List;
 
 import javax.jcr.Item;
 
-import org.argeo.app.api.Term;
-import org.argeo.app.api.TermsManager;
+import org.argeo.api.app.Term;
+import org.argeo.api.app.TermsManager;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.SwtEditablePart;
 import org.argeo.cms.swt.MouseDoubleClick;

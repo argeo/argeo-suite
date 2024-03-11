@@ -4,7 +4,7 @@ import javax.xml.namespace.QName;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.search.AndFilter;
-import org.argeo.app.api.EntityType;
+import org.argeo.api.app.EntityType;
 import org.argeo.app.geo.acr.GeoEntityUtils;
 import org.locationtech.jts.geom.Geometry;
 

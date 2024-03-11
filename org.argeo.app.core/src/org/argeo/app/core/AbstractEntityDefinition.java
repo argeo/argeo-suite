@@ -1,6 +1,6 @@
 package org.argeo.app.core;
 
-import org.argeo.app.api.EntityDefinition;
+import org.argeo.api.app.EntityDefinition;
 
 public abstract class AbstractEntityDefinition implements EntityDefinition {
 

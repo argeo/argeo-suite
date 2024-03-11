@@ -2,10 +2,10 @@ package org.argeo.app.ui.forms;
 
 import javax.jcr.Item;
 
+import org.argeo.api.app.Term;
+import org.argeo.api.app.TermsManager;
+import org.argeo.api.app.Typology;
 import org.argeo.api.cms.ux.CmsIcon;
-import org.argeo.app.api.Term;
-import org.argeo.app.api.TermsManager;
-import org.argeo.app.api.Typology;
 import org.argeo.cms.Localized;
 import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;

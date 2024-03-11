@@ -9,10 +9,10 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.argeo.api.acr.Content;
+import org.argeo.api.app.RankedObject;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.ux.CmsIcon;
 import org.argeo.api.cms.ux.CmsView;
-import org.argeo.app.api.RankedObject;
 import org.argeo.app.core.SuiteUtils;
 import org.argeo.app.ux.SuiteIcon;
 import org.argeo.app.ux.SuiteStyle;

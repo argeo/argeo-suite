@@ -7,10 +7,10 @@ import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentNotFoundException;
 import org.argeo.api.acr.spi.ProvidedContent;
 import org.argeo.api.acr.spi.ProvidedSession;
-import org.argeo.app.api.EntityType;
-import org.argeo.app.api.Term;
-import org.argeo.app.api.TermsManager;
-import org.argeo.app.api.Typology;
+import org.argeo.api.app.EntityType;
+import org.argeo.api.app.Term;
+import org.argeo.api.app.TermsManager;
+import org.argeo.api.app.Typology;
 import org.argeo.cms.acr.AbstractSimpleContentProvider;
 import org.argeo.cms.acr.ContentUtils;
 

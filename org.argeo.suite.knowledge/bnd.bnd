@@ -7,7 +7,7 @@ OSGI-INF/termsEntryArea.xml,\
 OSGI-INF/termsLayer.xml,\
 
 Import-Package:\
-org.argeo.app.api,\
+org.argeo.api.app,\
 org.argeo.cms.swt.acr;resolution:=optional,\
 org.argeo.app.swt.ux;resolution:=optional,\
 org.argeo.app.swt.terms;resolution:=optional,\
