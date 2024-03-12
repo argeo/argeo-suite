@@ -1,11 +1,14 @@
 package org.argeo.app.core;
 
+import static java.lang.System.Logger.Level.ERROR;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.Objects;
 
 import org.argeo.api.acr.spi.ContentNamespace;
+import org.argeo.cms.acr.CmsContentNamespace;
 
 public enum SuiteContentNamespace implements ContentNamespace {
 	//
@@ -51,7 +54,7 @@ public enum SuiteContentNamespace implements ContentNamespace {
 	// Re-add XML in order to solve import issue with xlink
 	XML("xml", "http://www.w3.org/XML/1998/namespace", "xml.xsd", "http://www.w3.org/2001/xml.xsd"),
 	//
-	
+
 	;
 
 	private final static String RESOURCE_BASE = "/org/argeo/app/core/schemas/";
@@ -77,10 +80,13 @@ public enum SuiteContentNamespace implements ContentNamespace {
 					resource = URI.create(resourceFileName).toURL();
 				}
 			} catch (MalformedURLException e) {
-				throw new IllegalArgumentException("Cannot convert " + resourceFileName + " to URL");
+				resource = null;
+				System.getLogger(CmsContentNamespace.class.getName()).log(ERROR,
+						"Cannot load " + resourceFileName + ": " + e.getMessage());
+				// throw new IllegalArgumentException("Cannot convert " + resourceFileName + "
+				// to URL");
 			}
-
-			Objects.requireNonNull(resource);
+			// Objects.requireNonNull(resource);
 		}
 		if (publicUrl != null)
 			try {
