@@ -13,12 +13,12 @@ import javax.jcr.security.Privilege;
 import javax.security.auth.x500.X500Principal;
 
 import org.argeo.api.acr.ldap.LdapAttr;
+import org.argeo.api.app.AppUserState;
+import org.argeo.api.app.EntityType;
 import org.argeo.api.cms.CmsConstants;
 import org.argeo.api.cms.CmsSession;
-import org.argeo.app.api.AppUserState;
-import org.argeo.app.api.EntityType;
+import org.argeo.api.cms.auth.RoleNameUtils;
 import org.argeo.app.core.SuiteUtils;
-import org.argeo.cms.RoleNameUtils;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
 

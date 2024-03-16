@@ -11,8 +11,8 @@ import javax.jcr.observation.EventListener;
 import javax.jcr.query.Query;
 
 import org.argeo.api.acr.Content;
+import org.argeo.api.app.EntityType;
 import org.argeo.api.cms.CmsConstants;
-import org.argeo.app.api.EntityType;
 import org.argeo.cms.jcr.acr.JcrContentProvider;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.ui.CmsUiProvider;

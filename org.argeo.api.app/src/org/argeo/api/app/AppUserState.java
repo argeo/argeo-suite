@@ -1,4 +1,4 @@
-package org.argeo.app.api;
+package org.argeo.api.app;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.cms.CmsSession;

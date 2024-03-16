@@ -14,7 +14,7 @@ import org.argeo.api.cms.ux.CmsIcon;
 import org.argeo.app.ux.SuiteIcon;
 import org.argeo.cms.CurrentUser;
 import org.argeo.cms.acr.ContentUtils;
-import org.argeo.cms.auth.CmsRole;
+import org.argeo.cms.auth.CmsSystemRole;
 import org.argeo.cms.ux.widgets.AbstractHierarchicalPart;
 import org.argeo.cms.ux.widgets.Column;
 
@@ -57,11 +57,11 @@ public class HierarchyUnitPart extends AbstractHierarchicalPart<HierarchyUnit> {
 			}
 		} else {
 			for (UserDirectory directory : cmsUserManager.getUserDirectories()) {
-				if (CurrentUser.implies(CmsRole.userAdmin, directory.getBase())) {
+				if (CurrentUser.implies(CmsSystemRole.userAdmin, directory.getBase())) {
 					visible.add(directory);
 				}
 				for (HierarchyUnit hu : directory.getDirectHierarchyUnits(true)) {
-					if (CurrentUser.implies(CmsRole.userAdmin, hu.getBase())) {
+					if (CurrentUser.implies(CmsSystemRole.userAdmin, hu.getBase())) {
 						visible.add(hu);
 					}
 				}

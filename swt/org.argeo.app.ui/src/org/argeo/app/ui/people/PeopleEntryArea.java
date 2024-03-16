@@ -15,7 +15,7 @@ import org.argeo.app.ux.SuiteMsg;
 import org.argeo.app.ux.SuiteUxEvent;
 import org.argeo.cms.CurrentUser;
 import org.argeo.cms.acr.ContentUtils;
-import org.argeo.cms.auth.CmsRole;
+import org.argeo.cms.auth.CmsSystemRole;
 import org.argeo.cms.jcr.acr.JcrContent;
 import org.argeo.cms.swt.CmsSwtTheme;
 import org.argeo.cms.swt.CmsSwtUtils;
@@ -136,7 +136,7 @@ public class PeopleEntryArea implements SwtUiProvider, CmsUiProvider {
 				addItem.setEnabled(true);
 
 				addOrgItem.setEnabled(usersPart.getInput() != null
-						&& CurrentUser.implies(CmsRole.groupAdmin, usersPart.getInput().getBase()));
+						&& CurrentUser.implies(CmsSystemRole.groupAdmin, usersPart.getInput().getBase()));
 //				cmsView.sendEvent(SuiteUxEvent.refreshPart.topic(), SuiteUxEvent
 //						.eventProperties(ContentUtils.hierarchyUnitToContent(contentSession, hierarchyUnit)));
 			}

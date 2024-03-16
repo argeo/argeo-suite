@@ -8,21 +8,21 @@ import org.argeo.api.acr.Content;
 import org.argeo.api.acr.QNamed;
 import org.argeo.api.acr.ldap.LdapAttr;
 import org.argeo.api.acr.ldap.LdapObj;
+import org.argeo.api.app.SuiteRole;
+import org.argeo.api.cms.auth.RoleNameUtils;
+import org.argeo.api.cms.auth.SystemRole;
 import org.argeo.api.cms.directory.CmsGroup;
 import org.argeo.api.cms.directory.CmsUser;
 import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.api.cms.directory.HierarchyUnit;
 import org.argeo.api.cms.directory.HierarchyUnit.Type;
-import org.argeo.app.api.SuiteRole;
 import org.argeo.app.swt.ux.SuiteSwtUtils;
 import org.argeo.app.ux.SuiteMsg;
 import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.CmsMsg;
 import org.argeo.cms.CurrentUser;
 import org.argeo.cms.Localized;
-import org.argeo.cms.RoleNameUtils;
-import org.argeo.cms.SystemRole;
-import org.argeo.cms.auth.CmsRole;
+import org.argeo.cms.auth.CmsSystemRole;
 import org.argeo.cms.swt.CmsSwtUtils;
 import org.argeo.cms.swt.Selected;
 import org.argeo.cms.swt.acr.SwtSection;
@@ -77,7 +77,7 @@ public class PersonUiProvider implements SwtUiProvider {
 						roleContext, roles);
 				addRoleCheckBox(rolesSection, hierarchyUnit, user, SuiteMsg.publisherRole, SuiteRole.publisher,
 						roleContext, roles);
-				addRoleCheckBox(rolesSection, hierarchyUnit, user, SuiteMsg.userAdminRole, CmsRole.userAdmin,
+				addRoleCheckBox(rolesSection, hierarchyUnit, user, SuiteMsg.userAdminRole, CmsSystemRole.userAdmin,
 						roleContext, roles);
 			}
 //			Composite facetsSection = new Composite(main, SWT.NONE);
@@ -89,7 +89,7 @@ public class PersonUiProvider implements SwtUiProvider {
 //					new Label(facetsSection, SWT.NONE).setText(member);
 //				}
 //			}
-			if (CurrentUser.implies(CmsRole.userAdmin, roleContext)) {
+			if (CurrentUser.implies(CmsSystemRole.userAdmin, roleContext)) {
 				SwtSection changePasswordSection = new SwtSection(main, SWT.BORDER);
 				changePasswordSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 2, 1));
 				changePasswordSection.setLayout(new GridLayout(2, false));
@@ -177,15 +177,15 @@ public class PersonUiProvider implements SwtUiProvider {
 			}
 		}
 
-		if (systemRole.equals(CmsRole.userAdmin)) {
-			if (!CurrentUser.isUserContext(roleContext) && CurrentUser.implies(CmsRole.userAdmin, roleContext)) {
+		if (systemRole.equals(CmsSystemRole.userAdmin)) {
+			if (!CurrentUser.isUserContext(roleContext) && CurrentUser.implies(CmsSystemRole.userAdmin, roleContext)) {
 				// a user admin cannot modify the user admins of their own context
 				radio.setEnabled(true);
 			} else {
 				radio.setEnabled(false);
 			}
 		} else {
-			radio.setEnabled(CurrentUser.implies(CmsRole.userAdmin, roleContext));
+			radio.setEnabled(CurrentUser.implies(CmsSystemRole.userAdmin, roleContext));
 		}
 
 		radio.addSelectionListener((Selected) (e) -> {

@@ -1,12 +1,13 @@
 package org.argeo.app.swt.osgi;
 
+import static java.lang.System.Logger.Level.TRACE;
+
 import java.awt.Color;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.System.Logger;
-import java.lang.System.Logger.Level;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -91,7 +92,7 @@ public class BundleSvgTheme extends BundleCmsSwtTheme {
 			try (InputStream imageIn = new ByteArrayInputStream(out.toByteArray())) {
 				imageData = new ImageData(imageIn);
 			}
-			logger.log(Level.DEBUG, () -> "Generated " + size + "x" + size + " PNG icon from " + path);
+			logger.log(TRACE, () -> "Generated " + size + "x" + size + " PNG icon from " + path);
 		} catch (IOException | TranscoderException e) {
 			throw new RuntimeException("Cannot transcode SVG " + path, e);
 		}

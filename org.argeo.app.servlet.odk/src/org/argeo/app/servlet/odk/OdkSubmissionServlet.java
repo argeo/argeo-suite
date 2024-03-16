@@ -21,9 +21,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
 import org.argeo.api.acr.Content;
+import org.argeo.api.app.AppUserState;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.CmsSession;
-import org.argeo.app.api.AppUserState;
 import org.argeo.app.image.ImageProcessor;
 import org.argeo.app.odk.OrxType;
 import org.argeo.app.xforms.FormSubmissionListener;

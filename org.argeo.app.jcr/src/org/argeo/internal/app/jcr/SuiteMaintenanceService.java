@@ -8,8 +8,8 @@ import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 import javax.jcr.security.Privilege;
 
+import org.argeo.api.app.EntityType;
 import org.argeo.api.cms.CmsConstants;
-import org.argeo.app.api.EntityType;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.maintenance.AbstractMaintenanceService;
 

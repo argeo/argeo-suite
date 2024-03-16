@@ -1,4 +1,4 @@
-package org.argeo.app.api;
+package org.argeo.api.app;
 
 import javax.xml.namespace.QName;
 
@@ -6,7 +6,7 @@ import org.argeo.api.acr.ArgeoNamespace;
 import org.argeo.api.acr.ContentName;
 import org.argeo.api.acr.ldap.LdapAttr;
 import org.argeo.api.cms.CmsConstants;
-import org.argeo.cms.SystemRole;
+import org.argeo.api.cms.auth.SystemRole;
 
 /** Standard suite system roles. */
 public enum SuiteRole implements SystemRole {

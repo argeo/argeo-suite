@@ -15,9 +15,9 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 
+import org.argeo.api.app.EntityMimeType;
+import org.argeo.api.app.EntityType;
 import org.argeo.api.cms.CmsLog;
-import org.argeo.app.api.EntityMimeType;
-import org.argeo.app.api.EntityType;
 import org.argeo.app.odk.OdkNames;
 import org.argeo.app.odk.OrxListName;
 import org.argeo.app.odk.OrxManifestName;

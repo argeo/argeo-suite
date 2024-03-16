@@ -11,8 +11,8 @@ import javax.jcr.ItemExistsException;
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
 
+import org.argeo.api.app.EntityType;
 import org.argeo.api.cms.CmsLog;
-import org.argeo.app.api.EntityType;
 import org.argeo.jcr.JcrUtils;
 import org.argeo.maintenance.AbstractMaintenanceService;
 

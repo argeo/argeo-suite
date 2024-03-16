@@ -6,12 +6,12 @@ import java.util.List;
 import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ContentSession;
 import org.argeo.api.acr.ldap.LdapObj;
+import org.argeo.api.cms.directory.CmsRole;
 import org.argeo.api.cms.directory.CmsUserManager;
 import org.argeo.api.cms.directory.HierarchyUnit;
 import org.argeo.api.cms.directory.UserDirectory;
 import org.argeo.cms.acr.ContentUtils;
 import org.argeo.cms.ux.widgets.DefaultTabularPart;
-import org.osgi.service.useradmin.Role;
 
 public class UsersPart extends DefaultTabularPart<HierarchyUnit, Content> {
 	private ContentSession contentSession;
@@ -35,7 +35,7 @@ public class UsersPart extends DefaultTabularPart<HierarchyUnit, Content> {
 		List<Content> roles = new ArrayList<>();
 		UserDirectory ud = (UserDirectory) hu.getDirectory();
 		if (ud.getRealm().isPresent()) {
-			for (Role r : ud.getHierarchyUnitRoles(ud, null, true)) {
+			for (CmsRole r : ud.getHierarchyUnitRoles(ud, null, true)) {
 				Content content = ContentUtils.roleToContent(cmsUserManager, contentSession, r);
 				if (content.hasContentClass(LdapObj.inetOrgPerson, LdapObj.organization))
 					roles.add(content);
@@ -45,7 +45,7 @@ public class UsersPart extends DefaultTabularPart<HierarchyUnit, Content> {
 			for (HierarchyUnit directChild : hu.getDirectHierarchyUnits(false)) {
 				if (!(directChild.isType(HierarchyUnit.Type.FUNCTIONAL)
 						|| directChild.isType(HierarchyUnit.Type.ROLES))) {
-					for (Role r : ud.getHierarchyUnitRoles(directChild, null, false)) {
+					for (CmsRole r : ud.getHierarchyUnitRoles(directChild, null, false)) {
 						Content content = ContentUtils.roleToContent(cmsUserManager, contentSession, r);
 						if (content.hasContentClass(LdapObj.inetOrgPerson, LdapObj.organization, LdapObj.groupOfNames))
 							roles.add(content);

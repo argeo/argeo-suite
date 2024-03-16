@@ -1,4 +1,4 @@
-package org.argeo.app.api;
+package org.argeo.api.app;
 
 /** The definition of an entity, a composite configurable data structure. */
 public interface EntityDefinition {

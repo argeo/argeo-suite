@@ -2,6 +2,6 @@ Import-Package:\
 org.eclipse.swt,\
 org.argeo.api.cms.ux,\
 org.argeo.cms.ux.acr,\
-org.argeo.app.api,\
+org.argeo.api.app,\
 org.argeo.cms.osgi,\
 *

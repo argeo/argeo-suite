@@ -1,4 +1,4 @@
-package org.argeo.app.api;
+package org.argeo.api.app;
 
 import java.util.HashSet;
 import java.util.Set;

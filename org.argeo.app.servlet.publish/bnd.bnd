@@ -3,7 +3,7 @@ org.apache.xmlgraphics.image.loader,\
 org.osgi.service.http.context,\
 javax.jcr.nodetype,\
 org.osgi.framework,\
-org.argeo.app.api,\
+org.argeo.api.app,\
 org.argeo.cms.acr.xml,\
 javax.servlet.*;version="[3,5)",\
 *

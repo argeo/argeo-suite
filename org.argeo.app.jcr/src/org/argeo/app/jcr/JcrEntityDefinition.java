@@ -6,8 +6,8 @@ import javax.jcr.Repository;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
-import org.argeo.app.api.EntityConstants;
-import org.argeo.app.api.EntityDefinition;
+import org.argeo.api.app.EntityConstants;
+import org.argeo.api.app.EntityDefinition;
 import org.argeo.cms.jcr.CmsJcrUtils;
 import org.argeo.jcr.Jcr;
 import org.osgi.framework.BundleContext;

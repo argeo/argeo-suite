@@ -29,9 +29,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.output.NullOutputStream;
-import org.argeo.app.api.EntityMimeType;
-import org.argeo.app.api.EntityType;
-import org.argeo.app.api.WGS84PosName;
+import org.argeo.api.app.EntityMimeType;
+import org.argeo.api.app.EntityType;
+import org.argeo.api.app.WGS84PosName;
 import org.argeo.app.geo.GeoShapeUtils;
 import org.argeo.app.odk.OrxManifestName;
 import org.argeo.cms.auth.RemoteAuthUtils;

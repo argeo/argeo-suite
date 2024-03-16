@@ -4,18 +4,17 @@ import org.argeo.api.acr.Content;
 import org.argeo.api.acr.ldap.LdapAcrUtils;
 import org.argeo.api.acr.ldap.LdapAttr;
 import org.argeo.api.acr.ldap.LdapObj;
+import org.argeo.api.cms.directory.CmsUser;
 import org.argeo.api.cms.ux.CmsIcon;
 import org.argeo.app.ux.SuiteIcon;
 import org.argeo.cms.CurrentUser;
-import org.argeo.cms.auth.UserAdminUtils;
 import org.argeo.cms.ux.widgets.Column;
-import org.osgi.service.useradmin.User;
 
 public class UserColumn implements Column<Content> {
 	@Override
 	public String getText(Content role) {
 		if (role.hasContentClass(LdapObj.inetOrgPerson))
-			return UserAdminUtils.getUserDisplayName(role.adapt(User.class));
+			return role.adapt(CmsUser.class).getDisplayName();
 		else if (role.hasContentClass(LdapObj.organization))
 			return role.attr(LdapAttr.o);
 		else if (role.hasContentClass(LdapObj.groupOfNames)) {

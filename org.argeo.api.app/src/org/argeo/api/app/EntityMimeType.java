@@ -1,4 +1,4 @@
-package org.argeo.app.api;
+package org.argeo.api.app;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;

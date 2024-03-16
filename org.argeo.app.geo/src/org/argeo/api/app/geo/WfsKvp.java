@@ -1,4 +1,4 @@
-package org.argeo.app.api.geo;
+package org.argeo.api.app.geo;
 
 /** Keys used for WFS KVP (key-value pair) encoding. */
 public enum WfsKvp {

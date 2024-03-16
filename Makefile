@@ -10,7 +10,7 @@ uninstall: osgi-uninstall
 A2_CATEGORY = org.argeo.suite
 
 BUNDLES = \
-org.argeo.app.api \
+org.argeo.api.app \
 org.argeo.app.core \
 org.argeo.app.jcr \
 org.argeo.app.geo \

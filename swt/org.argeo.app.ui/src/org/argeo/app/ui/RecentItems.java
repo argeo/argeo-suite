@@ -15,7 +15,7 @@ import javax.jcr.observation.EventListener;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
 
-import org.argeo.app.api.EntityType;
+import org.argeo.api.app.EntityType;
 import org.argeo.app.jcr.XPathUtils;
 import org.argeo.app.ui.widgets.DelayedText;
 import org.argeo.app.ux.SuiteIcon;

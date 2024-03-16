@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.jcr.Node;
 
-import org.argeo.app.api.Term;
-import org.argeo.app.api.Typology;
+import org.argeo.api.app.Term;
+import org.argeo.api.app.Typology;
 import org.argeo.jcr.Jcr;
 
 /** A typology. Helper to optimise {@link SuiteTermsManager} implementation. */

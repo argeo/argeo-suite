@@ -1,7 +1,7 @@
 package org.argeo.app.docbook;
 
 import org.argeo.api.acr.Content;
-import org.argeo.app.api.EntityType;
+import org.argeo.api.app.EntityType;
 
 /** Utilities when using ACR to access DocBook. */
 public class DbkAcrUtils {

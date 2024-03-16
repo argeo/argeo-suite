@@ -13,10 +13,10 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
 import org.apache.commons.io.IOUtils;
+import org.argeo.api.app.EntityNames;
+import org.argeo.api.app.EntityType;
 import org.argeo.api.cms.ux.CmsEditable;
 import org.argeo.api.cms.ux.CmsStyle;
-import org.argeo.app.api.EntityNames;
-import org.argeo.app.api.EntityType;
 import org.argeo.app.swt.ux.SuiteSwtUtils;
 import org.argeo.app.ux.SuiteUxEvent;
 import org.argeo.cms.acr.ContentUtils;

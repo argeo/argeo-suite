@@ -8,7 +8,7 @@ import org.argeo.api.acr.Content;
 import org.argeo.api.acr.NamespaceUtils;
 import org.argeo.api.acr.spi.ContentProvider;
 import org.argeo.api.acr.spi.ProvidedSession;
-import org.argeo.app.api.Term;
+import org.argeo.api.app.Term;
 import org.argeo.cms.acr.AbstractContent;
 
 public class TermContent extends AbstractContent {
