@@ -1,21 +1,16 @@
 package org.argeo.app.core;
 
-import static java.lang.System.Logger.Level.ERROR;
-
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 import java.util.Objects;
 
 import org.argeo.api.acr.spi.ContentNamespace;
-import org.argeo.cms.acr.CmsContentNamespace;
 
 public enum SuiteContentNamespace implements ContentNamespace {
 	//
 	// ARGEO
 	//
-	ENTITY("entity", "http://www.argeo.org/ns/entity",
-			"platform:/plugin/org.argeo.app.api/org/argeo/api/app/entity.xsd", null),
+	ENTITY("entity", "http://www.argeo.org/ns/entity", "/org/argeo/app/api/entity.xsd", null),
 	//
 	ARGEO_DBK("argeodbk", "http://www.argeo.org/ns/argeodbk", null, null),
 	//
@@ -70,22 +65,28 @@ public enum SuiteContentNamespace implements ContentNamespace {
 		Objects.requireNonNull(namespace);
 		this.namespace = namespace;
 		if (resourceFileName != null) {
-			try {
-				// FIXME workaround when in nested OSGi frameworks
-				// we should use class path, as before
-				if (!resourceFileName.startsWith("platform:")) {
-					resource = URI.create("platform:/plugin/org.argeo.app.core" + RESOURCE_BASE + resourceFileName)
-							.toURL();
-				} else {
-					resource = URI.create(resourceFileName).toURL();
-				}
-			} catch (MalformedURLException e) {
-				resource = null;
-				System.getLogger(CmsContentNamespace.class.getName()).log(ERROR,
-						"Cannot load " + resourceFileName + ": " + e.getMessage());
-				// throw new IllegalArgumentException("Cannot convert " + resourceFileName + "
-				// to URL");
-			}
+			if (!resourceFileName.startsWith("/"))
+				resource = getClass().getResource(RESOURCE_BASE + resourceFileName);
+			else
+				resource = getClass().getResource(resourceFileName);
+//			Objects.requireNonNull(resource);
+
+//			try {
+//				// FIXME workaround when in nested OSGi frameworks
+//				// we should use class path, as before
+//				if (!resourceFileName.startsWith("platform:")) {
+//					resource = URI.create("platform:/plugin/org.argeo.app.core" + RESOURCE_BASE + resourceFileName)
+//							.toURL();
+//				} else {
+//					resource = URI.create(resourceFileName).toURL();
+//				}
+//			} catch (MalformedURLException e) {
+//				resource = null;
+//				System.getLogger(CmsContentNamespace.class.getName()).log(ERROR,
+//						"Cannot load " + resourceFileName + ": " + e.getMessage());
+//				// throw new IllegalArgumentException("Cannot convert " + resourceFileName + "
+//				// to URL");
+//			}
 			// Objects.requireNonNull(resource);
 		}
 		if (publicUrl != null)
