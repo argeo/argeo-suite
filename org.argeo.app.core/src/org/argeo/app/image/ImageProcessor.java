@@ -16,8 +16,8 @@ import java.util.concurrent.Callable;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.Imaging;
+import org.apache.commons.imaging.ImagingException;
 import org.apache.commons.imaging.common.ImageMetadata;
 import org.apache.commons.imaging.common.ImageMetadata.ImageMetadataItem;
 import org.apache.commons.imaging.common.RationalNumber;
@@ -140,12 +140,12 @@ public class ImageProcessor {
 	public static int getOrientation(ImageMetadata metadata) {
 		if (metadata instanceof JpegImageMetadata) {
 			JpegImageMetadata jpegMetadata = (JpegImageMetadata) metadata;
-			TiffField field = jpegMetadata.findEXIFValue(TiffTagConstants.TIFF_TAG_ORIENTATION);
+			TiffField field = jpegMetadata.findExifValue(TiffTagConstants.TIFF_TAG_ORIENTATION);
 			if (field == null)
 				return TiffTagConstants.ORIENTATION_VALUE_HORIZONTAL_NORMAL;
 			try {
 				return field.getIntValue();
-			} catch (ImageReadException e) {
+			} catch (ImagingException e) {
 				throw new IllegalStateException(e);
 			}
 		} else {
@@ -218,7 +218,7 @@ public class ImageProcessor {
 
 	}
 
-	public static void metadataExample(InputStream in, String fileName) throws ImageReadException, IOException {
+	public static void metadataExample(InputStream in, String fileName) throws ImagingException, IOException {
 		// get all metadata stored in EXIF format (ie. from JPEG or TIFF).
 		final ImageMetadata metadata = Imaging.getMetadata(in, fileName);
 
@@ -255,7 +255,7 @@ public class ImageProcessor {
 			// simple interface to GPS data
 			final TiffImageMetadata exifMetadata = jpegMetadata.getExif();
 			if (null != exifMetadata) {
-				final TiffImageMetadata.GPSInfo gpsInfo = exifMetadata.getGPS();
+				final TiffImageMetadata.GpsInfo gpsInfo = exifMetadata.getGpsInfo();
 				if (null != gpsInfo) {
 					final String gpsDescription = gpsInfo.toString();
 					final double longitude = gpsInfo.getLongitudeAsDegreesEast();
@@ -269,13 +269,13 @@ public class ImageProcessor {
 
 			// more specific example of how to manually access GPS values
 			final TiffField gpsLatitudeRefField = jpegMetadata
-					.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_LATITUDE_REF);
+					.findExifValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_LATITUDE_REF);
 			final TiffField gpsLatitudeField = jpegMetadata
-					.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_LATITUDE);
+					.findExifValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_LATITUDE);
 			final TiffField gpsLongitudeRefField = jpegMetadata
-					.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_LONGITUDE_REF);
+					.findExifValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_LONGITUDE_REF);
 			final TiffField gpsLongitudeField = jpegMetadata
-					.findEXIFValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_LONGITUDE);
+					.findExifValueWithExactMatch(GpsTagConstants.GPS_TAG_GPS_LONGITUDE);
 			if (gpsLatitudeRefField != null && gpsLatitudeField != null && gpsLongitudeRefField != null
 					&& gpsLongitudeField != null) {
 				// all of these values are strings.
@@ -319,7 +319,7 @@ public class ImageProcessor {
 	}
 
 	private static void printTagValue(final JpegImageMetadata jpegMetadata, final TagInfo tagInfo) {
-		final TiffField field = jpegMetadata.findEXIFValueWithExactMatch(tagInfo);
+		final TiffField field = jpegMetadata.findExifValueWithExactMatch(tagInfo);
 		if (field == null) {
 			System.out.println(tagInfo.name + ": " + "Not Found.");
 		} else {
