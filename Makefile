@@ -35,6 +35,7 @@ org.argeo.tp.img \
 org.argeo.tp.publish \
 org.argeo.tp.math \
 org.argeo.tp.earth \
+osgi/equinox/org.argeo.tp.osgi.framework \
 osgi/equinox/org.argeo.tp.osgi \
 osgi/equinox/org.argeo.tp.eclipse \
 swt/rap/org.argeo.tp.swt \
