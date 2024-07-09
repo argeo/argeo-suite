@@ -32,6 +32,7 @@ import org.apache.commons.io.output.NullOutputStream;
 import org.argeo.api.app.EntityMimeType;
 import org.argeo.api.app.EntityType;
 import org.argeo.api.app.WGS84PosName;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.app.geo.GeoShapeUtils;
 import org.argeo.app.odk.OrxManifestName;
 import org.argeo.cms.auth.RemoteAuthUtils;
@@ -45,6 +46,7 @@ import org.argeo.jcr.JcrException;
 /** Describe additional files. */
 public class OdkManifestServlet extends HttpServlet {
 	private static final long serialVersionUID = 138030510865877478L;
+	private final static CmsLog log = CmsLog.getLog(OdkManifestServlet.class);
 
 	private Repository repository;
 
@@ -98,8 +100,10 @@ public class OdkManifestServlet extends HttpServlet {
 							try (DigestOutputStream out = new DigestOutputStream(NullOutputStream.NULL_OUTPUT_STREAM,
 									messageDigest)) {
 								writeMediaFile(out, target, mimeType, charset);
+								String checksum = DigestUtils.toHexString(out.getMessageDigest().digest());
+//								System.out.println(checksum);
 								writer.append("<hash>");
-								writer.append("md5sum:" + DigestUtils.toHexString(out.getMessageDigest().digest()));
+								writer.append("md5sum:" + checksum);
 								writer.append("</hash>");
 							}
 							writer.append("<downloadUrl>" + baseServer + "/api/odk/formManifest" + file.getPath()
@@ -125,6 +129,7 @@ public class OdkManifestServlet extends HttpServlet {
 				throw new IllegalArgumentException("Unsupported node " + node);
 			}
 		} catch (RepositoryException e) {
+			log.error("Cannot generate manifest", e);
 			throw new JcrException(e);
 		} catch (NoSuchAlgorithmException e) {
 			throw new ServletException(e);
@@ -138,7 +143,9 @@ public class OdkManifestServlet extends HttpServlet {
 			throws RepositoryException, IOException {
 		if (target.isNodeType(NodeType.NT_QUERY)) {
 			Query query = target.getSession().getWorkspace().getQueryManager().getQuery(target);
+//			System.out.println(query.getStatement());
 			QueryResult queryResult = query.execute();
+
 			List<String> columnNames = new ArrayList<>();
 			for (String c : queryResult.getColumnNames()) {
 				columnNames.add(c);
@@ -164,13 +171,18 @@ public class OdkManifestServlet extends HttpServlet {
 						lst.add(row.getValue("name").getString() + " (" + row.getValue("label").getString() + ")");
 						Node field = row.getNode("geopoint");
 						if (field != null && field.isNodeType(EntityType.geopoint.get())) {
-							double lat = field.getProperty(WGS84PosName.lat.get()).getDouble();
-							double lon = field.getProperty(WGS84PosName.lon.get()).getDouble();
-							double alt = field.hasProperty(WGS84PosName.alt.get())
-									? field.getProperty(WGS84PosName.alt.get()).getDouble()
-									: Double.NaN;
-							String geoshape = GeoShapeUtils.geoPointToGeoShape(lon, lat, alt);
-							lst.add(geoshape);
+							try {
+								double lat = field.getProperty(WGS84PosName.lat.get()).getDouble();
+								double lon = field.getProperty(WGS84PosName.lon.get()).getDouble();
+								double alt = field.hasProperty(WGS84PosName.alt.get())
+										? field.getProperty(WGS84PosName.alt.get()).getDouble()
+										: Double.NaN;
+								String geoshape = GeoShapeUtils.geoPointToGeoShape(lon, lat, alt);
+								lst.add(geoshape);
+							} catch (RepositoryException e) {
+								if (log.isTraceEnabled())
+									log.error("Geopoint " + field + " is missing data", e);
+							}
 						}
 						csvWriter.writeLine(lst);
 					}
