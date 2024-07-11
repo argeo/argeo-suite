@@ -95,7 +95,9 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 //	private CmsUserManager cmsUserManager;
 
 	// TODO make more optimal or via CmsSession/CmsView
-	private static Timer janitorTimer = new Timer(true);
+	// It works if static, but there is no clean way to get rid of it, so we open
+	// one per app
+	private Timer janitorTimer = new Timer(true);
 	private Map<String, WeakReference<SwtAppUi>> managedUis = new HashMap<>();
 
 	// ACR
@@ -189,6 +191,8 @@ public class SwtArgeoApp extends AbstractArgeoApp implements CmsEventSubscriber 
 		if (log.isDebugEnabled())
 			log.info("Argeo Suite App stopped");
 
+		// clean janitor timer so that th thread is not kept
+		janitorTimer.cancel();
 	}
 
 	@Override
