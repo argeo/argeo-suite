@@ -22,8 +22,8 @@ import org.argeo.api.cms.CmsLog;
 import org.argeo.app.odk.OrxListName;
 import org.argeo.app.odk.OrxManifestName;
 import org.argeo.cms.auth.RemoteAuthUtils;
-import org.argeo.cms.servlet.ServletHttpRequest;
 import org.argeo.cms.servlet.ServletUtils;
+import org.argeo.cms.servlet.javax.JavaxServletHttpRequest;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrxApi;
 
@@ -47,7 +47,7 @@ public class OdkFormListServlet extends HttpServlet {
 		String pathInfo = req.getPathInfo();
 
 		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, CmsConstants.SYS_WORKSPACE),
-				new ServletHttpRequest(req));
+				new JavaxServletHttpRequest(req));
 		Writer writer = resp.getWriter();
 		writer.append("<?xml version='1.0' encoding='UTF-8' ?>");
 		writer.append("<xforms xmlns=\"http://openrosa.org/xforms/xformsList\">");

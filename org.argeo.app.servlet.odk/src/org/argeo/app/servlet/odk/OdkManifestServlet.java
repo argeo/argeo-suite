@@ -36,8 +36,8 @@ import org.argeo.api.cms.CmsLog;
 import org.argeo.app.geo.GeoShapeUtils;
 import org.argeo.app.odk.OrxManifestName;
 import org.argeo.cms.auth.RemoteAuthUtils;
-import org.argeo.cms.servlet.ServletHttpRequest;
 import org.argeo.cms.servlet.ServletUtils;
+import org.argeo.cms.servlet.javax.JavaxServletHttpRequest;
 import org.argeo.cms.util.CsvWriter;
 import org.argeo.cms.util.DigestUtils;
 import org.argeo.jcr.Jcr;
@@ -63,7 +63,7 @@ public class OdkManifestServlet extends HttpServlet {
 		// cf. https://forum.getodk.org/t/authentication-for-non-https-schems/32967/4
 		StringBuilder baseServer = ServletUtils.getRequestUrlBase(req, true);
 
-		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), new ServletHttpRequest(req));
+		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), new JavaxServletHttpRequest(req));
 
 		try {
 			Node node = session.getNode(pathInfo);

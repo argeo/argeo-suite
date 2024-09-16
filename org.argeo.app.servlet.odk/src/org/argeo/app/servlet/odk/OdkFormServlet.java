@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.argeo.app.odk.OdkNames;
 import org.argeo.cms.auth.RemoteAuthUtils;
-import org.argeo.cms.servlet.ServletHttpRequest;
+import org.argeo.cms.servlet.javax.JavaxServletHttpRequest;
 import org.argeo.jcr.Jcr;
 
 /** Retrieves a single form. */
@@ -27,7 +27,7 @@ public class OdkFormServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		resp.setContentType("text/xml; charset=utf-8");
 
-		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), new ServletHttpRequest(req));
+		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), new JavaxServletHttpRequest(req));
 
 		String pathInfo = req.getPathInfo();
 		if (pathInfo.startsWith("//"))

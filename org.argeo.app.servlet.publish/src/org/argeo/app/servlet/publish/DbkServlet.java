@@ -47,7 +47,7 @@ import org.argeo.api.cms.ux.CmsTheme;
 import org.argeo.app.docbook.DbkType;
 import org.argeo.app.jcr.docbook.DbkJcrUtils;
 import org.argeo.cms.auth.RemoteAuthUtils;
-import org.argeo.cms.servlet.ServletHttpRequest;
+import org.argeo.cms.servlet.javax.JavaxServletHttpRequest;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
@@ -111,7 +111,7 @@ public class DbkServlet extends HttpServlet {
 
 		Session session = null;
 		try {
-			session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), new ServletHttpRequest(req));
+			session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), new JavaxServletHttpRequest(req));
 			Node node = session.getNode(path);
 
 			if (node.hasNode(DbkType.article.get())) {

@@ -46,7 +46,7 @@ import org.argeo.app.geo.GpxUtils;
 import org.argeo.app.geo.acr.GeoEntityUtils;
 import org.argeo.cms.acr.xml.XmlNormalizer;
 import org.argeo.cms.auth.RemoteAuthUtils;
-import org.argeo.cms.servlet.ServletHttpRequest;
+import org.argeo.cms.servlet.javax.JavaxServletHttpRequest;
 import org.argeo.cms.util.LangUtils;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Polygon;
@@ -78,7 +78,7 @@ public class FopServlet extends HttpServlet {
 		String path = URLDecoder.decode(servletPath, StandardCharsets.UTF_8);
 
 		boolean pdf = ".pdf".equals(ext);
-		ContentSession session = RemoteAuthUtils.doAs(() -> contentRepository.get(), new ServletHttpRequest(req));
+		ContentSession session = RemoteAuthUtils.doAs(() -> contentRepository.get(), new JavaxServletHttpRequest(req));
 		Content content = session.get(path);
 
 		// dev only

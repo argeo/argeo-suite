@@ -30,7 +30,7 @@ import org.argeo.app.xforms.FormSubmissionListener;
 import org.argeo.cms.auth.RemoteAuthRequest;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.jcr.acr.JcrContent;
-import org.argeo.cms.servlet.ServletHttpRequest;
+import org.argeo.cms.servlet.javax.JavaxServletHttpRequest;
 import org.argeo.jcr.JcrUtils;
 
 /** Receives a form submission. */
@@ -54,7 +54,7 @@ public class OdkSubmissionServlet extends HttpServlet {
 		resp.setHeader("X-OpenRosa-Version", "1.0");
 		resp.setDateHeader("Date", System.currentTimeMillis());
 
-		RemoteAuthRequest request = new ServletHttpRequest(req);
+		RemoteAuthRequest request = new JavaxServletHttpRequest(req);
 		CmsSession cmsSession = RemoteAuthUtils.getCmsSession(request);
 
 		boolean isIncomplete = false;
