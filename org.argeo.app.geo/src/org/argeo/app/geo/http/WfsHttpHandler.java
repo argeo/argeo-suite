@@ -36,8 +36,8 @@ import org.argeo.cms.acr.json.AcrJsonUtils;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.http.HttpHeader;
 import org.argeo.cms.http.HttpStatus;
-import org.argeo.cms.http.RemoteAuthHttpExchange;
 import org.argeo.cms.http.server.HttpServerUtils;
+import org.argeo.cms.http.server.HttpRemoteAuthExchange;
 import org.argeo.cms.util.LangUtils;
 import org.geotools.api.referencing.FactoryException;
 import org.geotools.api.referencing.crs.CoordinateReferenceSystem;
@@ -187,7 +187,7 @@ public class WfsHttpHandler implements HttpHandler {
 					RemoteAuthUtils.doAs(() -> {
 						featureAdapter.addConstraintsForFeature((AndFilter) search.getWhere(), typeName);
 						return null;
-					}, new RemoteAuthHttpExchange(exchange));
+					}, new HttpRemoteAuthExchange(exchange));
 				}
 
 				if (bbox != null) {
