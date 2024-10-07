@@ -15,12 +15,12 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.nodetype.NodeType;
 
-import org.argeo.api.app.EntityMimeType;
 import org.argeo.api.app.EntityType;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.app.odk.OdkNames;
 import org.argeo.app.odk.OrxListName;
 import org.argeo.app.odk.OrxManifestName;
+import org.argeo.cms.http.CommonMediaType;
 import org.argeo.cms.util.DigestUtils;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrUtils;
@@ -81,7 +81,7 @@ public class OdkJcrUtils {
 							// path = path.substring(0, path.length() - ".xml".length());
 							// Node target = file.getSession().getNode(path);
 							uuid = path.substring(1, path.length() - ".xml".length());
-							mimeType = EntityMimeType.XML.getMimeType();
+							mimeType = CommonMediaType.TEXT_XML.getType();
 						} else if ("file-csv".equals(type)) {
 							if (!path.endsWith(".csv"))
 								throw new IllegalArgumentException("File uri " + instanceUri + " must end with .csv");
@@ -89,7 +89,7 @@ public class OdkJcrUtils {
 							// path = path.substring(0, path.length() - ".csv".length());
 							// Node target = file.getSession().getNode(path);
 							uuid = path.substring(1, path.length() - ".csv".length());
-							mimeType = EntityMimeType.CSV.getMimeType();
+							mimeType = CommonMediaType.TEXT_CSV.getType();
 						} else {
 							throw new IllegalArgumentException("Unsupported instance type " + type);
 						}

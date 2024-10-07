@@ -29,13 +29,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.output.NullOutputStream;
-import org.argeo.api.app.EntityMimeType;
 import org.argeo.api.app.EntityType;
 import org.argeo.api.app.WGS84PosName;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.app.geo.GeoShapeUtils;
 import org.argeo.app.odk.OrxManifestName;
 import org.argeo.cms.auth.RemoteAuthUtils;
+import org.argeo.cms.http.CommonMediaType;
 import org.argeo.cms.servlet.ServletUtils;
 import org.argeo.cms.servlet.javax.JavaxServletHttpRequest;
 import org.argeo.cms.util.CsvWriter;
@@ -68,7 +68,7 @@ public class OdkManifestServlet extends HttpServlet {
 		try {
 			Node node = session.getNode(pathInfo);
 			if (node.isNodeType(OrxManifestName.manifest.get())) {
-				resp.setContentType(EntityMimeType.XML.toHttpContentType());
+				resp.setContentType(CommonMediaType.TEXT_XML.toHttpContentType());
 				Writer writer = resp.getWriter();
 				writer.append("<?xml version='1.0' encoding='UTF-8' ?>");
 				writer.append("<manifest xmlns=\"http://openrosa.org/xforms/xformsManifest\">");
@@ -76,7 +76,7 @@ public class OdkManifestServlet extends HttpServlet {
 				children: while (nit.hasNext()) {
 					Node file = nit.nextNode();
 					if (file.isNodeType(OrxManifestName.mediaFile.get())) {
-						EntityMimeType mimeType = EntityMimeType
+						CommonMediaType mimeType = CommonMediaType
 								.find(file.getProperty(Property.JCR_MIMETYPE).getString());
 						Charset charset = Charset.forName(file.getProperty(Property.JCR_ENCODING).getString());
 
@@ -115,7 +115,7 @@ public class OdkManifestServlet extends HttpServlet {
 
 				writer.append("</manifest>");
 			} else if (node.isNodeType(OrxManifestName.mediaFile.get())) {
-				EntityMimeType mimeType = EntityMimeType.find(node.getProperty(Property.JCR_MIMETYPE).getString());
+				CommonMediaType mimeType = CommonMediaType.find(node.getProperty(Property.JCR_MIMETYPE).getString());
 				Charset charset = Charset.forName(node.getProperty(Property.JCR_ENCODING).getString());
 				resp.setContentType(mimeType.toHttpContentType(charset));
 				if (node.isNodeType(NodeType.NT_ADDRESS)) {
@@ -139,7 +139,7 @@ public class OdkManifestServlet extends HttpServlet {
 
 	}
 
-	protected void writeMediaFile(OutputStream out, Node target, EntityMimeType mimeType, Charset charset)
+	protected void writeMediaFile(OutputStream out, Node target, CommonMediaType mimeType, Charset charset)
 			throws RepositoryException, IOException {
 		if (target.isNodeType(NodeType.NT_QUERY)) {
 			Query query = target.getSession().getWorkspace().getQueryManager().getQuery(target);
@@ -154,8 +154,8 @@ public class OdkManifestServlet extends HttpServlet {
 			columnNames.add("display");
 			columnNames.add("geometry");
 
-			if (EntityMimeType.XML.equals(mimeType)) {
-			} else if (EntityMimeType.CSV.equals(mimeType)) {
+			if (CommonMediaType.TEXT_XML.equals(mimeType)) {
+			} else if (CommonMediaType.TEXT_CSV.equals(mimeType)) {
 				CsvWriter csvWriter = new CsvWriter(out, charset);
 				csvWriter.writeLine(columnNames);
 				RowIterator rit = queryResult.getRows();
@@ -195,9 +195,9 @@ public class OdkManifestServlet extends HttpServlet {
 				}
 			}
 		} else {
-			if (EntityMimeType.XML.equals(mimeType)) {
+			if (CommonMediaType.TEXT_XML.equals(mimeType)) {
 				target.getSession().exportDocumentView(target.getPath(), out, true, false);
-			} else if (EntityMimeType.CSV.equals(mimeType)) {
+			} else if (CommonMediaType.TEXT_CSV.equals(mimeType)) {
 				CsvWriter csvWriter = new CsvWriter(out, charset);
 				csvWriter.writeLine(new String[] { "name", "label" });
 				NodeIterator children = target.getNodes();
