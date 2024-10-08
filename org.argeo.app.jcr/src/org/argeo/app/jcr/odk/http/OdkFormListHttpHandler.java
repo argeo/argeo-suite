@@ -1,4 +1,6 @@
-package org.argeo.app.servlet.odk;
+package org.argeo.app.jcr.odk.http;
+
+import static org.argeo.cms.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -11,10 +13,6 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.argeo.api.app.EntityType;
 import org.argeo.api.cms.CmsConstants;
@@ -22,47 +20,42 @@ import org.argeo.api.cms.CmsLog;
 import org.argeo.app.odk.OrxListName;
 import org.argeo.app.odk.OrxManifestName;
 import org.argeo.cms.auth.RemoteAuthUtils;
-import org.argeo.cms.servlet.ServletUtils;
-import org.argeo.cms.servlet.javax.JavaxServletHttpRequest;
+import org.argeo.cms.http.server.HttpRemoteAuthExchange;
+import org.argeo.cms.http.server.HttpServerUtils;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrxApi;
 
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+
 /** Lists available forms. */
-public class OdkFormListServlet extends HttpServlet {
-	private static final long serialVersionUID = 2706191315048423321L;
-	private final static CmsLog log = CmsLog.getLog(OdkFormListServlet.class);
+public class OdkFormListHttpHandler implements HttpHandler {
+	private final static CmsLog log = CmsLog.getLog(OdkFormListHttpHandler.class);
 
 	private Repository repository;
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setContentType("text/xml; charset=utf-8");
-		resp.setHeader("X-OpenRosa-Version", "1.0");
-		resp.setDateHeader("Date", System.currentTimeMillis());
-
+	public void handle(HttpExchange exchange) throws IOException {
+		OdkHttpUtils.addOdkResponseHeaders(exchange);
 		// we force HTTPS since ODK Collect will fail anyhow when sending http
 		// cf. https://forum.getodk.org/t/authentication-for-non-https-schems/32967/4
-		StringBuilder baseServer = ServletUtils.getRequestUrlBase(req, true);
-
-		String pathInfo = req.getPathInfo();
-
+		StringBuilder baseServer = HttpServerUtils.getRequestUrlBase(exchange, true);
+		String path = HttpServerUtils.subPath(exchange);
 		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, CmsConstants.SYS_WORKSPACE),
-				new JavaxServletHttpRequest(req));
-		Writer writer = resp.getWriter();
-		writer.append("<?xml version='1.0' encoding='UTF-8' ?>");
-		writer.append("<xforms xmlns=\"http://openrosa.org/xforms/xformsList\">");
-		try {
+				new HttpRemoteAuthExchange(exchange));
 
+		try (Writer writer = HttpServerUtils.getResponseWriter(exchange);) {
+
+			writer.append("<?xml version='1.0' encoding='UTF-8' ?>");
+			writer.append("<xforms xmlns=\"http://openrosa.org/xforms/xformsList\">");
 			Query query;
-			if (pathInfo == null) {
+			if (path == null || "/".equals(path)) {
 				query = session.getWorkspace().getQueryManager()
 						.createQuery("SELECT * FROM [" + OrxListName.xform.get() + "]", Query.JCR_SQL2);
 			} else {
-				query = session.getWorkspace().getQueryManager()
-						.createQuery(
-								"SELECT node FROM [" + OrxListName.xform.get()
-										+ "] AS node WHERE ISDESCENDANTNODE (node, '" + pathInfo + "')",
-								Query.JCR_SQL2);
+				query = session.getWorkspace().getQueryManager().createQuery("SELECT node FROM ["
+						+ OrxListName.xform.get() + "] AS node WHERE ISDESCENDANTNODE (node, '" + path + "')",
+						Query.JCR_SQL2);
 			}
 			QueryResult queryResult = query.execute();
 
@@ -98,15 +91,14 @@ public class OdkFormListServlet extends HttpServlet {
 					writer.append(str);
 				}
 			}
+			writer.append("</xforms>");
 		} catch (RepositoryException e) {
-			e.printStackTrace();
 			// TODO error message
-			// resp.sendError(500);
-			resp.sendError(503);
+			e.printStackTrace();
+			HttpServerUtils.sendStatusOnly(exchange, INTERNAL_SERVER_ERROR);
 		} finally {
 			Jcr.logout(session);
 		}
-		writer.append("</xforms>");
 	}
 
 	public void setRepository(Repository repository) {

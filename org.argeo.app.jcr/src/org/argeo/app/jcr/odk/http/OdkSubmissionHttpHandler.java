@@ -1,4 +1,8 @@
-package org.argeo.app.servlet.odk;
+package org.argeo.app.jcr.odk.http;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.argeo.cms.http.HttpStatus.CREATED;
+import static org.argeo.cms.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,11 +18,6 @@ import javax.jcr.ImportUUIDBehavior;
 import javax.jcr.Node;
 import javax.jcr.Property;
 import javax.jcr.nodetype.NodeType;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
 import org.argeo.api.acr.Content;
 import org.argeo.api.app.AppUserState;
@@ -27,16 +26,19 @@ import org.argeo.api.cms.CmsSession;
 import org.argeo.app.image.ImageProcessor;
 import org.argeo.app.odk.OrxType;
 import org.argeo.app.xforms.FormSubmissionListener;
-import org.argeo.cms.auth.RemoteAuthRequest;
 import org.argeo.cms.auth.RemoteAuthUtils;
+import org.argeo.cms.http.server.HttpRemoteAuthExchange;
+import org.argeo.cms.http.server.HttpServerUtils;
+import org.argeo.cms.http.server.MimePart;
 import org.argeo.cms.jcr.acr.JcrContent;
-import org.argeo.cms.servlet.javax.JavaxServletHttpRequest;
 import org.argeo.jcr.JcrUtils;
 
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+
 /** Receives a form submission. */
-public class OdkSubmissionServlet extends HttpServlet {
-	private static final long serialVersionUID = 7834401404691302385L;
-	private final static CmsLog log = CmsLog.getLog(OdkSubmissionServlet.class);
+public class OdkSubmissionHttpHandler implements HttpHandler {
+	private final static CmsLog log = CmsLog.getLog(OdkSubmissionHttpHandler.class);
 
 	private final static String XML_SUBMISSION_FILE = "xml_submission_file";
 	private final static String IS_INCOMPLETE = "*isIncomplete*";
@@ -49,13 +51,9 @@ public class OdkSubmissionServlet extends HttpServlet {
 	private AppUserState appUserState;
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setContentType("text/xml; charset=utf-8");
-		resp.setHeader("X-OpenRosa-Version", "1.0");
-		resp.setDateHeader("Date", System.currentTimeMillis());
-
-		RemoteAuthRequest request = new JavaxServletHttpRequest(req);
-		CmsSession cmsSession = RemoteAuthUtils.getCmsSession(request);
+	public void handle(HttpExchange exchange) throws IOException {
+		OdkHttpUtils.addOdkResponseHeaders(exchange);
+		CmsSession cmsSession = RemoteAuthUtils.getCmsSession(new HttpRemoteAuthExchange(exchange));
 
 		boolean isIncomplete = false;
 		try {
@@ -64,7 +62,7 @@ public class OdkSubmissionServlet extends HttpServlet {
 			String submissionName = submissionNameFormatter.format(Instant.now());
 			Node submission = cmsSessionNode.addNode(submissionName, OrxType.submission.get());
 			String submissionPath = submission.getPath();
-			for (Part part : req.getParts()) {
+			for (MimePart part : HttpServerUtils.extractFormData(exchange)) {
 				String partNameSane = JcrUtils.replaceInvalidChars(part.getName());
 				if (log.isTraceEnabled())
 					log.trace("Part: " + part.getName() + ", " + part.getContentType());
@@ -116,20 +114,20 @@ public class OdkSubmissionServlet extends HttpServlet {
 				if (cmsSessionNode.getSession().itemExists(submissionPath))
 					submission.remove();
 				cmsSessionNode.getSession().save();
-				resp.setStatus(503);
+				HttpServerUtils.sendStatusOnly(exchange, INTERNAL_SERVER_ERROR);
 				return;
 			}
 
 		} catch (Exception e) {
 			log.error("Cannot save submission", e);
-			resp.setStatus(503);
+			HttpServerUtils.sendStatusOnly(exchange, INTERNAL_SERVER_ERROR);
 			return;
 		}
 
-		resp.setStatus(201);
-		resp.getWriter().write("<OpenRosaResponse xmlns=\"http://openrosa.org/http/response\">"
-				+ "<message>Form Received!</message>" + "</OpenRosaResponse>");
-
+		byte[] msg = ("<OpenRosaResponse xmlns=\"http://openrosa.org/http/response\">"
+				+ "<message>Form Received!</message>" + "</OpenRosaResponse>").getBytes(UTF_8);
+		exchange.sendResponseHeaders(CREATED.get(), msg.length);
+		exchange.getResponseBody().write(msg);
 	}
 
 	public synchronized void addSubmissionListener(FormSubmissionListener listener) {

@@ -2,6 +2,10 @@ Service-Component:\
 OSGI-INF/termsManager.xml,\
 OSGI-INF/maintenanceService.xml,\
 OSGI-INF/appUserState.xml,\
+OSGI-INF/odkFormListHttpHandler.xml,\
+OSGI-INF/odkFormHttpHandler.xml,\
+OSGI-INF/odkSubmissionHttpHandler.xml,\
+OSGI-INF/odkManifestHttpHandler.xml
 
 Import-Package:\
 javax.jcr.nodetype,\

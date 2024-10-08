@@ -1,4 +1,6 @@
-package org.argeo.app.servlet.odk;
+package org.argeo.app.jcr.odk.http;
+
+import static org.argeo.cms.http.CommonMediaType.TEXT_XML;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -23,105 +25,100 @@ import javax.jcr.query.Query;
 import javax.jcr.query.QueryResult;
 import javax.jcr.query.Row;
 import javax.jcr.query.RowIterator;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.io.output.NullOutputStream;
 import org.argeo.api.app.EntityType;
 import org.argeo.api.app.WGS84PosName;
+import org.argeo.api.cms.CmsConstants;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.app.geo.GeoShapeUtils;
 import org.argeo.app.odk.OrxManifestName;
 import org.argeo.cms.auth.RemoteAuthUtils;
 import org.argeo.cms.http.CommonMediaType;
-import org.argeo.cms.servlet.ServletUtils;
-import org.argeo.cms.servlet.javax.JavaxServletHttpRequest;
+import org.argeo.cms.http.server.HttpRemoteAuthExchange;
+import org.argeo.cms.http.server.HttpServerUtils;
 import org.argeo.cms.util.CsvWriter;
 import org.argeo.cms.util.DigestUtils;
+import org.argeo.cms.util.StreamUtils;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
 
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+
 /** Describe additional files. */
-public class OdkManifestServlet extends HttpServlet {
-	private static final long serialVersionUID = 138030510865877478L;
-	private final static CmsLog log = CmsLog.getLog(OdkManifestServlet.class);
+public class OdkManifestHttpHandler implements HttpHandler {
+	private final static CmsLog log = CmsLog.getLog(OdkManifestHttpHandler.class);
 
 	private Repository repository;
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		resp.setHeader("X-OpenRosa-Version", "1.0");
-		resp.setDateHeader("Date", System.currentTimeMillis());
-
-		String pathInfo = req.getPathInfo();
-		if (pathInfo.startsWith("//"))
-			pathInfo = pathInfo.substring(1);
-
+	public void handle(HttpExchange exchange) throws IOException {
+		OdkHttpUtils.addOdkResponseHeaders(exchange);
 		// we force HTTPS since ODK Collect will fail anyhow when sending http
 		// cf. https://forum.getodk.org/t/authentication-for-non-https-schems/32967/4
-		StringBuilder baseServer = ServletUtils.getRequestUrlBase(req, true);
-
-		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, null), new JavaxServletHttpRequest(req));
+		StringBuilder baseServer = HttpServerUtils.getRequestUrlBase(exchange, true);
+		String path = HttpServerUtils.subPath(exchange);
+		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, CmsConstants.SYS_WORKSPACE),
+				new HttpRemoteAuthExchange(exchange));
 
 		try {
-			Node node = session.getNode(pathInfo);
+			Node node = session.getNode(path);
 			if (node.isNodeType(OrxManifestName.manifest.get())) {
-				resp.setContentType(CommonMediaType.TEXT_XML.toHttpContentType());
-				Writer writer = resp.getWriter();
-				writer.append("<?xml version='1.0' encoding='UTF-8' ?>");
-				writer.append("<manifest xmlns=\"http://openrosa.org/xforms/xformsManifest\">");
-				NodeIterator nit = node.getNodes();
-				children: while (nit.hasNext()) {
-					Node file = nit.nextNode();
-					if (file.isNodeType(OrxManifestName.mediaFile.get())) {
-						CommonMediaType mimeType = CommonMediaType
-								.find(file.getProperty(Property.JCR_MIMETYPE).getString());
-						Charset charset = Charset.forName(file.getProperty(Property.JCR_ENCODING).getString());
+				HttpServerUtils.setContentType(exchange, TEXT_XML);
+				try (Writer writer = HttpServerUtils.getResponseWriter(exchange);) {
+					writer.append("<?xml version='1.0' encoding='UTF-8' ?>");
+					writer.append("<manifest xmlns=\"http://openrosa.org/xforms/xformsManifest\">");
+					NodeIterator nit = node.getNodes();
+					children: while (nit.hasNext()) {
+						Node file = nit.nextNode();
+						if (file.isNodeType(OrxManifestName.mediaFile.get())) {
+							CommonMediaType mimeType = CommonMediaType
+									.find(file.getProperty(Property.JCR_MIMETYPE).getString());
+							Charset charset = Charset.forName(file.getProperty(Property.JCR_ENCODING).getString());
 
-						if (file.isNodeType(NodeType.NT_ADDRESS)) {
-							Node target;
-							try {
-								target = file.getProperty(Property.JCR_ID).getNode();
-							} catch (ItemNotFoundException e) {
-								// TODO remove old manifests
-								continue children;
-							}
-							writer.append("<mediaFile>");
-							writer.append("<filename>");
-							// Work around bug in ODK Collect not supporting paths
-							// writer.append(target.getPath().substring(1) + ".xml");
-							writer.append(target.getIdentifier() + "." + mimeType.getDefaultExtension());
-							writer.append("</filename>");
+							if (file.isNodeType(NodeType.NT_ADDRESS)) {
+								Node target;
+								try {
+									target = file.getProperty(Property.JCR_ID).getNode();
+								} catch (ItemNotFoundException e) {
+									// TODO remove old manifests
+									continue children;
+								}
+								writer.append("<mediaFile>");
+								writer.append("<filename>");
+								// Work around bug in ODK Collect not supporting paths
+								// writer.append(target.getPath().substring(1) + ".xml");
+								writer.append(target.getIdentifier() + "." + mimeType.getDefaultExtension());
+								writer.append("</filename>");
 
-							MessageDigest messageDigest = MessageDigest.getInstance(DigestUtils.MD5);
-							// TODO cache a temp file ?
-							try (DigestOutputStream out = new DigestOutputStream(NullOutputStream.NULL_OUTPUT_STREAM,
-									messageDigest)) {
-								writeMediaFile(out, target, mimeType, charset);
-								String checksum = DigestUtils.toHexString(out.getMessageDigest().digest());
+								MessageDigest messageDigest = MessageDigest.getInstance(DigestUtils.MD5);
+								// TODO cache a temp file ?
+								try (DigestOutputStream out = new DigestOutputStream(StreamUtils.NULL_OUTPUT_STREAM,
+										messageDigest)) {
+									writeMediaFile(out, target, mimeType, charset);
+									String checksum = DigestUtils.toHexString(out.getMessageDigest().digest());
 //								System.out.println(checksum);
-								writer.append("<hash>");
-								writer.append("md5sum:" + checksum);
-								writer.append("</hash>");
+									writer.append("<hash>");
+									writer.append("md5sum:" + checksum);
+									writer.append("</hash>");
+								}
+								writer.append("<downloadUrl>" + baseServer + "/api/odk/formManifest" + file.getPath()
+										+ "</downloadUrl>");
 							}
-							writer.append("<downloadUrl>" + baseServer + "/api/odk/formManifest" + file.getPath()
-									+ "</downloadUrl>");
+							writer.append("</mediaFile>");
 						}
-						writer.append("</mediaFile>");
 					}
-				}
 
-				writer.append("</manifest>");
+					writer.append("</manifest>");
+				}
 			} else if (node.isNodeType(OrxManifestName.mediaFile.get())) {
 				CommonMediaType mimeType = CommonMediaType.find(node.getProperty(Property.JCR_MIMETYPE).getString());
 				Charset charset = Charset.forName(node.getProperty(Property.JCR_ENCODING).getString());
-				resp.setContentType(mimeType.toHttpContentType(charset));
+				HttpServerUtils.setContentType(exchange, mimeType, charset);
 				if (node.isNodeType(NodeType.NT_ADDRESS)) {
 					Node target = node.getProperty(Property.JCR_ID).getNode();
 
-					writeMediaFile(resp.getOutputStream(), target, mimeType, charset);
+					writeMediaFile(exchange.getResponseBody(), target, mimeType, charset);
 				} else {
 					throw new IllegalArgumentException("Unsupported node " + node);
 				}
@@ -132,7 +129,7 @@ public class OdkManifestServlet extends HttpServlet {
 			log.error("Cannot generate manifest", e);
 			throw new JcrException(e);
 		} catch (NoSuchAlgorithmException e) {
-			throw new ServletException(e);
+			throw new IllegalStateException(e);
 		} finally {
 			Jcr.logout(session);
 		}
@@ -199,12 +196,12 @@ public class OdkManifestServlet extends HttpServlet {
 				target.getSession().exportDocumentView(target.getPath(), out, true, false);
 			} else if (CommonMediaType.TEXT_CSV.equals(mimeType)) {
 				CsvWriter csvWriter = new CsvWriter(out, charset);
-				csvWriter.writeLine(new String[] { "name", "label" });
+				csvWriter.writeLine(new Object[] { "name", "label" });
 				NodeIterator children = target.getNodes();
 				while (children.hasNext()) {
 					Node child = children.nextNode();
 					String label = Jcr.getTitle(child);
-					csvWriter.writeLine(new String[] { child.getIdentifier(), label });
+					csvWriter.writeLine(new Object[] { child.getIdentifier(), label });
 				}
 			}
 

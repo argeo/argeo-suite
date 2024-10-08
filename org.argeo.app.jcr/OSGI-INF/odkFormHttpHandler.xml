@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="ODK Form Servlet">
-   <implementation class="org.argeo.app.servlet.odk.OdkFormServlet"/>
+   <implementation class="org.argeo.app.jcr.odk.http.OdkFormHttpHandler"/>
    <service>
-      <provide interface="javax.servlet.Servlet"/>
+      <provide interface="com.sun.net.httpserver.HttpHandler"/>
    </service>
+   <property name="context.path" type="String" value="/api/odk/form/" />
    <property name="osgi.http.whiteboard.servlet.pattern" type="String" value="/form/*"/>
    <property name="osgi.http.whiteboard.context.select" type="String" value="(osgi.http.whiteboard.context.name=odkServletContext)"/>
    <reference bind="setRepository" cardinality="1..1" interface="javax.jcr.Repository" name="Repository" policy="static" target="(cn=ego)"/>

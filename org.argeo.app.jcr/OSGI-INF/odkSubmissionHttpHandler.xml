@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="ODK Submission Servlet">
-   <implementation class="org.argeo.app.servlet.odk.OdkSubmissionServlet"/>
+   <implementation class="org.argeo.app.jcr.odk.http.OdkSubmissionHttpHandler"/>
    <service>
-      <provide interface="javax.servlet.Servlet"/>
+      <provide interface="com.sun.net.httpserver.HttpHandler"/>
    </service>
+   <property name="context.path" type="String" value="/api/odk/submission" />
    <property name="osgi.http.whiteboard.servlet.pattern" type="String" value="/submission"/>
    <property name="osgi.http.whiteboard.context.select" type="String" value="(osgi.http.whiteboard.context.name=odkServletContext)"/>
    <property name="osgi.http.whiteboard.servlet.multipart.enabled" type="String" value="true"/>
