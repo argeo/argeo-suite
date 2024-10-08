@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.argeo.api.acr.Content;
+import org.argeo.api.cms.CmsLog;
 import org.argeo.app.ux.SuiteIcon;
 import org.argeo.app.ux.SuiteStyle;
 import org.argeo.cms.Localized;
@@ -26,6 +27,8 @@ import org.osgi.framework.wiring.BundleWiring;
 
 /** An app layer based on an entry area and an editor area. */
 public class DefaultEditionLayer implements SwtAppLayer {
+	private final static CmsLog log = CmsLog.getLog(DefaultEditionLayer.class);
+
 	private String id;
 	private SwtUiProvider entryArea;
 	private SwtUiProvider defaultView;
@@ -199,14 +202,20 @@ public class DefaultEditionLayer implements SwtAppLayer {
 	}
 
 	public void setEntryArea(SwtUiProvider entryArea) {
+		if (this.entryArea != null)
+			log.debug("Entry area overridden in layer " + id);
 		this.entryArea = entryArea;
 	}
 
 	public void setWorkArea(SwtUiProvider workArea) {
+		if (this.workArea != null)
+			log.debug("Work area overridden in layer " + id);
 		this.workArea = workArea;
 	}
 
 	public void setDefaultView(SwtUiProvider defaultView) {
+		if (this.defaultView != null)
+			log.debug("Default view overridden in layer " + id);
 		this.defaultView = defaultView;
 	}
 
