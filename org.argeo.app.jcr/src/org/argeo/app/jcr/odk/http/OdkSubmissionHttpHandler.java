@@ -27,6 +27,8 @@ import org.argeo.app.image.ImageProcessor;
 import org.argeo.app.odk.OrxType;
 import org.argeo.app.xforms.FormSubmissionListener;
 import org.argeo.cms.auth.RemoteAuthUtils;
+import org.argeo.cms.http.HttpMethod;
+import org.argeo.cms.http.HttpStatus;
 import org.argeo.cms.http.server.HttpRemoteAuthExchange;
 import org.argeo.cms.http.server.HttpServerUtils;
 import org.argeo.cms.http.server.MimePart;
@@ -53,6 +55,15 @@ public class OdkSubmissionHttpHandler implements HttpHandler {
 	@Override
 	public void handle(HttpExchange exchange) throws IOException {
 		OdkHttpUtils.addOdkResponseHeaders(exchange);
+
+		exchange.getResponseHeaders().set("X-OpenRosa-Accept-Content-Length", Integer.toString(10 * 1024 * 1024));
+
+		String httpMethod = exchange.getRequestMethod();
+		if (HttpMethod.HEAD.name().equalsIgnoreCase(httpMethod)) {
+			exchange.sendResponseHeaders(HttpStatus.NO_CONTENT.get(), -1);
+			return;
+		}
+
 		CmsSession cmsSession = RemoteAuthUtils.getCmsSession(new HttpRemoteAuthExchange(exchange));
 
 		boolean isIncomplete = false;
@@ -91,10 +102,10 @@ public class OdkSubmissionHttpHandler implements HttpHandler {
 					} else {
 						fileNode = JcrUtils.copyStreamAsFile(submission, partNameSane, part.getInputStream());
 					}
-					String contentType = part.getContentType();
-					if (contentType != null) {
+					String partContentType = part.getContentType();
+					if (partContentType != null) {
 						fileNode.addMixin(NodeType.MIX_MIMETYPE);
-						fileNode.setProperty(Property.JCR_MIMETYPE, contentType);
+						fileNode.setProperty(Property.JCR_MIMETYPE, partContentType);
 					}
 					if (part.getName().endsWith(".jpg") || part.getName().endsWith(".png")) {
 						// TODO meta data and thumbnails
@@ -124,6 +135,7 @@ public class OdkSubmissionHttpHandler implements HttpHandler {
 			return;
 		}
 
+		// TODO: internationalize?
 		byte[] msg = ("<OpenRosaResponse xmlns=\"http://openrosa.org/http/response\">"
 				+ "<message>Form Received!</message>" + "</OpenRosaResponse>").getBytes(UTF_8);
 		exchange.sendResponseHeaders(CREATED.get(), msg.length);

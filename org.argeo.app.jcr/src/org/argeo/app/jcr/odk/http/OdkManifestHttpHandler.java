@@ -65,7 +65,7 @@ public class OdkManifestHttpHandler implements HttpHandler {
 			Node node = session.getNode(path);
 			if (node.isNodeType(OrxManifestName.manifest.get())) {
 				HttpServerUtils.setContentType(exchange, TEXT_XML);
-				try (Writer writer = HttpServerUtils.getResponseWriter(exchange);) {
+				try (Writer writer = HttpServerUtils.sendResponseAsWriter(exchange)) {
 					writer.append("<?xml version='1.0' encoding='UTF-8' ?>");
 					writer.append("<manifest xmlns=\"http://openrosa.org/xforms/xformsManifest\">");
 					NodeIterator nit = node.getNodes();
@@ -108,8 +108,9 @@ public class OdkManifestHttpHandler implements HttpHandler {
 							writer.append("</mediaFile>");
 						}
 					}
-
 					writer.append("</manifest>");
+				} catch (NoSuchAlgorithmException e) {
+					throw new IllegalStateException(e);
 				}
 			} else if (node.isNodeType(OrxManifestName.mediaFile.get())) {
 				CommonMediaType mimeType = CommonMediaType.find(node.getProperty(Property.JCR_MIMETYPE).getString());
@@ -117,8 +118,9 @@ public class OdkManifestHttpHandler implements HttpHandler {
 				HttpServerUtils.setContentType(exchange, mimeType, charset);
 				if (node.isNodeType(NodeType.NT_ADDRESS)) {
 					Node target = node.getProperty(Property.JCR_ID).getNode();
-
-					writeMediaFile(exchange.getResponseBody(), target, mimeType, charset);
+					try (OutputStream out = HttpServerUtils.sendResponse(exchange)) {
+						writeMediaFile(out, target, mimeType, charset);
+					}
 				} else {
 					throw new IllegalArgumentException("Unsupported node " + node);
 				}
@@ -128,8 +130,6 @@ public class OdkManifestHttpHandler implements HttpHandler {
 		} catch (RepositoryException e) {
 			log.error("Cannot generate manifest", e);
 			throw new JcrException(e);
-		} catch (NoSuchAlgorithmException e) {
-			throw new IllegalStateException(e);
 		} finally {
 			Jcr.logout(session);
 		}

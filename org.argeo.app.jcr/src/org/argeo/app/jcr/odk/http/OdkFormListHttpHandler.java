@@ -44,8 +44,7 @@ public class OdkFormListHttpHandler implements HttpHandler {
 		Session session = RemoteAuthUtils.doAs(() -> Jcr.login(repository, CmsConstants.SYS_WORKSPACE),
 				new HttpRemoteAuthExchange(exchange));
 
-		try (Writer writer = HttpServerUtils.getResponseWriter(exchange);) {
-
+		try (Writer writer = HttpServerUtils.sendResponseAsWriter(exchange)) {
 			writer.append("<?xml version='1.0' encoding='UTF-8' ?>");
 			writer.append("<xforms xmlns=\"http://openrosa.org/xforms/xformsList\">");
 			Query query;

@@ -3,6 +3,7 @@ package org.argeo.app.jcr.odk.http;
 import static org.argeo.cms.http.HttpStatus.INTERNAL_SERVER_ERROR;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 
@@ -35,9 +36,9 @@ public class OdkFormHttpHandler implements HttpHandler {
 		if (pathInfo.startsWith("//"))
 			pathInfo = pathInfo.substring(1);
 
-		try {
+		try (OutputStream out = HttpServerUtils.sendResponse(exchange)) {
 			String path = URLDecoder.decode(pathInfo, StandardCharsets.UTF_8);
-			session.exportDocumentView(path + "/" + OdkNames.H_HTML, exchange.getResponseBody(), true, false);
+			session.exportDocumentView(path + "/" + OdkNames.H_HTML, out, true, false);
 		} catch (RepositoryException e) {
 			// TODO error message
 			e.printStackTrace();
