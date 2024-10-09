@@ -1,4 +1,4 @@
-package org.argeo.app.servlet.publish;
+package org.argeo.app.publish.http;
 
 import java.io.IOException;
 import java.io.InputStream;

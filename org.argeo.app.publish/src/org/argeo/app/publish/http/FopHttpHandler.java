@@ -1,4 +1,7 @@
-package org.argeo.app.servlet.publish;
+package org.argeo.app.publish.http;
+
+import static org.argeo.cms.http.CommonMediaType.APPLICATION_PDF;
+import static org.argeo.cms.http.CommonMediaType.APPLICATION_XML;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,10 +17,6 @@ import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Objects;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -46,19 +45,21 @@ import org.argeo.app.geo.GpxUtils;
 import org.argeo.app.geo.acr.GeoEntityUtils;
 import org.argeo.cms.acr.xml.XmlNormalizer;
 import org.argeo.cms.auth.RemoteAuthUtils;
-import org.argeo.cms.servlet.javax.JavaxServletHttpRequest;
+import org.argeo.cms.http.server.HttpRemoteAuthExchange;
+import org.argeo.cms.http.server.HttpServerUtils;
 import org.argeo.cms.util.LangUtils;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.Polygon;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
 
 import net.sf.saxon.BasicTransformerFactory;
 
 /**
  * A servlet transforming an XML view of the data to either FOP or PDF.
  */
-public class FopServlet extends HttpServlet {
-	private static final long serialVersionUID = 6906020513498289335L;
-
+public class FopHttpHandler implements HttpHandler {
 	private final static String PROP_ARGEO_FO_XSL = "argeo.fo.xsl";
 
 	private ContentRepository contentRepository;
@@ -70,15 +71,18 @@ public class FopServlet extends HttpServlet {
 	private URL xslUrl;
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String servletPath = req.getServletPath();
-		String ext = servletPath.substring(servletPath.lastIndexOf('.'));
-		servletPath = servletPath.substring(1, servletPath.lastIndexOf('.'));
-		servletPath = servletPath.substring(servletPath.indexOf('/'), servletPath.length());
-		String path = URLDecoder.decode(servletPath, StandardCharsets.UTF_8);
+	public void handle(HttpExchange exchange) throws IOException {
+		String pathInfo = HttpServerUtils.subPath(exchange);
+//		String servletPath = req.getServletPath();
+		String ext = pathInfo.substring(pathInfo.lastIndexOf('.'));
+		pathInfo = pathInfo.substring(0, pathInfo.lastIndexOf('.'));
+		// servletPath = servletPath.substring(servletPath.indexOf('/'),
+		// servletPath.length());
+		String path = URLDecoder.decode(pathInfo, StandardCharsets.UTF_8);
 
 		boolean pdf = ".pdf".equals(ext);
-		ContentSession session = RemoteAuthUtils.doAs(() -> contentRepository.get(), new JavaxServletHttpRequest(req));
+		ContentSession session = RemoteAuthUtils.doAs(() -> contentRepository.get(),
+				new HttpRemoteAuthExchange(exchange));
 		Content content = session.get(path);
 
 		// dev only
@@ -98,7 +102,7 @@ public class FopServlet extends HttpServlet {
 		}
 
 		Source xmlInput = content.adapt(Source.class);
-		String systemId = req.getRequestURL().toString();
+		String systemId = exchange.getRequestURI().toString();
 		xmlInput.setSystemId(systemId);
 
 		URIResolver uriResolver = (href, base) -> {
@@ -170,37 +174,31 @@ public class FopServlet extends HttpServlet {
 
 		try {
 			if (pdf) {
-				FopFactoryBuilder builder = new FopFactoryBuilder(URI.create(req.getRequestURL().toString()),
-						resourceResolver);
+				FopFactoryBuilder builder = new FopFactoryBuilder(exchange.getRequestURI(), resourceResolver);
 				FopFactory fopFactory = builder.build();
 //				FopFactory fopFactory = FopFactory.newInstance(URI.create(req.getRequestURL().toString()));
-				resp.setContentType("application/pdf");
-				Fop fop = fopFactory.newFop("application/pdf", resp.getOutputStream());
-				Transformer transformer = foTemplates.newTransformer();
-				transformer.setURIResolver(uriResolver);
-				Result fopResult = new SAXResult(fop.getDefaultHandler());
-				transformer.transform(xmlInput, fopResult);
-
+				HttpServerUtils.setContentType(exchange, APPLICATION_PDF);
+				try (OutputStream out = HttpServerUtils.sendResponse(exchange)) {
+					Fop fop = fopFactory.newFop(APPLICATION_PDF.get(), out);
+					Transformer transformer = foTemplates.newTransformer();
+					transformer.setURIResolver(uriResolver);
+					Result fopResult = new SAXResult(fop.getDefaultHandler());
+					transformer.transform(xmlInput, fopResult);
+				}
 			} else {
-				Result xmlOutput = new StreamResult(resp.getOutputStream());
-				resp.setContentType("application/xml");
-				Transformer transformer = foTemplates.newTransformer();
+				HttpServerUtils.setContentType(exchange, APPLICATION_XML);
+				try (OutputStream out = HttpServerUtils.sendResponse(exchange)) {
+					Result xmlOutput = new StreamResult(out);
+					Transformer transformer = foTemplates.newTransformer();
 //				transformer = transformerFactory.newTransformer();// identity
-				transformer.setURIResolver(uriResolver);
-				transformer.transform(xmlInput, xmlOutput);
+					transformer.setURIResolver(uriResolver);
+					transformer.transform(xmlInput, xmlOutput);
+				}
 			}
 		} catch (FOPException | IOException | TransformerException e) {
 			throw new RuntimeException("Cannot process " + path, e);
 		}
 
-	}
-
-	@Override
-	public void init() throws ServletException {
-//		for (Enumeration<String> it = getServletConfig().getInitParameterNames(); it.hasMoreElements();)
-//			System.out.println(it.nextElement());
-//		for (String str : getServletContext().getResourcePaths("/"))
-//			System.out.println(str);
 	}
 
 	public void start(Map<String, Object> properties) {

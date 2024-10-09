@@ -81,7 +81,7 @@ public class OdkJcrUtils {
 							// path = path.substring(0, path.length() - ".xml".length());
 							// Node target = file.getSession().getNode(path);
 							uuid = path.substring(1, path.length() - ".xml".length());
-							mimeType = CommonMediaType.TEXT_XML.getType();
+							mimeType = CommonMediaType.APPLICATION_XML.getType();
 						} else if ("file-csv".equals(type)) {
 							if (!path.endsWith(".csv"))
 								throw new IllegalArgumentException("File uri " + instanceUri + " must end with .csv");

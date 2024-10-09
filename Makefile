@@ -14,7 +14,7 @@ org.argeo.api.app \
 org.argeo.app.core \
 org.argeo.app.jcr \
 org.argeo.app.geo \
-org.argeo.app.servlet.publish \
+org.argeo.app.publish \
 org.argeo.app.theme.default \
 org.argeo.app.profile.acr.fs \
 org.argeo.app.profile.acr.jcr \

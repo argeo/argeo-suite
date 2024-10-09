@@ -1,6 +1,6 @@
 package org.argeo.app.jcr.odk.http;
 
-import static org.argeo.cms.http.CommonMediaType.TEXT_XML;
+import static org.argeo.cms.http.CommonMediaType.APPLICATION_XML;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -64,7 +64,7 @@ public class OdkManifestHttpHandler implements HttpHandler {
 		try {
 			Node node = session.getNode(path);
 			if (node.isNodeType(OrxManifestName.manifest.get())) {
-				HttpServerUtils.setContentType(exchange, TEXT_XML);
+				HttpServerUtils.setContentType(exchange, APPLICATION_XML);
 				try (Writer writer = HttpServerUtils.sendResponseAsWriter(exchange)) {
 					writer.append("<?xml version='1.0' encoding='UTF-8' ?>");
 					writer.append("<manifest xmlns=\"http://openrosa.org/xforms/xformsManifest\">");
@@ -151,7 +151,7 @@ public class OdkManifestHttpHandler implements HttpHandler {
 			columnNames.add("display");
 			columnNames.add("geometry");
 
-			if (CommonMediaType.TEXT_XML.equals(mimeType)) {
+			if (CommonMediaType.APPLICATION_XML.equals(mimeType)) {
 			} else if (CommonMediaType.TEXT_CSV.equals(mimeType)) {
 				CsvWriter csvWriter = new CsvWriter(out, charset);
 				csvWriter.writeLine(columnNames);
@@ -192,7 +192,7 @@ public class OdkManifestHttpHandler implements HttpHandler {
 				}
 			}
 		} else {
-			if (CommonMediaType.TEXT_XML.equals(mimeType)) {
+			if (CommonMediaType.APPLICATION_XML.equals(mimeType)) {
 				target.getSession().exportDocumentView(target.getPath(), out, true, false);
 			} else if (CommonMediaType.TEXT_CSV.equals(mimeType)) {
 				CsvWriter csvWriter = new CsvWriter(out, charset);

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0">
-   <implementation class="org.argeo.app.servlet.publish.FontsServlet"/>
+   <implementation class="org.argeo.app.publish.http.FontsServlet"/>
    <service>
       <provide interface="javax.servlet.Servlet"/>
    </service>
