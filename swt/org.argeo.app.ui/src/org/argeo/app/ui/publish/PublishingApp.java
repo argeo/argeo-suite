@@ -15,7 +15,7 @@ import org.argeo.api.cms.CmsApp;
 import org.argeo.api.cms.CmsLog;
 import org.argeo.api.cms.ux.CmsUi;
 import org.argeo.app.swt.ux.SwtArgeoApp;
-import org.argeo.cms.AbstractCmsApp;
+import org.argeo.app.ux.AbstractArgeoApp;
 import org.argeo.cms.ui.CmsUiProvider;
 import org.argeo.cms.util.LangUtils;
 import org.argeo.jcr.Jcr;
@@ -28,7 +28,7 @@ import org.osgi.framework.Constants;
  * A {@link CmsApp} dedicated to publishing, typically a public or internal web
  * site.
  */
-public class PublishingApp extends AbstractCmsApp {
+public class PublishingApp extends AbstractArgeoApp {
 	private final static CmsLog log = CmsLog.getLog(PublishingApp.class);
 
 	private String pid;
