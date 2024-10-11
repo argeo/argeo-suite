@@ -47,7 +47,7 @@ import org.argeo.api.cms.ux.CmsTheme;
 import org.argeo.app.docbook.DbkType;
 import org.argeo.app.jcr.docbook.DbkJcrUtils;
 import org.argeo.cms.auth.RemoteAuthUtils;
-import org.argeo.cms.servlet.javax.JavaxServletHttpRequest;
+import org.argeo.cms.javax.servlet.JavaxServletHttpRequest;
 import org.argeo.jcr.Jcr;
 import org.argeo.jcr.JcrException;
 import org.argeo.jcr.JcrUtils;
