@@ -1,6 +1,5 @@
 Import-Package:\
 org.apache.xmlgraphics.image.loader,\
-org.osgi.service.http.context,\
 javax.jcr.nodetype,\
 org.osgi.framework,\
 org.argeo.api.app,\
